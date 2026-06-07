@@ -1,0 +1,23 @@
+#  Paid Fonts
+/fonts/
+*.ttf
+*.woff
+*.woff2
+*.eot
+
+# WordPress Modules
+wp-config.php
+/wp-admin/
+/wp-includes/
+/wp-content/uploads/
+/wp-content/upgrade/
+/wp-content/cache/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+node_modules/

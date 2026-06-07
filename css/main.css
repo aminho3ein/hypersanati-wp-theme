@@ -1,0 +1,343 @@
+@font-face {
+    font-family: "AnjomanMax";
+    src:
+        url("../fonts/AnjomanMaxVF.woff2") format("woff2"),
+        url("../fonts/AnjomanMaxVF.woff") format("woff");
+    font-weight: 100 900;
+    font-style: normal;
+}
+
+.btn {
+    font-weight: 600;
+}
+
+    /* =======================
+       Colors
+       ======================= */
+:root {
+
+    /* Brand Colors */
+    --color-primary: #9f8561;
+    --color-secondary: #5e4420;
+
+    /* State Colors */
+    --color-success: #ffa800;
+    --color-warning: #ff9621;
+    --color-danger: #fff200;
+    --color-info: #17a2b8;
+
+    /* Neutral Colors */
+    --color-white: #ffffff;
+    --color-light: #f5f5f5;
+    --color-gray: #b6b2b2;
+    --color-dark: #212529;
+    --color-black: #000000;
+
+    /* gray styles */
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #6c757d;
+    --gray-700: #495057;
+    --gray-900: #212529;
+    --gray-800: #343a40;
+
+    /* Text Colors */
+    --text-primary: var(--color-dark);
+    --text-secondary: var(--color-gray);
+    --text-inverse: var(--color-white);
+
+    /* Background Colors */
+    --bg-page: var(--color-light);
+    --bg-surface: var(--color-white);
+    --bg-dark: var(--color-dark);
+
+    /* Border Colors */
+    --border-light: var(--color-light);
+    --border-default: var(--color-gray);
+    --border-strong: var(--color-secondary);
+
+    /* Accent Colors */
+    --accent-primary: var(--color-primary);
+    --accent-secondary: var(--color-secondary);
+
+    /* Selection */
+    --selection-bg: var(--color-success);
+    --selection-color: var(--color-black);
+
+    --color-text: var(--color-dark);
+    --color-link: var(--color-primary);
+    --color-link-hover: var(--color-secondary); 
+    --color-background: var(--color-white);
+
+    /* =======================
+       Typography
+       ======================= */
+    --font-family-base: 'AnjomanMax', sans-serif;
+    --font-family-heading: 'AnjomanMax', sans-serif;
+
+    --font-size-base: 16px; 
+    --line-height-heading: 1.3;
+    --line-height-base: 1.8; 
+    /* Heading Scale */
+    --fs-h1: 2.5rem;   /* 40px */
+    --fs-h2: 2rem;     /* 32px */
+    --fs-h3: 1.75rem;  /* 28px */
+    --fs-h4: 1.5rem;   /* 24px */
+    --fs-h5: 1.25rem;  /* 20px */
+    --fs-h6: 1rem;     /* 16px */
+
+    --fs-body: 1rem;      /* 16px */
+    --fs-small: 0.875rem; /* 14px *
+    --fs-xs: 0.75rem;    /* 12px */
+    --fs-sm: 0.875rem;   /* 14px */
+    --fs-lg: 1.125rem;   /* 18px */
+    --fs-xl: 1.25rem;    /* 20px */
+    
+    /* =======================
+       Spacing
+       ======================= */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+
+    /* =======================
+       Borders
+       ======================= */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-pill: 999px;
+    --border-width: 1px;
+    --border-color: #dee2e6;
+
+    /* Hover */
+
+    --color-primary-hover: #8a7353;
+    --color-primary-active: #755f43;
+
+
+}
+
+
+/* --- CSS Resets / Normalize --- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+html {
+    font-size: var(--font-size-base); 
+    line-height: var(--line-height-base);
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family-base);
+    color: var(--color-text);
+    background-color: var(--color-light);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    direction: rtl;
+}
+
+/* =======================
+   Headings
+   ======================= */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-heading);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.2;
+    font-weight: 500;
+}
+
+h1 {
+     font-size: var(--fs-h1);
+    font-weight: 800;
+}
+h2 {
+     font-size: var(--fs-h2);
+     font-weight: 700;
+}
+h3 {
+     font-size: var(--fs-h3); 
+     font-weight: 700;
+}
+h4 {
+     font-size: var(--fs-h4); 
+     font-weight: 600;
+} 
+h5 { font-size: var(--fs-h5); 
+    font-weight: 600;
+}
+h6 { font-size: var(--fs-h6); 
+    font-weight: 500;
+}
+
+/* =======================
+   Paragraph
+   ======================= */
+
+p {
+    font-size: var(--fs-body);
+    font-weight: 400;
+    line-height: 1.8;
+    margin-bottom: var(--spacing-md);
+}
+
+a {
+    color: var(--color-link);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: var(--color-link-hover);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+img, svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* --- Utilities --- */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+
+.mt-sm { margin-top: var(--spacing-sm); }
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+
+.p-sm { padding: var(--spacing-sm); }
+.pb-sm { padding-bottom: var(--spacing-sm); }
+.pt-sm { padding-top: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.pb-md { padding-bottom: var(--spacing-md); }
+.pt-md { padding-top: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }
+.pb-lg { padding-bottom: var(--spacing-lg); }
+.pt-lg { padding-top: var(--spacing-lg); }
+
+/* --- Basic Form Elements --- */
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+button {
+    cursor: pointer;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+button:hover {
+    /* background-color: var(--color-link-hover); Use a darker shade of primary */
+    border-color: var(--color-link-hover);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    width: auto; /* Override default styling */
+    margin-right: var(--spacing-sm);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.container {
+    width: 90%; /* Or 100% */
+    max-width: 1200px; /* Adjust as needed for your design */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+}
+
+/* Example: Basic Flexbox Grid (adjust as needed) */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: calc(var(--spacing-md) * -1);
+    margin-right: calc(var(--spacing-md) * -1);
+}
+
+.col {
+    flex: 1;
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+}
+
+.col-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+}
+/* Add more column classes like .col-3, .col-4, .col-12 etc. */
+
+
+/* ==========================================================================
+   Components (Example: Buttons, Cards, etc.)
+   ========================================================================== */
+
+/* Example: Primary Button Style */
+.btn {
+    display: inline-block;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    border: var(--border-width) solid transparent;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: 1rem;
+    line-height: var(--line-height-base);
+    border-radius: var(--border-radius);
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.btn-primary {
+    color: var(--color-white);
+    background-color: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+}
+
+.btn-primary:hover {
+    color: var(--color-white);
+    background-color: var(--color-link-hover);
+    border-color: var(--color-link-hover);
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+    
+}
+
+@media (min-width: 1440px) and (max-width: 1600px) {
+
+}
+@media (min-width: 1600px) and (max-width: 2559px) {
+    
+}
