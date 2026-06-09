@@ -7,9 +7,7 @@
     font-style: normal;
 }
 
-.btn {
-    font-weight: 600;
-}
+
 
     /* =======================
        Colors
@@ -30,6 +28,7 @@
     --color-white: #ffffff;
     --color-light: #f5f5f5;
     --color-gray: #b6b2b2;
+    --color-gray-navs: #eeeeee;
     --color-dark: #212529;
     --color-black: #000000;
 
@@ -141,11 +140,13 @@ html {
 
 body {
     font-family: var(--font-family-base);
+    /* font-variant-numeric: normal ; */
     color: var(--color-text);
     background-color: var(--color-light);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     direction: rtl;
+    overflow-x: hidden;
 }
 
 /* =======================
@@ -188,14 +189,14 @@ h6 { font-size: var(--fs-h6);
 p {
     font-size: var(--fs-body);
     font-weight: 400;
-    line-height: 1.8;
-    margin-bottom: var(--spacing-md);
+    /* line-height: 1.8; */
+    /* margin-bottom: var(--spacing-md); */
 }
 
 a {
     color: var(--color-link);
     text-decoration: none;
-    transition: color 0.2s ease-in-out;
+    /* transition: color 0.2s ease-in-out; */
 }
 
 a:hover {
@@ -242,7 +243,7 @@ textarea {
     line-height: inherit;
     border: var(--border-width) solid var(--border-color);
     border-radius: var(--border-radius);
-    padding: var(--spacing-sm) var(--spacing-md);
+    /* padding: var(--spacing-sm) var(--spacing-md); */
 }
 
 button {
@@ -271,32 +272,27 @@ input[type="radio"] {
 .container {
     width: 90%; /* Or 100% */
     max-width: 1200px; /* Adjust as needed for your design */
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: var(--spacing-md);
-    padding-right: var(--spacing-md);
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    /* padding-left: var(--spacing-md); */
+    /* padding-right: var(--spacing-md); */
 }
 
 /* Example: Basic Flexbox Grid (adjust as needed) */
 .row {
     display: flex;
     flex-wrap: wrap;
-    margin-left: calc(var(--spacing-md) * -1);
-    margin-right: calc(var(--spacing-md) * -1);
+    /* margin-left: calc(var(--spacing-md) * -1); */
+    /* margin-right: calc(var(--spacing-md) * -1); */
 }
 
 .col {
     flex: 1;
-    padding-left: var(--spacing-md);
-    padding-right: var(--spacing-md);
+    /* padding-left: var(--spacing-md); */
+    /* padding-right: var(--spacing-md); */
 }
 
-.col-6 {
-    flex: 0 0 50%;
-    max-width: 50%;
-    padding-left: var(--spacing-md);
-    padding-right: var(--spacing-md);
-}
+
 /* Add more column classes like .col-3, .col-4, .col-12 etc. */
 
 
@@ -332,8 +328,196 @@ input[type="radio"] {
 }
 
 @media (min-width: 1024px) and (max-width: 1439px) {
-    
-}
+    /* header styles */
+    .header{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .top-of-nav{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 25rem;
+        color: var(--color-light);
+        background-color: var(--color-primary-hover);
+        width: 100vw;
+        height: 50px;
+        overflow:hidden;
+    }
+    .top-of-nav a{
+        text-decoration: none;
+        color: inherit;
+        font-size: var(--fs-h5);
+
+    }
+    .my-navbar{
+        display: flex;        
+        background-color: var(--color-gray-navs);
+        width: 100vw;
+        height: 50px;
+        border-bottom: 2px solid var(--color-gray);
+        justify-content: space-around;
+    }
+    ul{
+        display: flex;
+        list-style-type: none;
+    }
+    ul li a{
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        color: var(--color-black);
+        font-size: var(--fs-h5);
+        width: 120px;
+        height: 48px;
+        border-left: 1px solid var(--color-white);
+        border-right: 1px solid var(--color-gray);
+    }
+    .contact-btn{
+        border-left: none;
+    }
+    .home-btn{
+        border-right: none;
+    }
+    .my-profile{
+        display: flex;
+        border: none;
+        align-items: center;
+    }
+    ul li a:hover{
+        color: var(--color-secondary);
+        background-color: rgb(255,168,0,0.5);
+    }
+    ul li a:focus{
+        color: var(--color-secondary);
+    }
+    .sell-number{
+        display: flex;
+        justify-content: center;
+        color: var(--color-danger);
+        align-items: center;
+        /* margin-top: 25px; */
+        margin-left:10px;
+        background-color: #5e4420;
+        width:47.29px;
+        height: 48px;
+        border-radius: 2px;
+    }
+    .sell-number p{
+        font-size: 22px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+    .cart{
+        display: flex;
+        align-items: center;
+        /* margin-top: 15px; */
+        margin : 15px 10px 0 10px;
+    }
+    .cart i {
+        font-size: 22px;
+    }
+
+
+
+    /* footer-styles */
+    .my-foot{
+        display: flex;
+        width: 100vw;
+        height: 465px;
+        background-color: var(--color-gray-navs);
+        padding: 7.5rem 10rem;
+        margin-top: 10px;
+    }
+    .intro{
+        display: flex;
+        flex-direction: column;
+        width: 25%;
+        align-items: center;
+    }
+    .top-product{
+        display: flex;
+        flex-direction: column;
+        width: 25%;
+        padding: 0 2rem;
+
+    }
+    .top-product a{
+        text-decoration: none;
+        color: var(--color-black);
+    }   
+    .top-product a::before{
+        content: "o";
+        margin-left: 10px;
+        font-size: 26px;
+        font-weight: 100;
+        color: var(--color-primary);
+    }  
+    .top-product a::before:hover{
+        color: var(--color-secondary);
+    }
+    .top-content{
+        display: flex;
+        flex-direction: column;
+        width: 25%;
+        /* padding: 0 1rem; */
+    }    
+    .top-content a{
+        text-decoration: none;
+        color: var(--color-black);
+    }
+    .top-content a::before{
+        content: "o";
+        margin-left: 10px;
+        font-size: 26px;
+        font-weight: 100;
+        color: var(--color-primary);
+    }
+    .top-content a::before:hover{
+        color: var(--color-secondary);
+    }
+    .contact{
+        width: 25%;
+        margin-right: 1rem;
+    }
+    .contact a{
+        text-decoration: none;
+        color: var(--color-black);
+    }
+    .address-section{
+        display: flex;
+        gap: 10px;
+    }
+    .mail-section{
+        display: flex;
+        gap: 10px;
+    }
+    .contact-numbers{
+        display: flex;
+        gap: 0.5rem;
+    }
+    .contact img{
+        width: 20px;
+        height: 20px;
+    }
+    .bottom-of-footer{
+        height: 50px;
+        width: 100vw;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+
+
+
+
+
+
+    }
 
 @media (min-width: 1440px) and (max-width: 1600px) {
 
