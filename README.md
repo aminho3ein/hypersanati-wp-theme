@@ -61,7 +61,7 @@ Then open the project folder and run index.html in your browser.
 
 Roadmap
 [x] Homepage layout
-[ ] Responsive design improvements
+[x] Responsive design improvements
 [ ] Blog section enhancements
 [ ] UI component refactoring
 [ ] WordPress theme conversion
@@ -80,10 +80,15 @@ The frontend layout will be integrated into a custom WordPress theme using:
 PHP template hierarchy
 WordPress theme functions
 Dynamic blog and content sections
-Author
-Developer: Amin Hossein
+
+
+## Author
+
+Developers:
+- Amin Hossein
+- Elyas Hosseini
 
 GitHub: https://github.com/aminho3ein
 
-License
+## License
 This project is licensed under the MIT License.
