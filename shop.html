@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="./css/bootstrap.rtl.min.css" />
+
+    <link rel="stylesheet" href="./css/fontawesome.min.css" />
+    <link rel="stylesheet" href="./css/brands.min.css" />
+    <link rel="stylesheet" href="./css/solid.min.css" />
+
+    <link rel="stylesheet" href="./css/main.css" />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/tablet-responsive.css"
+      media="(min-width:768px)"
+    />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/laptop-responsive.css"
+      media="(min-width:992px)"
+    />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/desktop-responsive.css"
+      media="(min-width:1200px)"
+    />
+    <link rel="stylesheet" href="./css/shop.css" />
+    <title>همگام صنعت برتر</title>
+  </head>
+  <body>
+    <!-- header -->
+    <div class="header">
+      <div class="top-of-nav">
+        <a href="#">ارسال ۷ الی ۱۰ روزکاری</a>
+        <a href="#">پیگیری سفارش</a>
+      </div>
+      <div class="my-navbar">
+        <!-- Logo / Brand (mobile) -->
+        <div class="navbar-brand">
+          <span>هایپرصنعتی الفت</span>
+        </div>
+
+        <!-- Desktop nav links -->
+        <ul class="nav-links">
+          <li><a class="home-btn" href="#">صفحه اصلی</a></li>
+          <li><a href="#">فروشگاه</a></li>
+          <li><a href="#">مجله</a></li>
+          <li><a href="#">درباره ما</a></li>
+          <li><a class="contact-btn" href="#">ارتباط با ما</a></li>
+        </ul>
+
+        <!-- Desktop nav actions -->
+        <ul class="nav-actions">
+          <div class="sell-number"><p>۷</p></div>
+          <div class="cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </div>
+          <li><a class="my-profile" href="#">حساب کاربری</a></li>
+        </ul>
+
+        <!-- Hamburger button (mobile only) -->
+        <div class="menu-and-cart">
+          <ul class="mobile-nav-actions">
+            <div class="sell-number"><p>۷</p></div>
+            <div class="cart">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+            <li><a class="my-profile" href="#">حساب کاربری</a></li>
+          </ul>
+          <button
+            class="hamburger"
+            id="hamburgerBtn"
+            aria-label="منو"
+            aria-expanded="false"
+          >
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Drawer Menu -->
+      <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+          <li><a href="#" onclick="closeMobileMenu()">صفحه اصلی</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">فروشگاه</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">مجله</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">درباره ما</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">ارتباط با ما</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">حساب کاربری</a></li>
+        </ul>
+      </div>
+      <div
+        class="mobile-overlay"
+        id="mobileOverlay"
+        onclick="closeMobileMenu()"
+      ></div>
+    </div>
+
+    <!-- search-feat -->
+
+    <div class="search-input">
+      <h5>عنوان محصول</h5>
+      <div class="big-input-division">
+        <input type="search" placeholder="مثلا بلبرینگ تماس زاویه ای" />
+        <button class="btn">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+    </div>
+    <h4 class="shop-name">فروشگاه محصولات صنعتی الفت</h4>
+    <hr class="main-hr" />
+
+    <div class="shop-container">
+      <div class="col-4 side-bar">
+        <div class="approximate-search">
+          <div class="approximate-paragraphs">
+            <p>فیلتر دسترسی به محصولات</p>
+          </div>
+          <div class="accurate-inputs">
+            <div class="accurate-search-boxes">
+              <div class="search-approx-box">
+                <div class="approximate-input-name">
+                  <h5>قطر داخلی</h5>
+                </div>
+                <div class="approximate-inputs">
+                  <p>بیشتر از مثلا</p>
+                  <input type="text" placeholder="مثلا 20" />
+                  <p id="va">و</p>
+                  <p>کمتر از</p>
+                  <input type="text" placeholder="مثلا 20" />
+                </div>
+              </div>
+              <div class="search-approx-box">
+                <div class="approximate-input-name">
+                  <h5>قطر خارجی</h5>
+                </div>
+                <div class="approximate-inputs">
+                  <p>بیشتر از مثلا</p>
+                  <input type="text" placeholder="مثلا 20" />
+                  <p id="va">و</p>
+                  <p>کمتر از</p>
+                  <input type="text" placeholder="مثلا 20" />
+                </div>
+              </div>
+              <div class="search-approx-box">
+                <div class="approximate-input-name">
+                  <h5>ارتفاع</h5>
+                </div>
+                <div class="approximate-inputs">
+                  <p>بیشتر از مثلا</p>
+                  <input type="text" placeholder="مثلا 20" />
+                  <p id="va">و</p>
+                  <p>کمتر از</p>
+                  <input type="text" placeholder="مثلا 20" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h4 class="category-header">یک دسته محصول را انتخاب کنید</h4>
+        <hr class="sub-section-hr" />
+        <div class="category">
+          <a href="#">
+            <p>یراق آلات</p>
+          </a>
+          <a href="#">
+            <p>روغن کاری</p>
+          </a>
+          <a href="#">
+            <p>کنترل فشار و دما</p>
+          </a>
+          <a href="#">
+            <p>کشیدن و بلند کردن</p>
+          </a>
+          <a href="#">
+            <p>اتصال دهنده ها</p>
+          </a>
+          <a href="#">
+            <p>مواد اولیه</p>
+          </a>
+          <a href="#">
+            <p>لوازم ایمنی</p>
+          </a>
+          <a href="#">
+            <p>اره کاری و برش</p>
+          </a>
+          <a href="#">
+            <p>آب بندی</p>
+          </a>
+          <a href="#">
+            <p>حمل و نقل</p>
+          </a>
+          <a href="#">
+            <p>تعلیق</p>
+          </a>
+          <a href="#">
+            <p>ساخت و ساز</p>
+          </a>
+          <a href="#">
+            <p>ساختمان و محوطه سازی</p>
+          </a>
+          <a href="#">
+            <p>دستگاه های صنعتی</p>
+          </a>
+          <a href="#">
+            <p>گیربکس صنعتی</p>
+          </a>
+          <a href="#">
+            <p>تهویه مطبوع</p>
+          </a>
+          <a href="#">
+            <p>پمپ</p>
+          </a>
+          <a href="#">
+            <p>گرمایش و موتورخانه</p>
+          </a>
+          <a href="#">
+            <p>برق صنعتی</p>
+          </a>
+          <a href="#">
+            <p>قطعات صنعتی</p>
+          </a>
+          <a href="#">
+            <p>اینتورتر</p>
+          </a>
+          <a href="#">
+            <p>ابزار آلات</p>
+          </a>
+          <a href="#">
+            <p>موتور ویبره</p>
+          </a>
+          <a href="#">
+            <p>فن و تهویه</p>
+          </a>
+          <a href="#">
+            <p>موتور برق و ژنراتور</p>
+          </a>
+          <a href="#">
+            <p>الکتروموتور</p>
+          </a>
+          <a href="#">
+            <p>ابزار دستی</p>
+          </a>
+        </div>
+      </div>
+      <div class="col-8 products-section">
+        <h4>همه دسته محصولات</h4>
+        <hr class="sub-section-hr" />
+        <div class="category">
+          <div class="category-name">
+            <h5>بست و اتصال</h5>
+          </div>
+          <div class="sub-category">
+            <div class="sub-category-name">
+              <p class="sub-cat-name">اتصال دهنده ها</p>
+            </div>
+            <div class="child-category">
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>پیچ و مهره</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>میله و گل میخ رزوه دار</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>پیچ چشمی</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>پیچ و مهره U شکل</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>مهره</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>واشر</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>واشر تنظیم</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- second child category -->
+
+            <div class="child-category">
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>فاصله دهنده‌ها و پایه‌ها</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>پین‌ها</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>لنگرها</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>میخ‌ها</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>میخ‌کوب‌ها</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>پرچ‌ها</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>ابزار پرچ</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>منگنه‌ها</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- third child section -->
+            <div class="child-category">
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>منگنه</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>جاکلیدی</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>حلقه‌های نگهدارنده</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>بست‌های کابل</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>بند آویز</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>آهنربا</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sub-category">
+            <div class="sub-category-name">
+              <p class="sub-cat-name">چسب و نوار</p>
+            </div>
+            <div class="child-category">
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>بست‌های کابل</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>بند آویز</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>آهنربا</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sub-category">
+            <div class="sub-category-name">
+              <p class="sub-cat-name">جوشکاری، لحیم کاری سخت و لحیم کاری</p>
+            </div>
+            <div class="child-category">
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>بست‌های کابل</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>بند آویز</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>آهنربا</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>بست‌های کابل</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>بند آویز</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>آهنربا</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>بست‌های کابل</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>بند آویز</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>آهنربا</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>بست‌های کابل</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>بند آویز</p>
+                </div>
+              </div>
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>آهنربا</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="sub-section-hr" />
+        <div class="category">
+          <div class="category-name">
+            <h5>بست و اتصال</h5>
+          </div>
+
+          <div class="sub-category">
+            <div class="sub-category-name">
+              <p class="sub-cat-name">اتصال دهنده ها</p>
+            </div>
+
+            <div class="child-category">
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>پیچ و مهره</p>
+                </div>
+              </div>
+
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>میله و گل میخ رزوه دار</p>
+                </div>
+              </div>
+
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>پیچ چشمی</p>
+                </div>
+              </div>
+
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>پیچ و مهره U شکل</p>
+                </div>
+              </div>
+
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>مهره</p>
+                </div>
+              </div>
+
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>واشر</p>
+                </div>
+              </div>
+
+              <div class="product-section">
+                <div class="product-cat-frame">
+                  <img src="./assets/shop-assets/02.png" alt="" />
+                </div>
+                <div class="product-name">
+                  <p>واشر تنظیم</p>
+                </div>
+              </div>
+            </div>
+            <!-- child-category -->
+          </div>
+          <!-- sub-category -->
+        </div>
+        <!-- category -->
+      </div>
+    </div>
+
+    <!-- footer -->
+    <div class="my-foot">
+      <div class="intro">
+        <h5>Logo</h5>
+        <img src="" alt="" />
+        <p>
+          ارائه‌دهنده خدمات تخصصی در حوزه تأمین، فروش، خرید، توزیع، صادرات و
+          واردات انواع محصولات صنعتی، تجهیزات، قطعات و ملزومات مورد نیاز صنایع
+          مختلف. این مجموعه با تکیه بر شبکه تأمین گسترده، تضمین کیفیت کالا، و
+          پشتیبانی حرفه‌ای، در زمینه فروش محصولات صنعتی و ارائه خدمات پیش و پس
+          از فروش به مشتریان در بخش‌های گوناگون صنعتی فعالیت می‌کند.
+        </p>
+      </div>
+      <div class="top-product">
+        <h5>برترین محصولات</h5>
+        <a href="#">یاتاقان</a>
+        <a href="#">بلبرینگ زاویه ایرانیان</a>
+        <a href="#">کاسه نمد</a>
+        <a href="#">بلبرینگ خود تنظیم</a>
+        <a href="#">اورینگ</a>
+      </div>
+      <div class="top-content">
+        <h5>برترین مقالات</h5>
+        <a href="#">اصطکاک در بلبرینگ و رولبرینگ</a>
+        <a href="#">زنگ زدگی بلبرینگ</a>
+        <a href="#"><span dir="ltr">FG</span> بر روی بلبرینگ به چه معناست ؟</a>
+        <a href="#">از کجا به اصالت محصول پی ببریم ؟</a>
+        <a href="#">نحوه پیگیری سفارش</a>
+      </div>
+      <div class="contact">
+        <h5>تماس با ما</h5>
+        <div class="address-section">
+          <img src="./assets/location point 2.svg" alt="" />
+          <p>
+            ادرس فروشگاه ما : تهران خیابان سعدی جنوبی خیابان اکباتان کوچه ناظم
+            الاطبا شمالی پاساژ امام حسین زیر همکف پلاک 32 بلبرینگ همگام صنعت
+            برتر
+          </p>
+        </div>
+        <div class="mail-section">
+          <img src="./assets/envelope.svg" alt="" /><a href="#"
+            ><p>info@example.com</p></a
+          >
+        </div>
+        <div class="contact-numbers">
+          <div>
+            <img src="./assets/mobile phone 1.svg" alt="" />
+          </div>
+          <div>
+            <a href="#"><p>02133989930</p></a>
+            <a href="#"><p>02133989940</p></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-of-footer">
+      <p>کلیه ی حقوق برای هایپرصنعتی الفت محفوظ می باشد</p>
+      <p>طراحی و توسعه توسط هوش افزار ایرانیان</p>
+    </div>
+
+    <script src="./js/functions.js"></script>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

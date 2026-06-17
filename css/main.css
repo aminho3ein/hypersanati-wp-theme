@@ -1253,7 +1253,7 @@ button.handle-frame-section:disabled {
    ========================================================================== */
 .my-foot {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   width: 100%;
   background-color: var(--color-gray-navs);
   padding: 2rem 1rem;
