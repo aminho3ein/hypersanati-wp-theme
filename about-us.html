@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="fa"  dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="./css/bootstrap.rtl.min.css" />
+
+    <link rel="stylesheet" href="./css/fontawesome.min.css" />
+    <link rel="stylesheet" href="./css/brands.min.css" />
+    <link rel="stylesheet" href="./css/solid.min.css" />
+
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/about-us.css" />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/tablet-responsive.css"
+      media="(min-width:768px)"
+    />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/laptop-responsive.css"
+      media="(min-width:992px)"
+    />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/desktop-responsive.css"
+      media="(min-width:1200px)"
+    />
+
+    
+
+    <title>همگام صنعت برتر</title>
+  </head>
+  <body>
+    <!-- header -->
+    <div class="header">
+      <div class="top-of-nav">
+        <a href="#">ارسال ۷ الی ۱۰ روزکاری</a>
+        <a href="#">پیگیری سفارش</a>
+      </div>
+      <div class="my-navbar">
+        <!-- Logo / Brand (mobile) -->
+        <div class="navbar-brand">
+          <span>هایپرصنعتی الفت</span>
+        </div>
+
+        <!-- Desktop nav links -->
+        <ul class="nav-links">
+          <li><a class="home-btn" href="#">صفحه اصلی</a></li>
+          <li><a href="#">فروشگاه</a></li>
+          <li><a href="#">مجله</a></li>
+          <li><a href="#">درباره ما</a></li>
+          <li><a class="contact-btn" href="#">ارتباط با ما</a></li>
+        </ul>
+
+        <!-- Desktop nav actions -->
+        <ul class="nav-actions">
+          <div class="sell-number"><p>۷</p></div>
+          <div class="cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </div>
+          <li><a class="my-profile" href="#">حساب کاربری</a></li>
+        </ul>
+
+        <!-- Hamburger button (mobile only) -->
+        <div class="menu-and-cart">
+          <ul class="mobile-nav-actions">
+            <div class="sell-number"><p>۷</p></div>
+            <div class="cart">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+            <li><a class="my-profile" href="#">حساب کاربری</a></li>
+          </ul>
+          <button
+            class="hamburger"
+            id="hamburgerBtn"
+            aria-label="منو"
+            aria-expanded="false"
+          >
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Drawer Menu -->
+      <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+          <li><a href="#" onclick="closeMobileMenu()">صفحه اصلی</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">فروشگاه</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">مجله</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">درباره ما</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">ارتباط با ما</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">حساب کاربری</a></li>
+        </ul>
+      </div>
+      <div
+        class="mobile-overlay"
+        id="mobileOverlay"
+        onclick="closeMobileMenu()"
+      ></div>
+    </div>
+
+    
+<section class="about-hero-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-12">
+        <div class="about-hero-card">
+
+
+          <div class="about-hero-content">
+            <div class="about-hero-title-wrap">
+              <h1 class="about-hero-title">
+                <span class="about-hero-title-item is-active">تأمین مطمئن</span>
+                <span class="about-hero-title-item">پشتیبانی تخصصی</span>
+                <span class="about-hero-title-item">راهکارهای عملی</span>
+              </h1>
+            </div>
+
+            <p class="about-hero-text">
+              ما تأمین‌کننده تخصصی محصولات و تجهیزات صنعتی هستیم و با تمرکز بر سرعت، دقت و پشتیبانی فنی، به صنایع مختلف در بهبود بهره‌وری و کاهش توقفات کمک می‌کنیم.
+            </p>
+
+
+
+            <div class="about-hero-lower-text">
+              <p>
+                مشتریان ما فقط برای خرید قطعه به ما مراجعه نمی‌کنند؛ آن‌ها به دانش فنی، تجربه عملی و توانایی ما در ارائه راه‌حل‌های سریع و کاربردی اعتماد دارند.
+              </p>
+
+            </div>
+          </div>
+            <div class="about-hero-image-wrap">
+            <img
+              src="./assets/about-us/about-hero.jpg"
+              alt="درباره هایپرصنعتی الفت"
+              class="about-hero-image"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission Section -->
+<section class="about-mission-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10">
+        <div class="about-mission-content">
+          <h2 class="about-mission-title">ماموریت ما</h2>
+
+          <p class="about-mission-text">
+            ارائه راهکارهای فنی قابل اتکا که باعث افزایش بهره‌وری، کاهش هزینه‌های نگهداری
+            و بهینه‌سازی زنجیره تأمین مشتریان شود.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about-why-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10">
+        
+        <div class="about-why-header">
+          <h2 class="about-why-title">چرا ما؟</h2>
+        </div>
+
+        <div class="about-why-grid">
+
+          <article class="about-why-card about-why-card-3">
+            <div class="about-why-icon">
+              <img src="./assets/about-us/delivery.png" alt="تأمین سریع و مطمئن" />
+            </div>
+            <h3>تأمین سریع و مطمئن</h3>
+            <p>
+              ارسال سریع کالا، دسترسی گسترده به موجودی و شبکه تأمین قوی،
+              باعث می‌شود قطعات موردنیاز شما در کوتاه‌ترین زمان ممکن تأمین شود.
+            </p>
+          </article>
+
+          <article class="about-why-card about-why-card-2">
+            <div class="about-why-icon">
+              <img src="./assets/about-us/quality.png" alt="کیفیت و اصالت کالا" />
+            </div>
+            <h3>کیفیت و اصالت کالا</h3>
+            <p>
+              همکاری با برندهای معتبر صنعتی، تضمین اصالت کالا و قابلیت رهگیری محصولات،
+              اطمینان خاطر کامل ایجاد می‌کند.
+            </p>
+          </article>
+
+          <article class="about-why-card about-why-card-1">
+            <div class="about-why-icon">
+              <img src="./assets/about-us/support.png" alt="پشتیبانی تخصصی" />
+            </div>
+            <h3>پشتیبانی تخصصی</h3>
+            <p>
+              کارشناسان فنی ما در انتخاب، مشخصه‌یابی و جایگزینی قطعات در کنار شما هستند،
+              از مرحله طراحی و ساخت تا تعمیر و نگهداری.
+            </p>
+          </article>
+
+
+          <article class="about-why-card about-why-card-4">
+            <div class="about-why-icon">
+              <img src="./assets/about-us/partnership.png" alt="همکاری بلندمدت" />
+            </div>
+            <h3>همکاری بلندمدت</h3>
+            <p>
+              ما خود را صرفاً فروشنده نمی‌دانیم؛ بلکه شریک تأمین شما هستیم.
+              هدف ما ایجاد رابطه‌ای پایدار، شفاف و مبتنی بر اعتماد است.
+            </p>
+          </article>
+
+          <article class="about-why-card about-why-card-5">
+            <div class="about-why-icon">
+              <img src="./assets/about-us/productivity.png" alt="راهکارهای افزایش بهره‌وری" />
+            </div>
+            <h3>راهکارهای افزایش بهره‌وری</h3>
+            <p>
+              با تحلیل شرایط عملیاتی شما، بهترین پیشنهادها را برای کاهش توقف خط تولید،
+              بهبود عملکرد تجهیزات و کاهش هزینه‌ها ارائه می‌دهیم.
+            </p>
+          </article>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- footer -->
+    <div class="my-foot">
+      <div class="intro">
+        <h5>Logo</h5>
+        <img src="" alt="" />
+        <p>
+          ارائه‌دهنده خدمات تخصصی در حوزه تأمین، فروش، خرید، توزیع، صادرات و
+          واردات انواع محصولات صنعتی، تجهیزات، قطعات و ملزومات مورد نیاز صنایع
+          مختلف. این مجموعه با تکیه بر شبکه تأمین گسترده، تضمین کیفیت کالا، و
+          پشتیبانی حرفه‌ای، در زمینه فروش محصولات صنعتی و ارائه خدمات پیش و پس
+          از فروش به مشتریان در بخش‌های گوناگون صنعتی فعالیت می‌کند.
+        </p>
+      </div>
+      <div class="top-product">
+        <h5>برترین محصولات</h5>
+        <a href="#">یاتاقان</a>
+        <a href="#">بلبرینگ زاویه ایرانیان</a>
+        <a href="#">کاسه نمد</a>
+        <a href="#">بلبرینگ خود تنظیم</a>
+        <a href="#">اورینگ</a>
+      </div>
+      <div class="top-content">
+        <h5>برترین مقالات</h5>
+        <a href="#">اصطکاک در بلبرینگ و رولبرینگ</a>
+        <a href="#">زنگ زدگی بلبرینگ</a>
+        <a href="#"><span dir="ltr">FG</span> بر روی بلبرینگ به چه معناست ؟</a>
+        <a href="#">از کجا به اصالت محصول پی ببریم ؟</a>
+        <a href="#">نحوه پیگیری سفارش</a>
+      </div>
+      <div class="contact">
+        <h5>تماس با ما</h5>
+        <div class="address-section">
+          <img src="./assets/location point 2.svg" alt="" />
+          <p>
+            ادرس فروشگاه ما : تهران خیابان سعدی جنوبی خیابان اکباتان کوچه ناظم
+            الاطبا شمالی پاساژ امام حسین زیر همکف پلاک 32 بلبرینگ همگام صنعت
+            برتر
+          </p>
+        </div>
+        <div class="mail-section">
+          <img src="./assets/envelope.svg" alt="" /><a href="#"
+            ><p>info@example.com</p></a
+          >
+        </div>
+        <div class="contact-numbers">
+          <div>
+            <img src="./assets/mobile phone 1.svg" alt="" />
+          </div>
+          <div>
+            <a href="#"><p>02133989930</p></a>
+            <a href="#"><p>02133989940</p></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-of-footer">
+      <p>کلیه ی حقوق برای هایپرصنعتی الفت محفوظ می باشد</p>
+      <p>طراحی و توسعه توسط هوش افزار ایرانیان</p>
+    </div>
+
+    <script src="./js/hamburger-menu.js"></script>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="./js/about-us.js"></script>
+
+  </body>
+</html>
