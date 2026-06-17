@@ -26,6 +26,7 @@
   --color-red: #f90000;
   --color-red-read-more: #ba0404;
   --color-search-box: #e7e3e3;
+  --color-card-article-cat: #e6d8c6;
   --gray-100: #f8f9fa;
   --gray-200: #e9ecef;
   --gray-300: #dee2e6;
@@ -118,7 +119,7 @@ html {
 body {
   font-family: var(--font-family-base);
   color: var(--color-text);
-  background-color: var(--color-light);
+  background-color: var(--color-white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   direction: rtl;
