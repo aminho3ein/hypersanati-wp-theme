@@ -7,7 +7,7 @@
 .about-hero-section {
   width: 100%;
   padding: 1.5rem 0 2rem;
-  background-color: var(--color-light);
+  background-color: var(--color-white);
 }
 
 .about-hero-card {
@@ -26,7 +26,7 @@
   width: 580px;
   min-height: 416px;
   overflow: hidden;
-  background-color: var(--color-light);
+  background-color: var(--color-white);
 }
 
 .about-hero-image-wrap::after {
@@ -252,7 +252,7 @@
 
 .about-mission-section {
   width: 100%;
-  background-color: var(--color-light);
+  background-color: var(--color-white);
   padding: 5rem 0;
 }
 
@@ -325,7 +325,7 @@
 .about-why-section {
   width: 100%;
   padding: 4rem 0 5rem;
-  background-color: var(--color-light);
+  background-color: var(--color-white);
 }
 
 .about-why-header {
@@ -351,7 +351,7 @@
   width: 52px;
   height: 3px;
   margin: var(--spacing-sm) auto 0;
-  background-color: var(--color-primary);
+  background-color: var(--color-white);
   border-radius: var(--radius-pill);
 }
 
@@ -376,7 +376,7 @@
   justify-content: center;
   margin-bottom: 1.5rem;
   border-radius: var(--radius-sm);
-  background-color: var(--gray-300);
+  background-color: var(--gray-200);
   overflow: hidden;
 }
 
