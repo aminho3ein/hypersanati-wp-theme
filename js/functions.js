@@ -28,8 +28,6 @@ function closeMobileMenu() {
   document.body.style.overflow = "";
 }
 
-
-
 ////////////////////////===================cards handle btns
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -54,14 +52,31 @@ document.addEventListener("DOMContentLoaded", function () {
   rightBtn.addEventListener("click", function () {
     scrollContainer.scrollBy({
       left: getScrollAmount(),
-      behavior: "smooth"
+      behavior: "smooth",
     });
   });
 
   leftBtn.addEventListener("click", function () {
     scrollContainer.scrollBy({
       left: -getScrollAmount(),
-      behavior: "smooth"
+      behavior: "smooth",
     });
+  });
+});
+
+////////////////////////////////  single-product-meta-tabs-feat
+document.querySelectorAll(".product-meta-nav button").forEach((btn) => {
+  btn.addEventListener("click", function () {
+    document
+      .querySelectorAll(".tab-panel")
+      .forEach((p) => p.classList.remove("active"));
+
+    document
+      .querySelectorAll(".product-meta-nav button")
+      .forEach((b) => b.classList.remove("active"));
+
+    document.getElementById(this.dataset.tab).classList.add("active");
+
+    this.classList.add("active");
   });
 });

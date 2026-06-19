@@ -13,7 +13,6 @@
   display: flex;
   flex-direction: column;
   width: 50%;
-  /* margin: 1rem; */
 }
 .left-side {
   display: flex;
@@ -41,12 +40,10 @@
   color: gold;
 }
 
-/* وقتی انتخاب شد */
 .fontawesome-5-star-rate input:checked ~ label i {
   color: gold;
 }
 
-/* تغییر آیکون از توخالی به پر */
 .fontawesome-5-star-rate input:checked ~ label i:before {
   content: "\f005";
   font-family: "Font Awesome 6 Free";
@@ -133,30 +130,13 @@
 .add-to-cart-and-dropdown-sec-frame {
   background-color: var(--color-white);
 }
-.add-to-cart-and-dropdown-sec-frame select {
-  /* display: none; */
-}
-
-#product-count {
-  width: 80%;
-  text-align-last: center;
-  border: none;
-}
-#product-count:focus {
-  outline: none;
-}
 
 /* ============
 
     product img section
 
  =========== */
-/* .product-and-price-detail{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
- } */
+
 .product-images {
   display: flex;
   flex-direction: column;
@@ -175,7 +155,7 @@
 .custom-btn {
   width: 60px;
   height: 180px;
-  background: rgba(120, 120, 120, 0.4); /* خاکستری نیمه شفاف */
+  background: rgba(120, 120, 120, 0.4);
   border-radius: 0;
   top: 50%;
   transform: translateY(-50%);
@@ -230,4 +210,387 @@
 
 .product-specs .value {
   color: #777;
+}
+
+/* ==========================
+
+        product-meta-tabs styles
+
+============================*/
+.product-meta-tabs {
+  height: 74px;
+  width: 100vw;
+  background-color: var(--gray-300);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-direction: column;
+}
+.product-meta-nav {
+  height: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.product-meta-nav button {
+  height: inherit;
+  border-radius: 0;
+  width: 212px;
+  background-color: transparent;
+  border: 2px solid var(--gray-400);
+  border-top: none;
+  color: var(--color-dark);
+}
+.between {
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/* ارتفاع ثابت و یکسان برای هر سه تب */
+.product-meta-content {
+  height: 500px;
+  overflow: hidden;
+}
+
+/* قانون مشترک: همه‌ی پنل‌ها همین رفتار را دارند (overflow + height یکسان) */
+.product-meta-content > .tab-panel {
+  display: none;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.product-meta-content > .tab-panel.active {
+  display: flex; /* qa و reviews همین flex را برای چیدمان سایدبار+محتوا نیاز دارند */
+}
+
+/* فقط desc به چیدمان ستونی نیاز دارد */
+#desc.active {
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2.5625rem;
+}
+
+#reviews {
+  padding: 2rem;
+}
+
+.product-meta-nav button.active {
+  background-color: var(--color-light);
+  color: var(--color-dark);
+  border: 2px solid transparent;
+  border-top: 2px solid var(--color-black);
+}
+.product-meta-nav button i {
+  margin-left: 8px;
+}
+
+#desc p {
+  display: block;
+  margin-top: 2rem;
+}
+
+/* =================
+
+      question and answer styles
+
+================== */
+.question-and-answer-sec {
+  width: 80%;
+  padding: 5rem;
+  /* دیگر overflow و height جدا نمی‌خواهد؛ اسکرول روی #qa انجام می‌شود */
+}
+.question-and-answer-sec-request {
+  margin-top: 1rem;
+}
+
+.question-and-answer-sec-filter {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+}
+
+.question-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.question-filter .value {
+  cursor: pointer;
+}
+.question-filter .value.active {
+  color: var(--color-warning);
+  font-weight: 700;
+}
+
+.question-ctr-sec {
+  width: 20%;
+  flex-shrink: 0;
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  align-self: flex-start; /* مهم: نگذارد ارتفاعش کشیده شود */
+  background: #fff;
+  z-index: 2;
+}
+.question-ctr-sec p {
+  text-align: center;
+}
+.question-ctr-sec button {
+  width: 200px;
+  background-color: transparent;
+  color: var(--color-secondary);
+}
+
+.question-and-answer-sec,
+.product-reviews {
+  width: 80%;
+  /* height و overflow حذف شد؛ اسکرول واقعی روی #qa / #reviews است */
+}
+
+.product-qa {
+  font-family: inherit;
+}
+
+.qa-item {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: #fff;
+}
+
+.qa-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.qa-name {
+  font-weight: 600;
+}
+
+.qa-role {
+  font-size: 12px;
+  color: #777;
+  margin-right: 6px;
+}
+
+.qa-text {
+  line-height: 1.9;
+  margin-bottom: 10px;
+}
+
+.qa-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #777;
+}
+
+.same-question {
+  background: var(--color-primary);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.reply-btn {
+  background: var(--color-primary);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.user-icon {
+  font-size: 18px;
+  color: #666;
+}
+
+.seller-icon {
+  font-size: 18px;
+  color: #2e7d32;
+}
+
+.answer {
+  margin-right: 40px;
+  background: #fafafa;
+}
+
+/* ==================
+
+      score section
+
+===================== */
+.score-number-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+}
+.score-total {
+  font-size: 12px;
+}
+.product-score-value {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.product-reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.review-item {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 18px;
+  background: #fff;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.review-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.review-user i {
+  font-size: 20px;
+  color: #666;
+}
+
+.user-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+}
+
+.user-badges {
+  display: flex;
+  gap: 6px;
+  margin-top: 3px;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.badge.buyer {
+  background: #f2f2f2;
+  color: #444;
+}
+
+.badge.shop {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.review-date {
+  font-size: 13px;
+  color: var(--color-primary-hover);
+}
+
+.review-text {
+  line-height: 2;
+  margin-bottom: 14px;
+}
+
+.review-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.review-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.review-actions button {
+  border: none;
+  background: var(--color-primary);
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ===========
+
+      card style section
+
+=============*/
+
+.product-card{
+  width:250px;
+  height:520px;
+  background:var(--color-gray);
+  display:flex;
+  flex-direction:column;
+}
+
+.product-image img{
+  width:250px;
+  height:250px;
+  object-fit:cover;
+}
+
+.product-name{
+  margin-top:1rem;
+  padding:0 10px;
+}
+
+.product-name p{
+  font-size:18px;
+  font-weight:normal;
+}
+
+.price-and-discont-sec{
+  margin-top:auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* کدهای خودت بدون تغییر */
+.discont-sec{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+}
+
+.discont-sec-frame p{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background-color:var(--color-danger);
+  border-radius:13.5px;
+  height:32px;
+  width:91px;
+}
+
+.price-sec p{
+  font-size:18px;
+  font-weight:bold;
 }
