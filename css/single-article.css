@@ -11,6 +11,7 @@
 }
 
 .single-article-hero__inner {
+  direction: rtl;
   max-width: 63rem;
   margin: 0 auto;
   text-align: center;
@@ -125,26 +126,71 @@
   width: 15.625rem;
   min-width: 15.625rem;
   flex: 0 0 15.625rem;
+  align-self: flex-start;
+  position: relative;
 }
 
 .featured-product-card {
   position: sticky;
-  top: 7.5rem;
+  top: 1.5rem;
   background-color: var(--bg-surface);
-  border: var(--border-width) solid var(--gray-400);
+  border-top: var(--border-width) solid var(--gray-400);
+  border-bottom: var(--border-width) solid var(--gray-400);
+  border-left: var(--border-width) solid var(--gray-400);
+  border-right: var(--border-width) solid var(--gray-400);
   border-radius: 0;
   box-shadow: 0 0.25rem 0.875rem rgba(0, 0, 0, 0.08);
   overflow: hidden;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.featured-product-card.is-sticky {
+  box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.12);
+}
+
+.featured-product-card.is-sticky-active {
+  border-left-width: 0.1875rem;
+  border-right-width: 0.1875rem;
 }
 
 .featured-product-progress {
   position: absolute;
   top: 0;
-  right: 0;
-  width: 0.3125rem;
+  bottom: auto;
+  width: 0.125rem;
   height: 0;
-  background: linear-gradient(to bottom, var(--color-warning), var(--color-red));
-  transition: height 0.2s ease;
+  background: linear-gradient(
+    to bottom,
+    var(--color-primary) 0%,
+    var(--color-success) 45%,
+    var(--color-warning) 100%
+  );
+  transition (
+    height 0.2s ease,
+    width 0.25s ease,
+    background 0.25s ease
+    );
+  z-index: 2;
+}
+
+.featured-product-card.is-sticky-active .featured-product-progress {
+  width: 0.25rem;
+}
+
+.featured-product-progress--right {
+  right: 0;
+}
+
+.featured-product-progress--left {
+  left: 0;
+}
+
+.featured-product-card.is-scroll-complete .featured-product-progress {
+  height: 100% !important;
+  background: var(--color-red);
 }
 
 .featured-product-image-link {
@@ -190,6 +236,7 @@
   color: var(--gray-700);
   font-size: var(--fs-body);
   line-height: 1.9;
+  text-align: right;
 }
 
 .featured-product-pricing {
@@ -261,6 +308,8 @@
 }
 
 .article-toc-list {
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding-right: var(--spacing-xl);
   list-style-type: disc;
@@ -276,16 +325,23 @@
 }
 
 .article-toc-list a {
+  width: 100%;
   display: inline-block;
   color: var(--gray-700);
   font-size: var(--fs-xl);
   font-weight: 400;
-  line-height: 1.9;
   transition: color 0.2s ease;
+  border: none;
+  height: 15px;
+
 }
 
 .article-toc-list a:hover {
-  color: var(--color-link-hover);
+  background-color: transparent;
+  color: var(--color-primary-hover);
+}
+.article-toc-list a:active {
+  color: var(--color-primary-active);
 }
 
 /* =========================
@@ -367,25 +423,29 @@
   }
 
   .single-article-layout {
-    flex-direction: column-reverse;
-    gap: calc(var(--spacing-xl) * 2);
+    flex-direction: row;
+    gap: calc(var(--spacing-xl) * 1.5);
   }
 
   .single-article-sidebar {
-    width: 100%;
-    min-width: 100%;
-    flex: 1 1 100%;
+    position: sticky;
+    top: 1rem; /* فاصله از بالای صفحه وقتی استیکی می‌شه، می‌تونید عدد رو تغییر بدید */
+    align-self: flex-start; /* اگه parent با flex/grid چیده شده، این لازمه */
+    width: 15.625rem;
+    min-width: 15.625rem;
+    flex: 0 0 15.625rem;
   }
 
   .single-article-main {
-    width: 100%;
+    width: auto;
+    flex: 1 1 auto;
   }
 
   .featured-product-card {
-    position: relative;
-    top: auto;
-    max-width: 20rem;
-    margin: 0 auto;
+    position: sticky;
+    top: 1.5rem;
+    max-width: 100%;
+    margin: 0;
   }
 
   .featured-product-image {
@@ -394,10 +454,7 @@
     aspect-ratio: 1 / 1;
   }
 
-  .article-toc-box {
-    max-width: 100%;
-  }
-
+  .article-toc-box,
   .article-content-block {
     max-width: 100%;
   }
@@ -429,6 +486,29 @@
 
   .single-article-content-section {
     padding: calc(var(--spacing-xl) * 2) 0 calc(var(--spacing-xl) * 3);
+  }
+
+  .single-article-layout {
+    flex-direction: column-reverse;
+    gap: calc(var(--spacing-xl) * 2);
+  }
+
+  .single-article-sidebar {
+    position: relative;
+    width: 100%;
+    min-width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .featured-product-card {
+    
+    top: auto;
+    max-width: 20rem;
+    margin: 0 auto;
+  }
+
+  .featured-product-progress {
+    display: none;
   }
 
   .article-toc-box {

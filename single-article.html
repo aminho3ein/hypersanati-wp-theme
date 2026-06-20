@@ -149,40 +149,47 @@
     <div class="single-article-layout">
 
       <!-- Sidebar Product Card -->
-      <aside class="single-article-sidebar">
-        <div class="featured-product-card">
-          <div class="featured-product-progress"></div>
+<aside class="single-article-sidebar">
+  <div class="featured-product-card" id="featuredProductCard">
+    <span class="featured-product-progress featured-product-progress--right" aria-hidden="true"></span>
+    <span class="featured-product-progress featured-product-progress--left" aria-hidden="true"></span>
 
-          <a href="#" class="featured-product-image-link">
-            <img
-              src="assets/article-category/product-bearing.jpg"
-              alt="بلبرینگ 6205-2RS-1"
-              class="featured-product-image"
-            />
-          </a>
+    <a href="#" class="featured-product-image-link">
+      <img
+        src="assets/article-category/product-bearing.jpg"
+        alt="بلبرینگ 6205-2RS-1"
+        class="featured-product-image"
+      />
+    </a>
 
-          <div class="featured-product-body">
-            <h3 class="featured-product-title">
-              بلبرینگ 6205-2RS-1 با قطر داخلی 1 اینچ - بلبرینگ 6205-RS-16
-            </h3>
+    <div class="featured-product-body">
+      <h3 class="featured-product-title">
+        <a href="#">
+          بلبرینگ 6205-2RS-1 با قطر داخلی 1 اینچ - بلبرینگ 6205-RS-16
+        </a>
+      </h3>
 
-            <div class="featured-product-pricing">
-              <div class="featured-product-price-row">
-                <span class="featured-product-discount">15% تخفیف</span>
-                <span class="featured-product-old-price">10,850,976</span>
-              </div>
+      <p class="featured-product-description">
+        بلبرینگ صنعتی مناسب برای کاربردهای متنوع با کیفیت ساخت بالا، عملکرد نرم و طول عمر مناسب در شرایط کاری مختلف.
+      </p>
 
-              <div class="featured-product-final-price">
-                9,228,160 تومان
-              </div>
-            </div>
-          </div>
+      <div class="featured-product-pricing">
+        <div class="featured-product-price-row">
+          <span class="featured-product-discount">15% تخفیف</span>
+          <span class="featured-product-old-price">10,850,976</span>
         </div>
-      </aside>
+
+        <div class="featured-product-final-price">
+          9,228,160 تومان
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>
 
       <!-- Main Content -->
       <div class="single-article-main">
-
+        
         <!-- Table of Contents -->
         <div class="article-toc-box">
           <h2 class="article-toc-title">فهرست مطالب مقاله حاضر:</h2>
@@ -290,5 +297,6 @@
 
     <script src="./js/functions.js"></script>
     <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="./js/single-article.js"></script>
   </body>
 </html>
