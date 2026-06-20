@@ -80,3 +80,23 @@ document.querySelectorAll(".product-meta-nav button").forEach((btn) => {
     this.classList.add("active");
   });
 });
+////////////////////////=================== related products
+document.querySelectorAll(".relevent-sec").forEach((section) => {
+  const slider = section.querySelector(".blogScroll");
+  const rightBtn = section.querySelector(".scrollRightBtn");
+  const leftBtn = section.querySelector(".scrollLeftBtn");
+
+  rightBtn.addEventListener("click", () => {
+    slider.scrollBy({
+      left: -300,
+      behavior: "smooth",
+    });
+  });
+
+  leftBtn.addEventListener("click", () => {
+    slider.scrollBy({
+      left: 300,
+      behavior: "smooth",
+    });
+  });
+});
