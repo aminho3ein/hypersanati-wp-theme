@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="./css/bootstrap.rtl.min.css" />
+
+    <link rel="stylesheet" href="./css/fontawesome.min.css" />
+    <link rel="stylesheet" href="./css/brands.min.css" />
+    <link rel="stylesheet" href="./css/solid.min.css" />
+
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/single-article.css" />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/tablet-responsive.css"
+      media="(min-width:768px)"
+    />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/laptop-responsive.css"
+      media="(min-width:992px)"
+    />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/desktop-responsive.css"
+      media="(min-width:1200px)"
+    />
+
+    <title>همگام صنعت برتر</title>
+  </head>
+  <body>
+    <!-- header -->
+    <div class="header">
+      <div class="top-of-nav">
+        <a href="#">ارسال ۷ الی ۱۰ روزکاری</a>
+        <a href="#">پیگیری سفارش</a>
+      </div>
+      <div class="my-navbar">
+        <!-- Logo / Brand (mobile) -->
+        <div class="navbar-brand">
+          <span>هایپرصنعتی الفت</span>
+        </div>
+
+        <!-- Desktop nav links -->
+        <ul class="nav-links">
+          <li><a class="home-btn" href="#">صفحه اصلی</a></li>
+          <li><a href="#">فروشگاه</a></li>
+          <li><a href="#">مجله</a></li>
+          <li><a href="#">درباره ما</a></li>
+          <li><a class="contact-btn" href="#">ارتباط با ما</a></li>
+        </ul>
+
+        <!-- Desktop nav actions -->
+        <ul class="nav-actions">
+          <div class="sell-number"><p>۷</p></div>
+          <div class="cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </div>
+          <li><a class="my-profile" href="#">حساب کاربری</a></li>
+        </ul>
+
+        <!-- Hamburger button (mobile only) -->
+        <div class="menu-and-cart">
+          <ul class="mobile-nav-actions">
+            <div class="sell-number"><p>۷</p></div>
+            <div class="cart">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+            <li><a class="my-profile" href="#">حساب کاربری</a></li>
+          </ul>
+          <button
+            class="hamburger"
+            id="hamburgerBtn"
+            aria-label="منو"
+            aria-expanded="false"
+          >
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Drawer Menu -->
+      <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+          <li><a href="#" onclick="closeMobileMenu()">صفحه اصلی</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">فروشگاه</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">مجله</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">درباره ما</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">ارتباط با ما</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">حساب کاربری</a></li>
+        </ul>
+      </div>
+      <div
+        class="mobile-overlay"
+        id="mobileOverlay"
+        onclick="closeMobileMenu()"
+      ></div>
+    </div>
+
+<section class="single-article-hero">
+  <div class="container">
+    <div class="single-article-hero__inner">
+      
+      <h1 class="single-article-title">
+        میل گردان در مقابل میل اکسل: راهنمای مقایسه ساده
+      </h1>
+
+      <nav class="single-article-breadcrumb" aria-label="breadcrumb">
+        <a href="#">خانه</a>
+        <span>/</span>
+        <a href="#">مجله</a>
+        <span>/</span>
+        <a href="#">آموزش</a>
+        <span>/</span>
+        <span class="current">میل گردان در مقابل میل اکسل</span>
+      </nav>
+
+      <div class="single-article-meta">
+        <span class="single-article-author">نویسنده: امین نیرودی حسینی</span>
+        <span class="single-article-separator">|</span>
+        <span class="single-article-date">تاریخ انتشار: ۱۴۰۵/۰۴/۲۱</span>
+      </div>
+
+      <div class="single-article-featured-image">
+        <img src="assets/single-article/featured-image.jpg" alt="مقایسه میل گردان و میل اکسل">
+      </div>
+
+      <p class="single-article-excerpt">
+        یک وسیله نقلیه به‌تنهایی نمی‌تواند حرکت کند مگر اینکه نیروی موتور از طریق سیستم انتقال قدرت به چرخ‌ها منتقل شود. این فرآیند شامل چندین قطعه چرخان است که برای انتقال گشتاور به‌طور روان با هم کار می‌کنند.
+      </p>
+
+      <p class="single-article-excerpt">
+        یک وسیله نقلیه به‌تنهایی نمی‌تواند حرکت کند مگر اینکه نیروی موتور از طریق سیستم انتقال قدرت به چرخ‌هکار می‌کنند.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="single-article-content-section">
+  <div class="container">
+    <div class="single-article-layout">
+
+      <!-- Sidebar Product Card -->
+      <aside class="single-article-sidebar">
+        <div class="featured-product-card">
+          <div class="featured-product-progress"></div>
+
+          <a href="#" class="featured-product-image-link">
+            <img
+              src="assets/article-category/product-bearing.jpg"
+              alt="بلبرینگ 6205-2RS-1"
+              class="featured-product-image"
+            />
+          </a>
+
+          <div class="featured-product-body">
+            <h3 class="featured-product-title">
+              بلبرینگ 6205-2RS-1 با قطر داخلی 1 اینچ - بلبرینگ 6205-RS-16
+            </h3>
+
+            <div class="featured-product-pricing">
+              <div class="featured-product-price-row">
+                <span class="featured-product-discount">15% تخفیف</span>
+                <span class="featured-product-old-price">10,850,976</span>
+              </div>
+
+              <div class="featured-product-final-price">
+                9,228,160 تومان
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="single-article-main">
+
+        <!-- Table of Contents -->
+        <div class="article-toc-box">
+          <h2 class="article-toc-title">فهرست مطالب مقاله حاضر:</h2>
+
+          <ul class="article-toc-list">
+            <li><a href="#section-1">میل گاردان چیست؟</a></li>
+            <li><a href="#section-2">میل اکسل چیست؟</a></li>
+            <li><a href="#section-8">خلاصه</a></li>
+          </ul>
+        </div>
+
+        <!-- Article Body -->
+        <article class="single-article-body">
+          <section id="section-1" class="article-content-block">
+            <h2 class="article-section-title">میل گاردان چیست؟</h2>
+
+            <div class="article-section-image-wrap">
+              <img
+                src="assets/single-article/axle-shaft-structure.jpg"
+                alt="ساختار میل گاردان"
+                class="article-section-image"
+              />
+            </div>
+
+            <p class="article-section-text">
+              میل گاردان یک قطعه چرخان در سیستم انتقال قدرت است که گشتاور را از گیربکس یا جعبه
+              دنده به دیفرانسیل منتقل می‌کند. به بیان ساده، این قطعه به انتقال نیروی موتور از یک
+              بخش خودرو به بخش دیگر کمک می‌کند تا چرخ‌ها بتوانند به نرمی بچرخند.
+            </p>
+
+            <p class="article-section-text">
+              گاردان‌ها معمولاً در خودروهای دیفرانسیل عقب، وانت‌ها و ماشین‌آلات صنعتی دیده
+              می‌شوند و نقش مهمی در انتقال یکنواخت نیرو در طول مسیر دارند.
+            </p>
+          </section>
+        </article>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+    <!-- footer -->
+    <div class="my-foot">
+      <div class="intro">
+        <h5>Logo</h5>
+        <img src="" alt="" />
+        <p>
+          ارائه‌دهنده خدمات تخصصی در حوزه تأمین، فروش، خرید، توزیع، صادرات و
+          واردات انواع محصولات صنعتی، تجهیزات، قطعات و ملزومات مورد نیاز صنایع
+          مختلف. این مجموعه با تکیه بر شبکه تأمین گسترده، تضمین کیفیت کالا، و
+          پشتیبانی حرفه‌ای، در زمینه فروش محصولات صنعتی و ارائه خدمات پیش و پس
+          از فروش به مشتریان در بخش‌های گوناگون صنعتی فعالیت می‌کند.
+        </p>
+      </div>
+      <div class="top-product">
+        <h5>برترین محصولات</h5>
+        <a href="#">یاتاقان</a>
+        <a href="#">بلبرینگ زاویه ایرانیان</a>
+        <a href="#">کاسه نمد</a>
+        <a href="#">بلبرینگ خود تنظیم</a>
+        <a href="#">اورینگ</a>
+      </div>
+      <div class="top-content">
+        <h5>برترین مقالات</h5>
+        <a href="#">اصطکاک در بلبرینگ و رولبرینگ</a>
+        <a href="#">زنگ زدگی بلبرینگ</a>
+        <a href="#"><span dir="ltr">FG</span> بر روی بلبرینگ به چه معناست ؟</a>
+        <a href="#">از کجا به اصالت محصول پی ببریم ؟</a>
+        <a href="#">نحوه پیگیری سفارش</a>
+      </div>
+      <div class="contact">
+        <h5>تماس با ما</h5>
+        <div class="address-section">
+          <img src="./assets/location point 2.svg" alt="" />
+          <p>
+            ادرس فروشگاه ما : تهران خیابان سعدی جنوبی خیابان اکباتان کوچه ناظم
+            الاطبا شمالی پاساژ امام حسین زیر همکف پلاک 32 بلبرینگ همگام صنعت
+            برتر
+          </p>
+        </div>
+        <div class="mail-section">
+          <img src="./assets/envelope.svg" alt="" /><a href="#"
+            ><p>info@example.com</p></a
+          >
+        </div>
+        <div class="contact-numbers">
+          <div>
+            <img src="./assets/mobile phone 1.svg" alt="" />
+          </div>
+          <div>
+            <a href="#"><p>02133989930</p></a>
+            <a href="#"><p>02133989940</p></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-of-footer">
+      <p>کلیه ی حقوق برای هایپرصنعتی الفت محفوظ می باشد</p>
+      <p>طراحی و توسعه توسط هوش افزار ایرانیان</p>
+    </div>
+
+    <script src="./js/functions.js"></script>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
