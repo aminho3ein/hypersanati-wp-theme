@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 ////////////////////////////////  single-product-meta-tabs-feat
+// ۱. منطق تب‌ها (بدون تغییر و کاملاً سالم)
 document.querySelectorAll(".product-meta-nav button").forEach((btn) => {
   btn.addEventListener("click", function () {
     document
@@ -80,6 +81,26 @@ document.querySelectorAll(".product-meta-nav button").forEach((btn) => {
     this.classList.add("active");
   });
 });
+
+// ۲. تفکیک دکمه‌های ثبت پرسش و ثبت نظر بر اساس Scope والد
+// دکمه ثبت پرسش (موجود در تب پرسش و پاسخ)
+const addQuestionBtn = document.querySelector("#qa .add-product-qestion");
+if (addQuestionBtn) {
+  addQuestionBtn.addEventListener("click", function () {
+    // منطق یا باز شدن مودال مربوط به ثبت پرسش
+    console.log("ثبت پرسش کلیک شد");
+  });
+}
+
+// دکمه‌های ثبت نظر (موجود در تب نظرات - چون دو دکمه با این کلاس در این تب داری از QuerySelectorAll استفاده می‌کنیم)
+const addReviewBtns = document.querySelectorAll("#reviews .add-product-qestion");
+addReviewBtns.forEach((btn) => {
+  btn.addEventListener("click", function () {
+    // منطق یا باز شدن مودال مربوط به ثبت نظر
+    console.log("ثبت نظر کلیک شد");
+  });
+});
+
 ////////////////////////=================== related products
 document.querySelectorAll(".relevent-sec").forEach((section) => {
   const slider = section.querySelector(".blogScroll");
