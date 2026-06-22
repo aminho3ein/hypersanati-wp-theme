@@ -48,6 +48,7 @@
         information section styles
 ======================== */
 .info-sec {
+  width: 870px;
   display: flex;
   flex-direction: column;
   gap: 3.125rem;
@@ -93,8 +94,8 @@
   display: flex;
   justify-content: flex-end;
 }
-.profile-info-section-description{
-    margin-top: 1.8125rem;
+.profile-info-section-description {
+  margin-top: 1.8125rem;
 }
 form {
   display: flex;
@@ -122,11 +123,86 @@ form {
   justify-content: flex-end;
   margin-top: 4.0625rem;
 }
-.save-btn{
-    background-color: var(--color-danger);
-    width: 67.78px;
-    height: 42px;
-    color: var(--color-secondary);
-    border: none;
-    border-radius: 10px;
+.save-btn {
+  background-color: var(--color-danger);
+  width: 67.78px;
+  height: 42px;
+  color: var(--color-secondary);
+  border: none;
+  border-radius: 10px;
+}
+
+/* ==========================
+        perchase history section
+===========================*/
+.search-history-frame input {
+  width: 139px;
+  height: 40px;
+  text-align: center;
+  border-radius: 5px;
+}
+.search-history-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+}
+.search-history-frame {
+  margin-top: 0.6875rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.6875rem;
+}
+.perchse-history-table-list {
+  margin-top: 0.75rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  direction: rtl;
+}
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: right;
+  vertical-align: middle;
+}
+
+th {
+  font-weight: bold;
+  background-color: #f5f5f5;
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+  width: 5%;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 40%;
+}
+
+th:nth-child(3),
+td:nth-child(3),
+th:nth-child(4),
+td:nth-child(4),
+th:nth-child(5),
+td:nth-child(5) {
+  width: 15%;
+}
+.see-merchandise-list {
+  width: 170px;
+  height: 45px;
+  color: var(--color-dark);
+  background-color: transparent;
+  border: 2px solid var(--color-secondary);
+  border-radius: 10px;
+}
+.history-title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
