@@ -250,7 +250,7 @@
           </div>
         </div>
       </div> -->
-<!-- 
+      <!-- 
       <div class="info-sec wishlist">
         <div class="address-info-section">
           <div class="history-title-section">
@@ -282,7 +282,157 @@
           </div>
         </div>
       </div> -->
-    
+
+      <div class="info-sec support-section">
+        <div class="address-info-section">
+          <div class="history-title-section">
+            <div class="profile-info-section-title">
+              <h5>پشتیبانی</h5>
+            </div>
+          </div>
+
+          <hr />
+
+          <div class="ticket-layout">
+            <div class="ticket-sidebar">
+              <button class="ticket-btn active" data-ticket-tab="new">
+                ساخت تیکت جدید
+              </button>
+              <button class="ticket-btn" data-ticket-tab="active">
+                تیکت های فعال
+              </button>
+              <button class="ticket-btn" data-ticket-tab="pending">
+                در انتظار پاسخ
+              </button>
+              <button class="ticket-btn" data-ticket-tab="closed">
+                تیکت های بسته شده
+              </button>
+            </div>
+
+            <div class="ticket-content">
+              <!-- new ticket -->
+              <div class="ticket-panel active" id="ticket-new">
+                <div class="ticket-type">
+                  <select class="ticket-select">
+                    <option value="">مسیر تیکت را انتخاب کنید</option>
+                    <option value="buy">سوال درباره خرید محصول</option>
+                    <option value="product">
+                      سوال درباره محصول خریداری شده
+                    </option>
+                  </select>
+                </div>
+
+                <div class="ticket-product-input">
+                  <input type="text" placeholder="نام محصول یا کد سفارش" />
+                </div>
+
+                <div class="ticket-message">
+                  <textarea placeholder="متن تیکت خود را بنویسید"></textarea>
+                </div>
+
+                <div class="ticket-send-frame">
+                  <button class="save-btn">ارسال تیکت</button>
+                </div>
+              </div>
+
+              <!-- active tickets -->
+              <div class="ticket-panel" id="ticket-active">
+                <div class="ticket-list">
+                  <div class="ticket-item">
+                    <div class="ticket-title">سوال درباره بلبرینگ</div>
+
+                    <div class="ticket-chat">
+                      <div class="chat-user">
+                        <p>سلام درباره این محصول سوال داشتم</p>
+                      </div>
+
+                      <div class="chat-support">
+                        <p>سلام لطفا شماره سفارش را ارسال کنید</p>
+                      </div>
+                    </div>
+
+                    <div class="ticket-reply">
+                      <input type="text" placeholder="پاسخ خود را بنویسید" />
+                      <button class="save-btn">ارسال</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- pending -->
+              <div class="ticket-panel" id="ticket-pending">
+                <div class="ticket-list">
+                  <div class="ticket-item pending">
+                    <div class="ticket-title">درخواست بررسی سفارش</div>
+                    <button class="delete-ticket">حذف تیکت</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- closed -->
+              <div class="ticket-panel" id="ticket-closed">
+                <div class="ticket-item closed">
+                  <div class="ticket-title">سوال درباره اورینگ</div>
+
+                  <div class="ticket-chat">
+                    <div class="chat-user">
+                      <p>آیا این محصول موجود است؟</p>
+                    </div>
+
+                    <div class="chat-support">
+                      <p>بله موجود است.</p>
+                    </div>
+                  </div>
+                  <div class="ticket-title">سوال درباره اورینگ</div>
+
+                  <div class="ticket-chat">
+                    <div class="chat-user">
+                      <p>آیا این محصول موجود است؟</p>
+                    </div>
+
+                    <div class="chat-support">
+                      <p>بله موجود است.</p>
+                    </div>
+                  </div>
+                  <div class="ticket-title">سوال درباره اورینگ</div>
+
+                  <div class="ticket-chat">
+                    <div class="chat-user">
+                      <p>آیا این محصول موجود است؟</p>
+                    </div>
+
+                    <div class="chat-support">
+                      <p>بله موجود است.</p>
+                    </div>
+                  </div>
+                  <div class="ticket-title">سوال درباره اورینگ</div>
+
+                  <div class="ticket-chat">
+                    <div class="chat-user">
+                      <p>آیا این محصول موجود است؟</p>
+                    </div>
+
+                    <div class="chat-support">
+                      <p>بله موجود است.</p>
+                    </div>
+                  </div>
+                  <div class="ticket-title">سوال درباره اورینگ</div>
+
+                  <div class="ticket-chat">
+                    <div class="chat-user">
+                      <p>آیا این محصول موجود است؟</p>
+                    </div>
+
+                    <div class="chat-support">
+                      <p>بله موجود است.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- footer -->
@@ -350,6 +500,26 @@
         btn.addEventListener("click", () => {
           buttons.forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
+        });
+      });
+
+      /////support secion codes
+
+      const ticketButtons = document.querySelectorAll(".ticket-btn");
+      const ticketPanels = document.querySelectorAll(".ticket-panel");
+
+      ticketButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          ticketButtons.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+
+          const tab = btn.dataset.ticketTab;
+
+          ticketPanels.forEach((panel) => {
+            panel.classList.remove("active");
+          });
+
+          document.getElementById("ticket-" + tab).classList.add("active");
         });
       });
     </script>
