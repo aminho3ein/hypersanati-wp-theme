@@ -32,6 +32,7 @@
   height: 62px;
   justify-content: center;
   align-items: center;
+  font-weight: bold;
 }
 .profile-reqtangle button:hover {
   border: none;
