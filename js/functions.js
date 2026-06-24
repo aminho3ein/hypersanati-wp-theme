@@ -93,7 +93,9 @@ if (addQuestionBtn) {
 }
 
 // دکمه‌های ثبت نظر (موجود در تب نظرات - چون دو دکمه با این کلاس در این تب داری از QuerySelectorAll استفاده می‌کنیم)
-const addReviewBtns = document.querySelectorAll("#reviews .add-product-qestion");
+const addReviewBtns = document.querySelectorAll(
+  "#reviews .add-product-qestion",
+);
 addReviewBtns.forEach((btn) => {
   btn.addEventListener("click", function () {
     // منطق یا باز شدن مودال مربوط به ثبت نظر
@@ -118,6 +120,126 @@ document.querySelectorAll(".relevent-sec").forEach((section) => {
     slider.scrollBy({
       left: 300,
       behavior: "smooth",
+    });
+  });
+});
+//profile logics
+
+document.addEventListener("DOMContentLoaded", () => {
+  /* ================================
+       Profile navigation section
+       اتصال دکمه‌های سمت راست به محتوای مربوطه
+    ================================ */
+
+  const profileButtons = document.querySelectorAll(".profile-reqtangle button");
+
+  const profileSectionsMap = [
+    {
+      buttonIndex: 0,
+      sectionSelector:
+        ".all-elements > .info-sec:not(.perchase-history):not(.wishlist):not(.support-section):not(.user-rank)",
+    },
+    {
+      buttonIndex: 1,
+      sectionSelector: ".perchase-history",
+    },
+    {
+      buttonIndex: 2,
+      sectionSelector: ".wishlist",
+    },
+    {
+      buttonIndex: 3,
+      sectionSelector: ".support-section",
+    },
+    {
+      buttonIndex: 4,
+      sectionSelector: ".user-rank",
+    },
+  ];
+
+  const profileSections = profileSectionsMap
+    .map((item) => ({
+      ...item,
+      button: profileButtons[item.buttonIndex],
+      section: document.querySelector(item.sectionSelector),
+    }))
+    .filter((item) => item.button);
+
+  const allProfileSections = profileSections
+    .map((item) => item.section)
+    .filter(Boolean);
+
+  const showProfileSection = (targetItem) => {
+    if (!targetItem.section) {
+      console.warn(
+        "برای این دکمه هنوز سکشن HTML فعال یا موجود نیست:",
+        targetItem.button.textContent.trim(),
+      );
+      return;
+    }
+
+    profileButtons.forEach((button) => button.classList.remove("active"));
+    targetItem.button.classList.add("active");
+
+    allProfileSections.forEach((section) => {
+      section.hidden = section !== targetItem.section;
+    });
+  };
+
+  profileSections.forEach((item) => {
+    item.button.addEventListener("click", () => {
+      showProfileSection(item);
+    });
+  });
+
+  const firstAvailableProfileSection =
+    profileSections.find((item) => item.section) || profileSections[0];
+
+  if (firstAvailableProfileSection) {
+    showProfileSection(firstAvailableProfileSection);
+  }
+
+  /* ================================
+       Logout button section
+       فعلاً فقط برای جلوگیری از رفتار پیش‌فرض
+    ================================ */
+
+  const logoutButton = profileButtons[5];
+
+  if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+      profileButtons.forEach((button) => button.classList.remove("active"));
+      logoutButton.classList.add("active");
+
+      console.info("دکمه خروج کلیک شد؛ منطق خروج باید به بک‌اند وصل شود.");
+    });
+  }
+
+  /* ================================
+       Support ticket tabs section
+       کد قبلی پشتیبانی با بررسی امن‌تر
+    ================================ */
+
+  const ticketButtons = document.querySelectorAll(".ticket-btn");
+  const ticketPanels = document.querySelectorAll(".ticket-panel");
+
+  ticketButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      ticketButtons.forEach((item) => item.classList.remove("active"));
+      button.classList.add("active");
+
+      const tab = button.dataset.ticketTab;
+      const targetPanel = document.getElementById("ticket-" + tab);
+
+      ticketPanels.forEach((panel) => {
+        panel.classList.remove("active");
+      });
+
+      if (targetPanel) {
+        targetPanel.classList.add("active");
+      } else {
+        console.warn("پنل تیکت پیدا نشد:", "ticket-" + tab);
+      }
     });
   });
 });
