@@ -159,7 +159,6 @@
 .featured-product-progress {
   position: absolute;
   top: 0;
-  bottom: auto;
   width: 0.125rem;
   height: 0;
   background: linear-gradient(
@@ -171,8 +170,7 @@
   transition:
     height 0.2s ease,
     width 0.25s ease,
-    background 0.25s ease
-    ;
+    background 0.25s ease;
   z-index: 2;
 }
 
