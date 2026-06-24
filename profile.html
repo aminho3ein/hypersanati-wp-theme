@@ -117,7 +117,7 @@
       </div>
 
       <!-- profile-sectoins -->
-      <!-- <div class="info-sec"> 
+      <div class="info-sec"> 
         <div class="profile-info-section">
           <div class="profile-info-section-title">
             <h5>حساب کاربری من</h5>
@@ -199,10 +199,10 @@
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
 
       <!-- wishlist -->
-      <!-- <div class="info-sec perchase-history">
+       <div class="info-sec perchase-history">
         <div class="address-info-section">
           <div class="history-title-section">
             <div class="profile-info-section-title">
@@ -250,10 +250,10 @@
             </table>
           </div>
         </div>
-      </div> -->
+      </div> 
 
       <!-- wishlist -->
-      <!-- 
+      
       <div class="info-sec wishlist">
         <div class="address-info-section">
           <div class="history-title-section">
@@ -284,10 +284,10 @@
             </table>
           </div>
         </div>
-      </div> -->
+      </div> 
 
       <!-- support-section -->
-      <!-- <div class="info-sec support-section">
+      <div class="info-sec support-section"> 
         <div class="address-info-section">
           <div class="history-title-section">
             <div class="profile-info-section-title">
@@ -432,7 +432,7 @@
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
 
       <!-- user-rank -->
       <div class="info-sec user-rank">
@@ -565,35 +565,8 @@
       <p>کلیه ی حقوق برای هایپرصنعتی الفت محفوظ می باشد</p>
       <p>طراحی و توسعه توسط هوش افزار ایرانیان</p>
     </div>
-    <script>
-      const buttons = document.querySelectorAll(".profile-reqtangle button");
-      buttons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          buttons.forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-        });
-      });
+    
 
-      /////support secion codes
-
-      const ticketButtons = document.querySelectorAll(".ticket-btn");
-      const ticketPanels = document.querySelectorAll(".ticket-panel");
-
-      ticketButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          ticketButtons.forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-
-          const tab = btn.dataset.ticketTab;
-
-          ticketPanels.forEach((panel) => {
-            panel.classList.remove("active");
-          });
-
-          document.getElementById("ticket-" + tab).classList.add("active");
-        });
-      });
-    </script>
     <script src="./js/functions.js"></script>
     <script src="./js/bootstrap.bundle.min.js"></script>
   </body>
