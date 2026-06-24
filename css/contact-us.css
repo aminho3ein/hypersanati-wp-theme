@@ -60,11 +60,20 @@
   align-items: center;
   justify-content: center;
   color: var(--color-secondary);
+  border-left: 2px solid transparent;
+  transition: border-color 0.25s ease;
 }
 
-.contact-info-icon svg {
-  width: 22px;
-  height: 22px;
+.contact-info-icon-svg {
+  color: var(--color-gray);
+  transition: color 0.25s ease;
+}
+.contact-info-item:hover .contact-info-icon {
+  border-left-color: var(--color-secondary);
+}
+
+.contact-info-item:hover .contact-info-icon-svg {
+  color: var(--color-secondary);
 }
 
 .contact-info-divider {
@@ -178,17 +187,25 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) 130px;
   direction: rtl;
+  border-radius: 14px;
 }
 
 .phone-number-input {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
   direction: rtl;
   text-align: right;
+  border-left: none;
 }
 
 .country-code-select {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   text-align: center;
   direction: ltr;
   cursor: pointer;
+  background: var(--color-secondary);
+  color: var(--color-white);
 }
 
 /* =========================
@@ -207,7 +224,7 @@
   border-top-right-radius: 14px;
   border-bottom-right-radius: 14px;
   border-left: 1px solid var(--gray-400);
-  border-right: none;
+  border-left: none;
   direction: ltr;
   text-align: right;
 }
