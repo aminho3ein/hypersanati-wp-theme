@@ -168,11 +168,11 @@
     var(--color-success) 45%,
     var(--color-warning) 100%
   );
-  transition (
+  transition:
     height 0.2s ease,
     width 0.25s ease,
     background 0.25s ease
-    );
+    ;
   z-index: 2;
 }
 

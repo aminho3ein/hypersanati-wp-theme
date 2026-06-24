@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="./css/bootstrap.rtl.min.css" />
+
+    <link rel="stylesheet" href="./css/fontawesome.min.css" />
+    <link rel="stylesheet" href="./css/brands.min.css" />
+    <link rel="stylesheet" href="./css/solid.min.css" />
+
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/thank-you-page.css" />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/tablet-responsive.css"
+      media="(min-width:768px)"
+    />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/laptop-responsive.css"
+      media="(min-width:992px)"
+    />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/desktop-responsive.css"
+      media="(min-width:1200px)"
+    />
+
+    
+
+    <title>همگام صنعت برتر</title>
+  </head>
+  <body>
+    <!-- header -->
+    <div class="header">
+      <div class="top-of-nav">
+        <a href="#">ارسال ۷ الی ۱۰ روزکاری</a>
+        <a href="#">پیگیری سفارش</a>
+      </div>
+      <div class="my-navbar">
+        <!-- Logo / Brand (mobile) -->
+        <div class="navbar-brand">
+          <span>هایپرصنعتی الفت</span>
+        </div>
+
+        <!-- Desktop nav links -->
+        <ul class="nav-links">
+          <li><a class="home-btn" href="#">صفحه اصلی</a></li>
+          <li><a href="#">فروشگاه</a></li>
+          <li><a href="#">مجله</a></li>
+          <li><a href="#">درباره ما</a></li>
+          <li><a class="contact-btn" href="#">ارتباط با ما</a></li>
+        </ul>
+
+        <!-- Desktop nav actions -->
+        <ul class="nav-actions">
+          <div class="sell-number"><p>۷</p></div>
+          <div class="cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </div>
+          <li><a class="my-profile" href="#">حساب کاربری</a></li>
+        </ul>
+
+        <!-- Hamburger button (mobile only) -->
+        <div class="menu-and-cart">
+          <ul class="mobile-nav-actions">
+            <div class="sell-number"><p>۷</p></div>
+            <div class="cart">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+            <li><a class="my-profile" href="#">حساب کاربری</a></li>
+          </ul>
+          <button
+            class="hamburger"
+            id="hamburgerBtn"
+            aria-label="منو"
+            aria-expanded="false"
+          >
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Drawer Menu -->
+      <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+          <li><a href="#" onclick="closeMobileMenu()">صفحه اصلی</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">فروشگاه</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">مجله</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">درباره ما</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">ارتباط با ما</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">حساب کاربری</a></li>
+        </ul>
+      </div>
+      <div
+        class="mobile-overlay"
+        id="mobileOverlay"
+        onclick="closeMobileMenu()"
+      ></div>
+    </div>
+
+
+
+
+
+<section class="thank-you-section">
+  <div class="thank-you-shape"></div>
+
+  <div class="container">
+    <div class="thank-you-wrapper">
+      <div class="thank-you-header">
+        <div class="thank-you-icon">
+          <span>✓</span>
+        </div>
+
+        <h1 class="thank-you-title">متشکریم!</h1>
+
+        <p class="thank-you-text">
+          درخواست شما با موفقیت ثبت شد. اطلاعات تکمیلی برای شما ارسال خواهد شد و
+          می‌توانید از طریق وب‌سایت و شبکه‌های اجتماعی ما، اخبار و خدمات بیشتر را
+          دنبال کنید.
+        </p>
+      </div>
+
+      <div class="thank-you-grid">
+<div class="thank-you-card">
+  <h2 class="thank-you-card-title">با ما در ارتباط باشید</h2>
+
+  <div class="thank-you-socials">
+    <a href="#" class="thank-you-social thank-you-social--facebook" aria-label="facebook">
+      <svg class="thank-you-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.6 1.6-1.6H16.7V4.8c-.3 0-.9-.1-1.8-.1-1.8 0-3.1 1.1-3.1 3.3V11H9v3h2.8v8h1.7Z"
+          fill="currentColor"
+        />
+      </svg>
+    </a>
+
+    <a href="#" class="thank-you-social thank-you-social--linkedin" aria-label="linkedin">
+      <svg class="thank-you-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M6.9 8.4a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4ZM5.4 9.7h3V19h-3V9.7Zm4.9 0h2.9V11h.1c.4-.8 1.4-1.6 2.9-1.6 3.1 0 3.7 2 3.7 4.7V19h-3v-4.3c0-1 0-2.4-1.5-2.4s-1.7 1.1-1.7 2.3V19h-3V9.7Z"
+          fill="currentColor"
+        />
+      </svg>
+    </a>
+
+    <a href="#" class="thank-you-social thank-you-social--pinterest" aria-label="pinterest">
+      <svg class="thank-you-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M12.1 4C7.8 4 5 7.1 5 11.1c0 2.4 1.3 4.6 3.3 5.4.1 0 .3 0 .3-.2l.5-1.9c0-.1 0-.2-.1-.3-.6-.7-1-1.7-1-2.8 0-2.7 2-5.1 5.2-5.1 2.8 0 4.4 1.7 4.4 4 0 3-1.3 5.5-3.3 5.5-1.1 0-1.9-.9-1.6-2 .3-1.3.8-2.7.8-3.6 0-.8-.4-1.5-1.3-1.5-1 0-1.8 1.1-1.8 2.5 0 .9.3 1.5.3 1.5l-1.2 5c-.3 1.2 0 2.7 0 2.8 0 .1.1.1.2 0 .1-.1 1.3-1.6 1.7-3 .1-.4.6-2.2.6-2.2.3.6 1.3 1.2 2.3 1.2 3 0 5.1-2.8 5.1-6.5C19 6.6 16.3 4 12.1 4Z"
+          fill="currentColor"
+        />
+      </svg>
+    </a>
+
+    <a href="#" class="thank-you-social thank-you-social--twitter" aria-label="twitter">
+      <svg class="thank-you-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M22 6.1c-.7.3-1.5.5-2.3.6.8-.5 1.4-1.2 1.7-2.1-.8.5-1.7.8-2.6 1-1.5-1.6-4.2-1.7-5.8-.1-.8.8-1.2 1.9-1.1 3-3-.2-5.8-1.6-7.6-4-.9 1.6-.5 3.6 1 4.7-.6 0-1.2-.2-1.7-.5 0 2.1 1.5 3.9 3.5 4.3-.6.2-1.2.2-1.8.1.5 1.7 2.1 2.9 4 3-1.5 1.2-3.4 1.9-5.4 1.9H3c2 1.3 4.4 2 6.8 2 8.2 0 12.8-6.9 12.5-13 .9-.6 1.6-1.2 2.2-2Z"
+          fill="currentColor"
+        />
+      </svg>
+    </a>
+  </div>
+</div>
+
+        <div class="thank-you-card">
+          <h2 class="thank-you-card-title">مشاهده وب‌سایت</h2>
+
+          <div class="thank-you-action">
+            <a href="#" class="btn thank-you-btn">رفتن به صفحه اصلی وبسایت</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+    <!-- footer -->
+    <div class="my-foot">
+      <div class="intro">
+        <h5>Logo</h5>
+        <img src="" alt="" />
+        <p>
+          ارائه‌دهنده خدمات تخصصی در حوزه تأمین، فروش، خرید، توزیع، صادرات و
+          واردات انواع محصولات صنعتی، تجهیزات، قطعات و ملزومات مورد نیاز صنایع
+          مختلف. این مجموعه با تکیه بر شبکه تأمین گسترده، تضمین کیفیت کالا، و
+          پشتیبانی حرفه‌ای، در زمینه فروش محصولات صنعتی و ارائه خدمات پیش و پس
+          از فروش به مشتریان در بخش‌های گوناگون صنعتی فعالیت می‌کند.
+        </p>
+      </div>
+      <div class="top-product">
+        <h5>برترین محصولات</h5>
+        <a href="#">یاتاقان</a>
+        <a href="#">بلبرینگ زاویه ایرانیان</a>
+        <a href="#">کاسه نمد</a>
+        <a href="#">بلبرینگ خود تنظیم</a>
+        <a href="#">اورینگ</a>
+      </div>
+      <div class="top-content">
+        <h5>برترین مقالات</h5>
+        <a href="#">اصطکاک در بلبرینگ و رولبرینگ</a>
+        <a href="#">زنگ زدگی بلبرینگ</a>
+        <a href="#"><span dir="ltr">FG</span> بر روی بلبرینگ به چه معناست ؟</a>
+        <a href="#">از کجا به اصالت محصول پی ببریم ؟</a>
+        <a href="#">نحوه پیگیری سفارش</a>
+      </div>
+      <div class="contact">
+        <h5>تماس با ما</h5>
+        <div class="address-section">
+          <img src="./assets/location point 2.svg" alt="" />
+          <p>
+            ادرس فروشگاه ما : تهران خیابان سعدی جنوبی خیابان اکباتان کوچه ناظم
+            الاطبا شمالی پاساژ امام حسین زیر همکف پلاک 32 بلبرینگ همگام صنعت
+            برتر
+          </p>
+        </div>
+        <div class="mail-section">
+          <img src="./assets/envelope.svg" alt="" /><a href="#"
+            ><p>info@example.com</p></a
+          >
+        </div>
+        <div class="contact-numbers">
+          <div>
+            <img src="./assets/mobile phone 1.svg" alt="" />
+          </div>
+          <div>
+            <a href="#"><p>02133989930</p></a>
+            <a href="#"><p>02133989940</p></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-of-footer">
+      <p>کلیه ی حقوق برای هایپرصنعتی الفت محفوظ می باشد</p>
+      <p>طراحی و توسعه توسط هوش افزار ایرانیان</p>
+    </div>
+
+    <script src="./js/hamburger-menu.js"></script>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="./js/404.js"></script>
+  </body>
+</html>
+
