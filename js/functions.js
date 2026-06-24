@@ -123,7 +123,7 @@ document.querySelectorAll(".relevent-sec").forEach((section) => {
     });
   });
 });
-//profile logics
+///////////////profile logics
 
 document.addEventListener("DOMContentLoaded", () => {
   /* ================================
