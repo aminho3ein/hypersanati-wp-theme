@@ -52,6 +52,7 @@
   width: 870px;
   display: flex;
   flex-direction: column;
+  gap: 3.125rem;
 }
 .profile-info-section-title {
   display: flex;
