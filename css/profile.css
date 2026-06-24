@@ -355,15 +355,15 @@ td:nth-child(5) {
   background: linear-gradient(57deg, #6a563b 0%, #9f8561 100%);
   border-radius: 20px;
   border: none;
-  padding:2.3rem 1rem;
+  padding: 2.3rem 1rem;
 }
-.rank-and-cta-text{
+.rank-and-cta-text {
   display: flex;
   justify-content: space-between;
   color: var(--color-white);
   gap: 1.5rem;
 }
-.rank-box{
+.rank-box {
   width: 100px;
   height: 100px;
   display: flex;
@@ -373,26 +373,26 @@ td:nth-child(5) {
   border-radius: 10px;
   padding: 1rem;
 }
-.cta-txt p{
+.cta-txt p {
   font-size: 14px;
   font-weight: lighter;
 }
-.rank-box p{
+.rank-box p {
   font-size: 30px;
   font-weight: bold;
 }
-.rank-box h4{
+.rank-box h4 {
   font-size: 14px;
   font-weight: bold;
 }
-.rank-boxes{
+.rank-boxes {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 1rem;
   gap: 3px;
 }
-.rank-boxes p{
+.rank-boxes p {
   display: flex;
   justify-content: center;
   border: 2px solid var(--color-dark);
@@ -407,7 +407,7 @@ td:nth-child(5) {
 }
 .progress-container {
   width: 100%;
-  background: linear-gradient(57deg, #6a563b, #9f8561); 
+  background: linear-gradient(57deg, #6a563b, #9f8561);
   border-radius: 10px;
   overflow: hidden;
   height: 9px;
@@ -418,18 +418,18 @@ td:nth-child(5) {
 }
 
 .progress-bar-fill {
-  background-color: var(--color-white); 
+  background-color: var(--color-white);
   height: 100%;
   width: 0%; /* این مقدار به صورت پویا تغییر می‌کند */
   transition: width 0.5s ease-in-out;
   border-radius: inherit; /* حفظ انحنای لبه‌ها */
 }
-.situation{
+.situation {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.situation-text{
+.situation-text {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -439,16 +439,56 @@ td:nth-child(5) {
   font-size: 18px;
   font-weight: bold;
   color: var(--color-white);
+  text-align: center;
 }
-.progress-frame{
+.progress-frame {
   margin-top: 2.5rem;
   display: flex;
   gap: 1rem;
   align-items: center;
   display: flex;
 }
-.progress-frame p{
+.progress-frame p {
   font-size: 30px;
   font-weight: bold;
   color: var(--color-white);
+}
+
+@media (max-width: 576px) {
+  .user-rank {
+    align-items: center;
+  }
+  .ticket-btn {
+    padding: 0 0.2rem;
+  }
+  td {
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 992px) {
+    .all-elements {
+    justify-content: center !important; 
+    align-items: flex-start !important; 
+  }
+  .profile-reqtangle button {
+    width: 327px !important;
+    flex-shrink: 0 !important; 
+  }
+
+  .ticket-sidebar.w-md-auto {
+    width: 220px !important;
+    flex-basis: auto !important;
+  }
+  
+  .profile-reqtangle {
+    width: 358px !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .ticket-sidebar {
+    width: 100% !important;
+  }
 }
