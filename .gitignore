@@ -1,23 +1,52 @@
-#  Paid Fonts
+# --- Paid Fonts ---
 /fonts/
 *.ttf
 *.woff
 *.woff2
 *.eot
 
-# WordPress Modules
+# --- WordPress Core & Config ---
+# WP-Conf
 wp-config.php
+# WP-Cores
 /wp-admin/
 /wp-includes/
+/wp-config-sample.php
+/wp-cron.php
+/wp-*.php
+/index.php
+/license.txt
+/readme.html
+
+# --- WordPress Directories ---
 /wp-content/uploads/
 /wp-content/upgrade/
 /wp-content/cache/
+/wp-content/languages/
 
-# OS generated files
+# --- Environment & Sensitive Data ---
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.log
+*.sql
+*.zip
+*.tar.gz
+
+# --- OS generated files ---
 .DS_Store
 Thumbs.db
+ehthumbs.db
 
-# IDEs
+# --- IDEs & Local Dev ---
 .vscode/
 .idea/
 node_modules/
+vendor/
+# .docker/ 
+
+# --- Backup & Logs ---
+*.bak
+*.old
