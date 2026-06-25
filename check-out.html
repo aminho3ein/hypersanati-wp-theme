@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="./css/bootstrap.rtl.min.css" />
+
+    <link rel="stylesheet" href="./css/fontawesome.min.css" />
+    <link rel="stylesheet" href="./css/brands.min.css" />
+    <link rel="stylesheet" href="./css/solid.min.css" />
+
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/check-out.css" />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/tablet-responsive.css"
+      media="(min-width:768px)"
+    />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/laptop-responsive.css"
+      media="(min-width:992px)"
+    />
+
+    <link
+      rel="stylesheet"
+      href="./css/responsive/desktop-responsive.css"
+      media="(min-width:1200px)"
+    />
+
+    
+
+    <title>همگام صنعت برتر</title>
+  </head>
+  <body>
+    <!-- header -->
+    <div class="header">
+      <div class="top-of-nav">
+        <a href="#">ارسال ۷ الی ۱۰ روزکاری</a>
+        <a href="#">پیگیری سفارش</a>
+      </div>
+      <div class="my-navbar">
+        <!-- Logo / Brand (mobile) -->
+        <div class="navbar-brand">
+          <span>هایپرصنعتی الفت</span>
+        </div>
+
+        <!-- Desktop nav links -->
+        <ul class="nav-links">
+          <li><a class="home-btn" href="#">صفحه اصلی</a></li>
+          <li><a href="#">فروشگاه</a></li>
+          <li><a href="#">مجله</a></li>
+          <li><a href="#">درباره ما</a></li>
+          <li><a class="contact-btn" href="#">ارتباط با ما</a></li>
+        </ul>
+
+        <!-- Desktop nav actions -->
+        <ul class="nav-actions">
+          <div class="sell-number"><p>۷</p></div>
+          <div class="cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </div>
+          <li><a class="my-profile" href="#">حساب کاربری</a></li>
+        </ul>
+
+        <!-- Hamburger button (mobile only) -->
+        <div class="menu-and-cart">
+          <ul class="mobile-nav-actions">
+            <div class="sell-number"><p>۷</p></div>
+            <div class="cart">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+            <li><a class="my-profile" href="#">حساب کاربری</a></li>
+          </ul>
+          <button
+            class="hamburger"
+            id="hamburgerBtn"
+            aria-label="منو"
+            aria-expanded="false"
+          >
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Drawer Menu -->
+      <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+          <li><a href="#" onclick="closeMobileMenu()">صفحه اصلی</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">فروشگاه</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">مجله</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">درباره ما</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">ارتباط با ما</a></li>
+          <li><a href="#" onclick="closeMobileMenu()">حساب کاربری</a></li>
+        </ul>
+      </div>
+      <div
+        class="mobile-overlay"
+        id="mobileOverlay"
+        onclick="closeMobileMenu()"
+      ></div>
+    </div>
+
+
+<div class="container">
+  <!-- Hiro Section -->
+  <section class="checkout-order-reference">
+    <div class="checkout-order-reference__inner">
+      <p class="checkout-order-reference__text">
+        شماره سفارش :
+        <span class="checkout-order-reference__code">۲۷۰۶۱۲-۰۱۲۲-۱۴۰۵۰</span>
+      </p>
+    </div>
+  </section>
+
+  <section class="checkout-address">
+    <div class="checkout-address__header">
+      <h2 class="checkout-address__title">آدرس من</h2>
+    </div>
+
+    <form class="checkout-address__form">
+      <div class="checkout-address__grid checkout-address__grid--two-col">
+        <div class="checkout-address__field">
+          <label class="checkout-address__label" for="province">استان <span>*</span></label>
+          <input
+            class="checkout-address__input"
+            type="text"
+            id="province"
+            name="province"
+            placeholder="استان"
+          />
+        </div>
+
+        <div class="checkout-address__field">
+          <label class="checkout-address__label" for="city">شهر <span>*</span></label>
+          <input
+            class="checkout-address__input"
+            type="text"
+            id="city"
+            name="city"
+            placeholder="شهر"
+          />
+        </div>
+      </div>
+
+      <div class="checkout-address__field checkout-address__field--full">
+        <label class="checkout-address__label" for="address">آدرس <span>*</span></label>
+        <input
+          class="checkout-address__input"
+          type="text"
+          id="address"
+          name="address"
+          placeholder="مثال کوچه و خیابان و جزئیات آدرس"
+        />
+        <p class="checkout-address__hint">
+          در صورت تغییر این بخش و ناهماهنگی آن با موقعیت مکانی، ممکن است ارسال سفارش با مشکل مواجه شود.
+        </p>
+      </div>
+
+      <div class="checkout-address__grid checkout-address__grid--two-col">
+        <div class="checkout-address__field">
+          <label class="checkout-address__label" for="plaque">پلاک <span>*</span></label>
+          <input
+            class="checkout-address__input"
+            type="text"
+            id="plaque"
+            name="plaque"
+          />
+        </div>
+
+        <div class="checkout-address__field">
+          <label class="checkout-address__label" for="unit">واحد</label>
+          <input
+            class="checkout-address__input"
+            type="text"
+            id="unit"
+            name="unit"
+          />
+        </div>
+      </div>
+
+      <div class="checkout-address__field checkout-address__field--full">
+        <label class="checkout-address__label" for="postal-code">کدپستی <span>*</span></label>
+        <input
+          class="checkout-address__input"
+          type="text"
+          id="postal-code"
+          name="postal-code"
+          placeholder="باید ده رقمی باشد"
+        />
+      </div>
+    </form>
+  </section>
+
+  <section class="checkout-personal-info">
+    <div class="checkout-personal-info__header">
+      <h2 class="checkout-personal-info__title">اطلاعات شخصی من</h2>
+    </div>
+
+    <form class="checkout-personal-info__form" id="personalInfoForm" novalidate>
+      <div class="checkout-personal-info__gender">
+        <div class="checkout-personal-info__gender-options">
+          <label class="checkout-personal-info__radio">
+            <input type="radio" name="gender" value="male" checked />
+            <span class="checkout-personal-info__radio-box"></span>
+            <span class="checkout-personal-info__radio-text">آقا</span>
+          </label>
+
+          <label class="checkout-personal-info__radio">
+            <input type="radio" name="gender" value="female" />
+            <span class="checkout-personal-info__radio-box"></span>
+            <span class="checkout-personal-info__radio-text">خانم</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="checkout-personal-info__grid">
+        <div class="checkout-personal-info__field">
+          <label class="checkout-address__label" for="first-name">نام <span>*</span></label>
+          <input
+            class="checkout-personal-info__input"
+            type="text"
+            id="first-name"
+            name="first-name"
+            placeholder="نام خود را وارد کنید *"
+          />
+        </div>
+
+        <div class="checkout-personal-info__field">
+          <label class="checkout-address__label" for="last-name">نام خانوادگی <span>*</span></label>
+          <input
+            class="checkout-personal-info__input"
+            type="text"
+            id="last-name"
+            name="last-name"
+            placeholder="نام خانوادگی خود را وارد کنید *"
+          />
+        </div>
+
+        <div class="checkout-personal-info__field">
+          <label class="checkout-address__label" for="store-name">نام فروشگاه</label>
+          <input
+            class="checkout-personal-info__input"
+            type="text"
+            id="store-name"
+            name="store-name"
+            placeholder="نام فروشگاه یا کارگاه خود را وارد کنید"
+          />
+        </div>
+
+        <div class="checkout-personal-info__field">
+          <label class="checkout-address__label" for="national-code">شماره کد ملی <span>*</span></label>
+          <input
+            class="checkout-personal-info__input"
+            type="text"
+            id="national-code"
+            name="national-code"
+            placeholder="شماره ملی خود را وارد کنید *"
+          />
+        </div>
+
+        <div class="checkout-personal-info__field">
+          <label class="checkout-address__label" for="mobile">شماره موبایل <span>*</span></label>
+          <input
+            class="checkout-personal-info__input"
+            type="tel"
+            id="mobile"
+            name="mobile"
+            placeholder="شماره موبایل خود را وارد کنید *"
+          />
+        </div>
+
+        <div class="checkout-personal-info__field">
+          <label class="checkout-address__label" for="birth-date">تاریخ تولد شما <span>*</span></label>
+          <input
+            class="checkout-personal-info__input"
+            type="text"
+            id="birth-date"
+            name="birth-date"
+            placeholder="تاریخ تولد خود را وارد کنید *"
+          />
+        </div>
+
+        <div class="checkout-personal-info__field checkout-personal-info__field--password-group">
+          <label class="checkout-address__label" for="password">رمز عبور خود را انتخاب کنید <span>*</span></label>
+
+          <div class="checkout-personal-info__password-error" id="confirmPasswordError"></div>
+
+          <div class="checkout-personal-info__password-row">
+            <div class="checkout-personal-info__password-col">
+              <div class="checkout-personal-info__password-wrap">
+                <input
+                  class="checkout-personal-info__input checkout-personal-info__input--password"
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="رمز عبور"
+                />
+                <button
+                  class="checkout-personal-info__password-toggle"
+                  type="button"
+                  aria-label="نمایش موقت رمز عبور"
+                  data-toggle-password="password"
+                >
+                  👁
+                </button>
+              </div>
+            </div>
+
+            <div class="checkout-personal-info__password-col">
+              <div class="checkout-personal-info__password-wrap">
+                <input
+                  class="checkout-personal-info__input checkout-personal-info__input--password"
+                  type="password"
+                  id="confirm-password"
+                  name="confirm-password"
+                  placeholder="تکرار رمز عبور"
+                />
+                <button
+                  class="checkout-personal-info__password-toggle"
+                  type="button"
+                  aria-label="نمایش موقت تکرار رمز عبور"
+                  data-toggle-password="confirm-password"
+                >
+                  👁
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <!-- Bank selector -->
+  <section class="checkout-payment-gateway">
+    <div class="checkout-payment-gateway__header">
+      <h2 class="checkout-payment-gateway__title">انتخاب درگاه پرداخت</h2>
+    </div>
+
+    <div class="checkout-payment-gateway__list">
+      <label class="checkout-payment-gateway__item">
+        <input type="radio" name="payment-gateway" value="zarinpal" checked />
+        <span class="checkout-payment-gateway__radio"></span>
+
+        <span class="checkout-payment-gateway__icon">
+          <img src="assets/check-out/zarinpal.png" alt="زرین پال" />
+        </span>
+
+        <span class="checkout-payment-gateway__content">
+          <span class="checkout-payment-gateway__name">زرین پال</span>
+          <span class="checkout-payment-gateway__desc">
+            پرداخت آنلاین امن از طریق درگاه زرین پال با اتصال سریع و مطمئن.
+          </span>
+        </span>
+      </label>
+
+      <label class="checkout-payment-gateway__item">
+        <input type="radio" name="payment-gateway" value="melli" />
+        <span class="checkout-payment-gateway__radio"></span>
+
+        <span class="checkout-payment-gateway__icon">
+          <img src="assets/check-out/melli.png" alt="بانک ملی" />
+        </span>
+
+        <span class="checkout-payment-gateway__content">
+          <span class="checkout-payment-gateway__name">بانک ملی</span>
+          <span class="checkout-payment-gateway__desc">
+            پرداخت اینترنتی از طریق درگاه بانک ملی با پشتیبانی از کارت‌های عضو شتاب.
+          </span>
+        </span>
+      </label>
+
+      <label class="checkout-payment-gateway__item">
+        <input type="radio" name="payment-gateway" value="mellat" />
+        <span class="checkout-payment-gateway__radio"></span>
+
+        <span class="checkout-payment-gateway__icon">
+          <img src="assets/check-out/mellat.png" alt="بانک ملت" />
+        </span>
+
+        <span class="checkout-payment-gateway__content">
+          <span class="checkout-payment-gateway__name">بانک ملت</span>
+          <span class="checkout-payment-gateway__desc">
+            درگاه پرداخت بانک ملت مناسب برای تراکنش‌های سریع و مطمئن آنلاین.
+          </span>
+        </span>
+      </label>
+
+      <label class="checkout-payment-gateway__item">
+        <input type="radio" name="payment-gateway" value="parsian" />
+        <span class="checkout-payment-gateway__radio"></span>
+
+        <span class="checkout-payment-gateway__icon">
+          <img src="assets/check-out/parsian.png" alt="بانک پارسیان" />
+        </span>
+
+        <span class="checkout-payment-gateway__content">
+          <span class="checkout-payment-gateway__name">بانک پارسیان</span>
+          <span class="checkout-payment-gateway__desc">
+            پرداخت از طریق درگاه بانک پارسیان با امنیت بالا و تجربه کاربری آسان.
+          </span>
+        </span>
+      </label>
+
+      <label class="checkout-payment-gateway__item">
+        <input type="radio" name="payment-gateway" value="pasargad" />
+        <span class="checkout-payment-gateway__radio"></span>
+
+        <span class="checkout-payment-gateway__icon">
+          <img src="assets/check-out/pasargad.png" alt="بانک پاسارگاد" />
+        </span>
+
+        <span class="checkout-payment-gateway__content">
+          <span class="checkout-payment-gateway__name">بانک پاسارگاد</span>
+          <span class="checkout-payment-gateway__desc">
+            پرداخت اینترنتی از طریق درگاه بانک پاسارگاد با اتصال ایمن و پایدار.
+          </span>
+        </span>
+      </label>
+    </div>
+  </section>
+
+  <!-- Discount Code -->
+  <section class="checkout-discount-code">
+    <div class="checkout-discount-code__header">
+      <h2 class="checkout-discount-code__title">کد تخفیف</h2>
+    </div>
+
+    <form class="checkout-discount-code__form">
+      <div class="checkout-discount-code__field">
+        <input
+          type="text"
+          class="checkout-discount-code__input"
+          id="discount-code"
+          name="discount-code"
+          placeholder=""
+        />
+        <button type="submit" class="checkout-discount-code__button">ثبت</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Order Summary Section -->
+  <section class="checkout-order-summary">
+    <div class="checkout-order-summary__header">
+      <h2 class="checkout-order-summary__title">خلاصه سفارش</h2>
+    </div>
+
+    <div class="checkout-order-summary__top">
+      <div class="checkout-order-summary__shipping-meta">
+        <p class="checkout-order-summary__shipping-date">دوشنبه ۲۵ خرداد - بازه ۱۰ تا ۲۳</p>
+        <p class="checkout-order-summary__shipping-count">۷ کالا</p>
+        <p class="checkout-order-summary__shipping-method">ارسال عادی</p>
+      </div>
+
+      <button
+        id="orderSummaryToggle"
+        class="checkout-order-summary__accordion-btn"
+        type="button"
+        aria-expanded="true"
+        aria-controls="orderSummaryContent"
+      >
+        <span class="checkout-order-summary__accordion-text">جزئیات مرسوله</span>
+        <span class="checkout-order-summary__accordion-chevron" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <div class="checkout-order-summary__accordion-content is-open" id="orderSummaryContent">
+      <div class="checkout-order-summary__details">
+        <div class="checkout-order-summary__detail-item">
+          <span class="checkout-order-summary__detail-label">نام گیرنده:</span>
+          <span class="checkout-order-summary__detail-value" data-summary-recipient>
+            نام و نام خانوادگی مخاطب
+          </span>
+        </div>
+
+        <div class="checkout-order-summary__detail-item">
+          <span class="checkout-order-summary__detail-label">شماره تماس:</span>
+          <span class="checkout-order-summary__detail-value" data-summary-mobile>
+            ۰۹۱۲۰۰۰۰۰۰۰
+          </span>
+        </div>
+
+        <div class="checkout-order-summary__detail-item">
+          <span class="checkout-order-summary__detail-label">آدرس ارسال:</span>
+          <span class="checkout-order-summary__detail-value" data-summary-address>
+            استان، شهر، خیابان، کوچه، پلاک، واحد، کدپستی
+          </span>
+        </div>
+
+        <div class="checkout-order-summary__detail-item">
+          <span class="checkout-order-summary__detail-label">وزن مرسوله:</span>
+          <span class="checkout-order-summary__detail-value" data-summary-weight>
+            ۲.۵ کیلوگرم
+          </span>
+        </div>
+      </div>
+
+      <div class="checkout-order-summary__products">
+        <a href="cart.html" class="checkout-order-summary__product" aria-label="مشاهده محصول 1 در سبد خرید">
+          <img src="assets/check-out/product-1.png" alt="محصول 1" />
+        </a>
+
+        <a href="cart.html" class="checkout-order-summary__product" aria-label="مشاهده محصول 2 در سبد خرید">
+          <img src="assets/check-out/product-1.png" alt="محصول 2" />
+        </a>
+
+        <a href="cart.html" class="checkout-order-summary__product" aria-label="مشاهده محصول 3 در سبد خرید">
+          <img src="assets/check-out/product-1.png" alt="محصول 3" />
+        </a>
+
+        <a href="cart.html" class="checkout-order-summary__product" aria-label="مشاهده محصول 4 در سبد خرید">
+          <img src="assets/check-out/product-1.png" alt="محصول 4" />
+        </a>
+
+        <a href="cart.html" class="checkout-order-summary__product" aria-label="مشاهده محصول 5 در سبد خرید">
+          <img src="assets/check-out/product-1.png" alt="محصول 5" />
+        </a>
+
+        <a href="cart.html" class="checkout-order-summary__product" aria-label="مشاهده محصول 6 در سبد خرید">
+          <img src="assets/check-out/product-1.png" alt="محصول 6" />
+        </a>
+      </div>
+    </div>
+
+    <div class="checkout-order-summary__actions">
+      <button type="button" class="checkout-order-summary__submit-btn">
+        تأیید و ادامه
+      </button>
+    </div>
+  </section>
+</div>
+
+
+    <!-- footer -->
+    <div class="my-foot">
+      <div class="intro">
+        <h5>Logo</h5>
+        <img src="" alt="" />
+        <p>
+          ارائه‌دهنده خدمات تخصصی در حوزه تأمین، فروش، خرید، توزیع، صادرات و
+          واردات انواع محصولات صنعتی، تجهیزات، قطعات و ملزومات مورد نیاز صنایع
+          مختلف. این مجموعه با تکیه بر شبکه تأمین گسترده، تضمین کیفیت کالا، و
+          پشتیبانی حرفه‌ای، در زمینه فروش محصولات صنعتی و ارائه خدمات پیش و پس
+          از فروش به مشتریان در بخش‌های گوناگون صنعتی فعالیت می‌کند.
+        </p>
+      </div>
+      <div class="top-product">
+        <h5>برترین محصولات</h5>
+        <a href="#">یاتاقان</a>
+        <a href="#">بلبرینگ زاویه ایرانیان</a>
+        <a href="#">کاسه نمد</a>
+        <a href="#">بلبرینگ خود تنظیم</a>
+        <a href="#">اورینگ</a>
+      </div>
+      <div class="top-content">
+        <h5>برترین مقالات</h5>
+        <a href="#">اصطکاک در بلبرینگ و رولبرینگ</a>
+        <a href="#">زنگ زدگی بلبرینگ</a>
+        <a href="#"><span dir="ltr">FG</span> بر روی بلبرینگ به چه معناست ؟</a>
+        <a href="#">از کجا به اصالت محصول پی ببریم ؟</a>
+        <a href="#">نحوه پیگیری سفارش</a>
+      </div>
+      <div class="contact">
+        <h5>تماس با ما</h5>
+        <div class="address-section">
+          <img src="./assets/location point 2.svg" alt="" />
+          <p>
+            ادرس فروشگاه ما : تهران خیابان سعدی جنوبی خیابان اکباتان کوچه ناظم
+            الاطبا شمالی پاساژ امام حسین زیر همکف پلاک 32 بلبرینگ همگام صنعت
+            برتر
+          </p>
+        </div>
+        <div class="mail-section">
+          <img src="./assets/envelope.svg" alt="" /><a href="#"
+            ><p>info@example.com</p></a
+          >
+        </div>
+        <div class="contact-numbers">
+          <div>
+            <img src="./assets/mobile phone 1.svg" alt="" />
+          </div>
+          <div>
+            <a href="#"><p>02133989930</p></a>
+            <a href="#"><p>02133989940</p></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-of-footer">
+      <p>کلیه ی حقوق برای هایپرصنعتی الفت محفوظ می باشد</p>
+      <p>طراحی و توسعه توسط هوش افزار ایرانیان</p>
+    </div>
+
+    <script src="./js/hamburger-menu.js"></script>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="./js/check-out.js"></script>
+  </body>
+</html>
