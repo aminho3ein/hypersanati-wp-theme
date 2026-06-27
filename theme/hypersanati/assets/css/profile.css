@@ -1,0 +1,494 @@
+@import url(./main.css);
+/*================================
+            public styles
+=============================== */
+.all-elements {
+  display: flex;
+  /* margin-top: 5.4375rem; */
+  gap: 2.6875rem;
+  padding: 6.375rem;
+}
+
+/*================================
+            profile handler btn's styles
+=============================== */
+
+.profile-reqtangle {
+  display: flex;
+  flex-direction: column;
+  width: 358px;
+  height: 573px;
+  border-radius: 20px;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-primary);
+  gap: 1.75rem;
+}
+.profile-reqtangle button {
+  display: flex;
+  border: 2px solid var(--color-white);
+  border-radius: 10px;
+  width: 327px;
+  height: 62px;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+.profile-reqtangle button:hover {
+  border: none;
+  background-color: var(--color-white);
+  color: var(--color-primary);
+}
+.profile-reqtangle button.active {
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  border: none;
+}
+
+/* ========================
+        information section styles
+======================== */
+.info-sec {
+  width: 870px;
+  display: flex;
+  flex-direction: column;
+  gap: 3.125rem;
+}
+.profile-info-section-title {
+  display: flex;
+  justify-content: space-between;
+}
+.profile-info-section-title h5 {
+  font-weight: bold;
+}
+.profile-info-section hr,
+.address-info-section hr,
+.user-ifo-section hr {
+  margin: 0.25rem 0;
+}
+.warning-text {
+  display: flex;
+  align-items: center;
+  background-color: #feb1b1;
+  border-radius: 3px;
+  height: 55px;
+  padding: 2px;
+}
+.profile-info-section-description {
+  display: flex;
+  flex-direction: column;
+}
+.btn-of-edit-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--gray-600);
+  width: 153px;
+  height: 25px;
+  border-radius: 2px;
+}
+.btn-of-edit-info p {
+  margin-bottom: 0;
+  color: var(--color-dark);
+}
+.btn-of-edit-info-frame {
+  display: flex;
+  justify-content: flex-end;
+}
+.profile-info-section-description {
+  margin-top: 1.8125rem;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.user-ifo-section {
+  margin-top: 2.3125rem;
+}
+.ceckbox-form-section {
+  display: flex;
+  gap: 2rem;
+}
+.input-frame {
+  display: flex;
+  justify-content: space-between;
+}
+.input-frame input {
+  width: 315px;
+  height: 42px;
+  padding: 0.5rem;
+}
+.save-btn-frame {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4.0625rem;
+}
+.save-btn {
+  background-color: var(--color-danger);
+  width: 67.78px;
+  height: 42px;
+  color: var(--color-secondary);
+  border: none;
+  border-radius: 10px;
+}
+
+/* ==========================
+        perchase history section
+===========================*/
+.search-history-frame input {
+  width: 139px;
+  height: 40px;
+  text-align: center;
+  border-radius: 5px;
+}
+.search-history-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+}
+.search-history-frame {
+  margin-top: 0.6875rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.6875rem;
+}
+.perchse-history-table-list {
+  margin-top: 0.75rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  direction: rtl;
+}
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: right;
+  vertical-align: middle;
+}
+
+th {
+  font-weight: bold;
+  background-color: #f5f5f5;
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+  width: 5%;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 40%;
+}
+
+th:nth-child(3),
+td:nth-child(3),
+th:nth-child(4),
+td:nth-child(4),
+th:nth-child(5),
+td:nth-child(5) {
+  width: 15%;
+}
+.see-merchandise-list {
+  width: 170px;
+  height: 45px;
+  color: var(--color-dark);
+  background-color: transparent;
+  border: 2px solid var(--color-secondary);
+  border-radius: 10px;
+}
+.history-title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+/* ==================
+    support section
+================== */
+
+.ticket-layout {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.ticket-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 220px;
+}
+
+.ticket-btn {
+  height: 45px;
+  border: 1px solid var(--color-secondary);
+  background: transparent;
+  border-radius: 8px;
+  font-weight: bold;
+  color: var(--color-dark);
+}
+
+.ticket-btn.active {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.ticket-content {
+  flex: 1;
+}
+
+.ticket-panel {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ticket-panel.active {
+  display: flex;
+}
+
+.ticket-select {
+  width: 100%;
+  height: 40px;
+  padding: 0.5rem;
+}
+
+.ticket-product-input input {
+  width: 100%;
+  height: 40px;
+  padding: 0.5rem;
+}
+
+.ticket-message textarea {
+  width: 100%;
+  height: 140px;
+  padding: 0.7rem;
+  resize: none;
+}
+
+.ticket-send-frame {
+  display: flex;
+  justify-content: flex-end;
+}
+.ticket-send-frame button {
+  height: 60px;
+}
+.ticket-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ticket-item {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.ticket-title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+}
+
+.ticket-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.chat-user {
+  align-self: flex-end;
+  background: var(--color-primary);
+  color: var(--color-white);
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  max-width: 60%;
+}
+
+.chat-support {
+  align-self: flex-start;
+  background: #f3f3f3;
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  max-width: 60%;
+}
+
+.ticket-reply {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.ticket-reply input {
+  flex: 1;
+  height: 40px;
+  padding: 0.5rem;
+}
+
+.delete-ticket {
+  border: none;
+  background: var(--color-danger);
+  color: var(--color-secondary);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+}
+/* ================
+    user rank styles
+================ */
+
+.user-rank-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 3.3125rem 1rem 1rem 1rem;
+  width: 778px;
+  height: 439px;
+  background: linear-gradient(57deg, #6a563b 0%, #9f8561 100%);
+  border-radius: 20px;
+  border: none;
+  padding: 2.3rem 1rem;
+}
+.rank-and-cta-text {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-white);
+  gap: 1.5rem;
+}
+.rank-box {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--color-white);
+  border-radius: 10px;
+  padding: 1rem;
+}
+.cta-txt p {
+  font-size: 14px;
+  font-weight: lighter;
+}
+.rank-box p {
+  font-size: 30px;
+  font-weight: bold;
+}
+.rank-box h4 {
+  font-size: 14px;
+  font-weight: bold;
+}
+.rank-boxes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  gap: 3px;
+}
+.rank-boxes p {
+  display: flex;
+  justify-content: center;
+  border: 2px solid var(--color-dark);
+  border-radius: 10px;
+  background-color: var(--color-white);
+  width: 80px;
+  height: 80px;
+  text-align: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+}
+.progress-container {
+  width: 100%;
+  background: linear-gradient(57deg, #6a563b, #9f8561);
+  border-radius: 10px;
+  overflow: hidden;
+  height: 9px;
+  border: 1px solid var(--color-white);
+  direction: rtl;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.progress-bar-fill {
+  background-color: var(--color-white);
+  height: 100%;
+  width: 0%; /* این مقدار به صورت پویا تغییر می‌کند */
+  transition: width 0.5s ease-in-out;
+  border-radius: inherit; /* حفظ انحنای لبه‌ها */
+}
+.situation {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.situation-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.situation-text p {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--color-white);
+  text-align: center;
+}
+.progress-frame {
+  margin-top: 2.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  display: flex;
+}
+.progress-frame p {
+  font-size: 30px;
+  font-weight: bold;
+  color: var(--color-white);
+}
+
+@media (max-width: 576px) {
+  .user-rank {
+    align-items: center;
+  }
+  .ticket-btn {
+    padding: 0 0.2rem;
+  }
+  td {
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 992px) {
+    .all-elements {
+    justify-content: center !important; 
+    align-items: flex-start !important; 
+  }
+  .profile-reqtangle button {
+    width: 327px !important;
+    flex-shrink: 0 !important; 
+  }
+
+  .ticket-sidebar.w-md-auto {
+    width: 220px !important;
+    flex-basis: auto !important;
+  }
+  
+  .profile-reqtangle {
+    width: 358px !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .ticket-sidebar {
+    width: 100% !important;
+  }
+}

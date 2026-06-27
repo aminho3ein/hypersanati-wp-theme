@@ -1,0 +1,11 @@
+@font-face {
+    font-family: "AnjomanMax";
+    src: url("../fonts/AnjomanMax-Regular.woff") format("woff");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "AnjomanMax";
+    src: url("../fonts/AnjomanMax-Bold.woff") format("woff");
+    font-weight: 700;
+}
