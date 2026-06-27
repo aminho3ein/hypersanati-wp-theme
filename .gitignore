@@ -1,14 +1,12 @@
 # --- Paid Fonts ---
-/fonts/
+theme/hypersanati/assets/fonts/
 *.ttf
 *.woff
 *.woff2
 *.eot
 
-# --- WordPress Core & Config ---
-# WP-Conf
+# --- WordPress Core (comes from Docker image, not repo) ---
 wp-config.php
-# WP-Cores
 /wp-admin/
 /wp-includes/
 /wp-config-sample.php
@@ -18,18 +16,16 @@ wp-config.php
 /license.txt
 /readme.html
 
-# --- WordPress Directories ---
-/wp-content/uploads/
-/wp-content/upgrade/
-/wp-content/cache/
-/wp-content/languages/
+# --- WordPress runtime directories ---
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/cache/
+wp-content/languages/
+
 
 # --- Environment & Sensitive Data ---
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
 *.log
 *.sql
 *.zip
@@ -45,8 +41,7 @@ ehthumbs.db
 .idea/
 node_modules/
 vendor/
-# .docker/ 
 
-# --- Backup & Logs ---
+# --- Backup ---
 *.bak
 *.old
