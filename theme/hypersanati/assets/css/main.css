@@ -456,6 +456,7 @@ ul {
   display: flex;
   list-style-type: none;
   margin-bottom: 0;
+  align-items: center;
 }
 
 ul li a {
@@ -828,7 +829,7 @@ ul li a:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  width: 220px;
+  width: 330px;
   justify-content: space-between;
 }
 
@@ -1256,12 +1257,14 @@ button.handle-frame-section:disabled {
    ========================================================================== */
 .my-foot {
   display: flex;
+  flex-direction: column;
   flex-wrap: nowrap;
   width: 100%;
   background-color: var(--color-gray-navs);
   padding: 2rem 1rem;
   margin-top: 1rem;
   gap: 1.5rem;
+  align-items: center;
 }
 
 .intro,
@@ -1317,7 +1320,9 @@ button.handle-frame-section:disabled {
   font-size: var(--fs-sm);
   background-color: var(--gray-200);
 }
-
+.bottom-of-footer p{
+  font-size: 10px;
+}
 /* ==========================================================================
    Responsive — tablet و بالاتر
    ========================================================================== */
@@ -1360,12 +1365,12 @@ button.handle-frame-section:disabled {
   .my-foot {
     padding: 3rem 2rem;
   }
-  .intro,
+  /* .intro,
   .top-product,
   .top-content,
   .contact {
     width: calc(50% - 0.75rem);
-  }
+  } */
 }
 
 @media (min-width: 1200px) {

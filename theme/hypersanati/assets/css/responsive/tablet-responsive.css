@@ -81,7 +81,7 @@
   }
 
   .accurate-inputs{
-    width: 250px;
+    width: 330px;
   }
 
   .accurate-inputs input{
@@ -183,12 +183,12 @@
     justify-content: space-between;
   }
 
-  .intro,
+  /* .intro,
   .top-product,
   .top-content,
   .contact{
     width: calc(50% - 1rem);
-  }
+  } */
 
   .bottom-of-footer{
     height: 55px;
