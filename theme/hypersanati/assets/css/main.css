@@ -1257,7 +1257,6 @@ button.handle-frame-section:disabled {
    ========================================================================== */
 .my-foot {
   display: flex;
-  flex-direction: column;
   flex-wrap: nowrap;
   width: 100%;
   background-color: var(--color-gray-navs);
@@ -1266,7 +1265,15 @@ button.handle-frame-section:disabled {
   gap: 1.5rem;
   align-items: center;
 }
-
+.foot-logo {
+  width: 72px;
+  height: 72px;
+  display: block;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  margin-inline-start: 0;
+  margin-inline-end: auto;
+}
 .intro,
 .top-product,
 .top-content,
@@ -1275,6 +1282,7 @@ button.handle-frame-section:disabled {
   flex-direction: column;
   gap: 0.5rem;
   width: 100%;
+  text-align: justify;
 }
 
 .top-product a,
@@ -1409,5 +1417,17 @@ button.handle-frame-section:disabled {
 
   .top-of-nav {
     gap: 20rem;
+  }
+}
+@media (min-width: 1199px) {
+  .foot-logo {
+    width: 84px;
+    height: 84px;
+  }
+}
+@media (max-width: 1200px) {
+  .foot-logo {
+    width: 72px;
+    height: 72px;
   }
 }

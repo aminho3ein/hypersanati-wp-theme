@@ -114,3 +114,46 @@ function hypersanati_enqueue_assets() {
     }
 }
 add_action('wp_enqueue_scripts', 'hypersanati_enqueue_assets');
+
+// add menu in theme
+function hypersanati_register_menus() {
+    register_nav_menus(array(
+        'primary_menu' => 'فهرست اصلی',
+        'footer_menu'  => 'فهرست فوتر',
+    ));
+}
+add_action('after_setup_theme', 'hypersanati_register_menus');
+
+function hypersanati_nav_link_classes($atts, $item, $args, $depth) {
+    $classes = isset($atts['class']) ? explode(' ', $atts['class']) : array();
+
+    $item_url = isset($item->url) ? untrailingslashit($item->url) : '';
+    $home_url = untrailingslashit(home_url('/'));
+
+    if (
+        isset($args->theme_location) &&
+        $args->theme_location === 'primary_menu'
+    ) {
+        if ($item_url === $home_url || in_array('menu-item-home', $item->classes, true)) {
+            $classes[] = 'home-btn';
+        }
+
+        if (trim($item->title) === 'ارتباط با ما') {
+            $classes[] = 'contact-btn';
+        }
+    }
+
+    if (
+        isset($args->menu_class) &&
+        $args->menu_class === 'mobile-nav-links'
+    ) {
+        $atts['onclick'] = 'closeMobileMenu()';
+    }
+
+    if (!empty($classes)) {
+        $atts['class'] = implode(' ', array_unique($classes));
+    }
+
+    return $atts;
+}
+add_filter('nav_menu_link_attributes', 'hypersanati_nav_link_classes', 10, 4);
