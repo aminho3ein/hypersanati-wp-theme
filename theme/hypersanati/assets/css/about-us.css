@@ -324,7 +324,7 @@
 
 .about-why-section {
   width: 100%;
-  padding: 4rem 0 5rem;
+  padding: 0 0 5rem;
   background-color: var(--color-white);
 }
 
@@ -419,7 +419,7 @@
 /* Desktop */
 @media (min-width: 1024px) {
   .about-why-section {
-    padding: 5rem 0 6rem;
+    padding: 0rem 0 6rem;
   }
 
   .about-why-grid {
@@ -450,7 +450,7 @@
 /* Mobile */
 @media (max-width: 767px) {
   .about-why-section {
-    padding: 3rem 0 4rem;
+    padding: 0rem 0 4rem;
   }
 
   .about-why-header {

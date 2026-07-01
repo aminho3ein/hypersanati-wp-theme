@@ -64,7 +64,7 @@ function hypersanati_enqueue_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'hypersanati_enqueue_scripts' );
 
-// for loading css, js for 404 page
+// Load theme assets conditionally
 function hypersanati_enqueue_assets() {
 
     // استایل اصلی قالب
@@ -77,10 +77,11 @@ function hypersanati_enqueue_assets() {
 
     // فقط برای صفحه 404
     if (is_404()) {
+
         wp_enqueue_style(
             'hypersanati-404',
             get_template_directory_uri() . '/assets/css/404.css',
-            array(),
+            array('hypersanati-style'),
             filemtime(get_template_directory() . '/assets/css/404.css')
         );
 
@@ -89,6 +90,25 @@ function hypersanati_enqueue_assets() {
             get_template_directory_uri() . '/assets/js/404.js',
             array(),
             filemtime(get_template_directory() . '/assets/js/404.js'),
+            true
+        );
+    }
+
+    // فقط برای صفحه درباره ما
+    if (is_page('about-us') || is_page_template('page-about-us.php')) {
+
+        wp_enqueue_style(
+            'hypersanati-about-us',
+            get_template_directory_uri() . '/assets/css/about-us.css',
+            array('hypersanati-style'),
+            filemtime(get_template_directory() . '/assets/css/about-us.css')
+        );
+
+        wp_enqueue_script(
+            'hypersanati-about-us',
+            get_template_directory_uri() . '/assets/js/about-us.js',
+            array(),
+            filemtime(get_template_directory() . '/assets/js/about-us.js'),
             true
         );
     }
