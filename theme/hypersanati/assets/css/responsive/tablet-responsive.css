@@ -177,11 +177,17 @@
 
   /* ---------- Footer ---------- */
 
-  .my-foot{
+  /* .my-foot{
     padding: 3rem 2rem;
 
     justify-content: space-between;
-  }
+  } */
+  .my-foot {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  align-items: start; /* جلوگیری از کشیده شدن المان‌ها به ارتفاع بلندترین المان */
+}
 
   /* .intro,
   .top-product,

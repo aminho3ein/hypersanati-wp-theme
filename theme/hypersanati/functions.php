@@ -10,11 +10,51 @@ function hypersanati_enqueue_all_css() {
     $base_url = get_template_directory_uri() . '/assets/css';
     $base_dir = get_template_directory() . '/assets/css';
 
+    // Bootstrap RTL
+    wp_enqueue_style(
+        'bootstrap-rtl',
+        $base_url . '/bootstrap.rtl.min.css',
+        array(),
+        filemtime($base_dir . '/bootstrap.rtl.min.css')
+    );
+
+    // FontAwesome Core
+    wp_enqueue_style(
+        'fontawesome',
+        $base_url . '/fontawesome.min.css',
+        array(),
+        filemtime($base_dir . '/fontawesome.min.css')
+    );
+
+    // FontAwesome Solid
+    wp_enqueue_style(
+        'fontawesome-solid',
+        $base_url . '/solid.min.css',
+        array('fontawesome'),
+        filemtime($base_dir . '/solid.min.css')
+    );
+
+    // FontAwesome Brands
+    wp_enqueue_style(
+        'fontawesome-brands',
+        $base_url . '/brands.min.css',
+        array('fontawesome'),
+        filemtime($base_dir . '/brands.min.css')
+    );
+
+    // Fonts
+    wp_enqueue_style(
+        'site-fonts',
+        $base_url . '/font.css',
+        array(),
+        filemtime($base_dir . '/font.css')
+    );
+
     // Main CSS
     wp_enqueue_style(
         'main-css',
         $base_url . '/main.css',
-        array(),
+        array('bootstrap-rtl'),
         filemtime($base_dir . '/main.css')
     );
 

@@ -384,6 +384,8 @@ ul li a {
    Desktop Override — footer
    ========================================================================== */
 .my-foot {
+  display: flex;
+  flex-direction: row;
   width: 100vw;
   height: 465px;
   padding: 7.5rem 10rem;
