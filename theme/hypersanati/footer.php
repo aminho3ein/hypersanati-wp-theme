@@ -2,8 +2,7 @@
     <!-- footer -->
     <div class="my-foot">
       <div class="intro">
-        <h5>Logo</h5>
-        <img src="" alt="" />
+        <a href="<?php echo esc_url( home_url( '/' ) ); ?>"><img class="foot-logo" src="<?php echo get_template_directory_uri(); ?>/assets/images/main-logo/logo.jpg" alt="" /></a>
         <p>
           ارائه‌دهنده خدمات تخصصی در حوزه تأمین، فروش، خرید، توزیع، صادرات و
           واردات انواع محصولات صنعتی، تجهیزات، قطعات و ملزومات مورد نیاز صنایع

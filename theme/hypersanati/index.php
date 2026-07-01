@@ -3,15 +3,25 @@
 
     <!-- search-feat -->
     <div class="search-area">
-      <div class="search-input">
-        <h5>عنوان محصول</h5>
-        <div class="big-input-division">
-          <input type="search" placeholder="مثلا بلبرینگ تماس زاویه ای" />
-          <button class="btn">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
+      <form class="search-input" method="get" action="<?php echo esc_url( home_url('/') ); ?>">
+        <div class="search-input">
+          <h5>عنوان محصول</h5>
+          <div class="big-input-division">
+            <input 
+              type="search" 
+              name="s" 
+              placeholder="مثلا بلبرینگ تماس زاویه ای"
+              value="<?php echo get_search_query(); ?>" 
+            />
+            <input type="hidden" name="post_type" value="product" />
+            <button class="btn" type="submit">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
         </div>
-      </div>
+      </form>
+
+
       <div class="accurate-search-input">
         <div class="search-text">
           <p>اگر اندازه ی دقیق قطعه مورد نظرتان را می دانید درمقابل بنویسید.</p>
