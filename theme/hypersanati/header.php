@@ -37,74 +37,124 @@
 
   </head>
 
-  <body <?php body_class(); ?>>
-  <body>
-    <!-- header -->
-    <div class="header">
-      <div class="top-of-nav">
-        <a href="#">ارسال ۷ الی ۱۰ روزکاری</a>
-        <a href="#">پیگیری سفارش</a>
-      </div>
-      <div class="my-navbar">
-        <!-- Logo / Brand (mobile) -->
-        <div class="navbar-brand">
-          <span>هایپرصنعتی الفت</span>
-        </div>
+<body <?php body_class(); ?>>
+<?php wp_body_open(); ?>
 
-        <!-- Desktop nav links -->
-        <ul class="nav-links">
-          <li><a class="home-btn" href="#">صفحه اصلی</a></li>
-          <li><a href="#">فروشگاه</a></li>
-          <li><a href="#">مجله</a></li>
-          <li><a href="#">درباره ما</a></li>
-          <li><a class="contact-btn" href="#">ارتباط با ما</a></li>
-        </ul>
+<!-- header -->
+<div class="header">
+  <div class="top-of-nav">
+    <a href="#">ارسال ۷ الی ۱۰ روزکاری</a>
+    <a href="#">پیگیری سفارش</a>
+  </div>
 
-        <!-- Desktop nav actions -->
-        <ul class="nav-actions">
-          <div class="sell-number"><p>۷</p></div>
-          <div class="cart">
-            <i class="fa-solid fa-cart-shopping"></i>
-          </div>
-          <li><a class="my-profile" href="#">حساب کاربری</a></li>
-        </ul>
-
-        <!-- Hamburger button (mobile only) -->
-        <div class="menu-and-cart">
-          <ul class="mobile-nav-actions">
-            <div class="sell-number"><p>۷</p></div>
-            <div class="cart">
-              <i class="fa-solid fa-cart-shopping"></i>
-            </div>
-            <li><a class="my-profile" href="#">حساب کاربری</a></li>
-          </ul>
-          <button
-            class="hamburger"
-            id="hamburgerBtn"
-            aria-label="منو"
-            aria-expanded="false"
-          >
-            <span class="ham-line"></span>
-            <span class="ham-line"></span>
-            <span class="ham-line"></span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Mobile Drawer Menu -->
-      <div class="mobile-menu" id="mobileMenu">
-        <ul class="mobile-nav-links">
-          <li><a href="#" onclick="closeMobileMenu()">صفحه اصلی</a></li>
-          <li><a href="#" onclick="closeMobileMenu()">فروشگاه</a></li>
-          <li><a href="#" onclick="closeMobileMenu()">مجله</a></li>
-          <li><a href="#" onclick="closeMobileMenu()">درباره ما</a></li>
-          <li><a href="#" onclick="closeMobileMenu()">ارتباط با ما</a></li>
-          <li><a href="#" onclick="closeMobileMenu()">حساب کاربری</a></li>
-        </ul>
-      </div>
-      <div
-        class="mobile-overlay"
-        id="mobileOverlay"
-        onclick="closeMobileMenu()"
-      ></div>
+  <div class="my-navbar">
+    <!-- Logo / Brand mobile -->
+    <div class="navbar-brand">
+      <a href="<?php echo esc_url(home_url('/')); ?>">
+        <span>هایپرصنعتی الفت</span>
+      </a>
     </div>
+
+    <!-- Desktop nav links -->
+    <?php
+    wp_nav_menu(array(
+        'theme_location' => 'primary_menu',
+        'container'      => false,
+        'menu_class'     => 'nav-links',
+        'fallback_cb'    => false,
+        'depth'          => 1,
+    ));
+    ?>
+
+    <?php
+    $cart_count = 0;
+
+    if (function_exists('WC') && WC()->cart) {
+        $cart_count = WC()->cart->get_cart_contents_count();
+    }
+
+    $cart_url = function_exists('wc_get_cart_url') ? wc_get_cart_url() : '#';
+
+    $account_url = function_exists('wc_get_page_permalink')
+        ? wc_get_page_permalink('myaccount')
+        : wp_login_url();
+
+    if (!$account_url) {
+        $account_url = wp_login_url();
+    }
+    ?>
+
+    <!-- Desktop nav actions -->
+    <ul class="nav-actions">
+      <div class="sell-number">
+        <p><?php echo esc_html(number_format_i18n($cart_count)); ?></p>
+      </div>
+
+      <div class="cart">
+        <a href="<?php echo esc_url($cart_url); ?>">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </a>
+      </div>
+
+      <li>
+        <a class="my-profile" href="<?php echo esc_url($account_url); ?>">
+          حساب کاربری
+        </a>
+      </li>
+    </ul>
+
+    <!-- Hamburger button mobile only -->
+    <div class="menu-and-cart">
+      <ul class="mobile-nav-actions">
+        <div class="sell-number">
+          <p><?php echo esc_html(number_format_i18n($cart_count)); ?></p>
+        </div>
+
+        <div class="cart">
+          <a href="<?php echo esc_url($cart_url); ?>">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </a>
+        </div>
+
+        <li>
+          <a class="my-profile" href="<?php echo esc_url($account_url); ?>">
+            حساب کاربری
+          </a>
+        </li>
+      </ul>
+
+      <button
+        class="hamburger"
+        id="hamburgerBtn"
+        aria-label="منو"
+        aria-expanded="false"
+      >
+        <span class="ham-line"></span>
+        <span class="ham-line"></span>
+        <span class="ham-line"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <?php
+    $mobile_account_item = '<li><a href="' . esc_url($account_url) . '" onclick="closeMobileMenu()">حساب کاربری</a></li>';
+
+    wp_nav_menu(array(
+        'theme_location' => 'primary_menu',
+        'container'      => false,
+        'menu_class'     => 'mobile-nav-links',
+        'fallback_cb'    => false,
+        'depth'          => 1,
+        'items_wrap'     => '<ul id="%1$s" class="%2$s">%3$s' . $mobile_account_item . '</ul>',
+    ));
+    ?>
+  </div>
+
+  <div
+    class="mobile-overlay"
+    id="mobileOverlay"
+    onclick="closeMobileMenu()"
+  ></div>
+</div>
