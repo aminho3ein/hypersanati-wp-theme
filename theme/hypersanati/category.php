@@ -65,7 +65,7 @@ $featured = new WP_Query([
 
 <!-- article-category-sectio -->
 <section class="article-category-section">
-  <div class="container">
+    <div class="container">
     <div class="article-category-layout">
 
       <!-- Sidebar -->
@@ -147,88 +147,88 @@ $featured = new WP_Query([
       
 
       <!-- Main Content -->
-      <main class="article-category-main">
-        <?php
-        $paged = isset($_GET['paged']) ? intval($_GET['paged']) : 1;
-        $posts = new WP_Query([
-          'post_type' => 'post',
-          'posts_per_page' => 8,
-          'paged' => $paged
-        ]);
-        ?>
+                        <main class="article-category-main">
 
-        <!-- Articles -->
-        <?php if ($posts->have_posts()) : ?>
-          <?php while ($posts->have_posts()) : $posts->the_post(); ?>
-
-            <div class="article-category-item">
-              <div class="article-category-tag">
-                <?php
-                  $categories = get_the_category();
-                  echo $categories[0]->name ?? 'مقاله';
-                ?>
-              </div>
-
-              <a href="<?php the_permalink(); ?>" class="article-card">
-
-                <div class="article-card-image">
-                  <?php the_post_thumbnail('large'); ?>
-                </div>
-
-                <h4 class="article-card-title">
-                  <?php the_title(); ?>
-                </h4>
-
-                <p class="article-card-text">
-                  <?php echo wp_trim_words(get_the_excerpt(), 30); ?>
-                </p>
-
-              </a>
-            </div>
-
-          <?php endwhile; ?>
-        <?php endif; wp_reset_postdata(); ?>
+                        <?php
+                        $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
 
+                        $posts = new WP_Query([
+                            'post_type' => 'post',
+                            'posts_per_page' => 8,
+                            'paged' => $paged
+                        ]);
+                        ?>
 
-        <!-- Pagination -->
-        <?php
-        $total_pages = $posts->max_num_pages;
-        $current = max(1, get_query_var('paged'));
-        ?>
+                        <div class="posts-wrapper">
 
-        <nav class="article-pagination" aria-label="Pagination">
+                        <?php if ($posts->have_posts()) : ?>
+                            <?php while ($posts->have_posts()) : $posts->the_post(); ?>
 
-          <!-- First -->
-          <a href="#" class="article-pagination-btn" data-page="1">ابتدا</a>
+                                <div class="article-category-item">
 
-          <!-- Prev -->
-          <a href="#" class="article-pagination-btn" data-page="<?php echo max(1, $current - 1); ?>">قبلی</a>
+                                    <div class="article-category-tag">
+                                        <?php
+                                        $categories = get_the_category();
+                                        echo $categories[0]->name ?? 'مقاله';
+                                        ?>
+                                    </div>
 
-          <?php
-          $start = max(1, $current - 4);
-          $end = min($total_pages, $start + 9);
+                                    <a href="<?php the_permalink(); ?>" class="article-card">
 
-          for ($i = $start; $i <= $end; $i++) :
-          ?>
-            <a href="#" class="article-pagination-btn <?php echo ($i == $current) ? 'active' : ''; ?>" data-page="<?php echo $i; ?>">
-              <?php echo $i; ?>
-            </a>
-          <?php endfor; ?>
+                                        <div class="article-card-image">
+                                            <?php the_post_thumbnail('large'); ?>
+                                        </div>
 
-          <!-- Next -->
-          <a href="#" class="article-pagination-btn" data-page="<?php echo min($total_pages, $current + 1); ?>">بعدی</a>
+                                        <h4 class="article-card-title">
+                                            <?php the_title(); ?>
+                                        </h4>
 
-          <!-- Last -->
-          <a href="#" class="article-pagination-btn" data-page="<?php echo $total_pages; ?>">انتها</a>
+                                        <p class="article-card-text">
+                                            <?php echo wp_trim_words(get_the_excerpt(), 30); ?>
+                                        </p>
 
-        </nav>
-      </main>
+                                    </a>
+                                </div>
 
+                            <?php endwhile; ?>
+                        <?php endif; wp_reset_postdata(); ?>
+
+                        </div>
+
+
+                        <!-- Pagination -->
+                        <?php
+                        $total_pages = $posts->max_num_pages;
+                        $current = max(1, $paged);
+                        ?>
+
+                        <nav class="article-pagination" aria-label="Pagination">
+
+                            <a href="#" class="article-pagination-btn" data-page="1">ابتدا</a>
+
+                            <a href="#" class="article-pagination-btn" data-page="<?php echo max(1, $current - 1); ?>">قبلی</a>
+
+                            <?php
+                            $start = max(1, $current - 4);
+                            $end = min($total_pages, $start + 9);
+
+                            for ($i = $start; $i <= $end; $i++) :
+                            ?>
+                                <a href="#" class="article-pagination-btn <?php echo ($i == $current) ? 'active' : ''; ?>"
+                                  data-page="<?php echo $i; ?>">
+                                    <?php echo $i; ?>
+                                </a>
+                            <?php endfor; ?>
+
+                            <a href="#" class="article-pagination-btn" data-page="<?php echo min($total_pages, $current + 1); ?>">بعدی</a>
+
+                            <a href="#" class="article-pagination-btn" data-page="<?php echo $total_pages; ?>">انتها</a>
+
+                        </nav>
+
+                        </main>
+         </div>
     </div>
-  </div>
 </section>
-
-
-
 <?php get_footer(); ?>

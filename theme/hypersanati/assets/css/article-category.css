@@ -293,9 +293,13 @@
    ========================= */
 .article-category-main {
   direction: rtl;
+}
+
+.posts-wrapper {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 5rem 2.5rem;
+  width: 100%;
 }
 
 .article-category-item {
@@ -394,9 +398,9 @@
     grid-template-columns: 1fr;
   }
 
-  .article-category-main {
+  .posts-wrapper {
     grid-template-columns: 1fr;
-      gap: 1rem 1rem;
+    gap: 1rem 1rem;
   }
 
   .discount-product-card {

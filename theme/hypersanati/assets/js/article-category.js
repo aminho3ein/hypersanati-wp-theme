@@ -1,51 +1,47 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    const items = document.querySelectorAll(".discount-slider a");
+    const postsWrapper = document.querySelector(".posts-wrapper");
+    const paginationBox = document.querySelector(".article-pagination");
 
-    if (!items.length) return;
+    if (!postsWrapper) return;
 
-    // اگر فقط 1 محصول داریم → اسلایدر خاموش
-    if (items.length === 1) {
-        items[0].classList.add("active");
-        return;
-    }
+    document.addEventListener("click", function (e) {
 
-    let index = 0;
+        const btn = e.target.closest(".article-pagination-btn");
+        if (!btn) return;
 
-    function showSlide() {
+        e.preventDefault();
 
-        items.forEach(item => item.classList.remove("active"));
+        const page =
+            btn.dataset.page ||
+            btn.getAttribute("data-page") ||
+            btn.textContent;
 
-        items[index].classList.add("active");
+        const pageNumber = parseInt(page);
 
-        index = (index + 1) % items.length;
-    }
+        if (!pageNumber) return;
 
-    showSlide();
-    setInterval(showSlide, 6000);
+        fetch(`/wp-admin/admin-ajax.php?action=load_posts&paged=${pageNumber}`)
+            .then(res => res.json())
+            .then(data => {
 
-});
+                if (!data.posts) return;
 
+                // 🔥 POSTS
+                postsWrapper.innerHTML = data.posts;
 
+                // 🔥 PAGINATION
+                if (paginationBox && data.pagination) {
+                    paginationBox.innerHTML = data.pagination;
+                }
 
-document.addEventListener("DOMContentLoaded", function () {
-
-    const container = document.querySelector(".article-category-main");
-
-    document.querySelectorAll(".article-pagination-btn").forEach(btn => {
-
-        btn.addEventListener("click", function (e) {
-            e.preventDefault();
-
-            const page = this.getAttribute("data-page");
-
-            fetch(`/wp-admin/admin-ajax.php?action=load_posts&page=${page}`)
-                .then(res => res.text())
-                .then(html => {
-                    container.innerHTML = html;
+                // smooth scroll
+                postsWrapper.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
                 });
 
-        });
+            });
 
     });
 

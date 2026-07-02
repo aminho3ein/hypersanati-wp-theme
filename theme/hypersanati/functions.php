@@ -164,29 +164,16 @@ function hypersanati_enqueue_assets() {
         );
     }
 
-    // Category page (JS + شرط وجود محصول تخفیف)
+    // Category page (JS)
     if (is_category() || is_archive()) {
 
-        // بررسی وجود محصول تخفیف‌دار
-        $discount_check = new WP_Query([
-            'post_type' => 'product',
-            'posts_per_page' => 1,
-            'meta_key' => '_is_discount_featured',
-            'meta_value' => 'yes'
-        ]);
-
-        if ($discount_check->have_posts()) {
-
-            wp_enqueue_script(
-                'hypersanati-category',
-                get_template_directory_uri() . '/assets/js/article-category.js',
-                array(),
-                filemtime(get_template_directory() . '/assets/js/article-category.js'),
-                true
-            );
-        }
-
-        wp_reset_postdata();
+        wp_enqueue_script(
+            'hypersanati-category',
+            get_template_directory_uri() . '/assets/js/article-category.js',
+            array(),
+            filemtime(get_template_directory() . '/assets/js/article-category.js'),
+            true
+        );
     }
 }
 add_action('wp_enqueue_scripts', 'hypersanati_enqueue_assets');
@@ -377,16 +364,18 @@ add_action('wp_ajax_nopriv_load_posts', 'load_posts_ajax');
 
 function load_posts_ajax() {
 
-    $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+    $paged = isset($_GET['paged']) ? intval($_GET['paged']) : 1;
 
-    $posts = new WP_Query([
+    $query = new WP_Query([
         'post_type' => 'post',
         'posts_per_page' => 8,
-        'paged' => $page
+        'paged' => $paged
     ]);
 
-    if ($posts->have_posts()) :
-        while ($posts->have_posts()) : $posts->the_post(); ?>
+    ob_start();
+
+    if ($query->have_posts()) :
+        while ($query->have_posts()) : $query->the_post(); ?>
 
             <div class="article-category-item">
 
@@ -414,6 +403,40 @@ function load_posts_ajax() {
 
         <?php endwhile;
     endif;
+
+    $posts_html = ob_get_clean();
+
+    // pagination جدا ساخته میشه
+    ob_start();
+
+    $total_pages = $query->max_num_pages;
+    $current = $paged;
+
+    ?>
+
+    <a href="#" class="article-pagination-btn" data-page="1">1</a>
+
+    <a href="#" class="article-pagination-btn" data-page="<?php echo max(1, $current - 1); ?>">قبلی</a>
+
+    <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+        <a href="#" class="article-pagination-btn <?php echo ($i == $current) ? 'active' : ''; ?>"
+           data-page="<?php echo $i; ?>">
+            <?php echo $i; ?>
+        </a>
+    <?php endfor; ?>
+
+    <a href="#" class="article-pagination-btn" data-page="<?php echo min($total_pages, $current + 1); ?>">بعدی</a>
+
+    <a href="#" class="article-pagination-btn" data-page="<?php echo $total_pages; ?>">انتها</a>
+
+    <?php
+
+    $pagination_html = ob_get_clean();
+
+    wp_send_json([
+        'posts' => $posts_html,
+        'pagination' => $pagination_html
+    ]);
 
     wp_die();
 }
