@@ -76,73 +76,66 @@ $featured = new WP_Query([
               dynamic_sidebar('sidebar-1');
           } ?>
         </div>
-        <a href="#" alt="">
+<?php
+$discount_products = new WP_Query([
+    'post_type' => 'product',
+    'posts_per_page' => 5,
+    'meta_key' => '_is_discount_featured',
+    'meta_value' => 'yes'
+]);
+?>
 
-          <?php
-          $discount_products = new WP_Query([
-              'post_type' => 'product',
-              'posts_per_page' => 5,
-              'meta_key' => '_is_discount_featured',
-              'meta_value' => 'yes'
-          ]);
-          ?>
+<div class="discount-slider" id="discountSlider">
 
+<?php if ($discount_products->have_posts()) : ?>
+    <?php while ($discount_products->have_posts()) : $discount_products->the_post(); 
+        $product = wc_get_product(get_the_ID());
+    ?>
 
-          <div class="discount-slider" id="discountSlider">
+        <a href="<?php the_permalink(); ?>" class="discount-item">
 
-          <?php if ($discount_products->have_posts()) : ?>
-              <?php while ($discount_products->have_posts()) : $discount_products->the_post(); 
-                  $product = wc_get_product(get_the_ID());
-              ?>
+            <div class="discount-product-card">
 
-                  <a href="<?php the_permalink(); ?>" class="discount-item">
+                <div class="discount-product-label">
+                    تخفیف ویژه هفته (تبلیغ)
+                </div>
 
-                      <div class="discount-product-card">
+                <div class="discount-product-frame">
+                    <?php the_post_thumbnail('medium'); ?>
+                </div>
 
-                          <div class="discount-product-label">
-                              تخفیف ویژه هفته (تبلیغ)
-                          </div>
+                <p class="discount-product-desc">
+                    <?php the_title(); ?>
+                </p>
 
-                          <div class="discount-product-frame">
-                              <?php the_post_thumbnail('medium'); ?>
-                          </div>
+                <div class="discount-product-old-price-row">
 
-                          <p class="discount-product-desc">
-                              <?php the_title(); ?>
-                          </p>
+                    <span class="discount-product-old-price">
+                        <?php echo wc_price($product->get_regular_price()); ?>
+                    </span>
 
-                          <div class="discount-product-old-price-row">
+                    <span class="discount-product-badge">
+                        <?php
+                        if ($product->get_regular_price() && $product->get_sale_price()) {
+                            echo round((($product->get_regular_price() - $product->get_sale_price()) / $product->get_regular_price()) * 100) . '%';
+                        }
+                        ?>
+                    </span>
 
-                              <span class="discount-product-old-price">
-                                  <?php echo wc_price($product->get_regular_price()); ?>
-                              </span>
+                </div>
 
-                              <span class="discount-product-badge">
-                                  <?php
-                                  if ($product->get_regular_price() && $product->get_sale_price()) {
-                                      echo round((($product->get_regular_price() - $product->get_sale_price()) / $product->get_regular_price()) * 100) . '%';
-                                  }
-                                  ?>
-                              </span>
+                <div class="discount-product-new-price">
+                    <?php echo wc_price($product->get_sale_price()); ?>
+                </div>
 
-                          </div>
-
-                          <div class="discount-product-new-price">
-                              <?php echo wc_price($product->get_sale_price()); ?>
-                          </div>
-
-                      </div>
-
-                  </a>
-
-              <?php endwhile; ?>
-          <?php endif; wp_reset_postdata(); ?>
-
-          </div>
-
-
+            </div>
 
         </a>
+
+    <?php endwhile; ?>
+<?php endif; wp_reset_postdata(); ?>
+
+</div>
       </aside>
       
 

@@ -175,6 +175,26 @@ function hypersanati_enqueue_assets() {
             true
         );
     }
+
+
+    // Single Post Page
+    if (is_single()) {
+
+        wp_enqueue_style(
+            'hypersanati-single-post',
+            get_template_directory_uri() . '/assets/css/single-article.css',
+            array('hypersanati-style'),
+            filemtime(get_template_directory() . '/assets/css/single-article.css')
+        );
+
+        wp_enqueue_script(
+            'hypersanati-single-post',
+            get_template_directory_uri() . '/assets/js/single-article.js',
+            array(),
+            filemtime(get_template_directory() . '/assets/js/single-article.js'),
+            true
+        );
+    }
 }
 add_action('wp_enqueue_scripts', 'hypersanati_enqueue_assets');
 
