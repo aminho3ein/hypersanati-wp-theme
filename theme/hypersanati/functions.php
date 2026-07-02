@@ -107,15 +107,15 @@ add_action( 'wp_enqueue_scripts', 'hypersanati_enqueue_scripts' );
 // Load theme assets conditionally
 function hypersanati_enqueue_assets() {
 
-    // استایل اصلی قالب
+    // Main Style
     wp_enqueue_style(
         'hypersanati-style',
         get_stylesheet_uri(),
         array(),
-        filemtime(get_template_directory() . '/style.css')
+        filemtime(get_template_directory() . '/assets/css/main.css')
     );
 
-    // فقط برای صفحه 404
+    // 404 page
     if (is_404()) {
 
         wp_enqueue_style(
@@ -134,7 +134,7 @@ function hypersanati_enqueue_assets() {
         );
     }
 
-    // فقط برای صفحه درباره ما
+    // About page
     if (is_page('about-us') || is_page_template('page-about-us.php')) {
 
         wp_enqueue_style(
@@ -151,6 +151,42 @@ function hypersanati_enqueue_assets() {
             filemtime(get_template_directory() . '/assets/js/about-us.js'),
             true
         );
+    }
+
+    // Category page (CSS)
+    if (is_category() || is_archive()) {
+
+        wp_enqueue_style(
+            'hypersanati-category',
+            get_template_directory_uri() . '/assets/css/article-category.css',
+            array('hypersanati-style'),
+            filemtime(get_template_directory() . '/assets/css/article-category.css')
+        );
+    }
+
+    // Category page (JS + شرط وجود محصول تخفیف)
+    if (is_category() || is_archive()) {
+
+        // بررسی وجود محصول تخفیف‌دار
+        $discount_check = new WP_Query([
+            'post_type' => 'product',
+            'posts_per_page' => 1,
+            'meta_key' => '_is_discount_featured',
+            'meta_value' => 'yes'
+        ]);
+
+        if ($discount_check->have_posts()) {
+
+            wp_enqueue_script(
+                'hypersanati-category',
+                get_template_directory_uri() . '/assets/js/article-category.js',
+                array(),
+                filemtime(get_template_directory() . '/assets/js/article-category.js'),
+                true
+            );
+        }
+
+        wp_reset_postdata();
     }
 }
 add_action('wp_enqueue_scripts', 'hypersanati_enqueue_assets');
@@ -197,3 +233,187 @@ function hypersanati_nav_link_classes($atts, $item, $args, $depth) {
     return $atts;
 }
 add_filter('nav_menu_link_attributes', 'hypersanati_nav_link_classes', 10, 4);
+
+
+
+
+// Article Hero Sectiop
+function add_featured_meta_box() {
+    add_meta_box(
+        'featured_post',
+        'مقاله شاخص',
+        'featured_meta_box_callback',
+        'post',
+        'side'
+    );
+}
+add_action('add_meta_boxes', 'add_featured_meta_box');
+
+function featured_meta_box_callback($post) {
+    $value = get_post_meta($post->ID, '_is_featured', true);
+
+    ?>
+    <label>
+        <input type="checkbox" name="is_featured" value="1" <?php checked($value, '1'); ?> />
+        نمایش در اسلایدر / Hero
+    </label>
+    <?php
+}
+
+function save_featured_meta($post_id) {
+    if (isset($_POST['is_featured'])) {
+        update_post_meta($post_id, '_is_featured', '1');
+    } else {
+        delete_post_meta($post_id, '_is_featured');
+    }
+}
+add_action('save_post', 'save_featured_meta');
+
+
+
+// Category Sticky Note Widget
+class Sidebar_Info_Widget extends WP_Widget {
+
+    function __construct() {
+        parent::__construct(
+            'sidebar_info_widget',
+            'Sidebar Info Card',
+            array('description' => 'نمایش عنوان و متن در سایدبار')
+        );
+    }
+
+    // view in sidebar
+    public function widget($args, $instance) {
+
+        $title = !empty($instance['title']) ? $instance['title'] : '';
+        $text  = !empty($instance['text']) ? $instance['text'] : '';
+
+        echo '<div class="sidebar-info-card">';
+
+        if ($title) {
+            echo '<h3 class="sidebar-info-title">' . esc_html($title) . '</h3>';
+        }
+
+        if ($text) {
+            echo '<p class="sidebar-info-text">' . esc_html($text) . '</p>';
+        }
+
+        echo '</div>';
+    }
+
+    // Form in Panel
+    public function form($instance) {
+
+        $title = !empty($instance['title']) ? $instance['title'] : '';
+        $text  = !empty($instance['text']) ? $instance['text'] : '';
+        ?>
+
+        <p>
+            <label>عنوان:</label>
+            <input class="widefat" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo esc_attr($title); ?>">
+        </p>
+
+        <p>
+            <label>متن:</label>
+            <textarea class="widefat" name="<?php echo $this->get_field_name('text'); ?>"><?php echo esc_textarea($text); ?></textarea>
+        </p>
+
+        <?php
+    }
+
+    // ذخیره اطلاعات
+    public function update($new_instance, $old_instance) {
+
+        $instance = array();
+        $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
+        $instance['text']  = (!empty($new_instance['text'])) ? strip_tags($new_instance['text']) : '';
+
+        return $instance;
+    }
+}
+
+// register widget
+function register_sidebar_info_widget() {
+    register_widget('Sidebar_Info_Widget');
+}
+add_action('widgets_init', 'register_sidebar_info_widget');
+
+function register_theme_sidebars() {
+    register_sidebar([
+        'name' => 'Main Sidebar',
+        'id' => 'sidebar-1',
+        'before_widget' => '',
+        'after_widget' => '',
+        'before_title' => '',
+        'after_title' => ''
+    ]);
+}
+add_action('widgets_init', 'register_theme_sidebars');
+
+
+
+// Create The Add Product In Sticky sidebar Category
+add_action('woocommerce_product_options_general_product_data', function() {
+
+    woocommerce_wp_checkbox([
+        'id' => '_is_discount_featured',
+        'label' => 'تخفیف ویژه هفته (تبلیغ)',
+        'description' => 'این محصول در اسلایدر تخفیف ویژه نمایش داده شود'
+    ]);
+
+});
+
+add_action('woocommerce_process_product_meta', function($post_id) {
+
+    $value = isset($_POST['_is_discount_featured']) ? 'yes' : 'no';
+    update_post_meta($post_id, '_is_discount_featured', $value);
+
+});
+
+
+// main post section
+add_action('wp_ajax_load_posts', 'load_posts_ajax');
+add_action('wp_ajax_nopriv_load_posts', 'load_posts_ajax');
+
+function load_posts_ajax() {
+
+    $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+    $posts = new WP_Query([
+        'post_type' => 'post',
+        'posts_per_page' => 8,
+        'paged' => $page
+    ]);
+
+    if ($posts->have_posts()) :
+        while ($posts->have_posts()) : $posts->the_post(); ?>
+
+            <div class="article-category-item">
+
+                <div class="article-category-tag">
+                    <?php
+                    $cat = get_the_category();
+                    echo $cat[0]->name ?? 'مقاله';
+                    ?>
+                </div>
+
+                <a href="<?php the_permalink(); ?>" class="article-card">
+
+                    <div class="article-card-image">
+                        <?php the_post_thumbnail('large'); ?>
+                    </div>
+
+                    <h4 class="article-card-title"><?php the_title(); ?></h4>
+
+                    <p class="article-card-text">
+                        <?php echo wp_trim_words(get_the_excerpt(), 30); ?>
+                    </p>
+
+                </a>
+            </div>
+
+        <?php endwhile;
+    endif;
+
+    wp_die();
+}

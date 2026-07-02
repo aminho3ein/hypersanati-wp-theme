@@ -54,6 +54,12 @@
   line-height: 1.5;
   color: var(--color-dark);
 }
+.article-category-hero__title a {
+  color: var(--color-dark);
+}
+.article-category-hero__title a:hover {
+  color: var(--color-secondary);
+}
 
 .article-category-hero__breadcrumb {
   display: flex;
