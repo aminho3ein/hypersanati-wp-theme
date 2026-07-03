@@ -1,202 +1,172 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
+if (!defined('ABSPATH')) exit;
 
-/**
- * Enqueue all CSS files in assets/css directory
- * (adds English comments for each file)
- */
+/* =========================================================
+   ENQUEUE STYLES
+========================================================= */
 function hypersanati_enqueue_all_css() {
 
     $base_url = get_template_directory_uri() . '/assets/css';
     $base_dir = get_template_directory() . '/assets/css';
 
-    // Bootstrap RTL
-    wp_enqueue_style(
-        'bootstrap-rtl',
-        $base_url . '/bootstrap.rtl.min.css',
-        array(),
-        filemtime($base_dir . '/bootstrap.rtl.min.css')
-    );
+    // Core styles
+    wp_enqueue_style('bootstrap-rtl', $base_url . '/bootstrap.rtl.min.css', [], filemtime($base_dir . '/bootstrap.rtl.min.css'));
+    wp_enqueue_style('fontawesome', $base_url . '/fontawesome.min.css', [], filemtime($base_dir . '/fontawesome.min.css'));
+    wp_enqueue_style('fontawesome-solid', $base_url . '/solid.min.css', ['fontawesome'], filemtime($base_dir . '/solid.min.css'));
+    wp_enqueue_style('fontawesome-brands', $base_url . '/brands.min.css', ['fontawesome'], filemtime($base_dir . '/brands.min.css'));
+    wp_enqueue_style('site-fonts', $base_url . '/font.css', [], filemtime($base_dir . '/font.css'));
 
-    // FontAwesome Core
-    wp_enqueue_style(
-        'fontawesome',
-        $base_url . '/fontawesome.min.css',
-        array(),
-        filemtime($base_dir . '/fontawesome.min.css')
-    );
+    // Main
+    wp_enqueue_style('main-css', $base_url . '/main.css', ['bootstrap-rtl'], filemtime($base_dir . '/main.css'));
 
-    // FontAwesome Solid
-    wp_enqueue_style(
-        'fontawesome-solid',
-        $base_url . '/solid.min.css',
-        array('fontawesome'),
-        filemtime($base_dir . '/solid.min.css')
-    );
-
-    // FontAwesome Brands
-    wp_enqueue_style(
-        'fontawesome-brands',
-        $base_url . '/brands.min.css',
-        array('fontawesome'),
-        filemtime($base_dir . '/brands.min.css')
-    );
-
-    // Fonts
-    wp_enqueue_style(
-        'site-fonts',
-        $base_url . '/font.css',
-        array(),
-        filemtime($base_dir . '/font.css')
-    );
-
-    // Main CSS
-    wp_enqueue_style(
-        'main-css',
-        $base_url . '/main.css',
-        array('bootstrap-rtl'),
-        filemtime($base_dir . '/main.css')
-    );
-
-    // Tablet
-    wp_enqueue_style(
-        'tablet-responsive',
-        $base_url . '/responsive/tablet-responsive.css',
-        array('main-css'),
-        filemtime($base_dir . '/responsive/tablet-responsive.css'),
-        '(min-width:768px)'
-    );
-
-    // Laptop
-    wp_enqueue_style(
-        'laptop-responsive',
-        $base_url . '/responsive/laptop-responsive.css',
-        array('main-css'),
-        filemtime($base_dir . '/responsive/laptop-responsive.css'),
-        '(min-width:992px)'
-    );
-
-    // Desktop
-    wp_enqueue_style(
-        'desktop-responsive',
-        $base_url . '/responsive/desktop-responsive.css',
-        array('main-css'),
-        filemtime($base_dir . '/responsive/desktop-responsive.css'),
-        '(min-width:1200px)'
-    );
+    // Responsive
+    wp_enqueue_style('tablet-responsive', $base_url . '/responsive/tablet-responsive.css', ['main-css'], filemtime($base_dir . '/responsive/tablet-responsive.css'), '(min-width:768px)');
+    wp_enqueue_style('laptop-responsive', $base_url . '/responsive/laptop-responsive.css', ['main-css'], filemtime($base_dir . '/responsive/laptop-responsive.css'), '(min-width:992px)');
+    wp_enqueue_style('desktop-responsive', $base_url . '/responsive/desktop-responsive.css', ['main-css'], filemtime($base_dir . '/responsive/desktop-responsive.css'), '(min-width:1200px)');
 }
-
 add_action('wp_enqueue_scripts', 'hypersanati_enqueue_all_css');
 
-/**
- * Enqueue remaining assets (JS + specific responsive folder if needed)
- */
+
+/* =========================================================
+   ENQUEUE SCRIPTS
+========================================================= */
 function hypersanati_enqueue_scripts() {
 
-    // JS
     wp_enqueue_script(
         'main-js',
         get_template_directory_uri() . '/assets/js/functions.js',
-        array(),
+        [],
         '1.0',
         true
     );
 }
-add_action( 'wp_enqueue_scripts', 'hypersanati_enqueue_scripts' );
+add_action('wp_enqueue_scripts', 'hypersanati_enqueue_scripts');
 
-// Load theme assets conditionally
+
+/* =========================================================
+   CONDITIONAL ASSETS
+========================================================= */
 function hypersanati_enqueue_assets() {
 
-    // Main Style
     wp_enqueue_style(
         'hypersanati-style',
         get_stylesheet_uri(),
-        array(),
+        [],
         filemtime(get_template_directory() . '/assets/css/main.css')
     );
 
-    // 404 page
+    /* =========================================================
+       404 PAGE
+    ========================================================= */
     if (is_404()) {
 
         wp_enqueue_style(
             'hypersanati-404',
             get_template_directory_uri() . '/assets/css/404.css',
-            array('hypersanati-style'),
+            ['hypersanati-style'],
             filemtime(get_template_directory() . '/assets/css/404.css')
         );
 
         wp_enqueue_script(
             'hypersanati-404',
             get_template_directory_uri() . '/assets/js/404.js',
-            array(),
+            [],
             filemtime(get_template_directory() . '/assets/js/404.js'),
             true
         );
     }
 
-    // About page
+    /* =========================================================
+       ABOUT US PAGE (FIXED)
+    ========================================================= */
     if (is_page('about-us') || is_page_template('page-about-us.php')) {
 
         wp_enqueue_style(
             'hypersanati-about-us',
             get_template_directory_uri() . '/assets/css/about-us.css',
-            array('hypersanati-style'),
+            ['hypersanati-style'],
             filemtime(get_template_directory() . '/assets/css/about-us.css')
         );
 
         wp_enqueue_script(
             'hypersanati-about-us',
             get_template_directory_uri() . '/assets/js/about-us.js',
-            array(),
+            [],
             filemtime(get_template_directory() . '/assets/js/about-us.js'),
             true
         );
     }
 
-    // Category page (CSS)
+    /* =========================================================
+       CATEGORY + ARCHIVE
+    ========================================================= */
     if (is_category() || is_archive()) {
 
         wp_enqueue_style(
             'hypersanati-category',
             get_template_directory_uri() . '/assets/css/article-category.css',
-            array('hypersanati-style'),
+            ['hypersanati-style'],
             filemtime(get_template_directory() . '/assets/css/article-category.css')
         );
-    }
-
-    // Category page (JS)
-    if (is_category() || is_archive()) {
 
         wp_enqueue_script(
             'hypersanati-category',
             get_template_directory_uri() . '/assets/js/article-category.js',
-            array(),
+            [],
             filemtime(get_template_directory() . '/assets/js/article-category.js'),
             true
         );
     }
+
+    /* =========================================================
+       SINGLE POST
+    ========================================================= */
+    if (is_single()) {
+
+        wp_enqueue_style(
+            'hypersanati-single-post',
+            get_template_directory_uri() . '/assets/css/single-article.css',
+            ['hypersanati-style'],
+            filemtime(get_template_directory() . '/assets/css/single-article.css')
+        );
+
+        wp_enqueue_script(
+            'hypersanati-single-post',
+            get_template_directory_uri() . '/assets/js/single-article.js',
+            [],
+            filemtime(get_template_directory() . '/assets/js/single-article.js'),
+            true
+        );
+    }
 }
+
 add_action('wp_enqueue_scripts', 'hypersanati_enqueue_assets');
 
-// add menu in theme
+
+/* =========================================================
+   MENUS
+========================================================= */
 function hypersanati_register_menus() {
-    register_nav_menus(array(
+    register_nav_menus([
         'primary_menu' => 'فهرست اصلی',
         'footer_menu'  => 'فهرست فوتر',
-    ));
+    ]);
 }
 add_action('after_setup_theme', 'hypersanati_register_menus');
 
+
+/* =========================================================
+   MENU CLASSES
+========================================================= */
 function hypersanati_nav_link_classes($atts, $item, $args, $depth) {
-    $classes = isset($atts['class']) ? explode(' ', $atts['class']) : array();
+
+    $classes = isset($atts['class']) ? explode(' ', $atts['class']) : [];
 
     $item_url = isset($item->url) ? untrailingslashit($item->url) : '';
     $home_url = untrailingslashit(home_url('/'));
 
-    if (
-        isset($args->theme_location) &&
-        $args->theme_location === 'primary_menu'
-    ) {
+    if ($args->theme_location === 'primary_menu') {
+
         if ($item_url === $home_url || in_array('menu-item-home', $item->classes, true)) {
             $classes[] = 'home-btn';
         }
@@ -206,10 +176,7 @@ function hypersanati_nav_link_classes($atts, $item, $args, $depth) {
         }
     }
 
-    if (
-        isset($args->menu_class) &&
-        $args->menu_class === 'mobile-nav-links'
-    ) {
+    if ($args->menu_class === 'mobile-nav-links') {
         $atts['onclick'] = 'closeMobileMenu()';
     }
 
@@ -222,77 +189,29 @@ function hypersanati_nav_link_classes($atts, $item, $args, $depth) {
 add_filter('nav_menu_link_attributes', 'hypersanati_nav_link_classes', 10, 4);
 
 
-
-
-// Article Hero Sectiop
-function add_featured_meta_box() {
-    add_meta_box(
-        'featured_post',
-        'مقاله شاخص',
-        'featured_meta_box_callback',
-        'post',
-        'side'
-    );
-}
-add_action('add_meta_boxes', 'add_featured_meta_box');
-
-function featured_meta_box_callback($post) {
-    $value = get_post_meta($post->ID, '_is_featured', true);
-
-    ?>
-    <label>
-        <input type="checkbox" name="is_featured" value="1" <?php checked($value, '1'); ?> />
-        نمایش در اسلایدر / Hero
-    </label>
-    <?php
-}
-
-function save_featured_meta($post_id) {
-    if (isset($_POST['is_featured'])) {
-        update_post_meta($post_id, '_is_featured', '1');
-    } else {
-        delete_post_meta($post_id, '_is_featured');
-    }
-}
-add_action('save_post', 'save_featured_meta');
-
-
-
-// Category Sticky Note Widget
+/* =========================================================
+   SIDEBAR WIDGET
+========================================================= */
 class Sidebar_Info_Widget extends WP_Widget {
 
     function __construct() {
-        parent::__construct(
-            'sidebar_info_widget',
-            'Sidebar Info Card',
-            array('description' => 'نمایش عنوان و متن در سایدبار')
-        );
+        parent::__construct('sidebar_info_widget', 'Sidebar Info Card');
     }
 
-    // view in sidebar
     public function widget($args, $instance) {
 
-        $title = !empty($instance['title']) ? $instance['title'] : '';
-        $text  = !empty($instance['text']) ? $instance['text'] : '';
+        $title = $instance['title'] ?? '';
+        $text  = $instance['text'] ?? '';
 
         echo '<div class="sidebar-info-card">';
-
-        if ($title) {
-            echo '<h3 class="sidebar-info-title">' . esc_html($title) . '</h3>';
-        }
-
-        if ($text) {
-            echo '<p class="sidebar-info-text">' . esc_html($text) . '</p>';
-        }
-
+        if ($title) echo '<h3 class="sidebar-info-title">' . esc_html($title) . '</h3>';
+        if ($text) echo '<p class="sidebar-info-text">' . esc_html($text) . '</p>';
         echo '</div>';
     }
 
-    // Form in Panel
     public function form($instance) {
-
-        $title = !empty($instance['title']) ? $instance['title'] : '';
-        $text  = !empty($instance['text']) ? $instance['text'] : '';
+        $title = $instance['title'] ?? '';
+        $text  = $instance['text'] ?? '';
         ?>
 
         <p>
@@ -308,57 +227,103 @@ class Sidebar_Info_Widget extends WP_Widget {
         <?php
     }
 
-    // ذخیره اطلاعات
-    public function update($new_instance, $old_instance) {
-
-        $instance = array();
-        $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
-        $instance['text']  = (!empty($new_instance['text'])) ? strip_tags($new_instance['text']) : '';
-
-        return $instance;
+    public function update($new, $old) {
+        return [
+            'title' => sanitize_text_field($new['title'] ?? ''),
+            'text'  => sanitize_textarea_field($new['text'] ?? '')
+        ];
     }
 }
 
-// register widget
-function register_sidebar_info_widget() {
+add_action('widgets_init', function () {
     register_widget('Sidebar_Info_Widget');
+});
+
+register_sidebar([
+    'name' => 'Main Sidebar',
+    'id' => 'sidebar-1'
+]);
+
+// Add seo_summary_box for Any 
+function hypersanati_add_seo_summary_box() {
+
+    add_meta_box(
+        'seo_summary_box',
+        'خلاصه سئو مقاله (SEO Summary)',
+        'hypersanati_seo_summary_box_callback',
+        'post',
+        'normal',
+        'high'
+    );
 }
-add_action('widgets_init', 'register_sidebar_info_widget');
+add_action('add_meta_boxes', 'hypersanati_add_seo_summary_box');
 
-function register_theme_sidebars() {
-    register_sidebar([
-        'name' => 'Main Sidebar',
-        'id' => 'sidebar-1',
-        'before_widget' => '',
-        'after_widget' => '',
-        'before_title' => '',
-        'after_title' => ''
-    ]);
+
+function hypersanati_seo_summary_box_callback($post) {
+
+    $value = get_post_meta($post->ID, '_seo_summary', true);
+
+    wp_nonce_field('save_seo_summary', 'seo_summary_nonce');
+    ?>
+
+    <textarea 
+        style="width:100%;height:120px;font-size:14px;line-height:1.6"
+        name="seo_summary_field"
+        placeholder="خلاصه سئو مقاله را اینجا بنویسید..."
+        required
+    ><?php echo esc_textarea($value); ?></textarea>
+
+    <p style="margin-top:8px;color:#666">
+        ⚠ این بخش برای نمایش در هیرو و سئو الزامی است
+    </p>
+
+    <?php
 }
-add_action('widgets_init', 'register_theme_sidebars');
 
 
+function hypersanati_save_seo_summary($post_id) {
 
-// Create The Add Product In Sticky sidebar Category
-add_action('woocommerce_product_options_general_product_data', function() {
+    if (!isset($_POST['seo_summary_nonce'])) return;
+
+    if (!wp_verify_nonce($_POST['seo_summary_nonce'], 'save_seo_summary')) return;
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+
+    if (isset($_POST['seo_summary_field'])) {
+        update_post_meta(
+            $post_id,
+            '_seo_summary',
+            sanitize_textarea_field($_POST['seo_summary_field'])
+        );
+    }
+}
+add_action('save_post', 'hypersanati_save_seo_summary');
+
+
+/* =========================================================
+   WOOCOMMERCE META
+========================================================= */
+add_action('woocommerce_product_options_general_product_data', function () {
 
     woocommerce_wp_checkbox([
         'id' => '_is_discount_featured',
-        'label' => 'تخفیف ویژه هفته (تبلیغ)',
-        'description' => 'این محصول در اسلایدر تخفیف ویژه نمایش داده شود'
+        'label' => 'تخفیف ویژه هفته'
     ]);
-
 });
 
-add_action('woocommerce_process_product_meta', function($post_id) {
+add_action('woocommerce_process_product_meta', function ($post_id) {
 
-    $value = isset($_POST['_is_discount_featured']) ? 'yes' : 'no';
-    update_post_meta($post_id, '_is_discount_featured', $value);
-
+    update_post_meta(
+        $post_id,
+        '_is_discount_featured',
+        isset($_POST['_is_discount_featured']) ? 'yes' : 'no'
+    );
 });
 
 
-// main post section
+/* =========================================================
+   AJAX POSTS
+========================================================= */
 add_action('wp_ajax_load_posts', 'load_posts_ajax');
 add_action('wp_ajax_nopriv_load_posts', 'load_posts_ajax');
 
@@ -404,14 +369,15 @@ function load_posts_ajax() {
         <?php endwhile;
     endif;
 
+    wp_reset_postdata();
+
     $posts_html = ob_get_clean();
 
-    // pagination جدا ساخته میشه
+    // pagination
     ob_start();
 
     $total_pages = $query->max_num_pages;
     $current = $paged;
-
     ?>
 
     <a href="#" class="article-pagination-btn" data-page="1">1</a>
