@@ -77,11 +77,7 @@ function hypersanati_enqueue_assets() {
     }
 
     /* =========================================================
-<<<<<<< Updated upstream
-       ABOUT US PAGE (FIXED)
-=======
        ABOUT PAGE
->>>>>>> Stashed changes
     ========================================================= */
     if (is_page('about-us') || is_page_template('page-about-us.php')) {
 
@@ -102,53 +98,6 @@ function hypersanati_enqueue_assets() {
     }
 
     /* =========================================================
-<<<<<<< Updated upstream
-       CATEGORY + ARCHIVE
-=======
-       CATEGORY PAGE
->>>>>>> Stashed changes
-    ========================================================= */
-    if (is_category() || is_archive()) {
-
-        wp_enqueue_style(
-            'hypersanati-category',
-            get_template_directory_uri() . '/assets/css/article-category.css',
-            ['hypersanati-style'],
-            filemtime(get_template_directory() . '/assets/css/article-category.css')
-        );
-
-        wp_enqueue_script(
-            'hypersanati-category',
-            get_template_directory_uri() . '/assets/js/article-category.js',
-            [],
-            filemtime(get_template_directory() . '/assets/js/article-category.js'),
-            true
-        );
-    }
-
-    /* =========================================================
-<<<<<<< Updated upstream
-=======
-       SHOP PAGE (WooCommerce)
-    ========================================================= */
-    if (function_exists('is_shop') && is_shop()) {
-
-        wp_enqueue_style(
-            'hypersanati-shop',
-            get_template_directory_uri() . '/assets/css/shop.css',
-            array('hypersanati-style'),
-            filemtime(get_template_directory() . '/assets/css/shop.css')
-        );
-
-        wp_enqueue_script(
-            'hypersanati-shop',
-            get_template_directory_uri() . '/assets/js/shop.js',
-            array(),
-            filemtime(get_template_directory() . '/assets/js/shop.js'),
-            true
-        );
-    }
-        /* =========================================================
        CATEGORY + ARCHIVE
     ========================================================= */
     if (is_category() || is_archive()) {
@@ -170,26 +119,24 @@ function hypersanati_enqueue_assets() {
     }
 
     /* =========================================================
->>>>>>> Stashed changes
        SINGLE POST
     ========================================================= */
-    if (is_single()) {
+    if (is_shop() || is_post_type_archive('product')) {
+    wp_enqueue_style(
+        'shop-css',
+        get_template_directory_uri() . '/assets/css/shop.css',
+        array(),
+        filemtime(get_template_directory() . '/assets/css/shop.css')
+    );
 
-        wp_enqueue_style(
-            'hypersanati-single-post',
-            get_template_directory_uri() . '/assets/css/single-article.css',
-            ['hypersanati-style'],
-            filemtime(get_template_directory() . '/assets/css/single-article.css')
-        );
-
-        wp_enqueue_script(
-            'hypersanati-single-post',
-            get_template_directory_uri() . '/assets/js/single-article.js',
-            [],
-            filemtime(get_template_directory() . '/assets/js/single-article.js'),
-            true
-        );
-    }
+    wp_enqueue_script(
+        'shop-js',
+        get_template_directory_uri() . '/assets/js/shop.js',
+        array('jquery'),
+        filemtime(get_template_directory() . '/assets/js/shop.js'),
+        true
+    );
+}
 }
 
 add_action('wp_enqueue_scripts', 'hypersanati_enqueue_assets');
@@ -462,3 +409,184 @@ function load_posts_ajax() {
 add_action('after_setup_theme', function () {
     add_theme_support('woocommerce');
 });
+
+
+
+
+// آژاکس بارگذاری محصولات و دسته‌ها (نسخه نهایی همراه با لینک محصول)
+add_action('wp_ajax_load_shop_categories', 'load_shop_categories');
+add_action('wp_ajax_nopriv_load_shop_categories', 'load_shop_categories');
+
+function load_shop_categories() {
+    $offset = isset($_GET['index']) ? intval($_GET['index']) : 0;
+    $selected_cat_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
+    
+    // دریافت کلمه کلیدی جستجو از آژاکس
+    $search_keyword = isset($_GET['search_keyword']) ? sanitize_text_field($_GET['search_keyword']) : '';
+
+    $uncategorized = get_term_by('slug', 'uncategorized', 'product_cat');
+    $exclude_ids = $uncategorized ? array($uncategorized->term_id) : array();
+
+    $args = [
+        'taxonomy'   => 'product_cat',
+        'hide_empty' => true,
+        'exclude'    => $exclude_ids,
+        'orderby'    => 'name',
+        'order'      => 'ASC'
+    ];
+
+    if ($selected_cat_id > 0) {
+        $args['include'] = [$selected_cat_id];
+    } else {
+        $args['parent']  = 0;
+    }
+
+    $categories = get_terms($args);
+    $categories = array_values($categories);
+
+    if (!isset($categories[$offset])) {
+        wp_die();
+    }
+
+    $cat = $categories[$offset];
+
+    if ($selected_cat_id > 0 && $cat->parent != 0) {
+        $subcats = [$cat];
+    } else {
+        $subcats = get_terms([
+            'taxonomy'   => 'product_cat',
+            'hide_empty' => true,
+            'parent'     => $cat->term_id
+        ]);
+        if (empty($subcats)) {
+            $subcats = [$cat];
+        }
+    }
+
+    ob_start();
+    $has_product = false;
+    ?>
+    <div class="category" data-id="<?php echo esc_attr($cat->term_id); ?>">
+        <div class="category-name">
+            <h5><?php echo esc_html($cat->name); ?></h5>
+        </div>
+        <div class="sub-category">
+            <?php foreach ($subcats as $sub) : ?>
+                <?php
+                // آرایه اصلی کوئری محصولات
+                $product_args = [
+                    'post_type'      => 'product',
+                    'posts_per_page' => -1,
+                    'tax_query'      => [
+                        [
+                            'taxonomy' => 'product_cat',
+                            'field'    => 'term_id',
+                            'terms'    => $sub->term_id
+                        ]
+                    ]
+                ];
+
+                // اضافه کردن فیلتر جستجوی متنی در صورت وجود کلمه کلیدی
+                if (!empty($search_keyword)) {
+                    $product_args['s'] = $search_keyword;
+                }
+
+                $products = new WP_Query($product_args);
+                ?>
+                <?php if ($products->have_posts()) : $has_product = true; ?>
+                    <div class="sub-category-name">
+                        <p class="sub-cat-name"><?php echo esc_html($sub->name); ?></p>
+                    </div>
+                    <div class="child-category">
+                        <?php while ($products->have_posts()) : $products->the_post(); ?>
+                            <a href="<?php the_permalink(); ?>" class="product-section" style="text-decoration: none; color: inherit; display: block;">
+                                <div class="product-cat-frame">
+                                    <?php the_post_thumbnail('medium'); ?>
+                                </div>
+                                <div class="product-name">
+                                    <p><?php the_title(); ?></p>
+                                </div>
+                            </a>
+                        <?php endwhile; ?>
+                    </div>
+                <?php endif; wp_reset_postdata(); ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <hr class="sub-section-hr" />
+    <?php
+    $html = ob_get_clean();
+    if ($has_product) {
+        echo $html;
+    }
+    wp_die();
+}
+
+// ۲. آژاکس ساخت ساختار درختی دسته‌ها و زیردسته‌ها در سایدبار
+add_action('wp_ajax_get_sidebar_categories', 'get_sidebar_categories');
+add_action('wp_ajax_nopriv_get_sidebar_categories', 'get_sidebar_categories');
+
+function get_sidebar_categories() {
+    $uncategorized = get_term_by('slug', 'uncategorized', 'product_cat');
+    $exclude_ids = $uncategorized ? array($uncategorized->term_id) : array();
+
+    // گرفتن دسته‌های اصلی (والد)
+    $main_categories = get_terms([
+        'taxonomy'   => 'product_cat',
+        'hide_empty' => true,
+        'exclude'    => $exclude_ids,
+        'parent'     => 0,
+        'orderby'    => 'name',
+        'order'      => 'ASC'
+    ]);
+
+    ob_start();
+    ?>
+    <!-- گزینه پیش‌فرض نمایش همه -->
+    <div class="sidebar-cat-group">
+        <label class="sidebar-category-item main-cat">
+            <input type="radio" name="product_category" value="0" checked>
+            <span>همه دسته محصولات</span>
+        </label>
+    </div>
+    
+    <?php
+    foreach ($main_categories as $main_cat) {
+        ?>
+        <div class="sidebar-cat-group" style="margin-bottom: 12px;">
+            <!-- دسته اصلی -->
+            <label class="sidebar-category-item main-cat" style="display: block; font-weight: bold; cursor: pointer;">
+                <input type="radio" name="product_category" value="<?php echo $main_cat->term_id; ?>">
+                <span><?php echo esc_html($main_cat->name); ?></span>
+            </label>
+
+            <?php
+            // گرفتن زیردسته‌های مربوط به این دسته اصلی
+            $sub_categories = get_terms([
+                'taxonomy'   => 'product_cat',
+                'hide_empty' => true,
+                'parent'     => $main_cat->term_id,
+                'orderby'    => 'name',
+                'order'      => 'ASC'
+            ]);
+
+            if (!empty($sub_categories)) {
+                echo '<div class="sidebar-subcats-wrapper" style="padding-right: 15px; margin-top: 5px;">';
+                foreach ($sub_categories as $sub_cat) {
+                    ?>
+                    <!-- زیر دسته (با کمی فاصله از راست) -->
+                    <label class="sidebar-category-item sub-cat" style="display: block; margin-bottom: 4px; font-size: 0.9em; opacity: 0.85; cursor: pointer;">
+                        <input type="radio" name="product_category" value="<?php echo $sub_cat->term_id; ?>">
+                        <span><?php echo esc_html($sub_cat->name); ?></span>
+                    </label>
+                    <?php
+                }
+                echo '</div>';
+            }
+            ?>
+        </div>
+        <?php
+    }
+    echo ob_get_clean();
+    wp_die();
+}
