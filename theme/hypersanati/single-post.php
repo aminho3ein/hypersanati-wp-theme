@@ -55,9 +55,15 @@
       </div>
 
       <!-- EXCERPT -->
-      <p class="single-article-excerpt">
-        <?php echo get_the_excerpt(); ?>
-      </p>
+        <?php
+          $seo_summary = get_post_meta(get_the_ID(), '_seo_summary', true);
+
+          if (!empty($seo_summary)) : ?>
+              <p class="single-article-excerpt">
+                  <?php echo esc_html($seo_summary); ?>
+              </p>
+          <?php endif; ?>
+
 
     </div>
   </div>
@@ -80,126 +86,140 @@ $discount_products = new WP_Query([
 ]);
 ?>
 
-<div class="discount-slider" id="discountSlider">
+<aside class="single-article-sidebar">
+        <div class="discount-slider" id="discountSlider">
 
-<?php if ($discount_products->have_posts()) : ?>
-    <?php while ($discount_products->have_posts()) : $discount_products->the_post(); 
-        $product = wc_get_product(get_the_ID());
-    ?>
+        <?php if ($discount_products->have_posts()) : ?>
+            <?php while ($discount_products->have_posts()) : $discount_products->the_post(); 
+                $product = wc_get_product(get_the_ID());
+            ?>
 
-        <a href="<?php the_permalink(); ?>" class="discount-item">
+                <a href="<?php the_permalink(); ?>" class="discount-item">
 
-            <div class="discount-product-card">
+                    <div class="discount-product-card">
 
-                <div class="discount-product-label">
-                    تخفیف ویژه هفته (تبلیغ)
-                </div>
+                        <div class="discount-product-label">
+                            تخفیف ویژه هفته (تبلیغ)
+                        </div>
 
-                <div class="discount-product-frame">
-                    <?php the_post_thumbnail('medium'); ?>
-                </div>
+                        <div class="discount-product-frame">
+                            <?php the_post_thumbnail('medium'); ?>
+                        </div>
 
-                <p class="discount-product-desc">
-                    <?php the_title(); ?>
-                </p>
+                        <p class="discount-product-desc">
+                            <?php the_title(); ?>
+                        </p>
 
-                <div class="discount-product-old-price-row">
+                        <div class="discount-product-old-price-row">
 
-                    <span class="discount-product-old-price">
-                        <?php echo wc_price($product->get_regular_price()); ?>
-                    </span>
+                            <span class="discount-product-old-price">
+                                <?php echo wc_price($product->get_regular_price()); ?>
+                            </span>
 
-                    <span class="discount-product-badge">
-                        <?php
-                        if ($product->get_regular_price() && $product->get_sale_price()) {
-                            echo round((($product->get_regular_price() - $product->get_sale_price()) / $product->get_regular_price()) * 100) . '%';
-                        }
-                        ?>
-                    </span>
+                            <span class="discount-product-badge">
+                                <?php
+                                if ($product->get_regular_price() && $product->get_sale_price()) {
+                                    echo round((($product->get_regular_price() - $product->get_sale_price()) / $product->get_regular_price()) * 100) . '%';
+                                }
+                                ?>
+                            </span>
 
-                </div>
+                        </div>
 
-                <div class="discount-product-new-price">
-                    <?php echo wc_price($product->get_sale_price()); ?>
-                </div>
+                        <div class="discount-product-new-price">
+                            <?php echo wc_price($product->get_sale_price()); ?>
+                        </div>
 
-            </div>
+                    </div>
 
-        </a>
+                </a>
 
-    <?php endwhile; ?>
-<?php endif; wp_reset_postdata(); ?>
+            <?php endwhile; ?>
+        <?php endif; wp_reset_postdata(); ?>
 
-</div>
+        </div>
+      </aside>
 
       <!-- Main Content -->
-      <?php
-$post_content = apply_filters('the_content', get_post_field('post_content', get_the_ID()));
+      <main class="single-article-main">
 
-libxml_use_internal_errors(true);
+<?php
 
-$dom = new DOMDocument();
-$dom->loadHTML(mb_convert_encoding($post_content, 'HTML-ENTITIES', 'UTF-8'));
+// ❌ مهم: RAW content بگیر، نه filtered
+$content = get_post_field('post_content', get_the_ID());
 
-$headings = $dom->getElementsByTagName('h2');
+// DEBUG: Show raw content length
+echo '<!-- DEBUG: Content length: ' . strlen($content) . ' -->';
 
 $toc = [];
 $index = 1;
 
-// برای ذخیره HTML جدید
-$new_content = $post_content;
+/* =========================
+   ساخت TOC + اضافه کردن ID
+========================= */
+$content = preg_replace_callback(
+    '/<h([2-6])([^>]*)>(.*?)<\/h\1>/is',
+    function ($matches) use (&$toc, &$index) {
 
-if ($headings->length > 0) {
-
-    foreach ($headings as $heading) {
-
-        $text = $heading->nodeValue;
-
+        $title = strip_tags($matches[3]);
         $id = 'section-' . $index;
-
-        // اضافه کردن ID به heading
-        $heading->setAttribute('id', $id);
 
         $toc[] = [
             'id' => $id,
-            'title' => $text
+            'title' => $title,
+            'level' => $matches[1]
         ];
 
         $index++;
-    }
 
-    // ذخیره HTML اصلاح شده
-    $new_content = $dom->saveHTML();
+        return '<h' . $matches[1] . ' id="' . $id . '"' . $matches[2] . '>' . $matches[3] . '</h' . $matches[1] . '>';
+    },
+    $content
+);
+
+// DEBUG: Show TOC count
+echo '<!-- DEBUG: TOC items found: ' . count($toc) . ' -->';
+if (!empty($toc)) {
+    echo '<!-- DEBUG: First TOC item: ' . htmlspecialchars($toc[0]['title']) . ' -->';
 }
+
 ?>
 
-<!-- TOC -->
+<!-- =========================
+     TOC (حتماً بالا باشد)
+========================= -->
 <?php if (!empty($toc)) : ?>
-<div class="article-toc-box">
-  <h2 class="article-toc-title">فهرست مطالب مقاله حاضر:</h2>
+    <div class="article-toc-box">
+        <h2 class="article-toc-title">فهرست مطالب مقاله</h2>
 
-  <ul class="article-toc-list">
-    <?php foreach ($toc as $item) : ?>
-      <li>
-        <a href="#<?php echo esc_attr($item['id']); ?>">
-          <?php echo esc_html($item['title']); ?>
-        </a>
-      </li>
-    <?php endforeach; ?>
-  </ul>
-</div>
+        <ul class="article-toc-list">
+            <?php foreach ($toc as $item) : ?>
+                <li>
+                    <a href="#<?php echo $item['id']; ?>">
+                        <?php echo $item['title']; ?>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 <?php endif; ?>
 
-<!-- CONTENT -->
+
+<!-- =========================
+     CONTENT
+========================= -->
 <article class="single-article-body">
-  <?php echo $new_content; ?>
-  
+
+    <?php
+    // حالا بعد از تغییر h2 ها، فیلتر وردپرس رو اعمال کن
+    echo apply_filters('the_content', $content);
+    ?>
+
 </article>
+
+      </main>
+
     </div>
   </div>
 </section>
-
-
-
-
 <?php get_footer(); ?>
