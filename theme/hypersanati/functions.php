@@ -77,7 +77,11 @@ function hypersanati_enqueue_assets() {
     }
 
     /* =========================================================
+<<<<<<< Updated upstream
        ABOUT US PAGE (FIXED)
+=======
+       ABOUT PAGE
+>>>>>>> Stashed changes
     ========================================================= */
     if (is_page('about-us') || is_page_template('page-about-us.php')) {
 
@@ -98,6 +102,53 @@ function hypersanati_enqueue_assets() {
     }
 
     /* =========================================================
+<<<<<<< Updated upstream
+       CATEGORY + ARCHIVE
+=======
+       CATEGORY PAGE
+>>>>>>> Stashed changes
+    ========================================================= */
+    if (is_category() || is_archive()) {
+
+        wp_enqueue_style(
+            'hypersanati-category',
+            get_template_directory_uri() . '/assets/css/article-category.css',
+            ['hypersanati-style'],
+            filemtime(get_template_directory() . '/assets/css/article-category.css')
+        );
+
+        wp_enqueue_script(
+            'hypersanati-category',
+            get_template_directory_uri() . '/assets/js/article-category.js',
+            [],
+            filemtime(get_template_directory() . '/assets/js/article-category.js'),
+            true
+        );
+    }
+
+    /* =========================================================
+<<<<<<< Updated upstream
+=======
+       SHOP PAGE (WooCommerce)
+    ========================================================= */
+    if (function_exists('is_shop') && is_shop()) {
+
+        wp_enqueue_style(
+            'hypersanati-shop',
+            get_template_directory_uri() . '/assets/css/shop.css',
+            array('hypersanati-style'),
+            filemtime(get_template_directory() . '/assets/css/shop.css')
+        );
+
+        wp_enqueue_script(
+            'hypersanati-shop',
+            get_template_directory_uri() . '/assets/js/shop.js',
+            array(),
+            filemtime(get_template_directory() . '/assets/js/shop.js'),
+            true
+        );
+    }
+        /* =========================================================
        CATEGORY + ARCHIVE
     ========================================================= */
     if (is_category() || is_archive()) {
@@ -119,6 +170,7 @@ function hypersanati_enqueue_assets() {
     }
 
     /* =========================================================
+>>>>>>> Stashed changes
        SINGLE POST
     ========================================================= */
     if (is_single()) {
@@ -406,3 +458,7 @@ function load_posts_ajax() {
 
     wp_die();
 }
+
+add_action('after_setup_theme', function () {
+    add_theme_support('woocommerce');
+});
