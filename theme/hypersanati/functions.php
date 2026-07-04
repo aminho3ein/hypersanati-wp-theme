@@ -118,8 +118,29 @@ function hypersanati_enqueue_assets() {
         );
     }
 
+
     /* =========================================================
        SINGLE POST
+    ========================================================= */
+    if (is_single()) {
+
+        wp_enqueue_style(
+            'single-article-css',
+            get_template_directory_uri() . '/assets/css/single-article.css',
+            array(),
+            filemtime(get_template_directory() . '/assets/css/single-article.css')
+        );
+
+        wp_enqueue_script(
+            'single-article-js',
+            get_template_directory_uri() . '/assets/js/single-article.js',
+            array('jquery'),
+            filemtime(get_template_directory() . '/assets/js/single-article.js'),
+            true
+        );
+    }
+    /* =========================================================
+       Shop Page
     ========================================================= */
     if (is_shop() || is_post_type_archive('product')) {
     wp_enqueue_style(
