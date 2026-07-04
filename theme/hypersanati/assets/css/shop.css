@@ -210,14 +210,13 @@ h4 {
 }
 #sidebar-category {
   padding: 2rem 0;
-  gap: 3rem;
+  gap: 0.5rem;
   display: flex;
   flex-direction: column;
 }
 .category p {
-  font-size: 12px;
+  font-size: 12px !important;
   color: var(--gray-700);
-  font-weight: bold;
   text-align: right;
   padding-right: 1rem;
 }
@@ -225,6 +224,74 @@ h4 {
   font-size: 14px;
   font-weight: bold;
   margin-right: 1rem !important;
+}
+
+/* استایل پایه برای تمام نمایشگرها (مشترک) */
+.sidebar-cat-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+}
+
+.sidebar-category-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 6px 0;
+    transition: all 0.2s ease;
+}
+
+.sidebar-category-item input[type="radio"] {
+    margin-left: 8px; /* فاصله دکمه از متن در زبان فارسی */
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+.sidebar-category-item.main-cat {
+    font-weight: bold;
+    font-size: 15px;
+    color: #333;
+}
+
+.sidebar-category-item.sub-cat {
+    font-size: 14px;
+    color: #555;
+}
+
+.sidebar-subcats-wrapper {
+    margin-right: 15px;
+    padding-right: 10px;
+    border-right: 1px dashed #ddd;
+    margin-top: 4px;
+}
+
+/* 📱 بهینه‌سازی اختصاصی برای موبایل و تبلت‌های کوچک (صفحات زیر 768 پیکسل) */
+@media screen and (max-width: 767px) {
+    .sidebar-category-item {
+        padding: 10px 4px; /* افزایش پدینگ عمودی برای راحت‌تر لمس شدن با انگشت */
+    }
+
+    .sidebar-category-item.main-cat {
+        font-size: 14px; /* کمی کوچک‌تر کردن فونت دسته اصلی */
+    }
+
+    .sidebar-category-item.sub-cat {
+        font-size: 13px; /* کمی کوچک‌تر کردن فونت زیردسته */
+    }
+
+    .sidebar-subcats-wrapper {
+        margin-right: 12px; /* کاهش جزئی فاصله راست برای ذخیره فضای عرض موبایل */
+        padding-right: 8px;
+        border-right: 2px solid #eee; /* تبدیل خط‌چین به یک خط صاف و نرم جهت تفکیک بهتر در موبایل */
+    }
+
+    /* بزرگ‌تر کردن دکمه رادیویی در موبایل جهت سهولت در لمس (Touch Target) */
+    .sidebar-category-item input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        margin-left: 10px;
+    }
 }
 
 /*===================================================
@@ -241,6 +308,7 @@ h4 {
   align-items: center;
 }
 .product-cat-frame {
+  overflow: hidden;
   display: flex;
   align-items: center;
   width: 60px;
