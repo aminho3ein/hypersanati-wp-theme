@@ -44,10 +44,11 @@ add_action('wp_enqueue_scripts', 'hypersanati_enqueue_scripts');
 
 
 /* =========================================================
-   CONDITIONAL ASSETS
+   CONDITIONAL ASSETS + SEARCH COMPACT
 ========================================================= */
 function hypersanati_enqueue_assets() {
 
+    // ۱. فراخوانی استایل اصلی پوسته
     wp_enqueue_style(
         'hypersanati-style',
         get_stylesheet_uri(),
@@ -55,11 +56,21 @@ function hypersanati_enqueue_assets() {
         filemtime(get_template_directory() . '/assets/css/main.css')
     );
 
+    // ۲. فراخوانی فایل main.js به صورت عمومی در فوتر (حل مشکل شما)
+    if (file_exists(get_template_directory() . '/assets/js/main.js')) {
+        wp_enqueue_script(
+            'hypersanati-main',
+            get_template_directory_uri() . '/assets/js/main.js',
+            [], // اگر از جی‌کوئری استفاده نمی‌کنید خالی بگذارید، در غیر این صورت: ['jquery']
+            filemtime(get_template_directory() . '/assets/js/main.js'),
+            true // مقدار true باعث می‌شود اسکریپت در فوتر لود شود
+        );
+    }
+
     /* =========================================================
        404 PAGE
     ========================================================= */
     if (is_404()) {
-
         wp_enqueue_style(
             'hypersanati-404',
             get_template_directory_uri() . '/assets/css/404.css',
@@ -80,7 +91,6 @@ function hypersanati_enqueue_assets() {
        ABOUT PAGE
     ========================================================= */
     if (is_page('about-us') || is_page_template('page-about-us.php')) {
-
         wp_enqueue_style(
             'hypersanati-about-us',
             get_template_directory_uri() . '/assets/css/about-us.css',
@@ -98,10 +108,9 @@ function hypersanati_enqueue_assets() {
     }
 
     /* =========================================================
-       CATEGORY + ARCHIVE
+       CATEGORY PAGE
     ========================================================= */
     if (is_category() || is_archive()) {
-
         wp_enqueue_style(
             'hypersanati-category',
             get_template_directory_uri() . '/assets/css/article-category.css',
@@ -118,50 +127,67 @@ function hypersanati_enqueue_assets() {
         );
     }
 
-
     /* =========================================================
        SINGLE POST
     ========================================================= */
     if (is_single()) {
-
         wp_enqueue_style(
-            'single-article-css',
+            'hypersanati-single-post',
             get_template_directory_uri() . '/assets/css/single-article.css',
-            array(),
+            ['hypersanati-style'],
             filemtime(get_template_directory() . '/assets/css/single-article.css')
         );
 
         wp_enqueue_script(
-            'single-article-js',
+            'hypersanati-single-post',
             get_template_directory_uri() . '/assets/js/single-article.js',
-            array('jquery'),
+            [],
             filemtime(get_template_directory() . '/assets/js/single-article.js'),
             true
         );
     }
+
     /* =========================================================
        Shop Page
     ========================================================= */
     if (is_shop() || is_post_type_archive('product')) {
-    wp_enqueue_style(
-        'shop-css',
-        get_template_directory_uri() . '/assets/css/shop.css',
-        array(),
-        filemtime(get_template_directory() . '/assets/css/shop.css')
-    );
+        wp_enqueue_style(
+            'shop-css',
+            get_template_directory_uri() . '/assets/css/shop.css',
+            array(),
+            filemtime(get_template_directory() . '/assets/css/shop.css')
+        );
 
-    wp_enqueue_script(
-        'shop-js',
-        get_template_directory_uri() . '/assets/js/shop.js',
-        array('jquery'),
-        filemtime(get_template_directory() . '/assets/js/shop.js'),
-        true
-    );
-}
-}
+        wp_enqueue_script(
+            'shop-js',
+            get_template_directory_uri() . '/assets/js/shop.js',
+            array('jquery'),
+            filemtime(get_template_directory() . '/assets/js/shop.js'),
+            true
+        );
+    }
 
+    /* =========================================================
+       Single Product
+    ========================================================= */
+    if (is_product()) {
+        wp_enqueue_style(
+            'single-product-css',
+            get_template_directory_uri() . '/assets/css/single-product.css',
+            array(),
+            filemtime(get_template_directory() . '/assets/css/single-product.css')
+        );
+
+        wp_enqueue_script(
+            'single-product-js',
+            get_template_directory_uri() . '/assets/js/single-product.js',
+            array('jquery'),
+            filemtime(get_template_directory() . '/assets/js/single-product.js'),
+            true
+        );
+    }
+}
 add_action('wp_enqueue_scripts', 'hypersanati_enqueue_assets');
-
 
 /* =========================================================
    MENUS
@@ -610,4 +636,164 @@ function get_sidebar_categories() {
     }
     echo ob_get_clean();
     wp_die();
+}
+
+
+
+
+
+
+
+// ذخیره اطلاعات تصویر برند به همراه پاکسازی دقیق
+add_action('edited_product_brand', 'save_brand_image', 10, 2);
+add_action('create_product_brand', 'save_brand_image', 10, 2);
+function save_brand_image($term_id, $tt_id) {
+    if (isset($_POST['brand_image_id'])) {
+        $image_id = sanitize_text_field($_POST['brand_image_id']);
+        update_term_meta($term_id, 'brand_image_id', $image_id);
+    }
+}
+
+
+
+
+
+// Product Attributes for Woocommerce
+add_action('woocommerce_product_data_tabs', 'bearing_technical_specs_tab');
+
+function bearing_technical_specs_tab($tabs) {
+
+    $tabs['bearing_specs'] = array(
+        'label'    => __('مشخصات فنی بلبرینگ', 'woocommerce'),
+        'target'   => 'bearing_specs_data_panel',
+        'class'    => array('show_if_simple', 'show_if_variable'),
+        'priority' => 21,
+    );
+
+    return $tabs;
+}
+
+add_action('woocommerce_product_data_panels', 'bearing_technical_specs_fields');
+
+function bearing_technical_specs_fields() {
+    ?>
+    <div id="bearing_specs_data_panel" class="panel woocommerce_options_panel hidden">
+
+        <div class="options_group">
+            <h3>مشخصات ابعادی و ساختاری</h3>
+
+            <?php
+            woocommerce_wp_text_input([
+                'id'    => '_mpn_part_number',
+                'label' => __('شماره فنی / پارت نامبر', 'woocommerce'),
+            ]);
+
+            woocommerce_wp_text_input([
+                'id'    => '_inner_diameter',
+                'label' => __('قطر داخلی', 'woocommerce'),
+            ]);
+
+            woocommerce_wp_text_input([
+                'id'    => '_outer_diameter',
+                'label' => __('قطر خارجی', 'woocommerce'),
+            ]);
+
+            woocommerce_wp_text_input([
+                'id'    => '_bearing_width',
+                'label' => __('عرض', 'woocommerce'),
+            ]);
+            ?>
+        </div>
+
+        <div class="options_group">
+            <h3>مشخصات فیزیکی</h3>
+
+            <?php
+            woocommerce_wp_text_input([
+                'id'    => '_bearing_seal',
+                'label' => __('نوع آب‌بندی', 'woocommerce'),
+            ]);
+
+            woocommerce_wp_text_input([
+                'id'    => '_bearing_clearance',
+                'label' => __('لقی', 'woocommerce'),
+            ]);
+
+            woocommerce_wp_text_input([
+                'id'    => '_bearing_precision',
+                'label' => __('کلاس دقت', 'woocommerce'),
+            ]);
+
+            woocommerce_wp_text_input([
+                'id'    => '_bearing_material',
+                'label' => __('جنس', 'woocommerce'),
+            ]);
+
+            woocommerce_wp_text_input([
+                'id'    => '_bearing_cage',
+                'label' => __('قفسه', 'woocommerce'),
+            ]);
+
+            woocommerce_wp_text_input([
+                'id'    => '_bearing_lubrication',
+                'label' => __('روانکاری', 'woocommerce'),
+            ]);
+            ?>
+        </div>
+
+        <div class="options_group">
+            <h3>عملکرد</h3>
+
+            <?php
+            woocommerce_wp_text_input([
+                'id'    => '_dynamic_load',
+                'label' => __('بار دینامیکی', 'woocommerce'),
+            ]);
+
+            woocommerce_wp_text_input([
+                'id'    => '_static_load',
+                'label' => __('بار استاتیکی', 'woocommerce'),
+            ]);
+
+            woocommerce_wp_text_input([
+                'id'    => '_max_rpm',
+                'label' => __('حداکثر دور', 'woocommerce'),
+            ]);
+
+            woocommerce_wp_text_input([
+                'id'    => '_country_origin',
+                'label' => __('کشور سازنده', 'woocommerce'),
+            ]);
+
+            woocommerce_wp_text_input([
+                'id'    => '_bearing_usage',
+                'label' => __('کاربرد', 'woocommerce'),
+            ]);
+
+            woocommerce_wp_text_input([
+                'id'    => '_bearing_industry',
+                'label' => __('صنعت', 'woocommerce'),
+            ]);
+            ?>
+        </div>
+
+        <div class="options_group">
+            <h3>مستندات</h3>
+
+            <?php
+            woocommerce_wp_text_input([
+                'id'    => '_datasheet_link',
+                'label' => __('لینک دیتاشیت', 'woocommerce'),
+            ]);
+
+            woocommerce_wp_textarea_input([
+                'id'          => '_equivalent_codes',
+                'label'       => __('کدهای معادل', 'woocommerce'),
+                'description' => __('با | جدا کنید'),
+            ]);
+            ?>
+        </div>
+
+    </div>
+    <?php
 }

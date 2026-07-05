@@ -6,101 +6,144 @@
       <form class="search-input" method="get" action="<?php echo esc_url( home_url('/') ); ?>">
         <div class="search-input">
           <h5>عنوان محصول</h5>
-          <div class="big-input-division">
+          <div class="big-input-division" style="position: relative; display: flex; align-items: center;">
+            
             <input 
               type="search" 
+              id="index-search-term"
               name="s" 
               placeholder="مثلا بلبرینگ تماس زاویه ای"
               value="<?php echo get_search_query(); ?>" 
+              autocomplete="off"
             />
+            
             <input type="hidden" name="post_type" value="product" />
+
+            <!-- دکمه ضربدر برای پاک کردن سریع متن ورودی در صفحه اصلی -->
+            <button type="button" id="index-reset-search" style="<?php echo is_search() ? 'display: block;' : 'display: none;'; ?> position: absolute; left: 50px; background: none; border: none; cursor: pointer; color: #999;">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+
             <button class="btn" type="submit">
               <i class="fa-solid fa-magnifying-glass"></i>
             </button>
           </div>
         </div>
       </form>
+<!-- Professional Search -->
 
 
-      <div class="accurate-search-input">
-        <div class="search-text">
-          <p>اگر اندازه ی دقیق قطعه مورد نظرتان را می دانید درمقابل بنویسید.</p>
-          <p id="mm-paragraph">اندازه دقیق (میلی متر mm)</p>
-        </div>
-        <div class="search-inputs">
-          <div class="accurate-inputs">
-            <h6>قطر داخلی</h6>
-            <input type="search" placeholder="مثلا 20" />
-          </div>
-          <div class="accurate-inputs">
-            <h6>قطر خارجی</h6>
-            <input type="search" placeholder="مثلا 20" />
-          </div>
-          <div class="accurate-inputs">
-            <h6>ارتفاع</h6>
-            <input type="search" placeholder="مثلا 20" />
-          </div>
-        </div>
-      </div>
-      <div class="two-section-for-serch">
-        <div class="approximate-stuff">
-          <div class="approximate-search">
-            <div class="approximate-paragraphs">
-              <p>
-                اگر اندازه ی دقیق قطعه مورد نظرتان را نمی دانید، می توانید در
-                بخش زیر به صورت تقریبی بگویید.
-              </p>
-              <p id="mm-paragraph">اندازه تقریبی (میلی متر mm)</p>
+<div class="new-search-container new-compact new-wide-mode">
+    
+    <!-- بخش اول: جستجوی دقیق -->
+    <section class="new-search-section">
+        <h2 class="new-section-title">جستجوی دقیق بر اساس اندازه (میلی‌متر)</h2>
+        <div class="new-exact-grid">
+            <div class="new-input-group">
+                <label for="new-inner-dia">قطر داخلی</label>
+                <input type="number" id="new-inner-dia" placeholder="مثلاً ۲۰">
             </div>
-            <div class="accurate-inputs">
-              <div class="accurate-search-boxes">
-                <div class="search-approx-box">
-                  <div class="approximate-input-name">
-                    <h5>قطر داخلی</h5>
-                  </div>
-                  <div class="approximate-inputs">
-                    <p>بیشتر از مثلا</p>
-                    <input type="text" placeholder="مثلا 20" />
-                    <p id="va">و</p>
-                    <p>کمتر از</p>
-                    <input type="text" placeholder="مثلا 20" />
-                  </div>
-                </div>
-                <div class="search-approx-box">
-                  <div class="approximate-input-name">
-                    <h5>قطر خارجی</h5>
-                  </div>
-                  <div class="approximate-inputs">
-                    <p>بیشتر از مثلا</p>
-                    <input type="text" placeholder="مثلا 20" />
-                    <p id="va">و</p>
-                    <p>کمتر از</p>
-                    <input type="text" placeholder="مثلا 20" />
-                  </div>
-                </div>
-                <div class="search-approx-box">
-                  <div class="approximate-input-name">
-                    <h5>ارتفاع</h5>
-                  </div>
-                  <div class="approximate-inputs">
-                    <p>بیشتر از مثلا</p>
-                    <input type="text" placeholder="مثلا 20" />
-                    <p id="va">و</p>
-                    <p>کمتر از</p>
-                    <input type="text" placeholder="مثلا 20" />
-                  </div>
-                </div>
-              </div>
+            <div class="new-input-group">
+                <label for="new-outer-dia">قطر خارجی</label>
+                <input type="number" id="new-outer-dia" placeholder="مثلاً ۲۰">
             </div>
-          </div>
-          <div class="search-btn">
-            <div class="mag-sec">
-              <button><i class="fa-solid fa-magnifying-glass"></i></button>
+            <div class="new-input-group">
+                <label for="new-height">ارتفاع</label>
+                <input type="number" id="new-height" placeholder="مثلاً ۲۰">
             </div>
-            <div class="search-name"><p>جستجو</p></div>
-          </div>
+            <button class="new-btn-search">جستجو</button>
         </div>
-      </div>
+    </section>
+
+    <hr class="new-divider">
+
+    <!-- بخش دوم: جستجوی تقریبی (بازه اندازه) -->
+    <section class="new-search-section">
+        <h2 class="new-section-title">جستجوی تقریبی (بازه اندازه)</h2>
+        <div class="new-range-grid">
+            
+            <!-- بازه قطر داخلی -->
+            <div class="new-range-card" id="range-inner">
+                <span class="new-card-title">بازه قطر داخلی</span>
+                <div class="new-slider-wrapper">
+                    <div class="new-dual-slider">
+                        <!-- دایره حداقل (Min) همراه با بالون -->
+                        <div class="new-slider-handle min-handle">
+                            <div class="new-tooltip-bubble">
+                                <span class="new-tooltip-label">از</span>
+                                <input type="number" class="new-handle-input" value="15" min="10" max="100">
+                            </div>
+                        </div>
+                        <!-- دایره حداکثر (Max) همراه با بالون -->
+                        <div class="new-slider-handle max-handle">
+                            <div class="new-tooltip-bubble">
+                                <span class="new-tooltip-label">تا</span>
+                                <input type="number" class="new-handle-input" value="45" min="10" max="100">
+                            </div>
+                        </div>
+                        <div class="new-slider-track"></div>
+                        <div class="new-slider-range-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- بازه قطر خارجی -->
+            <div class="new-range-card" id="range-outer">
+                <span class="new-card-title">بازه قطر خارجی</span>
+                <div class="new-slider-wrapper">
+                    <div class="new-dual-slider">
+                        <div class="new-slider-handle min-handle">
+                            <div class="new-tooltip-bubble">
+                                <span class="new-tooltip-label">از</span>
+                                <input type="number" class="new-handle-input" value="20" min="10" max="100">
+                            </div>
+                        </div>
+                        <div class="new-slider-handle max-handle">
+                            <div class="new-tooltip-bubble">
+                                <span class="new-tooltip-label">تا</span>
+                                <input type="number" class="new-handle-input" value="60" min="10" max="100">
+                            </div>
+                        </div>
+                        <div class="new-slider-track"></div>
+                        <div class="new-slider-range-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- بازه ارتفاع -->
+            <div class="new-range-card" id="range-height">
+                <span class="new-card-title">بازه ارتفاع</span>
+                <div class="new-slider-wrapper">
+                    <div class="new-dual-slider">
+                        <div class="new-slider-handle min-handle">
+                            <div class="new-tooltip-bubble">
+                                <span class="new-tooltip-label">از</span>
+                                <input type="number" class="new-handle-input" value="10" min="10" max="100">
+                            </div>
+                        </div>
+                        <div class="new-slider-handle max-handle">
+                            <div class="new-tooltip-bubble">
+                                <span class="new-tooltip-label">تا</span>
+                                <input type="number" class="new-handle-input" value="30" min="10" max="100">
+                            </div>
+                        </div>
+                        <div class="new-slider-track"></div>
+                        <div class="new-slider-range-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</div>
+
+
+
+
+<!-- Professional Search -->
+
+
     </div>
 
     <!-- hero-section -->
@@ -108,114 +151,65 @@
       <div>
         <h3>محصولات ویژه</h3>
       </div>
-      <div class="best-products-row">
+
+
+<?php
+// کوئری برای دریافت ۸ محصول به صورت تصادفی
+$best_products_query = new WP_Query([
+    'post_type'      => 'product',
+    'posts_per_page' => 8,
+    'orderby'        => 'rand'
+]);
+
+if ($best_products_query->have_posts()) :
+    $counter = 0;
+    
+    // شروع ردیف اول محصولات
+    echo '<div class="best-products-row">';
+    
+    while ($best_products_query->have_posts()) : $best_products_query->the_post();
+        $counter++;
+        
+        // اگر ۴ محصول اول نمایش داده شدند، ردیف اول را می‌بندیم و ردیف دوم را باز می‌کنیم
+        if ($counter == 5) {
+            echo '</div>'; // بستن ردیف اول (.best-products-row)
+            echo '<div class="best-products-row">'; // باز کردن ردیف دوم (.best-products-row)
+        }
+        ?>
+        
         <div class="single-product-container">
-          <div class="main-contains">
-            <div class="best-product-container">
-              <img src="<?php echo get_template_directory_uri(); ?>/assets/images/01.png" alt="" />
-            </div>
-            <div class="best-product-detail">
-              <p>یاتاقان غلتکی مخروطی</p>
-              <div class="icon-frame">
-                <i class="fa-solid fa-arrow-left"></i>
-              </div>
-            </div>
-          </div>
+            <!-- تبدیل کلاس اصلی به تگ A جهت لینک شدن کل باکس بدون تغییر در ساختار CSS -->
+            <a href="<?php the_permalink(); ?>" class="main-contains" style="text-decoration: none; color: inherit; display: block;">
+                
+                <div class="best-product-container">
+                    <?php if (has_post_thumbnail()) : ?>
+                        <?php the_post_thumbnail('medium'); ?>
+                    <?php else : ?>
+                        <!-- تصویر پیش‌فرض در صورت عدم وجود تصویر محصول -->
+                        <img src="<?php echo wc_placeholder_img_src(); ?>" alt="<?php the_title_attribute(); ?>" />
+                    <?php endif; ?>
+                </div>
+                
+                <div class="best-product-detail">
+                    <p><?php the_title(); ?></p>
+                    <div class="icon-frame">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </div>
+                </div>
+
+            </a>
         </div>
-        <div class="single-product-container">
-          <div class="main-contains">
-            <div class="best-product-container">
-              <div><img src="<?php echo get_template_directory_uri(); ?>/assets/images/02.png" alt="" /></div>
-            </div>
-            <div class="best-product-detail">
-              <p>بلبرینگ توپی چرخ</p>
-              <div class="icon-frame">
-                <i class="fa-solid fa-arrow-left"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="single-product-container">
-          <div class="main-contains">
-            <div class="best-product-container">
-              <div><img src="<?php echo get_template_directory_uri(); ?>/assets/images/03.png" alt="" /></div>
-            </div>
-            <div class="best-product-detail">
-              <p>یاتاقان غلتکی مخروطی</p>
-              <div class="icon-frame">
-                <i class="fa-solid fa-arrow-left"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="single-product-container">
-          <div class="main-contains">
-            <div class="best-product-container">
-              <div><img src="<?php echo get_template_directory_uri(); ?>/assets/images/04.png" alt="" /></div>
-            </div>
-            <div class="best-product-detail">
-              <p>بلبرینگ کلاچ</p>
-              <div class="icon-frame">
-                <i class="fa-solid fa-arrow-left"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="best-products-row">
-        <div class="single-product-container">
-          <div class="main-contains">
-            <div class="best-product-container">
-              <img src="<?php echo get_template_directory_uri(); ?>/assets/images/05.png" alt="" />
-            </div>
-            <div class="best-product-detail">
-              <p>بلبرینگ توپی چرخ کامیون</p>
-              <div class="icon-frame">
-                <i class="fa-solid fa-arrow-left"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="single-product-container">
-          <div class="main-contains">
-            <div class="best-product-container">
-              <div><img src="<?php echo get_template_directory_uri(); ?>/assets/images/06.png" alt="" /></div>
-            </div>
-            <div class="best-product-detail">
-              <p>بلبرینگ غلتکی خود تنظیم</p>
-              <div class="icon-frame">
-                <i class="fa-solid fa-arrow-left"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="single-product-container">
-          <div class="main-contains">
-            <div class="best-product-container">
-              <div><img src="<?php echo get_template_directory_uri(); ?>/assets/images/07.png" alt="" /></div>
-            </div>
-            <div class="best-product-detail">
-              <p>یاتاقان غلتکی استوانه ای</p>
-              <div class="icon-frame">
-                <i class="fa-solid fa-arrow-left"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="single-product-container">
-          <div class="main-contains">
-            <div class="best-product-container">
-              <div><img src="<?php echo get_template_directory_uri(); ?>/assets/images/08.png" alt="" /></div>
-            </div>
-            <div class="best-product-detail">
-              <p>بلبرینگ های خطی</p>
-              <div class="icon-frame">
-                <i class="fa-solid fa-arrow-left"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
+        <?php 
+    endwhile; 
+    
+    echo '</div>'; // بستen ردیف نهایی
+    
+    wp_reset_postdata(); 
+endif; 
+?>
+      
+
     </div>
 
     <!-- news-blog-posts -->
@@ -224,37 +218,55 @@
 
     <!-- brand-section -->
 
-    <div class="brand-section">
-      <h3>برند های بلبرینگ وارداتی</h3>
-      <div class="brand-groups">
-        <div class="brand-frame">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/brand (2).jpg" alt="" />
-        </div>
-        <div class="brand-frame">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/brand (5).png" alt="" />
-        </div>
-        <div class="brand-frame">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/brand (1).png" alt="" />
-        </div>
-        <div class="brand-frame">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/brand (3).jpg" alt="" />
-        </div>
-      </div>
-      <div class="brand-groups">
-        <div class="brand-frame">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/brand (1).jpg" alt="" />
-        </div>
-        <div class="brand-frame">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/brand (3).png" alt="" />
-        </div>
-        <div class="brand-frame">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/brand (2).png" alt="" />
-        </div>
-        <div class="brand-frame">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/brand (4).png" alt="" />
-        </div>
-      </div>
-    </div>
+<div class="brand-section">
+    <h3>برند های بلبرینگ وارداتی</h3>
+    
+    <?php
+    // دریافت تمام برندها
+    $brands = get_terms([
+        'taxonomy'   => 'product_brand',
+        'hide_empty' => false,
+    ]);
+
+    if (!empty($brands) && !is_wp_error($brands)) :
+        $counter = 0;
+        
+        // باز کردن ردیف اول
+        echo '<div class="brand-groups">';
+        
+        foreach ($brands as $brand) :
+            // ووکامرس آیدی تصویر دسته بندی/تاکسونومی را در متای thumbnail_id ذخیره می‌کند
+            $image_id = get_term_meta($brand->term_id, 'thumbnail_id', true);
+            $image_url = $image_id ? wp_get_attachment_url($image_id) : '';
+            
+            // اگر برند تصویر نداشت، آن را رد کن
+            if (empty($image_url)) {
+                continue;
+            }
+            
+            $counter++;
+            
+            // مدیریت ساختار ردیف‌های ۴ تایی مطابق CSS شما
+            if ($counter > 1 && ($counter - 1) % 4 == 0) {
+                echo '</div>'; // بستن ردیف قبلی
+                echo '<div class="brand-groups">'; // باز کردن ردیف جدید
+            }
+            ?>
+            
+            <div class="brand-frame">
+                <!-- نمایش لوگوی برند -->
+                <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($brand->name); ?>" title="<?php echo esc_attr($brand->name); ?>" />
+            </div>
+            
+        <?php 
+        endforeach;
+        
+        echo '</div>'; // بستن آخرین ردیف
+    else:
+        echo '<p style="text-align:center;">هنوز برندی ثبت نشده است.</p>';
+    endif;
+    ?>
+</div>
 
     <!-- new-post-cards-section -->
 
