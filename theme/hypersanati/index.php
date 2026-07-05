@@ -270,261 +270,76 @@ endif;
 
     <!-- new-post-cards-section -->
 
-    <div class="card-boxes">
-      <div class="name-and-controll-section">
+<div class="card-boxes">
+  <div class="name-and-controll-section">
     <div>
-      <button class="handle-frame-section" id="scrollRightBtn" type="button">
+      <button class="handle-frame-section" id="scrollRightBtn" type="button" aria-label="قبلی">
         <i class="fa-solid fa-angle-right"></i>
       </button>
     </div>
-        <div><h3>آخرین به روز رسانی وبلاگ</h3></div>
-        <div>
-          <button class="handle-frame-section" id="scrollLeftBtn" type="button">
-            <i class="fa-solid fa-angle-left"></i>
-          </button>
-        </div>
+    <div><h3>آخرین به روز رسانی وبلاگ</h3></div>
+    <div>
+      <button class="handle-frame-section" id="scrollLeftBtn" type="button" aria-label="بعدی">
+        <i class="fa-solid fa-angle-left"></i>
+      </button>
+    </div>
+  </div>
+  
+  <div class="cards-sectoins" id="blogScroll">
+    <?php
+    // تنظیمات کوئری برای گرفتن ۶ پست آخر
+    $blog_args = array(
+        'post_type'      => 'post',
+        'posts_per_page' => 6,
+        'post_status'    => 'publish'
+    );
+    $blog_query = new WP_Query($blog_args);
+
+    if ($blog_query->have_posts()) :
+        while ($blog_query->have_posts()) : $blog_query->the_post();
+    ?>
+    <div class="blog-card">
+      <div class="blog-card-img-frame">
+        <?php if (has_post_thumbnail()) : ?>
+            <img src="<?php the_post_thumbnail_url('medium'); ?>" alt="<?php the_title_attribute(); ?>" />
+        <?php else : ?>
+            <!-- تصویر پیش‌فرض در صورت نداشتن تصویر شاخص -->
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/default-blog.webp" alt="وبلاگ" />
+        <?php endif; ?>
       </div>
-      <div class="cards-sectoins" id="blogScroll">
-        <div class="blog-card">
-          <div class="blog-card-img-frame">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/90d9043dc033721bcc40dd40e24d3e4b.webp" alt="" />
+      <div class="blog-card-title">
+        <h6><?php the_title(); ?></h6>
+      </div>
+      <div class="blog-card-description">
+        <!-- نمایش خلاصه متن (20 کلمه) -->
+        <p><?php echo wp_trim_words(get_the_excerpt(), 20, ' ...'); ?></p>
+      </div>
+      <div class="blog-card-detailes">
+        <div class="blog-detail-sect">
+          <div class="time-frame">
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/calendar 3.svg" alt="تاریخ" />
+            <p><?php echo get_the_date('j F'); ?></p>
           </div>
-          <div class="blog-card-title">
-            <h6>
-              راهنمای جامع انتخاب محصولات صنعتی بر اساس استانداردهای
-              بین‌المللی(ISO, DIN, ASTM)
-            </h6>
-          </div>
-          <div class="blog-card-description">
-            <p>
-              لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
-              استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله
-              در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد
-              نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. ...
-            </p>
-          </div>
-          <div class="blog-card-detailes">
-            <div class="blog-detail-sect">
-              <div class="time-frame">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/calendar 3.svg" alt="" />
-                <p>13 آبان</p>
-              </div>
-              <div class="auther-frame">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/user.svg" alt="" />
-                <p>امین حسینی</p>
-              </div>
-            </div>
-            <div class="rea-more-frame">
-              <button class="read-more-btn">مطالعه</button>
-            </div>
+          <div class="auther-frame">
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/user.svg" alt="نویسنده" />
+            <p><?php the_author(); ?></p>
           </div>
         </div>
-        <div class="blog-card">
-          <div class="blog-card-img-frame">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/01.png" alt="" />
-          </div>
-          <div class="blog-card-title">
-            <h6>
-              تحلیل فنی و اقتصادی مقایسه محصولات صنعتی داخلی و وارداتی در صنایع
-              سنگین
-            </h6>
-          </div>
-          <div class="blog-card-description">
-            <p>
-              لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
-              استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله
-              در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد
-              نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. ...
-            </p>
-          </div>
-          <div class="blog-card-detailes">
-            <div class="blog-detail-sect">
-              <div class="time-frame">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/calendar 3.svg" alt="" />
-                <p>13 آبان</p>
-              </div>
-              <div class="auther-frame">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/user.svg" alt="" />
-                <p>امین حسینی</p>
-              </div>
-            </div>
-            <div class="rea-more-frame">
-              <button class="read-more-btn">مطالعه</button>
-            </div>
-          </div>
-        </div>
-        <div class="blog-card">
-          <div class="blog-card-img-frame">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/05.png" alt="" />
-          </div>
-          <div class="blog-card-title">
-            <h6>
-              راهنمای جامع انتخاب محصولات صنعتی بر اساس استانداردهای
-              بین‌المللی(ISO, DIN, ASTM)
-            </h6>
-          </div>
-          <div class="blog-card-description">
-            <p>
-              لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
-              استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله
-              در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد
-              نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. ...
-            </p>
-          </div>
-          <div class="blog-card-detailes">
-            <div class="blog-detail-sect">
-              <div class="time-frame">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/calendar 3.svg" alt="" />
-                <p>13 آبان</p>
-              </div>
-              <div class="auther-frame">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/user.svg" alt="" />
-                <p>امین حسینی</p>
-              </div>
-            </div>
-            <div class="rea-more-frame">
-              <button class="read-more-btn">مطالعه</button>
-            </div>
-          </div>
-        </div>
-        <div class="blog-card">
-          <div class="blog-card-img-frame">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/07.png" alt="" />
-          </div>
-          <div class="blog-card-title">
-            <h6>
-              راهنمای جامع انتخاب محصولات صنعتی بر اساس استانداردهای
-              بین‌المللی(ISO, DIN, ASTM)
-            </h6>
-          </div>
-          <div class="blog-card-description">
-            <p>
-              لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
-              استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله
-              در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد
-              نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. ...
-            </p>
-          </div>
-          <div class="blog-card-detailes">
-            <div class="blog-detail-sect">
-              <div class="time-frame">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/calendar 3.svg" alt="" />
-                <p>13 آبان</p>
-              </div>
-              <div class="auther-frame">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/user.svg" alt="" />
-                <p>امین حسینی</p>
-              </div>
-            </div>
-            <div class="rea-more-frame">
-              <button class="read-more-btn">مطالعه</button>
-            </div>
-          </div>
-        </div>
-        <div class="blog-card">
-          <div class="blog-card-img-frame">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/90d9043dc033721bcc40dd40e24d3e4b.webp" alt="" />
-          </div>
-          <div class="blog-card-title">
-            <h6>
-              راهنمای جامع انتخاب محصولات صنعتی بر اساس استانداردهای
-              بین‌المللی(ISO, DIN, ASTM)
-            </h6>
-          </div>
-          <div class="blog-card-description">
-            <p>
-              لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
-              استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله
-              در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد
-              نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. ...
-            </p>
-          </div>
-          <div class="blog-card-detailes">
-            <div class="blog-detail-sect">
-              <div class="time-frame">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/calendar 3.svg" alt="" />
-                <p>13 آبان</p>
-              </div>
-              <div class="auther-frame">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/user.svg" alt="" />
-                <p>امین حسینی</p>
-              </div>
-            </div>
-            <div class="rea-more-frame">
-              <button class="read-more-btn">مطالعه</button>
-            </div>
-          </div>
-        </div>
-        <div class="blog-card">
-          <div class="blog-card-img-frame">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/90d9043dc033721bcc40dd40e24d3e4b.webp" alt="" />
-          </div>
-          <div class="blog-card-title">
-            <h6>
-              راهنمای جامع انتخاب محصولات صنعتی بر اساس استانداردهای
-              بین‌المللی(ISO, DIN, ASTM)
-            </h6>
-          </div>
-          <div class="blog-card-description">
-            <p>
-              لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
-              استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله
-              در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد
-              نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. ...
-            </p>
-          </div>
-          <div class="blog-card-detailes">
-            <div class="blog-detail-sect">
-              <div class="time-frame">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/calendar 3.svg" alt="" />
-                <p>13 آبان</p>
-              </div>
-              <div class="auther-frame">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/user.svg" alt="" />
-                <p>امین حسینی</p>
-              </div>
-            </div>
-            <div class="rea-more-frame">
-              <button class="read-more-btn">مطالعه</button>
-            </div>
-          </div>
-        </div>
-        <div class="blog-card">
-          <div class="blog-card-img-frame">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/90d9043dc033721bcc40dd40e24d3e4b.webp" alt="" />
-          </div>
-          <div class="blog-card-title">
-            <h6>
-              راهنمای جامع انتخاب محصولات صنعتی بر اساس استانداردهای
-              بین‌المللی(ISO, DIN, ASTM)
-            </h6>
-          </div>
-          <div class="blog-card-description">
-            <p>
-              لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
-              استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله
-              در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد
-              نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. ...
-            </p>
-          </div>
-          <div class="blog-card-detailes">
-            <div class="blog-detail-sect">
-              <div class="time-frame">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/calendar 3.svg" alt="" />
-                <p>13 آبان</p>
-              </div>
-              <div class="auther-frame">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/user.svg" alt="" />
-                <p>امین حسینی</p>
-              </div>
-            </div>
-            <div class="rea-more-frame">
-              <button class="read-more-btn">مطالعه</button>
-            </div>
-          </div>
+        <div class="rea-more-frame">
+          <a href="<?php the_permalink(); ?>" class="read-more-btn"><button class="read-more-btn">مطالعه</button>
+</a>
         </div>
       </div>
     </div>
+    <?php
+        endwhile;
+        wp_reset_postdata(); // ریست کردن کوئری
+    else :
+        echo '<p>مقاله‌ای یافت نشد.</p>';
+    endif;
+    ?>
+  </div>
+</div>
 
 
     <?php get_footer(); ?>
