@@ -51,7 +51,7 @@
                 <label for="new-height">ارتفاع</label>
                 <input type="number" id="new-height" placeholder="مثلاً ۲۰">
             </div>
-            <button class="new-btn-search">جستجو</button>
+            <button type="button" id="exact-search-btn" class="new-btn-search">جستجو</button>
         </div>
     </section>
 
@@ -133,6 +133,10 @@
                 </div>
             </div>
 
+        </div>
+
+        <div class="new-range-actions">
+            <button type="button" id="approximate-search-btn" class="new-btn-search">جستجو</button>
         </div>
     </section>
 

@@ -1180,6 +1180,30 @@ ul li a:hover {
   background-color: var(--color-black);
 }
 
+.new-range-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--spacing-md);
+}
+
+.dimension-search-banner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
+}
+
+.dimension-search-banner p {
+    margin: 0;
+    color: var(--color-dark);
+    font-size: var(--fs-sm);
+}
+
+.dimension-search-banner .new-btn-search {
+    align-self: flex-start;
+    margin-top: var(--spacing-xs);
+}
+
 /* --- بخش بازه تقریبی (طرح بالون‌دار) --- */
 .new-range-grid {
   display: grid;
