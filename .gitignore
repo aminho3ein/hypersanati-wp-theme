@@ -21,6 +21,7 @@ wp-content/uploads/
 wp-content/upgrade/
 wp-content/cache/
 wp-content/languages/
+wp-content/plugins/
 
 
 # --- Environment & Sensitive Data ---
