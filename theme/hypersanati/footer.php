@@ -60,8 +60,7 @@
     </div>
 
     <script src="./js/functions.js"></script>
-    <script src="./js/bootstrap.bundle.min.js"></script>
-    
+    <script src="./js/bootstrap.bundle.min.js"></script>    
     <?php wp_footer(); ?>
   </body>
 </html>
