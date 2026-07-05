@@ -164,6 +164,27 @@ function hypersanati_enqueue_assets() {
             filemtime(get_template_directory() . '/assets/js/shop.js'),
             true
         );
+
+        wp_localize_script('shop-js', 'hypersanatiSearch', [
+            'shopUrl' => hypersanati_get_shop_url(),
+        ]);
+    }
+
+    /* =========================================================
+       Front Page (Dimension Search)
+    ========================================================= */
+    if (is_front_page() || is_home()) {
+        wp_enqueue_script(
+            'index-search-js',
+            get_template_directory_uri() . '/assets/js/index-search.js',
+            [],
+            filemtime(get_template_directory() . '/assets/js/index-search.js'),
+            true
+        );
+
+        wp_localize_script('index-search-js', 'hypersanatiSearch', [
+            'shopUrl' => hypersanati_get_shop_url(),
+        ]);
     }
 
     /* =========================================================
@@ -457,6 +478,136 @@ add_action('after_setup_theme', function () {
 });
 
 
+/* =========================================================
+   BEARING DIMENSION SEARCH
+========================================================= */
+function hypersanati_get_shop_url() {
+    if (function_exists('wc_get_page_permalink')) {
+        return wc_get_page_permalink('shop');
+    }
+
+    return home_url('/shop/');
+}
+
+function hypersanati_build_dimension_meta_query($params) {
+    $meta_query = [];
+    $mode = isset($params['dimension_search']) ? sanitize_text_field($params['dimension_search']) : '';
+
+    $map = [
+        'inner'  => '_inner_diameter',
+        'outer'  => '_outer_diameter',
+        'height' => '_bearing_width',
+    ];
+
+    if ($mode === 'exact') {
+        foreach ($map as $key => $meta_key) {
+            if (isset($params[$key]) && $params[$key] !== '' && is_numeric($params[$key])) {
+                $meta_query[] = [
+                    'key'     => $meta_key,
+                    'value'   => floatval($params[$key]),
+                    'compare' => '=',
+                    'type'    => 'DECIMAL',
+                ];
+            }
+        }
+    } elseif ($mode === 'approx') {
+        foreach ($map as $key => $meta_key) {
+            $min = (isset($params[$key . '_min']) && $params[$key . '_min'] !== '' && is_numeric($params[$key . '_min']))
+                ? floatval($params[$key . '_min'])
+                : null;
+            $max = (isset($params[$key . '_max']) && $params[$key . '_max'] !== '' && is_numeric($params[$key . '_max']))
+                ? floatval($params[$key . '_max'])
+                : null;
+
+            if ($min === null && $max === null) {
+                continue;
+            }
+
+            if ($min !== null && $max !== null) {
+                if ($min > $max) {
+                    [$min, $max] = [$max, $min];
+                }
+
+                $meta_query[] = [
+                    'key'     => $meta_key,
+                    'value'   => [$min, $max],
+                    'compare' => 'BETWEEN',
+                    'type'    => 'DECIMAL',
+                ];
+            } elseif ($min !== null) {
+                $meta_query[] = [
+                    'key'     => $meta_key,
+                    'value'   => $min,
+                    'compare' => '>=',
+                    'type'    => 'DECIMAL',
+                ];
+            } else {
+                $meta_query[] = [
+                    'key'     => $meta_key,
+                    'value'   => $max,
+                    'compare' => '<=',
+                    'type'    => 'DECIMAL',
+                ];
+            }
+        }
+    }
+
+    if (empty($meta_query)) {
+        return [];
+    }
+
+    if (count($meta_query) > 1) {
+        $meta_query['relation'] = 'AND';
+    }
+
+    return $meta_query;
+}
+
+function hypersanati_render_product_card() {
+    ?>
+    <a href="<?php the_permalink(); ?>" class="product-section" style="text-decoration: none; color: inherit; display: block;">
+        <div class="product-cat-frame">
+            <?php if (has_post_thumbnail()) : ?>
+                <?php the_post_thumbnail('medium'); ?>
+            <?php else : ?>
+                <img src="<?php echo esc_url(wc_placeholder_img_src()); ?>" alt="<?php the_title_attribute(); ?>" />
+            <?php endif; ?>
+        </div>
+        <div class="product-name">
+            <p><?php the_title(); ?></p>
+        </div>
+    </a>
+    <?php
+}
+
+function hypersanati_get_dimension_search_label($params) {
+    $mode = isset($params['dimension_search']) ? sanitize_text_field($params['dimension_search']) : '';
+    $parts = [];
+
+    if ($mode === 'exact') {
+        if (!empty($params['inner'])) {
+            $parts[] = 'قطر داخلی: ' . sanitize_text_field($params['inner']) . ' mm';
+        }
+        if (!empty($params['outer'])) {
+            $parts[] = 'قطر خارجی: ' . sanitize_text_field($params['outer']) . ' mm';
+        }
+        if (!empty($params['height'])) {
+            $parts[] = 'ارتفاع: ' . sanitize_text_field($params['height']) . ' mm';
+        }
+    } elseif ($mode === 'approx') {
+        if (isset($params['inner_min'], $params['inner_max'])) {
+            $parts[] = 'قطر داخلی: ' . sanitize_text_field($params['inner_min']) . ' تا ' . sanitize_text_field($params['inner_max']) . ' mm';
+        }
+        if (isset($params['outer_min'], $params['outer_max'])) {
+            $parts[] = 'قطر خارجی: ' . sanitize_text_field($params['outer_min']) . ' تا ' . sanitize_text_field($params['outer_max']) . ' mm';
+        }
+        if (isset($params['height_min'], $params['height_max'])) {
+            $parts[] = 'ارتفاع: ' . sanitize_text_field($params['height_min']) . ' تا ' . sanitize_text_field($params['height_max']) . ' mm';
+        }
+    }
+
+    return implode(' | ', $parts);
+}
 
 
 // آژاکس بارگذاری محصولات و دسته‌ها (نسخه نهایی همراه با لینک محصول)
@@ -565,6 +716,49 @@ function load_shop_categories() {
     if ($has_product) {
         echo $html;
     }
+    wp_die();
+}
+
+add_action('wp_ajax_search_products_by_dimensions', 'hypersanati_search_products_by_dimensions');
+add_action('wp_ajax_nopriv_search_products_by_dimensions', 'hypersanati_search_products_by_dimensions');
+
+function hypersanati_search_products_by_dimensions() {
+    $page = isset($_GET['index']) ? max(0, intval($_GET['index'])) : 0;
+    $per_page = 12;
+
+    $meta_query = hypersanati_build_dimension_meta_query($_GET);
+    if (empty($meta_query)) {
+        wp_die();
+    }
+
+    $products = new WP_Query([
+        'post_type'      => 'product',
+        'post_status'    => 'publish',
+        'posts_per_page' => $per_page,
+        'offset'         => $page * $per_page,
+        'meta_query'     => $meta_query,
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+    ]);
+
+    if (!$products->have_posts()) {
+        wp_die();
+    }
+
+    ob_start();
+    ?>
+    <div class="category dimension-search-results">
+        <div class="sub-category">
+            <div class="child-category">
+                <?php while ($products->have_posts()) : $products->the_post(); ?>
+                    <?php hypersanati_render_product_card(); ?>
+                <?php endwhile; ?>
+            </div>
+        </div>
+    </div>
+    <?php
+    echo ob_get_clean();
+    wp_reset_postdata();
     wp_die();
 }
 
@@ -795,4 +989,20 @@ function bearing_technical_specs_fields() {
 
     </div>
     <?php
+}
+
+add_action('woocommerce_process_product_meta', 'hypersanati_save_bearing_specs', 20);
+
+function hypersanati_save_bearing_specs($post_id) {
+    $dimension_fields = [
+        '_inner_diameter',
+        '_outer_diameter',
+        '_bearing_width',
+    ];
+
+    foreach ($dimension_fields as $field) {
+        if (isset($_POST[$field])) {
+            update_post_meta($post_id, $field, sanitize_text_field(wp_unslash($_POST[$field])));
+        }
+    }
 }
