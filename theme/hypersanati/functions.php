@@ -132,21 +132,20 @@ function hypersanati_enqueue_assets() {
     ========================================================= */
     if (is_single()) {
         wp_enqueue_style(
-            'hypersanati-single-post',
+            'single-article-css',
             get_template_directory_uri() . '/assets/css/single-article.css',
-            ['hypersanati-style'],
+            array(),
             filemtime(get_template_directory() . '/assets/css/single-article.css')
         );
 
         wp_enqueue_script(
-            'hypersanati-single-post',
+            'single-article-js',
             get_template_directory_uri() . '/assets/js/single-article.js',
-            [],
+            array('jquery'),
             filemtime(get_template_directory() . '/assets/js/single-article.js'),
             true
         );
     }
-
     /* =========================================================
        Shop Page
     ========================================================= */
