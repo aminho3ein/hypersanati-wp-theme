@@ -1361,6 +1361,9 @@ ul li a:hover {
   overflow-x: auto;
   scroll-behavior: smooth;
 }
+.cards-sectoins::-webkit-scrollbar {
+    display: none;
+}
 button.handle-frame-section {
   width: 48px;
   height: 48px;

@@ -105,3 +105,63 @@ document.querySelectorAll('.new-range-card').forEach(card => {
     // رندر اولیه ابعاد
     updateSlider();
 });
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const blogScroll = document.getElementById('blogScroll');
+    const scrollLeftBtn = document.getElementById('scrollLeftBtn');
+    const scrollRightBtn = document.getElementById('scrollRightBtn');
+    const cardBoxes = document.querySelector('.card-boxes');
+
+    if (!blogScroll || !scrollLeftBtn || !scrollRightBtn) return;
+
+    // محاسبه عرض یک کارت به همراه فاصله (Gap/Margin)
+    const getScrollAmount = () => {
+        const card = blogScroll.querySelector('.blog-card');
+        if (card) {
+            const style = window.getComputedStyle(card);
+            const margin = parseFloat(style.marginLeft) + parseFloat(style.marginRight);
+            return card.offsetWidth + margin;
+        }
+        return 300; // مقدار پیش‌فرض در صورت لود نشدن المان
+    };
+
+    // تابع رفتن به کارت بعدی (اسکرول به سمت چپ در سایت‌های RTL)
+    const scrollNext = () => {
+        const scrollAmount = getScrollAmount();
+        const maxScroll = blogScroll.scrollWidth - blogScroll.clientWidth;
+        
+        // در مرورگرها برای RTL، مقدار scrollLeft معمولا منفی است
+        // اگر به انتهای اسکرول رسیدیم، به نقطه صفر (ابتدا) برگرد
+        if (Math.abs(blogScroll.scrollLeft) >= maxScroll - 10) { 
+            blogScroll.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+            // اسکرول به سمت چپ (آیتم‌های بعدی در RTL)
+            blogScroll.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); 
+        }
+    };
+
+    // تابع برگشت به کارت قبلی (اسکرول به سمت راست در سایت‌های RTL)
+    const scrollPrev = () => {
+        const scrollAmount = getScrollAmount();
+        blogScroll.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    };
+
+    // اتصال دکمه‌ها به توابع
+    scrollLeftBtn.addEventListener('click', scrollNext);
+    scrollRightBtn.addEventListener('click', scrollPrev);
+
+    // تنظیم اسکرول خودکار هر 7 ثانیه (7000 میلی‌ثانیه)
+    let autoScrollTimer = setInterval(scrollNext, 7000);
+
+    // توقف اسکرول خودکار زمانی که موس روی بخش مقالات می‌آید
+    cardBoxes.addEventListener('mouseenter', () => {
+        clearInterval(autoScrollTimer);
+    });
+    
+    // اجرای مجدد اسکرول خودکار با برداشتن موس از روی مقالات
+    cardBoxes.addEventListener('mouseleave', () => {
+        autoScrollTimer = setInterval(scrollNext, 7000);
+    });
+});
