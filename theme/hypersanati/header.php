@@ -97,9 +97,12 @@
       </div>
 
       <li>
-        <a class="my-profile" href="<?php echo esc_url($account_url); ?>">
+        <button class="ui-btn ui-btn-account " type="button" id="ui-open-otp">
+  حساب کاربری
+        </button>
+        <!-- <a class="my-profile" href="<?php echo esc_url($account_url); ?>">
           حساب کاربری
-        </a>
+        </a> -->
       </li>
     </ul>
 
