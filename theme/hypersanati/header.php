@@ -2,34 +2,9 @@
 <!doctype html>
 <html lang="fa">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="<?php bloginfo('charset'); ?>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="" />
-    <link rel="stylesheet" href="./css/bootstrap.rtl.min.css" />
-
-    <link rel="stylesheet" href="./css/fontawesome.min.css" />
-    <link rel="stylesheet" href="./css/brands.min.css" />
-    <link rel="stylesheet" href="./css/solid.min.css" />
-
-    <link rel="stylesheet" href="./css/main.css" />
-
-    <link
-      rel="stylesheet"
-      href="./css/responsive/tablet-responsive.css"
-      media="(min-width:768px)"
-    />
-
-    <link
-      rel="stylesheet"
-      href="./css/responsive/laptop-responsive.css"
-      media="(min-width:992px)"
-    />
-
-    <link
-      rel="stylesheet"
-      href="./css/responsive/desktop-responsive.css"
-      media="(min-width:1200px)"
-    />
 
     <title>همگام صنعت برتر</title>
 
@@ -98,9 +73,9 @@
 
       <li>
         <button class="ui-btn ui-btn-account " type="button" id="ui-open-otp">
-  حساب کاربری
+           حساب کاربری
         </button>
-        <!-- <a class="my-profile" href="<?php echo esc_url($account_url); ?>">
+        <!-- <a class="my-profile" href="<?php //echo esc_url($account_url); ?>">
           حساب کاربری
         </a> -->
       </li>

@@ -1006,3 +1006,33 @@ function hypersanati_save_bearing_specs($post_id) {
         }
     }
 }
+// ==========================================
+// Hypersanati WooCommerce & Account / OTP Module
+// ==========================================
+
+// ۱. فراخوانی فایل منطق و پردازش‌های AJAX مربوط به OTP
+if ( file_exists( get_template_directory() . '/woocommerce/myaccount/enqueue.php' ) ) {
+    require_once get_template_directory() . '/woocommerce/myaccount/enqueue.php';
+}
+
+// ۲. نمایش فرم OTP در فوتر جهت دسترسی از طریق دکمه هدر
+add_action('wp_header', function() {
+    // اگر کاربر وارد نشده بود، فرم مودال OTP لود می‌شود
+    if ( ! is_user_logged_in() ) {
+        if ( file_exists( get_template_directory() . '/woocommerce/myaccount/form-otp-login.php' ) ) {
+            include get_template_directory() . '/woocommerce/myaccount/form-otp-login.php';
+        }
+    }
+});
+
+// ۳. ریدایرکت صفحه حساب کاربری (page_id=14) به قالب اختصاصی dashboard.php
+add_filter('template_include', function( $template ) {
+    // بررسی اینکه آیا صفحه جاری همان برگه‌ی حساب کاربری ووکامرس است یا خیر
+    if ( is_page() && function_exists('is_account_page') && is_account_page() ) {
+        $custom_dashboard = get_template_directory() . '/woocommerce/myaccount/dashboard.php';
+        if ( file_exists( $custom_dashboard ) ) {
+            return $custom_dashboard;
+        }
+    }
+    return $template;
+});
