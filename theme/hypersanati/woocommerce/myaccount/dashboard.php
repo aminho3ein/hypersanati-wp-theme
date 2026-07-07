@@ -1,13 +1,17 @@
 <?php 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit; // Exit if accessed directly.
+    exit;
 }
 
-// نمایش فرم OTP در صورت نیاز (بدون ساختار کامل هدر)
+get_header(); // <-- این خط را اضافه کنید
+
 get_template_part('/form-otp-login'); 
 ?>
 
-   
+ 
+    <div
+      class="all-elements d-flex flex-column flex-lg-row gap-3 gap-lg-5 p-3 p-md-4 p-lg-5"
+    >
       <!-- profile-btn-navigation -->
       <div class="my-profie-sec w-100 w-lg-auto">
         <div
@@ -103,7 +107,7 @@ get_template_part('/form-otp-login');
             </div>
           </div>
         </div>
-      </div> 
+      </div> -->
 
       <!-- wishlist -->
 
@@ -320,7 +324,7 @@ get_template_part('/form-otp-login');
             </div>
           </div>
         </div>
-      </div> 
+      </div> -->
 
       <!-- user-rank -->
       <div class="info-sec user-rank w-100">
