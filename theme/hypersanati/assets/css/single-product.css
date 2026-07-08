@@ -1,4 +1,4 @@
-@import url(./main.css);
+/* @import url(./main.css); */
 /* review control section - same style as question-ctr-sec */
 
 .review-ctr-sec {
@@ -136,6 +136,7 @@
   justify-content: center;
   align-items: center;
   background-color: var(--color-danger);
+  color: black;
   border-radius: 13.5px;
   height: 32px;
   width: 91px;
@@ -152,6 +153,7 @@
 .price-sec p {
   font-size: 18px;
   font-weight: bold;
+  text-align: center;
 }
 
 .add-to-cart-and-dropdown-sec {
@@ -200,6 +202,8 @@
 
 .single-image {
   position: relative;
+  border: 1px solid var (--color-gray) !important;
+  overflow: hidden;
 }
 
 .single-image-frame {
@@ -233,8 +237,9 @@
 }
 
 .product-image-gallery-frame {
-  width: 90px;
-  height: 90px;
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
 }
 
 .product-name-detail-sec {
@@ -601,7 +606,7 @@
   flex-direction: column;
   align-items: center;
   margin-top: 2rem;
-  height: 700px;
+  /* height: 700px; */
   overflow: hidden;
 }
 
@@ -628,7 +633,7 @@
   flex-direction: column;
   gap: 0.625rem;
   min-width: 210px !important;
-  height: 520px;
+  /* height: 520px; */
   margin-right: 1.25rem !important;
   box-shadow: 2px 2px 6px var(--color-gray);
   padding: 0.875rem;
@@ -755,10 +760,10 @@
 
   .discont-sec-frame p {
     font-size: 14px;
+    color: black;
   }
 
   .price-sec p {
-    font-size: 18px;
   }
 
   .add-to-cart-and-dropdown-sec-frame,
@@ -783,8 +788,9 @@
   }
 
   .product-image-gallery-frame {
-    width: 125px;
-    height: 125px;
+    width: 70px;
+    height: 70px;
+    overflow: hidden;
   }
 
   .product-image-gallery {
@@ -999,5 +1005,2823 @@
   .review-actions button {
     padding: 6px 10px;
     gap: 5px;
+  }
+}
+.product-and-price-detail.product-hero {
+  width: min(1180px, calc(100% - 32px));
+  height: auto;
+  margin: 2rem auto;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(250px, 320px) minmax(320px, 1fr) minmax(260px, 320px);
+  grid-template-areas: "specs media purchase";
+  gap: clamp(1rem, 2vw, 1.75rem);
+  align-items: start;
+  direction: rtl;
+}
+
+.product-hero__purchase {
+  grid-area: purchase;
+  flex: unset;
+  position: sticky;
+  top: 1rem;
+  z-index: 1;
+}
+
+.product-hero__media {
+  grid-area: media;
+  flex: unset;
+}
+
+.product-hero__specs {
+  grid-area: specs;
+  flex: unset;
+}
+
+/* کارت قیمت */
+.price-card {
+  width: 100%;
+  height: auto;
+  min-height: unset;
+  padding: 1.25rem;
+  /* border-radius: 24px; */
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.88)),
+    var(--color-white, #fff);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.price-and-discont-sec {
+  width: 100%;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.discont-sec {
+  display: flex;
+  align-items: first baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.12);
+}
+
+.old-price p {
+  margin: 0;
+  color: #9ca3af;
+  font-size: 0.7rem;
+  text-decoration: line-through;
+}
+
+.discont-sec-frame p {
+  width: auto;
+  min-width: 86px;
+  height: 32px;
+  padding: 0 0.75rem;
+  margin: 0;
+  border-radius: 999px;
+  background: var(--color-danger, #ef4444);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: black;
+}
+
+.price-label {
+  color: #6b7280;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.price-sec p {woocommerce-Price-currencySymbol
+  margin: 0;
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1.6;
+}
+
+.product-cart-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.add-to-cart-and-dropdown-sec {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.purchase-field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.purchase-field label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+.product-count-select {
+  width: 100%;
+  height: 50px;
+  padding: 0 1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  color: #111827;
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.product-count-select:focus {
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.add-to-cart {
+  width: 100%;
+  height: 54px;
+  border: none;
+  border-radius: 16px;
+  background: #ef4444;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+.add-to-cart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(239, 68, 68, 0.28);
+}
+
+.add-to-cart:active {
+  transform: translateY(0);
+}
+
+.bulk-buy-link {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.75rem;
+  border-radius: 16px;
+  background: rgba(17, 24, 39, 0.04);
+  color: #374151;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bulk-buy-link:hover {
+  background: rgba(17, 24, 39, 0.07);
+  color: #111827;
+}
+
+/* تصویر محصول */
+.product-images {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.single-image {
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  overflow: hidden;
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+  /* border-radius: 28px; */
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.07);
+}
+
+.single-image-frame {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.single-image-frame img,
+.single-image img {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 20px;
+  transition: transform 0.25s ease;
+}
+
+.single-image:hover img {
+  transform: scale(1.035);
+}
+
+.custom-btn {
+  position: absolute;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  border: none;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  background: rgba(17, 24, 39, 0.5);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.single-image:hover .custom-btn {
+  opacity: 1;
+}
+
+.custom-btn:hover {
+  background: rgba(17, 24, 39, 0.75);
+}
+
+#prev-image {
+  right: 14px;
+  left: auto;
+}
+
+#next-image {
+  left: 14px;
+  right: auto;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1);
+}
+
+.product-image-gallery {
+  width: 100%;
+  max-width: 560px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 72px;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 0.4rem 0.2rem 0.7rem;
+  scrollbar-width: thin;
+}
+
+.product-image-gallery-frame {
+  width: 72px;
+  height: 72px;
+  padding: 0.35rem;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-image-gallery-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.product-image-gallery-frame:hover,
+.product-image-gallery-frame.active {
+  transform: translateY(-2px);
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.15);
+}
+
+/* مشخصات فنی */
+.product-name-detail-sec {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 1.25rem;
+  /* border-radius: 20px; */
+  background: var(--color-white, #fff);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.06);
+}
+.product-name-detail-sec-title{
+  margin-bottom: 1rem;
+}
+.product-name-detail-sec-title h5 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #111827;
+}
+.product-details{
+    width: 100%;
+}
+/* .product-details ul {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 0.88rem;
+} */
+
+.product-specs {
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+.product-specs li {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.product-specs li:last-child {
+  border-bottom: none;
+}
+
+.product-specs .label {
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.product-specs .value {
+  margin-inline-start: auto;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-align: left;
+  line-height: 1.8;
+}
+
+/* تبلت و موبایل */
+@media (max-width: 992px) {
+  .product-and-price-detail.product-hero {
+    width: min(620px, calc(100% - 24px));
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "media"
+      "purchase"
+      "specs";
+    margin-top: 1rem;
+  }
+
+  .product-hero__purchase {
+    position: static;
+  }
+
+  .price-card,
+  .product-name-detail-sec,
+  .single-image {
+    /* border-radius: 22px; */
+  }
+
+  .custom-btn {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-and-price-detail.product-hero {
+    width: calc(100% - 20px);
+    gap: 0.85rem;
+  }
+
+  .price-card,
+  .product-name-detail-sec {
+    padding: 1rem;
+  }
+
+  .single-image {
+    /* border-radius: 20px; */
+  }
+
+  .product-image-gallery {
+    grid-auto-columns: 62px;
+  }
+
+  .product-image-gallery-frame {
+    width: 62px;
+    height: 62px;
+    border-radius: 14px;
+  }
+
+  .product-specs li {
+    align-items: flex-start;
+  }
+
+  .product-specs .label {
+    flex: unset;
+    text-align: right;
+  }
+  .product-specs .value {
+    max-width: 60%;
+    text-align: left;
+    word-break: break-word;
+  }
+}
+
+/* ===============================
+   Dynamic WooCommerce Reviews
+   بدون border-radius
+================================ */
+
+.product-meta-content > .tab-panel#reviews {
+  display: none;
+}
+
+.product-meta-content > .tab-panel#reviews.active,
+#reviews.reviews-section.active {
+  display: grid;
+}
+
+#reviews.reviews-section {
+  width: 100%;
+  min-height: 560px;
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: flex-start;
+  padding: clamp(1rem, 2vw, 2rem);
+  background: #f7f8fa;
+  direction: rtl;
+  overflow-y: auto;
+}
+
+
+/* ستون خلاصه امتیاز */
+#reviews.reviews-section .review-ctr-sec {
+  width: 100%;
+  height: auto;
+  position: sticky;
+  top: 1rem;
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 18px 45px rgba(17, 24, 39, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 1.1rem;
+  text-align: center;
+  z-index: 2;
+}
+
+.review-summary-top {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+#reviews.reviews-section .score-number-section {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+#reviews.reviews-section .product-score-value {
+  margin: 0;
+  color: #111827;
+  font-size: 2.7rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+#reviews.reviews-section .score-total {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.review-count-text {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+/* ستاره‌های نمایشی */
+.review-rating-stars {
+  display: inline-flex;
+  flex-direction: row;
+  gap: 0.25rem;
+  color: #d1d5db;
+}
+
+.review-rating-stars i {
+  font-size: 1rem;
+}
+
+.review-rating-stars i.is-active {
+  color: #f59e0b;
+}
+
+.review-average-stars i {
+  font-size: 1.25rem;
+}
+
+/* نمودار تعداد امتیازها */
+.review-rating-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.rating-breakdown-row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) 24px;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.rating-label,
+.rating-count {
+  color: #6b7280;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.rating-count {
+  text-align: left;
+}
+
+.rating-bar {
+  height: 7px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.rating-bar span {
+  display: block;
+  height: 100%;
+  background: #f59e0b;
+}
+
+.review-discount-text {
+  margin: 0;
+  color: #4b5563;
+  font-size: 0.9rem;
+  line-height: 1.9;
+}
+
+.review-submit-btn {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-secondary);
+  color: #fff;
+  border: none;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 900;
+  cursor: pointer;
+  /* box-shadow: 0 12px 28px rgba(239, 68, 68, 0.25); */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.review-submit-btn:hover {
+  color: #fff;
+  transform: translateY(-2px);
+  /* box-shadow: 0 16px 36px rgba(239, 68, 68, 0.34); */
+  background: var(--color-primary-hover);
+}
+
+.review-submit-btn.is-disabled {
+  background: #9ca3af;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ستون اصلی نظرات */
+#reviews.reviews-section .product-reviews {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.reviews-list-card,
+.review-form-card {
+  width: 100%;
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 18px 45px rgba(17, 24, 39, 0.07);
+}
+
+.reviews-list-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+.reviews-list-title h3 {
+  margin: 0;
+  color: #111827;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.reviews-list-title span {
+  color: #6b7280;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* کارت هر نظر */
+#reviews.reviews-section .review-item {
+  width: 100%;
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 12px 32px rgba(17, 24, 39, 0.055);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#reviews.reviews-section .review-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 46px rgba(17, 24, 39, 0.09);
+}
+
+#reviews.reviews-section .review-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+#reviews.reviews-section .review-user {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.review-avatar {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  background: #f3f4f6;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  overflow: hidden;
+}
+
+.review-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#reviews.reviews-section .user-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+#reviews.reviews-section .user-name {
+  color: #111827;
+  font-size: 0.98rem;
+  font-weight: 900;
+  line-height: 1.7;
+}
+
+#reviews.reviews-section .user-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+#reviews.reviews-section .badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.7;
+  border: 1px solid transparent;
+}
+
+#reviews.reviews-section .badge.buyer {
+  background: rgba(34, 197, 94, 0.1);
+  color: #15803d;
+  border-color: rgba(34, 197, 94, 0.22);
+}
+
+#reviews.reviews-section .badge.shop {
+  background: rgba(37, 99, 235, 0.08);
+  color: #1d4ed8;
+  border-color: rgba(37, 99, 235, 0.18);
+}
+
+.review-side-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.single-review-stars i {
+  font-size: 0.9rem;
+}
+
+#reviews.reviews-section .review-date {
+  color: #9ca3af;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* متن نظر */
+#reviews.reviews-section .review-text {
+  margin: 0;
+  padding: 1rem;
+  background: #f9fafb;
+  border-right: 4px solid var(--color-primary, #2563eb);
+  color: #374151;
+  font-size: 0.94rem;
+  line-height: 2.1;
+}
+
+#reviews.reviews-section .review-text p {
+  margin: 0;
+}
+
+/* بدون نظر */
+.reviews-empty-state {
+  padding: 1.25rem;
+  background: #f9fafb;
+  border-right: 4px solid var(--color-primary, #2563eb);
+}
+
+.reviews-empty-state h4 {
+  margin: 0 0 0.4rem;
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.reviews-empty-state p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.9;
+}
+
+/* فرم ثبت نظر */
+.review-form-card {
+  scroll-margin-top: 1.5rem;
+}
+
+.review-form-card .comment-reply-title {
+  display: block;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  color: #111827;
+  font-size: 1.05rem;
+  font-weight: 900;
+  line-height: 1.8;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+.review-form-card .comment-notes,
+.review-form-card .logged-in-as,
+.review-form-card .must-log-in {
+  margin: 0 0 1rem;
+  color: #6b7280;
+  font-size: 0.88rem;
+  line-height: 1.9;
+}
+
+.review-form-card .comment-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.review-form-card .comment-form-rating,
+.review-form-card .comment-form-comment,
+.review-form-card .form-submit,
+.review-form-card .comment-notes,
+.review-form-card .logged-in-as {
+  grid-column: 1 / -1;
+}
+
+.review-form-card .comment-form p {
+  margin: 0;
+}
+
+.review-form-card label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #374151;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.review-form-card .required {
+  color: var(--color-danger, #ef4444);
+}
+
+.review-form-card input[type="text"],
+.review-form-card input[type="email"],
+.review-form-card textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.8rem 1rem;
+  background: #f9fafb;
+  color: #111827;
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  outline: none;
+  font-family: inherit;
+  font-size: 0.92rem;
+  line-height: 1.9;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.review-form-card textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.review-form-card input:focus,
+.review-form-card textarea:focus {
+  background: #fff;
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+/* امتیازدهی فرم */
+.product-review-radio-stars {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  gap: 0.35rem;
+}
+
+.product-review-radio-stars input {
+  display: none;
+}
+
+.product-review-radio-stars label {
+  margin: 0;
+  cursor: pointer;
+  color: #d1d5db;
+}
+
+.product-review-radio-stars label i {
+  font-size: 1.55rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.product-review-radio-stars label:hover i,
+.product-review-radio-stars label:hover ~ label i,
+.product-review-radio-stars input:checked ~ label i {
+  color: #f59e0b;
+  transform: translateY(-2px);
+}
+
+.review-form-submit,
+.review-form-card .form-submit .submit {
+  width: 100%;
+  min-height: 52px;
+  border: none;
+  background: var(--color-danger, #ef4444);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(239, 68, 68, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.review-form-submit:hover,
+.review-form-card .form-submit .submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(239, 68, 68, 0.34);
+}
+
+/* پیام‌های فرم */
+.review-form-message {
+  padding: 1.25rem;
+  background: #f9fafb;
+  border-right: 4px solid var(--color-danger, #ef4444);
+}
+
+.review-form-message h3 {
+  margin: 0 0 0.4rem;
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.review-form-message p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.9;
+}
+
+/* تبلت */
+@media (max-width: 1024px) {
+  #reviews.reviews-section {
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  #reviews.reviews-section .review-ctr-sec,
+  .reviews-list-card,
+  .review-form-card {
+    padding: 1.2rem;
+  }
+
+  #reviews.reviews-section .product-score-value {
+    font-size: 2.3rem;
+  }
+}
+
+/* موبایل */
+@media (max-width: 768px) {
+  .product-meta-content > .tab-panel#reviews.active,
+  #reviews.reviews-section.active {
+    display: flex;
+  }
+
+  #reviews.reviews-section {
+    flex-direction: column;
+    min-height: auto;
+    padding: 0.85rem;
+  }
+
+  #reviews.reviews-section .review-ctr-sec {
+    position: static;
+  }
+
+  #reviews.reviews-section .review-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .review-side-info {
+    align-items: flex-start;
+  }
+
+  .review-form-card .comment-form {
+    grid-template-columns: 1fr;
+  }
+
+  .review-form-card .comment-form-author,
+  .review-form-card .comment-form-email {
+    grid-column: 1 / -1;
+  }
+}
+
+/* موبایل کوچک */
+@media (max-width: 480px) {
+  .reviews-list-title {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .review-avatar {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+
+  #reviews.reviews-section .user-name {
+    font-size: 0.9rem;
+  }
+
+  #reviews.reviews-section .review-text {
+    font-size: 0.86rem;
+    line-height: 2;
+  }
+
+  .rating-breakdown-row {
+    grid-template-columns: 52px minmax(0, 1fr) 20px;
+  }
+}
+
+.product-top-rating {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.product-top-rating .rate-passage h5 {
+  margin: 0;
+  color: #111827;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.8;
+}
+
+.theme-rating-stars {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.theme-rating-stars i {
+  color: #d1d5db;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.theme-rating-stars i.is-active {
+  color: #f59e0b;
+}
+
+.product-page-rating-stars i {
+  font-size: 1.45rem;
+}
+
+.product-top-rating .ctr-passage p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.8rem;
+  line-height: 1.8;
+}
+
+@media (min-width: 1024px) {
+  .product-page-rating-stars i {
+    font-size: 1.65rem;
+  }
+
+  .product-top-rating .rate-passage h5 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-top-rating {
+    align-items: center;
+    text-align: center;
+  }
+
+  .product-page-rating-stars i {
+    font-size: 1.25rem;
+  }
+}
+
+
+
+/* ===============================
+   Dynamic Product Q&A
+================================ */
+
+.product-meta-content > .tab-panel#qa {
+  display: none;
+}
+
+.product-meta-content > .tab-panel#qa.active,
+#qa.product-qa-panel.active {
+  display: grid;
+}
+
+#qa.product-qa-panel {
+  width: 100%;
+  min-height: 560px;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: flex-start;
+  padding: clamp(1rem, 2vw, 2rem);
+  background: #f7f8fa;
+  direction: rtl;
+  overflow-y: auto;
+}
+
+#qa.product-qa-panel,
+#qa.product-qa-panel * {
+  border-radius: 0 !important;
+}
+
+/* ستون ثبت پرسش */
+#qa.product-qa-panel .question-ctr-sec {
+  width: 100%;
+  height: auto;
+  position: sticky;
+  top: 1rem;
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 18px 45px rgba(17, 24, 39, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+  text-align: center;
+  z-index: 2;
+}
+
+#qa.product-qa-panel .question-ctr-sec p {
+  margin: 0;
+  color: #374151;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.9;
+}
+
+#qa.product-qa-panel .qa-help-text {
+  color: #6b7280;
+  font-size: 0.78rem;
+  line-height: 1.9;
+}
+
+#qa.product-qa-panel .add-product-question,
+#qa.product-qa-panel .add-product-qestion {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-secondary);
+  color: #fff;
+  border: none;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(239, 68, 68, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#qa.product-qa-panel .add-product-question:hover,
+#qa.product-qa-panel .add-product-qestion:hover {
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(239, 68, 68, 0.34);
+  background: var(--color-primary-hover);
+}
+
+/* ستون اصلی */
+#qa.product-qa-panel .question-and-answer-sec {
+  width: 100%;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+#qa.product-qa-panel .question-and-answer-sec-filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 12px 32px rgba(17, 24, 39, 0.055);
+}
+
+#qa.product-qa-panel .question-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  color: #6b7280;
+}
+
+#qa.product-qa-panel .question-filter i {
+  color: var(--color-primary, #2563eb);
+}
+
+#qa.product-qa-panel .question-filter .label,
+#qa.product-qa-panel .count-of-question .label {
+  color: #6b7280;
+  font-weight: 700;
+}
+
+#qa.product-qa-panel .question-filter .value {
+  color: #6b7280;
+  text-decoration: none;
+  font-weight: 800;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+#qa.product-qa-panel .question-filter .value.active {
+  color: var(--color-danger, #ef4444);
+}
+
+#qa.product-qa-panel .count-of-question {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
+#qa.product-qa-panel .count-of-question .value {
+  color: #111827;
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+/* پیام وضعیت */
+.qa-status-message {
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  background: #fff;
+  border-right: 4px solid var(--color-primary, #2563eb);
+  color: #374151;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 12px 32px rgba(17, 24, 39, 0.055);
+}
+
+.qa-status-empty,
+.qa-status-invalid,
+.qa-status-missing_user {
+  border-right-color: var(--color-danger, #ef4444);
+}
+
+/* لیست پرسش‌ها */
+#qa.product-qa-panel .question-and-answer-sec-request {
+  margin-top: 0;
+}
+
+#qa.product-qa-panel .product-qa {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-family: inherit;
+}
+
+.qa-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* کارت پرسش و پاسخ */
+#qa.product-qa-panel .qa-item {
+  margin: 0;
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 14px 36px rgba(17, 24, 39, 0.065);
+}
+
+#qa.product-qa-panel .qa-item.question {
+  border-right: 4px solid var(--color-primary, #2563eb);
+}
+
+#qa.product-qa-panel .qa-item.answer {
+  width: calc(100% - 3rem);
+  margin-right: 3rem;
+  background: #fbfcfd;
+  border-right: 4px solid #22c55e;
+}
+
+#qa.product-qa-panel .qa-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+#qa.product-qa-panel .user-icon,
+#qa.product-qa-panel .seller-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  font-size: 1.35rem;
+}
+
+#qa.product-qa-panel .user-icon {
+  color: #6b7280;
+}
+
+#qa.product-qa-panel .seller-icon {
+  color: #15803d;
+  background: rgba(34, 197, 94, 0.08);
+}
+
+#qa.product-qa-panel .qa-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+#qa.product-qa-panel .qa-name {
+  color: #111827;
+  font-size: 0.96rem;
+  font-weight: 900;
+  line-height: 1.7;
+}
+
+#qa.product-qa-panel .qa-role {
+  width: fit-content;
+  margin: 0;
+  padding: 0.1rem 0.5rem;
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  color: #1d4ed8;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+#qa.product-qa-panel .answer .qa-role {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.22);
+  color: #15803d;
+}
+
+#qa.product-qa-panel .qa-text {
+  margin: 0 3.5rem 1rem 0;
+  color: #374151;
+  font-size: 0.94rem;
+  line-height: 2.1;
+}
+
+#qa.product-qa-panel .qa-text p {
+  margin: 0;
+}
+
+#qa.product-qa-panel .qa-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-right: 3.5rem;
+  color: #9ca3af;
+  font-size: 0.82rem;
+}
+
+#qa.product-qa-panel .qa-date {
+  white-space: nowrap;
+}
+
+.same-question-form {
+  margin: 0;
+}
+
+/* دکمه‌ها */
+#qa.product-qa-panel .same-question,
+#qa.product-qa-panel .reply-btn,
+#qa.product-qa-panel .product-question-submit {
+  min-height: 40px;
+  padding: 0 0.9rem;
+  border: none;
+  background: var(--color-primary, #2563eb);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#qa.product-qa-panel .same-question:hover,
+#qa.product-qa-panel .reply-btn:hover,
+#qa.product-qa-panel .product-question-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(37, 99, 235, 0.28);
+}
+
+.qa-no-answer {
+  width: calc(100% - 3rem);
+  margin-right: 3rem;
+  padding: 0.85rem 1rem;
+  background: #fff;
+  border: 1px dashed rgba(17, 24, 39, 0.18);
+  color: #9ca3af;
+  font-size: 0.85rem;
+  line-height: 1.9;
+}
+
+/* فرم پاسخ مدیر */
+.qa-answer-details {
+  width: calc(100% - 3rem);
+  margin-right: 3rem;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 10px 26px rgba(17, 24, 39, 0.045);
+}
+
+.qa-answer-details summary {
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  color: #111827;
+  font-size: 0.88rem;
+  font-weight: 900;
+}
+
+.qa-answer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0 1rem 1rem;
+}
+
+.qa-answer-form textarea {
+  width: 100%;
+  min-height: 110px;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  background: #f9fafb;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.9;
+  resize: vertical;
+  outline: none;
+}
+
+.qa-answer-form textarea:focus {
+  background: #fff;
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+/* حالت خالی */
+.qa-empty-state {
+  padding: 2rem 1.5rem;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 14px 36px rgba(17, 24, 39, 0.065);
+  text-align: center;
+}
+
+.qa-empty-state i {
+  color: #9ca3af;
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.qa-empty-state h4 {
+  margin: 0 0 0.45rem;
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.qa-empty-state p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.9;
+}
+
+/* فرم ثبت پرسش */
+.product-qa-form-card {
+  margin-top: 1.25rem;
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 18px 45px rgba(17, 24, 39, 0.07);
+  scroll-margin-top: 1rem;
+}
+
+.product-qa-form-card h3 {
+  margin: 0 0 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+  color: #111827;
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.product-question-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.qa-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.product-question-form p {
+  margin: 0;
+}
+
+.product-question-form label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: #374151;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.product-question-form label span {
+  color: var(--color-danger, #ef4444);
+}
+
+.product-question-form input,
+.product-question-form textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  background: #f9fafb;
+  color: #111827;
+  font-family: inherit;
+  font-size: 0.92rem;
+  line-height: 1.9;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.product-question-form textarea {
+  min-height: 145px;
+  resize: vertical;
+}
+
+.product-question-form input:focus,
+.product-question-form textarea:focus {
+  background: #fff;
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.product-question-submit {
+  width: 100%;
+}
+
+/* تبلت */
+@media (max-width: 1024px) {
+  #qa.product-qa-panel {
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  #qa.product-qa-panel .question-ctr-sec,
+  .product-qa-form-card {
+    padding: 1.2rem;
+  }
+}
+
+/* موبایل */
+@media (max-width: 768px) {
+  .product-meta-content > .tab-panel#qa.active,
+  #qa.product-qa-panel.active {
+    display: flex;
+  }
+
+  #qa.product-qa-panel {
+    flex-direction: column;
+    min-height: auto;
+    padding: 0.85rem;
+  }
+
+  #qa.product-qa-panel .question-ctr-sec {
+    position: static;
+  }
+
+  #qa.product-qa-panel .question-and-answer-sec-filter {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #qa.product-qa-panel .count-of-question {
+    justify-content: flex-end;
+  }
+
+  #qa.product-qa-panel .qa-item.answer,
+  .qa-no-answer,
+  .qa-answer-details {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  #qa.product-qa-panel .qa-text,
+  #qa.product-qa-panel .qa-footer {
+    margin-right: 0;
+  }
+
+  #qa.product-qa-panel .qa-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #qa.product-qa-panel .same-question {
+    width: 100%;
+  }
+
+  .qa-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* موبایل کوچک */
+@media (max-width: 480px) {
+  #qa.product-qa-panel .qa-header {
+    align-items: flex-start;
+  }
+
+  #qa.product-qa-panel .user-icon,
+  #qa.product-qa-panel .seller-icon {
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
+    font-size: 1.15rem;
+  }
+
+  #qa.product-qa-panel .qa-name {
+    font-size: 0.9rem;
+  }
+
+  #qa.product-qa-panel .qa-text {
+    font-size: 0.86rem;
+    line-height: 2;
+  }
+}
+#qa.product-qa-panel {
+  position: relative;
+}
+
+#qa.product-qa-panel.is-loading .product-qa,
+#qa.product-qa-panel.is-loading .product-qa-form-card {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.qa-ajax-message {
+  display: none;
+  margin-bottom: 1rem;
+  padding: 1rem 1.25rem;
+  background: #fff;
+  color: #374151;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.9;
+  border-right: 4px solid var(--color-primary, #2563eb);
+  box-shadow: 0 12px 32px rgba(17, 24, 39, 0.055);
+}
+
+.qa-ajax-message.is-success {
+  border-right-color: #22c55e;
+}
+
+.qa-ajax-message.is-error {
+  border-right-color: var(--color-danger, #ef4444);
+}
+
+
+
+/* ===============================
+   Better Product Description View
+================================ */
+
+.product-meta-content > .tab-panel#desc {
+  display: none;
+}
+
+.product-meta-content > .tab-panel#desc.active,
+#desc.product-desc-panel.active {
+  display: block;
+}
+
+#desc.product-desc-panel {
+  width: 100%;
+  min-height: 480px;
+  padding: 1.5rem;
+  background: #f4f6f8;
+  direction: rtl;
+  overflow-y: auto;
+}
+
+#desc.product-desc-panel,
+#desc.product-desc-panel * {
+  border-radius: 0 !important;
+}
+
+.product-desc-layout {
+  /* width: min(1120px, 100%); */
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.product-desc-card {
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 16px 40px rgba(17, 24, 39, 0.07);
+}
+
+.desc-main-card {
+  padding: 1.5rem;
+  min-width: 0;
+}
+
+.desc-side-card {
+  padding: 1.25rem;
+  position: sticky;
+  top: 1rem;
+  min-width: 0;
+}
+
+/* Header اصلی توضیحات */
+.desc-section-head {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1.1rem;
+}
+
+.desc-section-icon,
+.desc-side-title i {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--color-primary, #2563eb);
+  border: 1px solid rgba(37, 99, 235, 0.16);
+  font-size: 1.2rem;
+}
+
+.desc-section-head span {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--color-primary, #2563eb);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.desc-section-head h2 {
+  margin: 0;
+  color: #111827;
+  font-size: clamp(1rem, 1.7vw, 1.35rem);
+  font-weight: 950;
+  line-height: 1.9;
+}
+
+/* خلاصه کوتاه */
+.desc-short-text {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: #f9fafb;
+  border-right: 4px solid var(--color-primary, #2563eb);
+  color: #374151;
+  font-size: 0.94rem;
+  line-height: 2.1;
+}
+
+.desc-short-text p {
+  margin: 0;
+}
+
+.desc-divider {
+  width: 100%;
+  height: 1px;
+  margin: 1rem 0;
+  background: rgba(17, 24, 39, 0.08);
+}
+
+/* محتوای توضیحات */
+.desc-content {
+  position: relative;
+  color: #374151;
+  font-size: 0.96rem;
+  line-height: 2.25;
+}
+
+.desc-content.is-collapsed {
+  max-height: 280px;
+  overflow: hidden;
+}
+
+.desc-content.is-collapsed::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  height: 80px;
+  background: linear-gradient(to top, #fff, rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+
+.desc-content.is-expanded {
+  max-height: none;
+  overflow: visible;
+}
+
+.desc-content.is-expanded::after {
+  display: none;
+}
+
+.desc-content p {
+  margin: 0 0 1rem;
+}
+
+.desc-content p:last-child {
+  margin-bottom: 0;
+}
+
+.desc-content h1,
+.desc-content h2,
+.desc-content h3,
+.desc-content h4,
+.desc-content h5,
+.desc-content h6 {
+  margin: 1.25rem 0 0.75rem;
+  color: #111827;
+  font-weight: 950;
+  line-height: 1.8;
+}
+
+.desc-content ul,
+.desc-content ol {
+  margin: 1rem 0;
+  padding-right: 1.25rem;
+}
+
+.desc-content li {
+  margin-bottom: 0.5rem;
+}
+
+.desc-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+.desc-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.desc-content table th,
+.desc-content table td {
+  padding: 0.8rem;
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  text-align: right;
+}
+
+.desc-content table th {
+  background: #f3f4f6;
+  color: #111827;
+  font-weight: 900;
+}
+
+/* دکمه مشاهده بیشتر */
+.desc-read-more {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 1rem;
+  border: none;
+  background: #111827;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(17, 24, 39, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.desc-read-more:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(17, 24, 39, 0.28);
+}
+
+/* Empty State */
+.desc-empty-state {
+  padding: 2rem 1rem;
+  background: #f9fafb;
+  border-right: 4px solid var(--color-primary, #2563eb);
+  text-align: center;
+}
+
+.desc-empty-state i {
+  display: block;
+  margin-bottom: 0.8rem;
+  color: #9ca3af;
+  font-size: 2rem;
+}
+
+.desc-empty-state h3 {
+  margin: 0 0 0.5rem;
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.desc-empty-state p {
+  max-width: 520px;
+  margin: 0 auto;
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.9;
+}
+
+/* Sidebar */
+.desc-side-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+.desc-side-title h3 {
+  margin: 0;
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 950;
+}
+
+.desc-info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.desc-info-list li {
+  display: grid;
+  grid-template-columns: 95px minmax(0, 1fr);
+  gap: 0.8rem;
+  align-items: start;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+.desc-info-list li:last-child {
+  border-bottom: none;
+}
+
+.desc-info-list .label {
+  color: #6b7280;
+  font-size: 0.82rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.desc-info-list .value {
+  color: #111827;
+  font-size: 0.84rem;
+  font-weight: 900;
+  line-height: 1.8;
+  text-align: right;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.desc-info-list .value a {
+  color: var(--color-primary, #2563eb);
+  text-decoration: none;
+}
+
+.desc-info-list .value a:hover {
+  text-decoration: underline;
+}
+
+.desc-info-list .stock-status {
+  color: #15803d;
+}
+
+.desc-ask-link {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(17, 24, 39, 0.04);
+  color: #111827;
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 900;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.desc-ask-link:hover {
+  background: #111827;
+  color: #fff;
+}
+
+/* تبلت */
+@media (max-width: 1024px) {
+  .product-desc-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .desc-side-card {
+    position: static;
+  }
+}
+
+/* موبایل */
+@media (max-width: 768px) {
+  #desc.product-desc-panel {
+    padding: 0.85rem;
+  }
+
+  .desc-main-card,
+  .desc-side-card {
+    padding: 1rem;
+  }
+
+  .desc-section-head {
+    align-items: flex-start;
+  }
+
+  .desc-section-icon,
+  .desc-side-title i {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+
+  .desc-section-head h2 {
+    font-size: 1rem;
+  }
+
+  .desc-content {
+    font-size: 0.9rem;
+    line-height: 2.1;
+  }
+
+  .desc-info-list li {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}
+/* ===============================
+   Isolated Quick Info Card
+   بدون تداخل با label/value های دیگر
+================================ */
+
+#desc.product-desc-panel .product-desc-quick-card {
+  width: 100%;
+  min-width: 0;
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 18px 45px rgba(17, 24, 39, 0.07);
+  position: sticky;
+  top: 1rem;
+  direction: rtl;
+  overflow: hidden;
+  border-radius: 0 !important;
+}
+
+#desc.product-desc-panel .product-desc-quick-card * {
+  box-sizing: border-box;
+  border-radius: 0 !important;
+}
+
+#desc.product-desc-panel .pd-quick-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+#desc.product-desc-panel .pd-quick-icon {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(160, 130, 88, 0.12);
+  border: 1px solid rgba(160, 130, 88, 0.25);
+  color: #9b7a4e;
+  font-size: 1.15rem;
+}
+
+#desc.product-desc-panel .pd-quick-title {
+  min-width: 0;
+}
+
+#desc.product-desc-panel .pd-quick-title span {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: #9b7a4e;
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
+#desc.product-desc-panel .pd-quick-title h3 {
+  margin: 0;
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 950;
+  line-height: 1.6;
+}
+
+/* لیست اطلاعات */
+#desc.product-desc-panel .pd-quick-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#desc.product-desc-panel .pd-quick-item {
+  width: 100%;
+  display: block;
+  padding: 0.85rem 0.9rem;
+  background: #f9fafb;
+  border: 1px solid rgba(17, 24, 39, 0.07);
+  box-shadow: none;
+  min-width: 0;
+}
+
+#desc.product-desc-panel .pd-quick-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: #6b7280;
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1.7;
+  white-space: normal;
+}
+
+#desc.product-desc-panel .pd-quick-value {
+  display: block;
+  width: 100%;
+  color: #111827;
+  font-size: 0.9rem;
+  font-weight: 950;
+  line-height: 1.9;
+  text-align: right;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+#desc.product-desc-panel .pd-quick-value a {
+  color: #9b7a4e;
+  text-decoration: none;
+  font-weight: 950;
+}
+
+#desc.product-desc-panel .pd-quick-value a:hover {
+  text-decoration: underline;
+}
+
+#desc.product-desc-panel .pd-quick-stock {
+  color: #15803d;
+}
+
+/* دسته‌بندی چون ممکن است طولانی باشد */
+#desc.product-desc-panel .pd-quick-category {
+  font-size: 0.86rem;
+}
+
+/* دکمه سوال */
+#desc.product-desc-panel .pd-quick-question-link {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111827;
+  color: #fff;
+  border: 1px solid #111827;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 950;
+  line-height: 1.8;
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(17, 24, 39, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+#desc.product-desc-panel .pd-quick-question-link:hover {
+  color: #fff;
+  background: #0f172a;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(17, 24, 39, 0.26);
+}
+
+/* اگر هنوز CSS قبلی desc-side-card وجود دارد، این تداخل را خنثی کن */
+#desc.product-desc-panel .product-desc-quick-card .label,
+#desc.product-desc-panel .product-desc-quick-card .value {
+  all: unset;
+}
+
+/* تبلت و موبایل */
+@media (max-width: 1024px) {
+  #desc.product-desc-panel .product-desc-quick-card {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  #desc.product-desc-panel .product-desc-quick-card {
+    padding: 1rem;
+  }
+
+  #desc.product-desc-panel .pd-quick-head {
+    align-items: flex-start;
+  }
+
+  #desc.product-desc-panel .pd-quick-icon {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+}
+
+
+/* ===============================
+   Smart Related / Similar Products
+================================ */
+
+.smart-product-sections {
+  width: min(1180px, calc(100% - 32px));
+  margin: 2.5rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  direction: rtl;
+}
+
+.smart-product-sections,
+.smart-product-sections * {
+  box-sizing: border-box;
+  border-radius: 0 !important;
+}
+
+.sp-products-section {
+  width: 100%;
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 18px 45px rgba(17, 24, 39, 0.07);
+  overflow: hidden;
+}
+
+.sp-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+.sp-section-title {
+  min-width: 0;
+}
+
+.sp-section-title span {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #9b7a4e;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.sp-section-title h3 {
+  margin: 0;
+  color: #111827;
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  font-weight: 950;
+  line-height: 1.7;
+}
+
+.sp-section-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.sp-scroll-btn {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  background: #f9fafb;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.sp-scroll-btn:hover {
+  background: #111827;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* row */
+.sp-products-row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 230px;
+  gap: 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0.1rem 0.9rem;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  direction: rtl;
+}
+
+.sp-products-row::-webkit-scrollbar {
+  display: none;
+}
+
+/* card */
+.sp-product-card {
+  min-width: 0;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 12px 32px rgba(17, 24, 39, 0.055);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sp-product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 46px rgba(17, 24, 39, 0.1);
+}
+
+.sp-card-image-link {
+  display: block;
+  text-decoration: none;
+}
+
+.sp-card-image {
+  position: relative;
+  width: 100%;
+  height: 210px;
+  padding: 1rem;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.sp-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.25s ease;
+}
+
+.sp-product-card:hover .sp-card-image img {
+  transform: scale(1.05);
+}
+
+.sp-sale-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  min-height: 28px;
+  padding: 0.25rem 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-danger, #ef4444);
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: 900;
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.24);
+  border-radius: 999px;
+}
+
+.sp-card-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 210px;
+}
+
+.sp-card-title {
+  min-height: 54px;
+  color: #111827;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 900;
+  line-height: 1.9;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sp-card-title:hover {
+  color: var(--color-primary, #2563eb);
+}
+
+.sp-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0.85rem 0;
+  color: #9ca3af;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.sp-card-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  color: #d1d5db;
+}
+
+.sp-card-stars i {
+  font-size: 0.78rem;
+}
+
+.sp-card-stars i.is-active {
+  color: #f59e0b;
+}
+
+.sp-card-price {
+  min-height: 42px;
+  margin-top: auto;
+  color: #111827;
+  font-size: 0.95rem;
+  font-weight: 950;
+  line-height: 1.8;
+}
+
+.sp-card-price del {
+  display: block;
+  color: #9ca3af;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: line-through;
+}
+
+.sp-card-price ins {
+  color: #111827;
+  text-decoration: none;
+}
+
+.sp-card-btn {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 0.9rem;
+  padding: 0.65rem 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-secondary);
+  color: #fff;
+  border: 1px solid #111827;
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 950;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.sp-card-btn:hover {
+  color: #fff;
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-active);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(239, 68, 68, 0.24);
+}
+
+/* empty */
+.sp-empty-state {
+  padding: 2rem 1rem;
+  background: #f9fafb;
+  border-right: 4px solid #9b7a4e;
+  color: #6b7280;
+  text-align: center;
+  font-size: 0.92rem;
+  line-height: 1.9;
+}
+
+.sp-empty-state i {
+  display: block;
+  margin-bottom: 0.75rem;
+  color: #9ca3af;
+  font-size: 2rem;
+}
+
+.sp-empty-state p {
+  margin: 0;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  .smart-product-sections {
+    width: calc(100% - 20px);
+    margin: 1.5rem auto;
+    gap: 1.25rem;
+  }
+
+  .sp-products-section {
+    padding: 1rem;
+  }
+
+  .sp-section-head {
+    align-items: flex-start;
+  }
+
+  .sp-section-controls {
+    display: none;
+  }
+
+  .sp-products-row {
+    grid-auto-columns: 205px;
+  }
+
+  .sp-card-image {
+    height: 180px;
+  }
+
+  .sp-card-body {
+    min-height: 205px;
+    padding: 0.85rem;
+  }
+
+  .sp-card-title {
+    font-size: 0.86rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sp-products-row {
+    grid-auto-columns: 185px;
+  }
+
+  .sp-card-image {
+    height: 160px;
+  }
+}
+
+
+
+/* ===============================
+   Product Benefits Soft Strip - Clean View
+   جایگزین استایل قبلی بخش کم‌رنگ
+================================ */
+
+.pb-usp-strip--soft {
+  width: min(1180px, calc(100% - 32px));
+  margin: 1.25rem auto;
+  padding: 0;
+  direction: rtl;
+}
+
+.pb-usp-strip--soft,
+.pb-usp-strip--soft * {
+  box-sizing: border-box;
+  border-radius: 0 !important;
+}
+
+.pb-usp-strip--soft .pb-usp-inner {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0;
+  background: #fff;
+  border-top: 1px solid rgba(17, 24, 39, 0.08);
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: none;
+  overflow: hidden;
+}
+
+/* هر آیتم */
+.pb-usp-strip--soft .pb-usp-item {
+  min-width: 0;
+  border-left: 1px solid rgba(17, 24, 39, 0.07);
+}
+
+.pb-usp-strip--soft .pb-usp-item:last-child {
+  border-left: none;
+}
+
+/* کارت مزیت */
+.pb-usp-strip--soft .pb-usp-card {
+  width: 100%;
+  min-height: 104px;
+  height: 100%;
+  padding: 0.9rem 0.75rem;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem;
+  background: #fff;
+  color: #6b7280;
+  text-align: center;
+  text-decoration: none;
+  opacity: 1 !important;
+  filter: none !important;
+  border: none !important;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.pb-usp-strip--soft .pb-usp-card:hover {
+  background: #f9fafb;
+  transform: translateY(-2px);
+}
+
+/* قاب آیکون */
+.pb-usp-strip--soft .pb-usp-icon {
+  width: 44px !important;
+  height: 44px !important;
+  flex: 0 0 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+/* کنترل تصویرهای آپلودی */
+.pb-usp-strip--soft .pb-usp-icon img,
+.pb-usp-strip--soft img {
+  width: 44px !important;
+  height: 44px !important;
+  max-width: 44px !important;
+  max-height: 44px !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* کنترل آیکون FontAwesome */
+.pb-usp-strip--soft .pb-usp-icon i {
+  font-size: 2rem !important;
+  color: #9ca3af;
+  line-height: 1;
+}
+
+/* متن */
+.pb-usp-strip--soft .pb-usp-content {
+  width: 100%;
+  min-width: 0;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center !important;
+  justify-content: center;
+  gap: 0.15rem;
+  text-align: center !important;
+}
+
+.pb-usp-strip--soft .pb-usp-content strong {
+  display: block;
+  width: 100%;
+  color: #6b7280;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.8;
+  text-align: center;
+  white-space: normal;
+}
+
+.pb-usp-strip--soft .pb-usp-content small {
+  display: none;
+}
+
+/* اگر به‌جای ابزارک اختصاصی، ابزارک تصویر/متن وردپرس گذاشته شده باشد */
+.pb-usp-strip--soft .widget_media_image,
+.pb-usp-strip--soft .widget_block,
+.pb-usp-strip--soft .widget_text {
+  min-height: 104px;
+  padding: 0.9rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  text-align: center;
+  border-left: 1px solid rgba(17, 24, 39, 0.07);
+}
+
+.pb-usp-strip--soft .widget_media_image img,
+.pb-usp-strip--soft .wp-block-image img {
+  width: 44px !important;
+  height: 44px !important;
+  max-width: 44px !important;
+  max-height: 44px !important;
+  object-fit: contain !important;
+}
+
+.pb-usp-strip--soft p,
+.pb-usp-strip--soft .textwidget {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.8;
+}
+
+/* موبایل */
+@media (max-width: 768px) {
+  .pb-usp-strip--soft {
+    width: calc(100% - 20px);
+  }
+
+  .pb-usp-strip--soft .pb-usp-inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pb-usp-strip--soft .pb-usp-card {
+    min-height: 96px;
+  }
+}
+
+@media (max-width: 420px) {
+  .pb-usp-strip--soft .pb-usp-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .pb-usp-strip--soft .pb-usp-card {
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    text-align: right !important;
+  }
+
+  .pb-usp-strip--soft .pb-usp-content {
+    align-items: flex-start !important;
+    text-align: right !important;
+  }
+
+  .pb-usp-strip--soft .pb-usp-content strong {
+    text-align: right;
   }
 }
