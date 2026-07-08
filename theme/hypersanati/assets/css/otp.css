@@ -1,8 +1,14 @@
+/* ==========================================================
+   Hypersanati OTP Modal
+   نکته: همه‌ی var() ها یک مقدار پیش‌فرض دارند تا حتی اگر
+   پروفایل/متغیرهای سراسری تعریف نشده باشند، ظاهر مودال خراب نشود.
+========================================================== */
+
 .ui-modal {
   position: fixed;
   inset: 0;
   display: none;
-  z-index: 9999;
+  z-index: 99999;
 }
 
 .ui-modal.is-open {
@@ -12,119 +18,206 @@
 .ui-modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,.45);
+  background: rgba(0, 0, 0, .45);
 }
 
 .ui-modal__panel {
   position: relative;
-  width: min(520px, calc(100% - 24px));
-  margin: 6vh auto;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 12px 40px rgba(0,0,0,.18);
+  width: min(440px, calc(100% - 24px));
+  margin: 8vh auto;
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-default, #e2e2e2);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .18);
   overflow: hidden;
+  animation: hs-modal-in .18s ease-out;
+}
+
+@keyframes hs-modal-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .ui-modal__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-lg);
-  border-bottom: 1px solid var(--border-light);
+  padding: var(--spacing-lg, 20px);
+  border-bottom: 1px solid var(--border-light, #eee);
 }
 
 .ui-modal__title {
-  font-size: var(--fs-h3);
+  font-size: var(--fs-h3, 18px);
   font-weight: 800;
   margin: 0;
+  color: var(--color-dark, #1a1a1a);
 }
 
 .ui-modal__close {
-  width: 38px;
-  height: 38px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-default);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md, 10px);
+  border: 1px solid var(--border-default, #e2e2e2);
   background: transparent;
-  color: var(--color-dark);
-  font-size: 20px;
+  color: var(--color-dark, #1a1a1a);
+  font-size: 18px;
+  line-height: 1;
   display: grid;
   place-items: center;
+  cursor: pointer;
+}
+
+.ui-modal__close:hover {
+  background: var(--color-background, #f5f5f5);
 }
 
 .ui-modal__body {
-  padding: var(--spacing-lg);
+  padding: var(--spacing-lg, 20px);
 }
 
+/* ---------- مراحل فرم ---------- */
+.ui-otp-step.is-hidden {
+  display: none;
+}
+
+.ui-otp-sent-to {
+  font-size: var(--fs-sm, 13px);
+  color: var(--text-secondary, #666);
+  margin: 0 0 var(--spacing-md, 16px);
+  line-height: 1.9;
+}
+
+/* ---------- فیلدها ---------- */
 .ui-form__group {
   display: grid;
-  gap: var(--spacing-xs);
-  margin-bottom: var(--spacing-md);
+  gap: var(--spacing-xs, 6px);
+  margin-bottom: var(--spacing-md, 16px);
 }
 
 .ui-label {
-  font-size: var(--fs-sm);
-  color: var(--text-secondary);
+  font-size: var(--fs-sm, 13px);
+  color: var(--text-secondary, #666);
 }
 
 .ui-input {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  background: var(--color-background);
+  border: 1px solid var(--border-default, #e2e2e2);
+  border-radius: var(--radius-md, 10px);
+  background: var(--color-background, #fafafa);
+  outline: none;
+  font-size: 15px;
+  transition: border-color .2s, box-shadow .2s;
+  box-sizing: border-box;
+}
+
+.ui-input:focus {
+  border-color: var(--accent-primary, #9f8561);
+  box-shadow: 0 0 0 3px rgba(159, 133, 97, .18);
+}
+
+.ui-help {
+  font-size: var(--fs-sm, 13px);
+  color: var(--color-red-read-more, #e33e3e);
+  min-height: 18px;
+}
+
+/* ---------- خانه‌های کد تایید ---------- */
+.ui-otp-boxes {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.ui-otp-box {
+  width: 48px;
+  height: 56px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  border: 1px solid var(--border-default, #e2e2e2);
+  border-radius: var(--radius-md, 10px);
+  background: var(--color-background, #fafafa);
   outline: none;
   transition: border-color .2s, box-shadow .2s;
 }
 
-.ui-input:focus {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(159,133,97,.18);
+.ui-otp-box:focus {
+  border-color: var(--accent-primary, #9f8561);
+  box-shadow: 0 0 0 3px rgba(159, 133, 97, .18);
 }
 
-.ui-help {
-  font-size: var(--fs-sm);
-  color: var(--color-red-read-more);
-  min-height: 18px;
+.ui-otp-box.is-filled {
+  border-color: var(--accent-primary, #9f8561);
 }
 
+/* ---------- دکمه‌ها ---------- */
 .ui-form__actions {
   display: grid;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-sm, 12px);
 }
 
 .ui-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-xs, 6px);
   width: 100%;
   padding: 12px 16px;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-md, 10px);
   border: 1px solid transparent;
   font-weight: 700;
-  transition: background-color .2s, border-color .2s, transform .02s, opacity .2s;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color .2s, border-color .2s, opacity .2s;
   user-select: none;
 }
 
 .ui-btn-primary {
-  background: var(--accent-primary);
-  border-color: var(--accent-primary);
-  color: var(--text-inverse);
+  background: var(--accent-primary, #9f8561);
+  border-color: var(--accent-primary, #9f8561);
+  color: var(--text-inverse, #ffffff);
 }
 
-.ui-btn-primary:hover {
-  border-color: var(--color-link-hover);
+.ui-btn-primary:hover:not(:disabled) {
+  border-color: var(--color-link-hover, #7c6a4c);
+  background: var(--color-link-hover, #7c6a4c);
 }
 
 .ui-btn-primary:disabled {
-  opacity: .55;
+  opacity: .5;
   cursor: not-allowed;
-  transform: none;
+}
+
+.ui-link-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  color: var(--accent-primary, #9f8561);
+  font-size: var(--fs-sm, 13px);
+  cursor: pointer;
+  text-decoration: underline;
+  justify-self: center;
+}
+
+.ui-link-btn:disabled {
+  color: var(--text-secondary, #999);
+  cursor: not-allowed;
+  text-decoration: none;
 }
 
 .ui-ajax-status {
-  font-size: var(--fs-sm);
-  color: var(--text-secondary);
+  margin-top: var(--spacing-sm, 12px);
+  font-size: var(--fs-sm, 13px);
+  color: var(--text-secondary, #666);
   min-height: 20px;
+  text-align: center;
+}
+
+.ui-ajax-status.is-error {
+  color: var(--color-red-read-more, #e33e3e);
+}
+
+.ui-ajax-status.is-success {
+  color: #2e7d32;
 }
