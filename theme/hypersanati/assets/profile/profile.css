@@ -1,4 +1,4 @@
-/* @import url(./main.css); */
+@import url(./main.css);
 /*================================
             public styles
 =============================== */
@@ -52,7 +52,6 @@
   width: 870px;
   display: flex;
   flex-direction: column;
-  gap: 3.125rem;
 }
 .profile-info-section-title {
   display: flex;
@@ -226,7 +225,6 @@ td:nth-child(5) {
 
 .ticket-btn {
   height: 45px;
-  width: 150px;
   border: 1px solid var(--color-secondary);
   background: transparent;
   border-radius: 8px;
