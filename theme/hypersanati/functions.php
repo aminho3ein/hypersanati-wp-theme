@@ -106,6 +106,49 @@ function hypersanati_enqueue_assets() {
     }
 
     /* =========================================================
+    THANK YOU PAGE + SALES INVOICE
+    ========================================================= */
+    if (function_exists('is_order_received_page') && is_order_received_page()) {
+        wp_enqueue_style(
+            'hsb-thank-you-page',
+            get_template_directory_uri() . '/assets/css/thank-you-page.css',
+            array('hypersanati-style'),
+            hypersanati_asset_version('/assets/css/thank-you-page.css')
+        );
+
+        wp_enqueue_style(
+            'hsb-sales-invoice',
+            get_template_directory_uri() . '/assets/css/sales-invoice.css',
+            array('hypersanati-style', 'hsb-thank-you-page'),
+            hypersanati_asset_version('/assets/css/sales-invoice.css')
+        );
+
+        wp_enqueue_script(
+            'hsb-html2pdf',
+            get_template_directory_uri() . '/assets/js/html2pdf.bundle.min.js',
+            array(),
+            hypersanati_asset_version('/assets/js/html2pdf.bundle.min.js'),
+            true
+        );
+
+        wp_enqueue_script(
+            'hsb-sales-invoice',
+            get_template_directory_uri() . '/assets/js/sales-invoice.js',
+            array('hsb-html2pdf'),
+            hypersanati_asset_version('/assets/js/sales-invoice.js'),
+            true
+        );
+
+        wp_enqueue_script(
+            'hsb-thank-you-page',
+            get_template_directory_uri() . '/assets/js/thank-you-page.js',
+            array('hsb-sales-invoice'),
+            hypersanati_asset_version('/assets/js/thank-you-page.js'),
+            true
+        );
+    }
+
+    /* =========================================================
        404 PAGE
     ========================================================= */
     if (is_404()) {
@@ -224,6 +267,7 @@ function hypersanati_enqueue_assets() {
             true
         );
     }
+
 
     /* =========================================================
        SHOP PAGE
@@ -2956,4 +3000,51 @@ function hsb_validate_checkout_password_confirmation($data, $errors) {
         $errors->add('password_confirmation_error', 'رمز عبور و تکرار رمز عبور یکسان نیستند.');
     }
 }
-// Start Checkout Page -------------------------------------------------------------------------->
+// End Checkout Page -------------------------------------------------------------------------->
+
+
+// Start Email Invoice to Customer ----------------------------------------------------------->
+if (!function_exists('hsb_add_invoice_link_to_customer_email')) {
+    add_action('woocommerce_email_after_order_table', 'hsb_add_invoice_link_to_customer_email', 20, 4);
+
+    function hsb_add_invoice_link_to_customer_email($order, $sent_to_admin, $plain_text, $email) {
+        if ($sent_to_admin || !($order instanceof WC_Order)) {
+            return;
+        }
+
+        $allowed_emails = array(
+            'customer_processing_order',
+            'customer_completed_order',
+            'customer_on_hold_order',
+        );
+
+        if (!isset($email->id) || !in_array($email->id, $allowed_emails, true)) {
+            return;
+        }
+
+        $invoice_url = $order->get_checkout_order_received_url() . '#salesInvoiceSection';
+
+        if ($plain_text) {
+            echo "\n";
+            echo "مشاهده فاکتور خرید: " . esc_url($invoice_url) . "\n";
+            return;
+        }
+        ?>
+
+        <div style="margin:24px 0;padding:18px;border:1px solid #e5e5e5;border-radius:10px;background:#fafafa;text-align:right;direction:rtl;">
+            <h2 style="margin:0 0 10px;font-size:18px;">فاکتور خرید شما</h2>
+
+            <p style="margin:0 0 14px;line-height:1.8;">
+                برای مشاهده و دانلود فاکتور سفارش خود روی دکمه زیر کلیک کنید.
+            </p>
+
+            <a href="<?php echo esc_url($invoice_url); ?>"
+               style="display:inline-block;padding:10px 18px;background:#9f8561;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:bold;">
+                مشاهده فاکتور خرید
+            </a>
+        </div>
+
+        <?php
+    }
+}
+// End Email Invoice to Customer ----------------------------------------------------------->

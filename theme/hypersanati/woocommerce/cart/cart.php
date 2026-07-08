@@ -6,7 +6,18 @@
  */
 
 defined('ABSPATH') || exit;
+$checkout_page_id = function_exists('wc_get_page_id') ? wc_get_page_id('checkout') : 0;
+$checkout_url     = function_exists('wc_get_checkout_url') ? wc_get_checkout_url() : home_url('/checkout/');
 
+if ($checkout_page_id > 0 && get_post_status($checkout_page_id) === 'publish') {
+    $checkout_url = get_permalink($checkout_page_id);
+}
+
+$shop_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/');
+
+if (!$shop_url) {
+    $shop_url = home_url('/');
+}
 do_action('woocommerce_before_cart');
 
 if (WC()->cart->is_empty()) {
@@ -114,10 +125,6 @@ if (WC()->cart->is_empty()) {
 
                         <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="cart-sidebar-card__checkout">
                             ادامه و تسویه حساب
-                        </a>
-
-                        <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="cart-sidebar-card__edit">
-                            مشاهده و ویرایش سبد خرید
                         </a>
                     </div>
                 </aside>
