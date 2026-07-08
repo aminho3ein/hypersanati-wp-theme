@@ -2508,3 +2508,310 @@ function hypersanati_contact_page_assets() {
 }
 
 // PAYAN TAMAS BA MA --------------------------------------------------
+
+
+
+
+
+// Start -- AJAX - EZAFE KARDANE MAHSUL BA DOKME AFZODAN BE SABADE KHARID ------------------------->
+add_action('wp_enqueue_scripts', 'hsb_enqueue_cart_ajax_popup_assets');
+function hsb_enqueue_cart_ajax_popup_assets() {
+    if (!function_exists('is_product') || !is_product()) {
+        return;
+    }
+
+    $css_path = get_template_directory() . '/assets/css/cart-ajax-pop-up.css';
+    $js_path  = get_template_directory() . '/assets/js/cart-ajax-pop-up.js';
+
+    wp_enqueue_style(
+        'hsb-cart-ajax-popup',
+        get_template_directory_uri() . '/assets/css/cart-ajax-pop-up.css',
+        array(),
+        file_exists($css_path) ? filemtime($css_path) : '1.0.0'
+    );
+
+    wp_enqueue_script(
+        'hsb-cart-ajax-popup',
+        get_template_directory_uri() . '/assets/js/cart-ajax-pop-up.js',
+        array(),
+        file_exists($js_path) ? filemtime($js_path) : '1.0.0',
+        true
+    );
+
+    wp_localize_script('hsb-cart-ajax-popup', 'hsbCartPopup', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('hsb_cart_popup_nonce'),
+    ));
+}
+
+// مرحله ۳: پاپ‌آپ را با wp_footer چاپ کن
+add_action('wp_footer', 'hsb_render_cart_ajax_popup');
+function hsb_render_cart_ajax_popup() {
+    if (!function_exists('is_product') || !is_product()) {
+        return;
+    }
+
+    if (!function_exists('WC')) {
+        return;
+    }
+    ?>
+
+    <section class="cart-ajax-popup-section is-hidden" id="cartAjaxPopupSection" aria-hidden="true">
+        <div class="cart-ajax-popup-overlay" id="cartAjaxPopupOverlay"></div>
+
+        <div class="cart-ajax-popup" id="cartAjaxPopup" role="dialog" aria-modal="true">
+            <button class="cart-ajax-popup__close" id="cartAjaxPopupClose" type="button" aria-label="بستن">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="cart-ajax-popup__content">
+                <div class="cart-ajax-popup__top">
+                    <div class="cart-ajax-popup__summary">
+                        <div class="cart-ajax-popup__summary-box">
+                            <p class="cart-ajax-popup__summary-title" id="cartAjaxPopupSummaryTitle">
+                                محصول به سبد خرید اضافه شد.
+                            </p>
+
+                            <div class="cart-ajax-popup__prices">
+                                <p>خرید جزء: <span id="cartAjaxPopupSubtotal">۰ تومان</span></p>
+                                <p>مالیات: <span id="cartAjaxPopupTax">۰ تومان</span></p>
+                                <p class="cart-ajax-popup__total">جمع خرید: <span id="cartAjaxPopupTotal">۰ تومان</span></p>
+                            </div>
+
+                            <div class="cart-ajax-popup__actions">
+                                <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="cart-ajax-popup__btn" id="cartAjaxPopupCartUrl">
+                                    ویرایش سبد خرید
+                                </a>
+
+                                <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="cart-ajax-popup__btn" id="cartAjaxPopupCheckoutUrl">
+                                    رفتن به تسویه حساب
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cart-ajax-popup__product">
+                        <div class="cart-ajax-popup__notice">
+                            <div class="cart-ajax-popup__notice-icon">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+
+                            <div class="cart-ajax-popup__notice-text">
+                                <p class="cart-ajax-popup__notice-title">
+                                    شما <span id="cartAjaxPopupProductNoticeTitle">این محصول</span>
+                                </p>
+                                <p class="cart-ajax-popup__notice-subtitle">
+                                    را به سبد خرید خود اضافه کردید.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="cart-ajax-popup__product-box">
+                            <div class="cart-ajax-popup__product-text" id="cartAjaxPopupProductText">
+                                <p>محصول</p>
+                            </div>
+
+                            <div class="cart-ajax-popup__product-image">
+                                <img id="cartAjaxPopupProductImage"
+                                     src="<?php echo esc_url(wc_placeholder_img_src()); ?>"
+                                     alt="product" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cart-ajax-popup__bottom">
+                    <p class="cart-ajax-popup__bottom-title">
+                        مشتری‌های ما همراه با محصول انتخابی شما، این محصولات را هم سفارش داده‌اند.
+                    </p>
+
+                    <div class="cart-ajax-popup__suggestions" id="cartAjaxPopupSuggestions"></div>
+
+                    <div class="cart-ajax-popup__continue">
+                        <button type="button" class="cart-ajax-popup__btn cart-ajax-popup__btn--single" id="cartAjaxPopupContinue">
+                            ادامه خرید
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <?php
+}
+
+
+
+// مرحله ۴: AJAX افزودن به سبد خرید را بساز
+add_action('wp_ajax_hsb_ajax_add_to_cart', 'hsb_ajax_add_to_cart');
+add_action('wp_ajax_nopriv_hsb_ajax_add_to_cart', 'hsb_ajax_add_to_cart');
+
+function hsb_ajax_add_to_cart() {
+    check_ajax_referer('hsb_cart_popup_nonce', 'nonce');
+
+    if (!function_exists('WC')) {
+        wp_send_json_error(array(
+            'message' => 'ووکامرس فعال نیست.'
+        ));
+    }
+
+    if (null === WC()->cart) {
+        wc_load_cart();
+    }
+
+    $product_id = 0;
+
+    if (!empty($_POST['product_id'])) {
+        $product_id = absint($_POST['product_id']);
+    } elseif (!empty($_POST['add-to-cart'])) {
+        $product_id = absint($_POST['add-to-cart']);
+    }
+
+    $variation_id = !empty($_POST['variation_id']) ? absint($_POST['variation_id']) : 0;
+
+    if (!$product_id && $variation_id) {
+        $product_id = wp_get_post_parent_id($variation_id);
+    }
+
+    $quantity = !empty($_POST['quantity']) ? wc_stock_amount(wp_unslash($_POST['quantity'])) : 1;
+
+    if ($quantity < 1) {
+        $quantity = 1;
+    }
+
+    $variation = array();
+
+    foreach ($_POST as $key => $value) {
+        if (strpos($key, 'attribute_') === 0) {
+            $variation[sanitize_title(wp_unslash($key))] = wc_clean(wp_unslash($value));
+        }
+    }
+
+    $product = wc_get_product($product_id);
+
+    if (!$product) {
+        wp_send_json_error(array(
+            'message' => 'محصول پیدا نشد.'
+        ));
+    }
+
+    $passed_validation = apply_filters(
+        'woocommerce_add_to_cart_validation',
+        true,
+        $product_id,
+        $quantity,
+        $variation_id,
+        $variation
+    );
+
+    if (!$passed_validation) {
+        wp_send_json_error(array(
+            'message' => 'امکان افزودن این محصول به سبد خرید وجود ندارد.'
+        ));
+    }
+
+    try {
+        $cart_item_key = WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $variation);
+
+        if (!$cart_item_key) {
+            wp_send_json_error(array(
+                'message' => 'محصول به سبد خرید اضافه نشد. لطفاً دوباره تلاش کنید.'
+            ));
+        }
+
+        WC()->cart->calculate_totals();
+
+        $display_product = $variation_id ? wc_get_product($variation_id) : $product;
+
+        $image_url = '';
+
+        if ($display_product && $display_product->get_image_id()) {
+            $image_url = wp_get_attachment_image_url($display_product->get_image_id(), 'woocommerce_thumbnail');
+        }
+
+        if (!$image_url && $product->get_image_id()) {
+            $image_url = wp_get_attachment_image_url($product->get_image_id(), 'woocommerce_thumbnail');
+        }
+
+        if (!$image_url) {
+            $image_url = wc_placeholder_img_src();
+        }
+
+        ob_start();
+        woocommerce_mini_cart();
+        $mini_cart = ob_get_clean();
+
+        $fragments = apply_filters('woocommerce_add_to_cart_fragments', array(
+            'div.widget_shopping_cart_content' => '<div class="widget_shopping_cart_content">' . $mini_cart . '</div>',
+            '.sell-number p' => '<p>' . esc_html(WC()->cart->get_cart_contents_count()) . '</p>',
+        ));
+
+        wp_send_json_success(array(
+            'product_title'    => $product->get_name(),
+            'product_image'    => $image_url,
+            'cart_count'       => WC()->cart->get_cart_contents_count(),
+            'subtotal'         => wp_strip_all_tags(WC()->cart->get_cart_subtotal()),
+            'tax'              => wp_strip_all_tags(wc_price(WC()->cart->get_taxes_total())),
+            'total'            => wp_strip_all_tags(WC()->cart->get_total()),
+            'cart_url'         => wc_get_cart_url(),
+            'checkout_url'     => wc_get_checkout_url(),
+            'suggestions_html' => hsb_cart_ajax_popup_suggestions_html($product_id),
+            'fragments'        => $fragments,
+        ));
+    } catch (Exception $e) {
+        wp_send_json_error(array(
+            'message' => $e->getMessage()
+        ));
+    }
+}
+
+
+// مرحله ۵: محصولات پیشنهادی داخل پاپ‌آپ
+function hsb_cart_ajax_popup_suggestions_html($product_id) {
+    $product = wc_get_product($product_id);
+
+    if (!$product) {
+        return '';
+    }
+
+    $suggested_ids = $product->get_cross_sell_ids();
+
+    if (empty($suggested_ids)) {
+        $suggested_ids = wc_get_related_products($product_id, 4);
+    }
+
+    if (empty($suggested_ids)) {
+        $suggested_ids = wc_get_products(array(
+            'status'  => 'publish',
+            'limit'   => 4,
+            'exclude' => array($product_id),
+            'orderby' => 'date',
+            'order'   => 'DESC',
+            'return'  => 'ids',
+        ));
+    }
+
+    if (empty($suggested_ids)) {
+        return '';
+    }
+
+    ob_start();
+
+    foreach (array_slice($suggested_ids, 0, 4) as $suggested_id) {
+        $suggested_product = wc_get_product($suggested_id);
+
+        if (!$suggested_product) {
+            continue;
+        }
+        ?>
+
+        <a href="<?php echo esc_url(get_permalink($suggested_id)); ?>" class="cart-ajax-popup__suggestion-card">
+            <?php echo $suggested_product->get_image('woocommerce_thumbnail'); ?>
+        </a>
+
+        <?php
+    }
+
+    return ob_get_clean();
+}
+// End -- AJAX - EZAFE KARDANE MAHSUL BA DOKME AFZODAN BE SABADE KHARID ------------------------->

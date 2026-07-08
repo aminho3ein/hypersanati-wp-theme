@@ -1,3 +1,34 @@
+.cart-ajax-popup-section.is-hidden {
+  display: none;
+}
+
+.cart-ajax-popup-section {
+  direction: ltr;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.cart-ajax-popup-overlay,
+.cart-ajax-popup {
+  pointer-events: auto;
+}
+
+body.cart-ajax-popup-open {
+  overflow: hidden;
+}
+
+.cart-ajax-popup__suggestion-card {
+  text-decoration: none;
+}
+
+.cart-ajax-popup__btn,
+.cart-ajax-popup__close,
+.cart-ajax-popup-overlay {
+  cursor: pointer;
+}
+
 .cart-ajax-popup-section {
   direction: ltr;
   position: relative;
