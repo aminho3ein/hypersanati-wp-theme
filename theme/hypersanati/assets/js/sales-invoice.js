@@ -5,9 +5,16 @@ document.addEventListener("DOMContentLoaded", function () {
   if (!downloadBtn || !invoiceArea) return;
 
   downloadBtn.addEventListener("click", function () {
+    if (typeof html2pdf === "undefined") {
+      alert("امکان دانلود PDF در حال حاضر وجود ندارد. لطفاً صفحه را دوباره بارگذاری کنید.");
+      return;
+    }
+
+    const fileName = downloadBtn.dataset.filename || "sales-invoice.pdf";
+
     const opt = {
       margin: [10, 10, 10, 10],
-      filename: "sales-invoice.pdf",
+      filename: fileName,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: {
         scale: 2,
@@ -24,8 +31,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
     html2pdf().set(opt).from(invoiceArea).save();
   });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("sales invoice page loaded");
 });

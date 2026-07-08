@@ -5,14 +5,15 @@
   direction: rtl;
   overflow: hidden;
 }
-
+.container{
+  
+}
 .thank-you-shape {
   position: absolute;
   top: 0;
   left: 0;
   width: 14rem;
   height: 14rem;
-  background-color: var(--gray-300);
   clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 
@@ -211,5 +212,148 @@
   .thank-you-btn {
     width: 100%;
     max-width: 14rem;
+  }
+}
+.thank-you-page {
+  padding: 56px 0 32px;
+  background-color: white;
+  direction: rtl;
+}
+
+.thank-you-page__card {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 36px 28px;
+  border: 1px solid var(--gray-300);
+  border-radius: 20px;
+  background: var(--color-white);
+  text-align: center;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+}
+
+.thank-you-page__icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: #e8f7ee;
+  color: #18a957;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.thank-you-page__title {
+  margin: 0 0 14px;
+  color: var(--color-black);
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.thank-you-page__text {
+  max-width: 620px;
+  margin: 0 auto 28px;
+  color: var(--gray-700);
+  font-size: var(--fs-body);
+  line-height: 2;
+}
+
+.thank-you-page__meta {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.thank-you-page__meta div {
+  padding: 16px 12px;
+  border: 1px solid var(--gray-300);
+  border-radius: 14px;
+  background: #fcfaf7;
+}
+
+.thank-you-page__meta span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--gray-700);
+  font-size: var(--fs-sm);
+}
+
+.thank-you-page__meta strong {
+  display: block;
+  color: var(--color-black);
+  font-size: var(--fs-body);
+  font-weight: 800;
+  line-height: 1.8;
+}
+
+.thank-you-page__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.thank-you-page__btn {
+  min-width: 170px;
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: var(--fs-body);
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0 18px;
+}
+
+.thank-you-page__btn:hover {
+  color: var(--color-white);
+  background: var(--color-primary-hover);
+}
+
+.thank-you-page__btn--secondary {
+  border: 1px solid var(--gray-400);
+  background: var(--color-white);
+  color: var(--color-black);
+}
+
+.thank-you-page__btn--secondary:hover {
+  color: var(--color-black);
+  background: #fcfaf7;
+}
+
+@media (max-width: 768px) {
+  .thank-you-page {
+    padding: 32px 0 24px;
+  }
+
+  .thank-you-page__card {
+    padding: 28px 18px;
+    border-radius: 16px;
+  }
+
+  .thank-you-page__title {
+    font-size: 1.5rem;
+  }
+
+  .thank-you-page__meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .thank-you-page__btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .thank-you-page__meta {
+    grid-template-columns: 1fr;
   }
 }
