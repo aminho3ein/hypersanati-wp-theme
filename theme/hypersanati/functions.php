@@ -1783,3 +1783,227 @@ if (!function_exists('theme_render_product_benefits_area')) {
 
 
 // Start Maziyat Reghabati Singpe Product -----------------------------------
+// ==========================================
+// Hypersanati WooCommerce & Account / OTP Module
+// ==========================================
+
+
+/* =============================================================
+   Hypersanati OTP Login / Register Module
+   محل فایل‌ها طبق ساختار پروژه:
+   - assets/css/otp.css
+   - assets/js/otp.js
+   - woocommerce/myaccount/form-otp-login.php
+   - woocommerce/myaccount/dashboard.php
+   این ماژول کاملاً مستقل و درون functions.php است؛
+   نیازی به inc/enqueue.php ندارد.
+
+if (!defined('ABSPATH')) exit;
+
+define('HYPERSANATI_OTP_LENGTH', 5);        // تعداد ارقام کد تایید (۴ یا ۵)
+define('HYPERSANATI_OTP_TTL', 300);         // مدت اعتبار کد به ثانیه (۵ دقیقه)
+define('HYPERSANATI_OTP_RESEND_WAIT', 60);  // حداقل فاصله بین دو درخواست کد (ثانیه)
+
+
+/* -------------------------------------------------------------
+   ۱. Enqueue استایل و اسکریپت
+   otp.css / otp.js سراسری هستند چون دکمه‌ی باز کردن مودال
+   داخل header.php و روی همه‌ی صفحات سایت است.
+   profile.css فقط در خودِ صفحه‌ی حساب کاربری لازم است.
+------------------------------------------------------------- */
+add_action('wp_enqueue_scripts', 'hypersanati_enqueue_otp_assets', 20);
+
+function hypersanati_enqueue_otp_assets()
+{
+    $css_dir = get_template_directory() . '/assets/css';
+    $js_dir  = get_template_directory() . '/assets/js';
+    $css_url = get_template_directory_uri() . '/assets/css';
+    $js_url  = get_template_directory_uri() . '/assets/js';
+
+    // otp.css (سراسری)
+    $otp_css_path = $css_dir . '/otp.css';
+    if (file_exists($otp_css_path)) {
+        wp_enqueue_style('hypersanati-otp', $css_url . '/otp.css', [], filemtime($otp_css_path));
+    }
+
+    // otp.js (سراسری)
+    $otp_js_path = $js_dir . '/otp.js';
+    if (file_exists($otp_js_path)) {
+        wp_enqueue_script('hypersanati-otp', $js_url . '/otp.js', [], filemtime($otp_js_path), true);
+
+        wp_localize_script('hypersanati-otp', 'otp_data', [
+            'ajax_url'    => admin_url('admin-ajax.php'),
+            'nonce'       => wp_create_nonce('hypersanati_otp_action'),
+            'code_length' => HYPERSANATI_OTP_LENGTH,
+            'resend_wait' => HYPERSANATI_OTP_RESEND_WAIT,
+            'is_logged_in'=> is_user_logged_in(),
+        ]);
+    }
+
+    // profile.css (فقط در my-account)
+    if (function_exists('is_account_page') && is_account_page()) {
+        $profile_css_path = $css_dir . '/profile.css';
+        if (file_exists($profile_css_path)) {
+            wp_enqueue_style('hypersanati-profile', $css_url . '/profile.css', ['hypersanati-otp'], filemtime($profile_css_path));
+        }
+    }
+}
+
+
+/* -------------------------------------------------------------
+   ۲. تزریق مودال OTP قبل از </body>
+   فقط برای کاربران مهمان (کاربر لاگین‌شده نیازی به این فرم ندارد)
+------------------------------------------------------------- */
+add_action('wp_footer', 'hypersanati_render_otp_modal');
+
+function hypersanati_render_otp_modal()
+{
+    if (is_user_logged_in()) {
+        return;
+    }
+
+    $modal_path = get_template_directory() . '/woocommerce/myaccount/form-otp-login.php';
+    if (file_exists($modal_path)) {
+        include $modal_path;
+    }
+}
+
+
+/* -------------------------------------------------------------
+   ۳. ریدایرکت صفحه‌ی حساب کاربری ووکامرس به قالب اختصاصی
+------------------------------------------------------------- */
+add_filter('template_include', 'hypersanati_use_custom_dashboard_template');
+
+function hypersanati_use_custom_dashboard_template($template)
+{
+    if (is_page() && function_exists('is_account_page') && is_account_page()) {
+        $custom_dashboard = get_template_directory() . '/woocommerce/myaccount/dashboard.php';
+        if (file_exists($custom_dashboard)) {
+            return $custom_dashboard;
+        }
+    }
+    return $template;
+}
+
+
+/* -------------------------------------------------------------
+   ۴. AJAX: ارسال کد تایید
+------------------------------------------------------------- */
+add_action('wp_ajax_ui_send_otp', 'hypersanati_ajax_send_otp');
+add_action('wp_ajax_nopriv_ui_send_otp', 'hypersanati_ajax_send_otp');
+
+function hypersanati_ajax_send_otp()
+{
+    check_ajax_referer('hypersanati_otp_action', 'nonce');
+
+    $phone = isset($_POST['phone']) ? sanitize_text_field(wp_unslash($_POST['phone'])) : '';
+
+    if (!preg_match('/^09\d{9}$/', $phone)) {
+        wp_send_json_error(['message' => 'شماره موبایل معتبر نیست. مثال صحیح: 09123456789']);
+    }
+
+    // جلوگیری از ارسال مکرر/اسپم
+    $wait_key = 'hs_otp_wait_' . $phone;
+    if (get_transient($wait_key)) {
+        wp_send_json_error(['message' => 'لطفاً کمی صبر کنید و دوباره تلاش کنید.']);
+    }
+
+    try {
+        $min  = (int) pow(10, HYPERSANATI_OTP_LENGTH - 1);
+        $max  = (int) pow(10, HYPERSANATI_OTP_LENGTH) - 1;
+        $code = (string) random_int($min, $max);
+    } catch (Exception $e) {
+        wp_send_json_error(['message' => 'خطا در تولید کد تایید.']);
+    }
+
+    set_transient('hs_otp_code_' . $phone, $code, HYPERSANATI_OTP_TTL);
+    set_transient($wait_key, 1, HYPERSANATI_OTP_RESEND_WAIT);
+
+    // TODO: اتصال به وب‌سرویس پیامک واقعی
+    // hypersanati_send_sms($phone, $code);
+
+    wp_send_json_success([
+        'message'     => 'کد تایید ارسال شد.',
+        'resend_wait' => HYPERSANATI_OTP_RESEND_WAIT,
+    ]);
+}
+
+
+/* -------------------------------------------------------------
+   ۵. AJAX: تایید کد و ورود / ثبت‌نام خودکار کاربر
+------------------------------------------------------------- */
+add_action('wp_ajax_ui_verify_otp', 'hypersanati_ajax_verify_otp');
+add_action('wp_ajax_nopriv_ui_verify_otp', 'hypersanati_ajax_verify_otp');
+
+function hypersanati_ajax_verify_otp()
+{
+    check_ajax_referer('hypersanati_otp_action', 'nonce');
+
+    $phone = isset($_POST['phone']) ? sanitize_text_field(wp_unslash($_POST['phone'])) : '';
+    $code  = isset($_POST['code'])  ? sanitize_text_field(wp_unslash($_POST['code']))  : '';
+
+    if (!preg_match('/^09\d{9}$/', $phone)) {
+        wp_send_json_error(['message' => 'شماره موبایل نامعتبر است.']);
+    }
+
+    $pattern = '/^\d{' . HYPERSANATI_OTP_LENGTH . '}$/';
+    if (!preg_match($pattern, $code)) {
+        wp_send_json_error(['message' => 'کد تایید باید ' . HYPERSANATI_OTP_LENGTH . ' رقمی باشد.']);
+    }
+
+    $saved_code = get_transient('hs_otp_code_' . $phone);
+
+    if ($saved_code === false) {
+        wp_send_json_error(['message' => 'کد منقضی شده است. لطفاً دوباره درخواست دهید.']);
+    }
+
+    if (!hash_equals((string) $saved_code, $code)) {
+        wp_send_json_error(['message' => 'کد وارد شده نادرست است.']);
+    }
+
+    // پیدا کردن کاربر یا ساخت خودکار (ثبت‌نام یکپارچه با ورود)
+    $user = get_user_by('login', $phone);
+
+    if (!$user) {
+        if (!function_exists('wc_create_new_customer')) {
+            wp_send_json_error(['message' => 'ووکامرس در دسترس نیست.']);
+        }
+
+        $user_id = wc_create_new_customer(
+            $phone . '@hypersanati.com',
+            $phone,
+            wp_generate_password(20, true, true)
+        );
+
+        if (is_wp_error($user_id)) {
+            wp_send_json_error(['message' => $user_id->get_error_message()]);
+        }
+
+        $user = get_user_by('id', $user_id);
+
+        if (!$user) {
+            wp_send_json_error(['message' => 'کاربر ساخته شد اما بارگذاری نشد.']);
+        }
+
+        update_user_meta($user->ID, 'billing_phone', $phone);
+    }
+
+    // پاک‌سازی کد استفاده‌شده
+    delete_transient('hs_otp_code_' . $phone);
+    delete_transient('hs_otp_wait_' . $phone);
+
+    // ورود رسمی کاربر با توابع آماده‌ی وردپرس/ووکامرس
+    wp_set_current_user($user->ID);
+    wp_set_auth_cookie($user->ID, true);
+
+    if (function_exists('wc_set_customer_auth_cookie')) {
+        wc_set_customer_auth_cookie($user->ID);
+    }
+
+    do_action('wp_login', $user->user_login, $user);
+
+    wp_send_json_success([
+        'message'  => 'ورود با موفقیت انجام شد.',
+        'redirect' => function_exists('wc_get_page_permalink') ? wc_get_page_permalink('myaccount') : home_url('/my-account/'),
+    ]);
+}
