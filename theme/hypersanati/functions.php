@@ -87,6 +87,27 @@ function hypersanati_enqueue_assets() {
         );
     }
 
+    
+    /* =========================================================
+       Page Tamas Ba Ma
+    ========================================================= */
+    if (is_page('contact-us') || is_page_template('contact-us.php')) {
+        wp_enqueue_style(
+            'hypersanati-contact-us',
+            get_template_directory_uri() . '/assets/css/contact-us.css',
+            ['hypersanati-style'],
+            filemtime(get_template_directory() . '/assets/css/contact-us.css')
+        );
+
+        wp_enqueue_script(
+            'hypersanati-contact-us',
+            get_template_directory_uri() . '/assets/js/contact-us.js',
+            [],
+            filemtime(get_template_directory() . '/assets/js/40contact-us4.js'),
+            true
+        );
+    }
+
     /* =========================================================
        ABOUT PAGE
     ========================================================= */
@@ -1783,10 +1804,20 @@ if (!function_exists('theme_render_product_benefits_area')) {
 
 
 // Start Maziyat Reghabati Singpe Product -----------------------------------
+
+
+
+
+
+
+
+
+
+
+
 // ==========================================
 // Hypersanati WooCommerce & Account / OTP Module
 // ==========================================
-
 
 /* =============================================================
    Hypersanati OTP Login / Register Module
@@ -1810,7 +1841,7 @@ define('HYPERSANATI_OTP_RESEND_WAIT', 60);  // حداقل فاصله بین دو
    otp.css / otp.js سراسری هستند چون دکمه‌ی باز کردن مودال
    داخل header.php و روی همه‌ی صفحات سایت است.
    profile.css فقط در خودِ صفحه‌ی حساب کاربری لازم است.
-------------------------------------------------------------- */
+------------------------------------------------------------- 
 add_action('wp_enqueue_scripts', 'hypersanati_enqueue_otp_assets', 20);
 
 function hypersanati_enqueue_otp_assets()
@@ -1850,10 +1881,10 @@ function hypersanati_enqueue_otp_assets()
 }
 
 
-/* -------------------------------------------------------------
+ -------------------------------------------------------------
    ۲. تزریق مودال OTP قبل از </body>
    فقط برای کاربران مهمان (کاربر لاگین‌شده نیازی به این فرم ندارد)
-------------------------------------------------------------- */
+------------------------------------------------------------- 
 add_action('wp_footer', 'hypersanati_render_otp_modal');
 
 function hypersanati_render_otp_modal()
@@ -1871,7 +1902,7 @@ function hypersanati_render_otp_modal()
 
 /* -------------------------------------------------------------
    ۳. ریدایرکت صفحه‌ی حساب کاربری ووکامرس به قالب اختصاصی
-------------------------------------------------------------- */
+------------------------------------------------------------- 
 add_filter('template_include', 'hypersanati_use_custom_dashboard_template');
 
 function hypersanati_use_custom_dashboard_template($template)
@@ -1888,7 +1919,7 @@ function hypersanati_use_custom_dashboard_template($template)
 
 /* -------------------------------------------------------------
    ۴. AJAX: ارسال کد تایید
-------------------------------------------------------------- */
+------------------------------------------------------------- 
 add_action('wp_ajax_ui_send_otp', 'hypersanati_ajax_send_otp');
 add_action('wp_ajax_nopriv_ui_send_otp', 'hypersanati_ajax_send_otp');
 
@@ -1931,7 +1962,7 @@ function hypersanati_ajax_send_otp()
 
 /* -------------------------------------------------------------
    ۵. AJAX: تایید کد و ورود / ثبت‌نام خودکار کاربر
-------------------------------------------------------------- */
+------------------------------------------------------------- 
 add_action('wp_ajax_ui_verify_otp', 'hypersanati_ajax_verify_otp');
 add_action('wp_ajax_nopriv_ui_verify_otp', 'hypersanati_ajax_verify_otp');
 
@@ -2007,3 +2038,485 @@ function hypersanati_ajax_verify_otp()
         'redirect' => function_exists('wc_get_page_permalink') ? wc_get_page_permalink('myaccount') : home_url('/my-account/'),
     ]);
 }
+*/
+
+
+
+
+// START TAMAS BA MA --------------------------------------------------
+
+// Contact page dynamic info in WordPress Customizer
+add_action( 'customize_register', 'hypersanati_contact_customizer_settings' );
+
+function hypersanati_contact_customizer_settings( $wp_customize ) {
+
+    $wp_customize->add_section(
+        'hypersanati_contact_info_section',
+        array(
+            'title'    => 'اطلاعات تماس فروشگاه',
+            'priority' => 160,
+        )
+    );
+
+    $wp_customize->add_setting(
+        'hypersanati_contact_address',
+        array(
+            'default'           => 'تهران، خیابان سعدی جنوبی، خیابان اکباتان، کوچه ناظم الاطبا شمالی، پاساژ امام حسین، زیر همکف، پلاک 32 بلبرینگ همگام صنعت برتر',
+            'sanitize_callback' => 'sanitize_textarea_field',
+        )
+    );
+
+    $wp_customize->add_control(
+        'hypersanati_contact_address',
+        array(
+            'label'   => 'آدرس فروشگاه',
+            'section' => 'hypersanati_contact_info_section',
+            'type'    => 'textarea',
+        )
+    );
+
+    $wp_customize->add_setting(
+        'hypersanati_contact_phone',
+        array(
+            'default'           => '۰۲۱-۳۳۹۸۹۹۳۰ - ۰۲۱-۳۳۹۸۹۹۴۰',
+            'sanitize_callback' => 'sanitize_text_field',
+        )
+    );
+
+    $wp_customize->add_control(
+        'hypersanati_contact_phone',
+        array(
+            'label'   => 'شماره تماس',
+            'section' => 'hypersanati_contact_info_section',
+            'type'    => 'text',
+        )
+    );
+
+    $wp_customize->add_setting(
+        'hypersanati_contact_fax',
+        array(
+            'default'           => '۰۲۱-۳۳۹۸۹۹۴۰',
+            'sanitize_callback' => 'sanitize_text_field',
+        )
+    );
+
+    $wp_customize->add_control(
+        'hypersanati_contact_fax',
+        array(
+            'label'   => 'فکس',
+            'section' => 'hypersanati_contact_info_section',
+            'type'    => 'text',
+        )
+    );
+
+    $wp_customize->add_setting(
+        'hypersanati_contact_email',
+        array(
+            'default'           => 'info@hamgamsanatbartar.com',
+            'sanitize_callback' => 'sanitize_email',
+        )
+    );
+
+    $wp_customize->add_control(
+        'hypersanati_contact_email',
+        array(
+            'label'   => 'ایمیل',
+            'section' => 'hypersanati_contact_info_section',
+            'type'    => 'email',
+        )
+    );
+
+    $wp_customize->add_setting(
+        'hypersanati_contact_terms_url',
+        array(
+            'default'           => '#',
+            'sanitize_callback' => 'esc_url_raw',
+        )
+    );
+
+    $wp_customize->add_control(
+        'hypersanati_contact_terms_url',
+        array(
+            'label'   => 'لینک قوانین و مقررات',
+            'section' => 'hypersanati_contact_info_section',
+            'type'    => 'url',
+        )
+    );
+}
+
+
+// Register contact messages post type
+add_action( 'init', 'hypersanati_register_contact_message_post_type' );
+
+function hypersanati_register_contact_message_post_type() {
+
+    register_post_type(
+        'hs_contact_message',
+        array(
+            'labels' => array(
+                'name'               => 'پیام‌های تماس',
+                'singular_name'      => 'پیام تماس',
+                'menu_name'          => 'پیام‌های تماس',
+                'add_new_item'       => 'افزودن پیام تماس',
+                'edit_item'          => 'مشاهده پیام تماس',
+                'view_item'          => 'نمایش پیام تماس',
+                'search_items'       => 'جستجوی پیام‌ها',
+                'not_found'          => 'پیامی پیدا نشد',
+                'not_found_in_trash' => 'پیامی در زباله‌دان پیدا نشد',
+            ),
+            'public'              => false,
+            'show_ui'             => true,
+            'show_in_menu'        => true,
+            'menu_icon'           => 'dashicons-email-alt2',
+            'supports'            => array( 'title', 'editor' ),
+            'capability_type'     => 'post',
+            'map_meta_cap'        => true,
+            'exclude_from_search' => true,
+        )
+    );
+}
+
+
+// Save contact form - Ajax + normal fallback
+add_action( 'admin_post_hypersanati_contact_form', 'hypersanati_handle_contact_form' );
+add_action( 'admin_post_nopriv_hypersanati_contact_form', 'hypersanati_handle_contact_form' );
+
+add_action( 'wp_ajax_hypersanati_contact_form', 'hypersanati_handle_contact_form' );
+add_action( 'wp_ajax_nopriv_hypersanati_contact_form', 'hypersanati_handle_contact_form' );
+
+function hypersanati_handle_contact_form() {
+
+    $is_ajax = wp_doing_ajax();
+
+    if (
+        ! isset( $_POST['hypersanati_contact_nonce'] ) ||
+        ! wp_verify_nonce(
+            sanitize_text_field( wp_unslash( $_POST['hypersanati_contact_nonce'] ) ),
+            'hypersanati_contact_form_action'
+        )
+    ) {
+        hypersanati_contact_response(
+            'security',
+            $is_ajax,
+            false,
+            'درخواست معتبر نیست. لطفاً صفحه را دوباره بارگذاری کنید.',
+            403
+        );
+    }
+
+    $subject      = isset( $_POST['contact_subject'] ) ? sanitize_text_field( wp_unslash( $_POST['contact_subject'] ) ) : '';
+    $phone        = isset( $_POST['contact_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['contact_phone'] ) ) : '';
+    $country_code = isset( $_POST['country_code'] ) ? sanitize_text_field( wp_unslash( $_POST['country_code'] ) ) : '+98';
+    $message      = isset( $_POST['contact_message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['contact_message'] ) ) : '';
+    $terms        = isset( $_POST['terms'] ) ? 'accepted' : '';
+
+    if ( empty( $subject ) || empty( $phone ) || empty( $message ) || empty( $terms ) ) {
+        hypersanati_contact_response(
+            'required',
+            $is_ajax,
+            false,
+            'لطفاً موضوع، شماره همراه، پیام و پذیرش قوانین را کامل کنید.',
+            422
+        );
+    }
+
+    $attachment_url = '';
+    $attachment_id  = 0;
+
+    if ( ! empty( $_FILES['contact_attachment']['name'] ) ) {
+
+        $file_size = isset( $_FILES['contact_attachment']['size'] ) ? absint( $_FILES['contact_attachment']['size'] ) : 0;
+
+        if ( $file_size > 5 * 1024 * 1024 ) {
+            hypersanati_contact_response(
+                'file_size',
+                $is_ajax,
+                false,
+                'حجم فایل نباید بیشتر از ۵ مگابایت باشد.',
+                422
+            );
+        }
+
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+
+        $allowed_mimes = array(
+            'jpg|jpeg|jpe' => 'image/jpeg',
+            'png'          => 'image/png',
+            'webp'         => 'image/webp',
+            'pdf'          => 'application/pdf',
+            'doc'          => 'application/msword',
+            'docx'         => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'xls'          => 'application/vnd.ms-excel',
+            'xlsx'         => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'zip'          => 'application/zip',
+        );
+
+        $upload = wp_handle_upload(
+            $_FILES['contact_attachment'],
+            array(
+                'test_form' => false,
+                'mimes'     => $allowed_mimes,
+            )
+        );
+
+        if ( isset( $upload['error'] ) ) {
+            hypersanati_contact_response(
+                'file_error',
+                $is_ajax,
+                false,
+                'فایل انتخاب‌شده قابل بارگذاری نیست. لطفاً فایل دیگری انتخاب کنید.',
+                422
+            );
+        }
+
+        if ( ! empty( $upload['file'] ) ) {
+            $file_type = wp_check_filetype( basename( $upload['file'] ), null );
+
+            $attachment = array(
+                'post_mime_type' => $file_type['type'],
+                'post_title'     => sanitize_file_name( basename( $upload['file'] ) ),
+                'post_content'   => '',
+                'post_status'    => 'inherit',
+            );
+
+            $attachment_id = wp_insert_attachment( $attachment, $upload['file'] );
+
+            if ( ! is_wp_error( $attachment_id ) ) {
+                $attachment_data = wp_generate_attachment_metadata( $attachment_id, $upload['file'] );
+                wp_update_attachment_metadata( $attachment_id, $attachment_data );
+                $attachment_url = wp_get_attachment_url( $attachment_id );
+            }
+        }
+    }
+
+    $post_id = wp_insert_post(
+        array(
+            'post_type'    => 'hs_contact_message',
+            'post_status'  => 'private',
+            'post_title'   => $subject,
+            'post_content' => $message,
+        )
+    );
+
+    if ( is_wp_error( $post_id ) || ! $post_id ) {
+        hypersanati_contact_response(
+            'save_error',
+            $is_ajax,
+            false,
+            'در ذخیره پیام مشکلی پیش آمد. لطفاً چند لحظه دیگر دوباره تلاش کنید.',
+            500
+        );
+    }
+
+    update_post_meta( $post_id, '_contact_phone', $phone );
+    update_post_meta( $post_id, '_contact_country_code', $country_code );
+    update_post_meta( $post_id, '_contact_terms', $terms );
+    update_post_meta( $post_id, '_contact_attachment_id', $attachment_id );
+    update_post_meta( $post_id, '_contact_attachment_url', $attachment_url );
+    update_post_meta(
+        $post_id,
+        '_contact_ip',
+        isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : ''
+    );
+
+    $admin_email = get_option( 'admin_email' );
+
+    $email_body  = "موضوع: {$subject}\n";
+    $email_body .= "شماره تماس: {$country_code} {$phone}\n\n";
+    $email_body .= "پیام:\n{$message}\n\n";
+
+    if ( $attachment_url ) {
+        $email_body .= "فایل پیوست:\n{$attachment_url}\n";
+    }
+
+    wp_mail(
+        $admin_email,
+        'پیام جدید از فرم تماس سایت',
+        $email_body
+    );
+
+    hypersanati_contact_response(
+        'success',
+        $is_ajax,
+        true,
+        'پیام شما با موفقیت ثبت شد. همکاران ما در حال بررسی هستند و در سریع‌ترین زمان ممکن با شما تماس می‌گیرند.'
+    );
+}
+
+function hypersanati_contact_response( $status, $is_ajax, $success, $message, $http_code = 200 ) {
+
+    if ( $is_ajax ) {
+        if ( $success ) {
+            wp_send_json_success(
+                array(
+                    'status'  => $status,
+                    'message' => $message,
+                ),
+                $http_code
+            );
+        }
+
+        wp_send_json_error(
+            array(
+                'status'  => $status,
+                'message' => $message,
+            ),
+            $http_code
+        );
+    }
+
+    $redirect_url = isset( $_POST['redirect_to'] )
+        ? esc_url_raw( wp_unslash( $_POST['redirect_to'] ) )
+        : home_url( '/contact-us/' );
+
+    wp_safe_redirect(
+        add_query_arg(
+            'contact_status',
+            sanitize_key( $status ),
+            $redirect_url
+        )
+    );
+
+    exit;
+}
+
+
+// Contact message meta box
+add_action( 'add_meta_boxes', 'hypersanati_contact_message_meta_boxes' );
+
+function hypersanati_contact_message_meta_boxes() {
+    add_meta_box(
+        'hypersanati_contact_message_info',
+        'اطلاعات پیام',
+        'hypersanati_contact_message_meta_box_html',
+        'hs_contact_message',
+        'normal',
+        'high'
+    );
+}
+
+function hypersanati_contact_message_meta_box_html( $post ) {
+
+    $phone          = get_post_meta( $post->ID, '_contact_phone', true );
+    $country_code   = get_post_meta( $post->ID, '_contact_country_code', true );
+    $attachment_url = get_post_meta( $post->ID, '_contact_attachment_url', true );
+    $ip             = get_post_meta( $post->ID, '_contact_ip', true );
+
+    ?>
+    <table class="widefat striped">
+        <tbody>
+            <tr>
+                <th style="width: 180px;">شماره تماس</th>
+                <td><?php echo esc_html( $country_code . ' ' . $phone ); ?></td>
+            </tr>
+
+            <tr>
+                <th>فایل پیوست</th>
+                <td>
+                    <?php if ( $attachment_url ) : ?>
+                        <a href="<?php echo esc_url( $attachment_url ); ?>" target="_blank" rel="noopener">
+                            مشاهده / دانلود فایل
+                        </a>
+                    <?php else : ?>
+                        فایلی ارسال نشده است.
+                    <?php endif; ?>
+                </td>
+            </tr>
+
+            <tr>
+                <th>IP ارسال‌کننده</th>
+                <td><?php echo esc_html( $ip ); ?></td>
+            </tr>
+        </tbody>
+    </table>
+    <?php
+}
+
+
+// Admin list columns
+add_filter( 'manage_hs_contact_message_posts_columns', 'hypersanati_contact_message_columns' );
+
+function hypersanati_contact_message_columns( $columns ) {
+
+    $new_columns = array();
+
+    $new_columns['cb']            = $columns['cb'];
+    $new_columns['title']         = 'موضوع';
+    $new_columns['contact_phone'] = 'شماره تماس';
+    $new_columns['contact_file']  = 'فایل';
+    $new_columns['date']          = 'تاریخ';
+
+    return $new_columns;
+}
+
+add_action( 'manage_hs_contact_message_posts_custom_column', 'hypersanati_contact_message_column_content', 10, 2 );
+
+function hypersanati_contact_message_column_content( $column, $post_id ) {
+
+    if ( 'contact_phone' === $column ) {
+        $phone        = get_post_meta( $post_id, '_contact_phone', true );
+        $country_code = get_post_meta( $post_id, '_contact_country_code', true );
+
+        echo esc_html( $country_code . ' ' . $phone );
+    }
+
+    if ( 'contact_file' === $column ) {
+        $attachment_url = get_post_meta( $post_id, '_contact_attachment_url', true );
+
+        if ( $attachment_url ) {
+            echo '<a href="' . esc_url( $attachment_url ) . '" target="_blank" rel="noopener">مشاهده فایل</a>';
+        } else {
+            echo '—';
+        }
+    }
+}
+
+
+// Load contact page CSS and JS only on contact page
+add_action( 'wp_enqueue_scripts', 'hypersanati_contact_page_assets', 30 );
+
+function hypersanati_contact_page_assets() {
+
+    if ( ! is_page( 'contact-us' ) && ! is_page_template( 'page-contact-us.php' ) ) {
+        return;
+    }
+
+    $theme_version = wp_get_theme()->get( 'Version' );
+
+    $contact_css_path = get_template_directory() . '/assets/css/contact-us.css';
+    $contact_css_uri  = get_template_directory_uri() . '/assets/css/contact-us.css';
+
+    if ( file_exists( $contact_css_path ) ) {
+        wp_enqueue_style(
+            'hypersanati-contact-us',
+            $contact_css_uri,
+            array(),
+            filemtime( $contact_css_path )
+        );
+    }
+
+    $contact_js_path = get_template_directory() . '/assets/js/contact-us.js';
+    $contact_js_uri  = get_template_directory_uri() . '/assets/js/contact-us.js';
+
+    if ( file_exists( $contact_js_path ) ) {
+        wp_enqueue_script(
+            'hypersanati-contact-us',
+            $contact_js_uri,
+            array(),
+            filemtime( $contact_js_path ),
+            true
+        );
+        wp_localize_script(
+            'hypersanati-contact-us',
+            'HypersanatiContactAjax',
+            array(
+                'ajax_url'     => admin_url( 'admin-ajax.php' ),
+                'sending_text' => 'در حال ارسال...',
+            )
+        );
+    }
+}
+
+// PAYAN TAMAS BA MA --------------------------------------------------
