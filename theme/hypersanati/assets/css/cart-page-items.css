@@ -312,6 +312,7 @@
 }
 
 @media (max-width: 1199.98px) {
+
   .cart-page-items__layout {
     grid-template-columns: 260px 1fr;
     gap: 32px;
@@ -335,6 +336,7 @@
   .cart-page-items__product-info h2 {
     font-size: 1.25rem;
   }
+
 }
 
 @media (max-width: 991.98px) {
@@ -432,5 +434,59 @@
 
   .cart-page-items__continue-link {
     font-size: 1.1rem;
+  }
+}
+
+
+.cart-page-items__quantity .quantity {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cart-page-items__quantity .qty {
+  width: 56px;
+  height: 36px;
+  text-align: center;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+}
+
+.cart-page-items__product-info a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cart-page-items__remove {
+  text-decoration: none;
+}
+
+.cart-page-items__empty {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  padding: 32px;
+  text-align: center;
+  border-radius: 12px;
+}
+
+.cart-sidebar-card__coupon.is-hidden {
+  display: none;
+}
+
+.cart-page-items__update-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cart-page-items__update-btn.is-active {
+  opacity: 1;
+}
+
+@media (min-width:1150px){
+  .cart-page-items__actions {
+    position: relative;
+    left: -13px;
+    top: -28px;
   }
 }

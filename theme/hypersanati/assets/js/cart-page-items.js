@@ -1,32 +1,56 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const cartRows = document.querySelectorAll(".cart-page-items__row");
+  const couponToggle = document.querySelector(".cart-sidebar-card__toggle");
+  const couponBox = document.querySelector(".cart-sidebar-card__coupon");
 
-  cartRows.forEach((row) => {
-    const plusBtn = row.querySelector(".cart-page-items__qty-btn--plus");
-    const minusBtn = row.querySelector(".cart-page-items__qty-btn--minus");
-    const qtyValue = row.querySelector(".cart-page-items__qty-value");
-    const removeBtn = row.querySelector(".cart-page-items__remove");
+  if (couponToggle && couponBox) {
+    couponToggle.addEventListener("click", function () {
+      couponBox.classList.toggle("is-hidden");
+      couponToggle.classList.toggle("is-active");
+    });
+  }
 
-    if (plusBtn && qtyValue) {
-      plusBtn.addEventListener("click", function () {
-        let currentValue = parseInt(qtyValue.textContent.trim(), 10) || 1;
-        qtyValue.textContent = currentValue + 1;
-      });
+  document.addEventListener("click", function (event) {
+    const plusBtn = event.target.closest(".cart-page-items__qty-btn--plus");
+    const minusBtn = event.target.closest(".cart-page-items__qty-btn--minus");
+
+    if (!plusBtn && !minusBtn) return;
+
+    const quantityWrapper = event.target.closest(".quantity");
+
+    if (!quantityWrapper) return;
+
+    const input = quantityWrapper.querySelector(".qty");
+
+    if (!input) return;
+
+    const min = parseFloat(input.getAttribute("min")) || 0;
+    const max = parseFloat(input.getAttribute("max")) || 999999;
+    const step = parseFloat(input.getAttribute("step")) || 1;
+    let value = parseFloat(input.value) || 0;
+
+    if (plusBtn) {
+      value += step;
     }
 
-    if (minusBtn && qtyValue) {
-      minusBtn.addEventListener("click", function () {
-        let currentValue = parseInt(qtyValue.textContent.trim(), 10) || 1;
-        if (currentValue > 1) {
-          qtyValue.textContent = currentValue - 1;
-        }
-      });
+    if (minusBtn) {
+      value -= step;
     }
 
-    if (removeBtn) {
-      removeBtn.addEventListener("click", function () {
-        row.style.display = "none";
-      });
+    if (value < min) value = min;
+    if (value > max) value = max;
+
+    input.value = value;
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+
+  document.addEventListener("change", function (event) {
+    if (!event.target.classList.contains("qty")) return;
+
+    const updateButton = document.querySelector(".cart-page-items__update-btn");
+
+    if (updateButton) {
+      updateButton.disabled = false;
+      updateButton.classList.add("is-active");
     }
   });
 });
