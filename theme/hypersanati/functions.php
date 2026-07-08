@@ -1841,7 +1841,7 @@ define('HYPERSANATI_OTP_RESEND_WAIT', 60);  // حداقل فاصله بین دو
    otp.css / otp.js سراسری هستند چون دکمه‌ی باز کردن مودال
    داخل header.php و روی همه‌ی صفحات سایت است.
    profile.css فقط در خودِ صفحه‌ی حساب کاربری لازم است.
-------------------------------------------------------------- 
+------------------------------------------------------------- */
 add_action('wp_enqueue_scripts', 'hypersanati_enqueue_otp_assets', 20);
 
 function hypersanati_enqueue_otp_assets()
@@ -1881,10 +1881,10 @@ function hypersanati_enqueue_otp_assets()
 }
 
 
- -------------------------------------------------------------
+/*-------------------------------------------------------------
    ۲. تزریق مودال OTP قبل از </body>
    فقط برای کاربران مهمان (کاربر لاگین‌شده نیازی به این فرم ندارد)
-------------------------------------------------------------- 
+------------------------------------------------------------- */
 add_action('wp_footer', 'hypersanati_render_otp_modal');
 
 function hypersanati_render_otp_modal()
@@ -1902,7 +1902,7 @@ function hypersanati_render_otp_modal()
 
 /* -------------------------------------------------------------
    ۳. ریدایرکت صفحه‌ی حساب کاربری ووکامرس به قالب اختصاصی
-------------------------------------------------------------- 
+------------------------------------------------------------- */
 add_filter('template_include', 'hypersanati_use_custom_dashboard_template');
 
 function hypersanati_use_custom_dashboard_template($template)
@@ -1919,7 +1919,7 @@ function hypersanati_use_custom_dashboard_template($template)
 
 /* -------------------------------------------------------------
    ۴. AJAX: ارسال کد تایید
-------------------------------------------------------------- 
+------------------------------------------------------------- */
 add_action('wp_ajax_ui_send_otp', 'hypersanati_ajax_send_otp');
 add_action('wp_ajax_nopriv_ui_send_otp', 'hypersanati_ajax_send_otp');
 
@@ -1962,7 +1962,7 @@ function hypersanati_ajax_send_otp()
 
 /* -------------------------------------------------------------
    ۵. AJAX: تایید کد و ورود / ثبت‌نام خودکار کاربر
-------------------------------------------------------------- 
+------------------------------------------------------------- */
 add_action('wp_ajax_ui_verify_otp', 'hypersanati_ajax_verify_otp');
 add_action('wp_ajax_nopriv_ui_verify_otp', 'hypersanati_ajax_verify_otp');
 
@@ -2038,7 +2038,7 @@ function hypersanati_ajax_verify_otp()
         'redirect' => function_exists('wc_get_page_permalink') ? wc_get_page_permalink('myaccount') : home_url('/my-account/'),
     ]);
 }
-*/
+
 
 
 
