@@ -47,14 +47,16 @@ add_action('wp_enqueue_scripts', 'hypersanati_enqueue_scripts');
    CONDITIONAL ASSETS + SEARCH COMPACT
 ========================================================= */
 
-function hypersanati_asset_version($relative_path) {
-    $file_path = get_template_directory() . $relative_path;
+if (!function_exists('hypersanati_asset_version')) {
+    function hypersanati_asset_version($relative_path) {
+        $file_path = get_template_directory() . $relative_path;
 
-    if (file_exists($file_path)) {
-        return filemtime($file_path);
+        if (file_exists($file_path)) {
+            return filemtime($file_path);
+        }
+
+        return '1.0.0';
     }
-
-    return '1.0.0';
 }
 
 function hypersanati_enqueue_assets() {
@@ -78,6 +80,27 @@ function hypersanati_enqueue_assets() {
             get_template_directory_uri() . '/assets/js/main.js',
             array(),
             hypersanati_asset_version('/assets/js/main.js'),
+            true
+        );
+    }
+
+    /* =========================================================
+    CHECKOUT PAGE
+    ========================================================= */
+
+    if (function_exists('is_checkout') && is_checkout() && !is_order_received_page()) {
+        wp_enqueue_style(
+            'hsb-checkout-page',
+            get_template_directory_uri() . '/assets/css/check-out.css',
+            array('hypersanati-style'),
+            hypersanati_asset_version('/assets/css/check-out.css')
+        );
+
+        wp_enqueue_script(
+            'hsb-checkout-page',
+            get_template_directory_uri() . '/assets/js/check-out.js',
+            array('jquery'),
+            hypersanati_asset_version('/assets/js/check-out.js'),
             true
         );
     }
@@ -2855,3 +2878,82 @@ function hsb_cart_ajax_popup_suggestions_html($product_id) {
     return ob_get_clean();
 }
 // End -- AJAX - EZAFE KARDANE MAHSUL BA DOKME AFZODAN BE SABADE KHARID ------------------------->
+
+
+
+// Start Checkout Page -------------------------------------------------------------------------->
+/* =========================================================
+   CUSTOM CHECKOUT FIELDS
+========================================================= */
+
+
+add_filter('woocommerce_checkout_fields', 'hsb_custom_checkout_fields');
+function hsb_custom_checkout_fields($fields) {
+
+    $fields['billing']['billing_gender'] = array(
+        'type'     => 'text',
+        'label'    => 'جنسیت',
+        'required' => false,
+        'priority' => 5,
+    );
+
+    $fields['billing']['billing_plaque'] = array(
+        'type'     => 'text',
+        'label'    => 'پلاک',
+        'required' => true,
+        'priority' => 75,
+    );
+
+    $fields['billing']['billing_national_code'] = array(
+        'type'     => 'text',
+        'label'    => 'کد ملی',
+        'required' => true,
+        'priority' => 120,
+    );
+
+    $fields['billing']['billing_birth_date'] = array(
+        'type'     => 'text',
+        'label'    => 'تاریخ تولد',
+        'required' => false,
+        'priority' => 130,
+    );
+
+    if (isset($fields['billing']['billing_email'])) {
+        $fields['billing']['billing_email']['required'] = false;
+    }
+
+    if (isset($fields['billing']['billing_company'])) {
+        $fields['billing']['billing_company']['label'] = 'نام فروشگاه یا کارگاه';
+        $fields['billing']['billing_company']['required'] = false;
+    }
+
+    return $fields;
+}
+
+add_action('woocommerce_checkout_create_order', 'hsb_save_custom_checkout_fields', 10, 2);
+function hsb_save_custom_checkout_fields($order, $data) {
+    $custom_fields = array(
+        'billing_gender'        => 'جنسیت',
+        'billing_plaque'        => 'پلاک',
+        'billing_national_code' => 'کد ملی',
+        'billing_birth_date'    => 'تاریخ تولد',
+    );
+
+    foreach ($custom_fields as $field_key => $field_label) {
+        if (isset($_POST[$field_key])) {
+            $order->update_meta_data('_' . $field_key, sanitize_text_field(wp_unslash($_POST[$field_key])));
+        }
+    }
+}
+
+add_action('woocommerce_after_checkout_validation', 'hsb_validate_checkout_password_confirmation', 10, 2);
+function hsb_validate_checkout_password_confirmation($data, $errors) {
+    if (
+        isset($_POST['account_password'], $_POST['confirm_password']) &&
+        !empty($_POST['account_password']) &&
+        sanitize_text_field(wp_unslash($_POST['account_password'])) !== sanitize_text_field(wp_unslash($_POST['confirm_password']))
+    ) {
+        $errors->add('password_confirmation_error', 'رمز عبور و تکرار رمز عبور یکسان نیستند.');
+    }
+}
+// Start Checkout Page -------------------------------------------------------------------------->
