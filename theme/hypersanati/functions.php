@@ -1799,19 +1799,7 @@ if (!function_exists('theme_render_product_benefits_area')) {
         <?php
     }
 }
-
-
-
-
-// Start Maziyat Reghabati Singpe Product -----------------------------------
-
-
-
-
-
-
-
-
+// END Maziyat Reghabati Singpe Product -----------------------------------
 
 
 
@@ -1819,7 +1807,7 @@ if (!function_exists('theme_render_product_benefits_area')) {
 // Hypersanati WooCommerce & Account / OTP Module
 // ==========================================
 
-/* =============================================================
+/* ============================================================
    Hypersanati OTP Login / Register Module
    محل فایل‌ها طبق ساختار پروژه:
    - assets/css/otp.css
@@ -1828,7 +1816,7 @@ if (!function_exists('theme_render_product_benefits_area')) {
    - woocommerce/myaccount/dashboard.php
    این ماژول کاملاً مستقل و درون functions.php است؛
    نیازی به inc/enqueue.php ندارد.
-
+*/
 if (!defined('ABSPATH')) exit;
 
 define('HYPERSANATI_OTP_LENGTH', 5);        // تعداد ارقام کد تایید (۴ یا ۵)
@@ -1881,7 +1869,7 @@ function hypersanati_enqueue_otp_assets()
 }
 
 
-/*-------------------------------------------------------------
+ /*-------------------------------------------------------------
    ۲. تزریق مودال OTP قبل از </body>
    فقط برای کاربران مهمان (کاربر لاگین‌شده نیازی به این فرم ندارد)
 ------------------------------------------------------------- */
