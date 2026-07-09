@@ -2,51 +2,8 @@
 if (!defined('ABSPATH')) exit;
 
 /* =========================================================
-   ENQUEUE STYLES
+   ASSET VERSION HELPER
 ========================================================= */
-function hypersanati_enqueue_all_css() {
-
-    $base_url = get_template_directory_uri() . '/assets/css';
-    $base_dir = get_template_directory() . '/assets/css';
-
-    // Core styles
-    wp_enqueue_style('bootstrap-rtl', $base_url . '/bootstrap.rtl.min.css', [], filemtime($base_dir . '/bootstrap.rtl.min.css'));
-    wp_enqueue_style('fontawesome', $base_url . '/fontawesome.min.css', [], filemtime($base_dir . '/fontawesome.min.css'));
-    wp_enqueue_style('fontawesome-solid', $base_url . '/solid.min.css', ['fontawesome'], filemtime($base_dir . '/solid.min.css'));
-    wp_enqueue_style('fontawesome-brands', $base_url . '/brands.min.css', ['fontawesome'], filemtime($base_dir . '/brands.min.css'));
-    wp_enqueue_style('site-fonts', $base_url . '/font.css', [], filemtime($base_dir . '/font.css'));
-
-    // Main
-    wp_enqueue_style('main-css', $base_url . '/main.css', ['bootstrap-rtl'], filemtime($base_dir . '/main.css'));
-
-    // Responsive
-    wp_enqueue_style('tablet-responsive', $base_url . '/responsive/tablet-responsive.css', ['main-css'], filemtime($base_dir . '/responsive/tablet-responsive.css'), '(min-width:768px)');
-    wp_enqueue_style('laptop-responsive', $base_url . '/responsive/laptop-responsive.css', ['main-css'], filemtime($base_dir . '/responsive/laptop-responsive.css'), '(min-width:992px)');
-    wp_enqueue_style('desktop-responsive', $base_url . '/responsive/desktop-responsive.css', ['main-css'], filemtime($base_dir . '/responsive/desktop-responsive.css'), '(min-width:1200px)');
-}
-add_action('wp_enqueue_scripts', 'hypersanati_enqueue_all_css');
-
-
-/* =========================================================
-   ENQUEUE SCRIPTS
-========================================================= */
-function hypersanati_enqueue_scripts() {
-
-    wp_enqueue_script(
-        'main-js',
-        get_template_directory_uri() . '/assets/js/functions.js',
-        [],
-        '1.0',
-        true
-    );
-}
-add_action('wp_enqueue_scripts', 'hypersanati_enqueue_scripts');
-
-
-/* =========================================================
-   CONDITIONAL ASSETS + SEARCH COMPACT
-========================================================= */
-
 if (!function_exists('hypersanati_asset_version')) {
     function hypersanati_asset_version($relative_path) {
         $file_path = get_template_directory() . $relative_path;
@@ -59,91 +16,256 @@ if (!function_exists('hypersanati_asset_version')) {
     }
 }
 
+/* =========================================================
+   SAFE ENQUEUE HELPERS
+========================================================= */
+if (!function_exists('hypersanati_enqueue_theme_style')) {
+    function hypersanati_enqueue_theme_style($handle, $relative_path, $deps = array(), $media = 'all') {
+        $file_path = get_template_directory() . $relative_path;
+
+        if (!file_exists($file_path)) {
+            return false;
+        }
+
+        wp_enqueue_style(
+            $handle,
+            get_template_directory_uri() . $relative_path,
+            $deps,
+            hypersanati_asset_version($relative_path),
+            $media
+        );
+
+        return true;
+    }
+}
+
+if (!function_exists('hypersanati_enqueue_theme_script')) {
+    function hypersanati_enqueue_theme_script($handle, $relative_path, $deps = array(), $in_footer = true) {
+        $file_path = get_template_directory() . $relative_path;
+
+        if (!file_exists($file_path)) {
+            return false;
+        }
+
+        wp_enqueue_script(
+            $handle,
+            get_template_directory_uri() . $relative_path,
+            $deps,
+            hypersanati_asset_version($relative_path),
+            $in_footer
+        );
+
+        return true;
+    }
+}
+
+/* =========================================================
+   ENQUEUE ALL THEME ASSETS
+========================================================= */
 function hypersanati_enqueue_assets() {
 
     /* =========================================================
-       MAIN STYLE
+       CORE CSS
     ========================================================= */
-    // wp_enqueue_style(
-    //     'hypersanati-style',
-    //     get_template_directory_uri() . '/assets/css/main.css',
-    //     array(),
-    //     hypersanati_asset_version('/assets/css/main.css')
-    // );
+
+    $bootstrap_loaded = hypersanati_enqueue_theme_style(
+        'hypersanati-bootstrap-rtl',
+        '/assets/css/bootstrap.rtl.min.css'
+    );
+
+    hypersanati_enqueue_theme_style(
+        'hypersanati-fontawesome',
+        '/assets/css/fontawesome.min.css'
+    );
+
+    hypersanati_enqueue_theme_style(
+        'hypersanati-fontawesome-solid',
+        '/assets/css/solid.min.css',
+        array('hypersanati-fontawesome')
+    );
+
+    hypersanati_enqueue_theme_style(
+        'hypersanati-fontawesome-brands',
+        '/assets/css/brands.min.css',
+        array('hypersanati-fontawesome')
+    );
+
+    hypersanati_enqueue_theme_style(
+        'hypersanati-site-fonts',
+        '/assets/css/font.css'
+    );
 
     /* =========================================================
-       MAIN JS
+       MAIN CSS
+       فقط یک بار لود می‌شود
     ========================================================= */
-    if (file_exists(get_template_directory() . '/assets/js/main.js')) {
-        wp_enqueue_script(
-            'hypersanati-main',
-            get_template_directory_uri() . '/assets/js/main.js',
-            array(),
-            hypersanati_asset_version('/assets/js/main.js'),
-            true
-        );
+
+    $main_deps = array();
+
+    if ($bootstrap_loaded) {
+        $main_deps[] = 'hypersanati-bootstrap-rtl';
+    }
+
+    if (wp_style_is('hypersanati-site-fonts', 'enqueued')) {
+        $main_deps[] = 'hypersanati-site-fonts';
+    }
+
+    hypersanati_enqueue_theme_style(
+        'hypersanati-style',
+        '/assets/css/main.css',
+        $main_deps
+    );
+
+    /* =========================================================
+       RESPONSIVE CSS
+    ========================================================= */
+
+    $page_css_deps = array('hypersanati-style');
+
+    $tablet_loaded = hypersanati_enqueue_theme_style(
+        'hypersanati-responsive-tablet',
+        '/assets/css/responsive/tablet-responsive.css',
+        array('hypersanati-style'),
+        '(min-width:768px)'
+    );
+
+    if ($tablet_loaded) {
+        $page_css_deps[] = 'hypersanati-responsive-tablet';
+    }
+
+    $laptop_loaded = hypersanati_enqueue_theme_style(
+        'hypersanati-responsive-laptop',
+        '/assets/css/responsive/laptop-responsive.css',
+        array('hypersanati-style'),
+        '(min-width:992px)'
+    );
+
+    if ($laptop_loaded) {
+        $page_css_deps[] = 'hypersanati-responsive-laptop';
+    }
+
+    $desktop_loaded = hypersanati_enqueue_theme_style(
+        'hypersanati-responsive-desktop',
+        '/assets/css/responsive/desktop-responsive.css',
+        array('hypersanati-style'),
+        '(min-width:1200px)'
+    );
+
+    if ($desktop_loaded) {
+        $page_css_deps[] = 'hypersanati-responsive-desktop';
     }
 
     /* =========================================================
-    CHECKOUT PAGE
+       CORE JS
+    ========================================================= */
+
+    $bootstrap_js_loaded = hypersanati_enqueue_theme_script(
+        'hypersanati-bootstrap-bundle',
+        '/assets/js/bootstrap.bundle.min.js',
+        array(),
+        true
+    );
+
+    $functions_js_deps = array();
+
+    if ($bootstrap_js_loaded) {
+        $functions_js_deps[] = 'hypersanati-bootstrap-bundle';
+    }
+
+    $functions_js_loaded = hypersanati_enqueue_theme_script(
+        'hypersanati-functions',
+        '/assets/js/functions.js',
+        $functions_js_deps,
+        true
+    );
+
+    $main_js_deps = array();
+
+    if ($functions_js_loaded) {
+        $main_js_deps[] = 'hypersanati-functions';
+    }
+
+    hypersanati_enqueue_theme_script(
+        'hypersanati-main-js',
+        '/assets/js/main.js',
+        $main_js_deps,
+        true
+    );
+
+    /* =========================================================
+       CHECKOUT PAGE
     ========================================================= */
 
     if (function_exists('is_checkout') && is_checkout() && !is_order_received_page()) {
-        wp_enqueue_style(
+
+        hypersanati_enqueue_theme_style(
             'hsb-checkout-page',
-            get_template_directory_uri() . '/assets/css/check-out.css',
-            array('hypersanati-style'),
-            hypersanati_asset_version('/assets/css/check-out.css')
+            '/assets/css/check-out.css',
+            $page_css_deps
         );
 
-        wp_enqueue_script(
+        hypersanati_enqueue_theme_script(
             'hsb-checkout-page',
-            get_template_directory_uri() . '/assets/js/check-out.js',
+            '/assets/js/check-out.js',
             array('jquery'),
-            hypersanati_asset_version('/assets/js/check-out.js'),
             true
         );
     }
 
     /* =========================================================
-    THANK YOU PAGE + SALES INVOICE
+       THANK YOU PAGE + SALES INVOICE
     ========================================================= */
+
     if (function_exists('is_order_received_page') && is_order_received_page()) {
-        wp_enqueue_style(
+
+        $thank_you_loaded = hypersanati_enqueue_theme_style(
             'hsb-thank-you-page',
-            get_template_directory_uri() . '/assets/css/thank-you-page.css',
-            array('hypersanati-style'),
-            hypersanati_asset_version('/assets/css/thank-you-page.css')
+            '/assets/css/thank-you-page.css',
+            $page_css_deps
         );
 
-        wp_enqueue_style(
+        $invoice_css_deps = $page_css_deps;
+
+        if ($thank_you_loaded) {
+            $invoice_css_deps[] = 'hsb-thank-you-page';
+        }
+
+        hypersanati_enqueue_theme_style(
             'hsb-sales-invoice',
-            get_template_directory_uri() . '/assets/css/sales-invoice.css',
-            array('hypersanati-style', 'hsb-thank-you-page'),
-            hypersanati_asset_version('/assets/css/sales-invoice.css')
+            '/assets/css/sales-invoice.css',
+            $invoice_css_deps
         );
 
-        wp_enqueue_script(
+        $html2pdf_loaded = hypersanati_enqueue_theme_script(
             'hsb-html2pdf',
-            get_template_directory_uri() . '/assets/js/html2pdf.bundle.min.js',
+            '/assets/js/html2pdf.bundle.min.js',
             array(),
-            hypersanati_asset_version('/assets/js/html2pdf.bundle.min.js'),
             true
         );
 
-        wp_enqueue_script(
+        $invoice_js_deps = array();
+
+        if ($html2pdf_loaded) {
+            $invoice_js_deps[] = 'hsb-html2pdf';
+        }
+
+        $invoice_js_loaded = hypersanati_enqueue_theme_script(
             'hsb-sales-invoice',
-            get_template_directory_uri() . '/assets/js/sales-invoice.js',
-            array('hsb-html2pdf'),
-            hypersanati_asset_version('/assets/js/sales-invoice.js'),
+            '/assets/js/sales-invoice.js',
+            $invoice_js_deps,
             true
         );
 
-        wp_enqueue_script(
+        $thank_you_js_deps = array();
+
+        if ($invoice_js_loaded) {
+            $thank_you_js_deps[] = 'hsb-sales-invoice';
+        }
+
+        hypersanati_enqueue_theme_script(
             'hsb-thank-you-page',
-            get_template_directory_uri() . '/assets/js/thank-you-page.js',
-            array('hsb-sales-invoice'),
-            hypersanati_asset_version('/assets/js/thank-you-page.js'),
+            '/assets/js/thank-you-page.js',
+            $thank_you_js_deps,
             true
         );
     }
@@ -151,19 +273,19 @@ function hypersanati_enqueue_assets() {
     /* =========================================================
        404 PAGE
     ========================================================= */
+
     if (is_404()) {
-        wp_enqueue_style(
+
+        hypersanati_enqueue_theme_style(
             'hypersanati-404',
-            get_template_directory_uri() . '/assets/css/404.css',
-            array('hypersanati-style'),
-            hypersanati_asset_version('/assets/css/404.css')
+            '/assets/css/404.css',
+            $page_css_deps
         );
 
-        wp_enqueue_script(
+        hypersanati_enqueue_theme_script(
             'hypersanati-404',
-            get_template_directory_uri() . '/assets/js/404.js',
+            '/assets/js/404.js',
             array(),
-            hypersanati_asset_version('/assets/js/404.js'),
             true
         );
     }
@@ -171,19 +293,19 @@ function hypersanati_enqueue_assets() {
     /* =========================================================
        CART PAGE
     ========================================================= */
+
     if (function_exists('is_cart') && is_cart()) {
-        wp_enqueue_style(
+
+        hypersanati_enqueue_theme_style(
             'hsb-cart-page-items',
-            get_template_directory_uri() . '/assets/css/cart-page-items.css',
-            array('hypersanati-style'),
-            hypersanati_asset_version('/assets/css/cart-page-items.css')
+            '/assets/css/cart-page-items.css',
+            $page_css_deps
         );
 
-        wp_enqueue_script(
+        hypersanati_enqueue_theme_script(
             'hsb-cart-page-items',
-            get_template_directory_uri() . '/assets/js/cart-page-items.js',
+            '/assets/js/cart-page-items.js',
             array(),
-            hypersanati_asset_version('/assets/js/cart-page-items.js'),
             true
         );
     }
@@ -191,59 +313,70 @@ function hypersanati_enqueue_assets() {
     /* =========================================================
        CONTACT US PAGE
     ========================================================= */
+
     if (is_page('contact-us') || is_page_template('page-contact-us.php')) {
-        wp_enqueue_style(
+
+        hypersanati_enqueue_theme_style(
             'hypersanati-contact-us',
-            get_template_directory_uri() . '/assets/css/contact-us.css',
-            array('hypersanati-style'),
-            hypersanati_asset_version('/assets/css/contact-us.css')
+            '/assets/css/contact-us.css',
+            $page_css_deps
         );
 
-        wp_enqueue_script(
+        $contact_js_loaded = hypersanati_enqueue_theme_script(
             'hypersanati-contact-us',
-            get_template_directory_uri() . '/assets/js/contact-us.js',
+            '/assets/js/contact-us.js',
             array(),
-            hypersanati_asset_version('/assets/js/contact-us.js'),
             true
         );
+
+        if ($contact_js_loaded) {
+            wp_localize_script(
+                'hypersanati-contact-us',
+                'HypersanatiContactAjax',
+                array(
+                    'ajax_url'     => admin_url('admin-ajax.php'),
+                    'sending_text' => 'در حال ارسال...',
+                )
+            );
+        }
     }
 
     /* =========================================================
        ABOUT PAGE
     ========================================================= */
+
     if (is_page('about-us') || is_page_template('page-about-us.php')) {
-        wp_enqueue_style(
+
+        hypersanati_enqueue_theme_style(
             'hypersanati-about-us',
-            get_template_directory_uri() . '/assets/css/about-us.css',
-            array('hypersanati-style'),
-            hypersanati_asset_version('/assets/css/about-us.css')
+            '/assets/css/about-us.css',
+            $page_css_deps
         );
 
-        wp_enqueue_script(
+        hypersanati_enqueue_theme_script(
             'hypersanati-about-us',
-            get_template_directory_uri() . '/assets/js/about-us.js',
+            '/assets/js/about-us.js',
             array(),
-            hypersanati_asset_version('/assets/js/about-us.js'),
             true
         );
     }
 
     /* =========================================================
-       CATEGORY PAGE
+       ARTICLE CATEGORY / TAG / ARCHIVE PAGE
     ========================================================= */
+
     if (is_category() || is_tag() || is_date() || is_author()) {
-        wp_enqueue_style(
+
+        hypersanati_enqueue_theme_style(
             'hypersanati-category',
-            get_template_directory_uri() . '/assets/css/article-category.css',
-            array('hypersanati-style'),
-            hypersanati_asset_version('/assets/css/article-category.css')
+            '/assets/css/article-category.css',
+            $page_css_deps
         );
 
-        wp_enqueue_script(
+        hypersanati_enqueue_theme_script(
             'hypersanati-category',
-            get_template_directory_uri() . '/assets/js/article-category.js',
+            '/assets/js/article-category.js',
             array(),
-            hypersanati_asset_version('/assets/js/article-category.js'),
             true
         );
     }
@@ -251,91 +384,107 @@ function hypersanati_enqueue_assets() {
     /* =========================================================
        SINGLE ARTICLE
     ========================================================= */
+
     if (is_singular('post')) {
-        wp_enqueue_style(
+
+        hypersanati_enqueue_theme_style(
             'single-article-css',
-            get_template_directory_uri() . '/assets/css/single-article.css',
-            array('hypersanati-style'),
-            hypersanati_asset_version('/assets/css/single-article.css')
+            '/assets/css/single-article.css',
+            $page_css_deps
         );
 
-        wp_enqueue_script(
+        hypersanati_enqueue_theme_script(
             'single-article-js',
-            get_template_directory_uri() . '/assets/js/single-article.js',
+            '/assets/js/single-article.js',
             array('jquery'),
-            hypersanati_asset_version('/assets/js/single-article.js'),
             true
         );
     }
 
-
     /* =========================================================
-       SHOP PAGE
+       SHOP PAGE / PRODUCT ARCHIVE
     ========================================================= */
-    if (function_exists('is_shop') && (is_shop() || is_post_type_archive('product'))) {
-        wp_enqueue_style(
+
+    if (
+        function_exists('is_shop') &&
+        (
+            is_shop() ||
+            is_post_type_archive('product') ||
+            (function_exists('is_product_category') && is_product_category()) ||
+            (function_exists('is_product_tag') && is_product_tag())
+        )
+    ) {
+
+        hypersanati_enqueue_theme_style(
             'shop-css',
-            get_template_directory_uri() . '/assets/css/shop.css',
-            array('hypersanati-style'),
-            hypersanati_asset_version('/assets/css/shop.css')
+            '/assets/css/shop.css',
+            $page_css_deps
         );
 
-        wp_enqueue_script(
+        $shop_js_loaded = hypersanati_enqueue_theme_script(
             'shop-js',
-            get_template_directory_uri() . '/assets/js/shop.js',
+            '/assets/js/shop.js',
             array('jquery'),
-            hypersanati_asset_version('/assets/js/shop.js'),
             true
         );
 
-        if (function_exists('hypersanati_get_shop_url')) {
-            wp_localize_script('shop-js', 'hypersanatiSearch', array(
-                'shopUrl' => hypersanati_get_shop_url(),
-            ));
+        if ($shop_js_loaded && function_exists('hypersanati_get_shop_url')) {
+            wp_localize_script(
+                'shop-js',
+                'hypersanatiSearch',
+                array(
+                    'shopUrl' => hypersanati_get_shop_url(),
+                )
+            );
         }
     }
 
     /* =========================================================
        FRONT PAGE
     ========================================================= */
+
     if (is_front_page() || is_home()) {
-        wp_enqueue_script(
+
+        $index_search_loaded = hypersanati_enqueue_theme_script(
             'index-search-js',
-            get_template_directory_uri() . '/assets/js/index-search.js',
+            '/assets/js/index-search.js',
             array(),
-            hypersanati_asset_version('/assets/js/index-search.js'),
             true
         );
 
-        if (function_exists('hypersanati_get_shop_url')) {
-            wp_localize_script('index-search-js', 'hypersanatiSearch', array(
-                'shopUrl' => hypersanati_get_shop_url(),
-            ));
+        if ($index_search_loaded && function_exists('hypersanati_get_shop_url')) {
+            wp_localize_script(
+                'index-search-js',
+                'hypersanatiSearch',
+                array(
+                    'shopUrl' => hypersanati_get_shop_url(),
+                )
+            );
         }
     }
 
     /* =========================================================
        SINGLE PRODUCT
     ========================================================= */
+
     if (function_exists('is_product') && is_product()) {
-        wp_enqueue_style(
+
+        hypersanati_enqueue_theme_style(
             'single-product-css',
-            get_template_directory_uri() . '/assets/css/single-product.css',
-            array('hypersanati-style'),
-            hypersanati_asset_version('/assets/css/single-product.css')
+            '/assets/css/single-product.css',
+            $page_css_deps
         );
 
-        wp_enqueue_script(
+        hypersanati_enqueue_theme_script(
             'single-product-js',
-            get_template_directory_uri() . '/assets/js/single-product.js',
+            '/assets/js/single-product.js',
             array('jquery'),
-            hypersanati_asset_version('/assets/js/single-product.js'),
             true
         );
     }
 }
 
-add_action('wp_enqueue_scripts', 'hypersanati_enqueue_assets');
+add_action('wp_enqueue_scripts', 'hypersanati_enqueue_assets', 20);
 
 /* =========================================================
    MENUS
