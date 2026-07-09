@@ -64,12 +64,12 @@ function hypersanati_enqueue_assets() {
     /* =========================================================
        MAIN STYLE
     ========================================================= */
-    wp_enqueue_style(
-        'hypersanati-style',
-        get_template_directory_uri() . '/assets/css/main.css',
-        array(),
-        hypersanati_asset_version('/assets/css/main.css')
-    );
+    // wp_enqueue_style(
+    //     'hypersanati-style',
+    //     get_template_directory_uri() . '/assets/css/main.css',
+    //     array(),
+    //     hypersanati_asset_version('/assets/css/main.css')
+    // );
 
     /* =========================================================
        MAIN JS
