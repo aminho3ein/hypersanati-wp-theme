@@ -2716,53 +2716,6 @@ function hypersanati_contact_message_column_content( $column, $post_id ) {
         }
     }
 }
-
-
-// Load contact page CSS and JS only on contact page
-add_action( 'wp_enqueue_scripts', 'hypersanati_contact_page_assets', 30 );
-
-function hypersanati_contact_page_assets() {
-
-    if ( ! is_page( 'contact-us' ) && ! is_page_template( 'page-contact-us.php' ) ) {
-        return;
-    }
-
-    $theme_version = wp_get_theme()->get( 'Version' );
-
-    $contact_css_path = get_template_directory() . '/assets/css/contact-us.css';
-    $contact_css_uri  = get_template_directory_uri() . '/assets/css/contact-us.css';
-
-    if ( file_exists( $contact_css_path ) ) {
-        wp_enqueue_style(
-            'hypersanati-contact-us',
-            $contact_css_uri,
-            array(),
-            filemtime( $contact_css_path )
-        );
-    }
-
-    $contact_js_path = get_template_directory() . '/assets/js/contact-us.js';
-    $contact_js_uri  = get_template_directory_uri() . '/assets/js/contact-us.js';
-
-    if ( file_exists( $contact_js_path ) ) {
-        wp_enqueue_script(
-            'hypersanati-contact-us',
-            $contact_js_uri,
-            array(),
-            filemtime( $contact_js_path ),
-            true
-        );
-        wp_localize_script(
-            'hypersanati-contact-us',
-            'HypersanatiContactAjax',
-            array(
-                'ajax_url'     => admin_url( 'admin-ajax.php' ),
-                'sending_text' => 'در حال ارسال...',
-            )
-        );
-    }
-}
-
 // PAYAN TAMAS BA MA --------------------------------------------------
 
 
