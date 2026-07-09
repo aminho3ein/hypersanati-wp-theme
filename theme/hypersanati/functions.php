@@ -46,24 +46,105 @@ add_action('wp_enqueue_scripts', 'hypersanati_enqueue_scripts');
 /* =========================================================
    CONDITIONAL ASSETS + SEARCH COMPACT
 ========================================================= */
+
+if (!function_exists('hypersanati_asset_version')) {
+    function hypersanati_asset_version($relative_path) {
+        $file_path = get_template_directory() . $relative_path;
+
+        if (file_exists($file_path)) {
+            return filemtime($file_path);
+        }
+
+        return '1.0.0';
+    }
+}
+
 function hypersanati_enqueue_assets() {
 
-    // ۱. فراخوانی استایل اصلی پوسته
-    // wp_enqueue_style(
-    //     'hypersanati-style',
-    //     get_stylesheet_uri(),
-    //     [],
-    //     filemtime(get_template_directory() . '/assets/css/main.css')
-    // );
+    /* =========================================================
+       MAIN STYLE
+    ========================================================= */
+    wp_enqueue_style(
+        'hypersanati-style',
+        get_template_directory_uri() . '/assets/css/main.css',
+        array(),
+        hypersanati_asset_version('/assets/css/main.css')
+    );
 
-    // ۲. فراخوانی فایل main.js به صورت عمومی در فوتر (حل مشکل شما)
+    /* =========================================================
+       MAIN JS
+    ========================================================= */
     if (file_exists(get_template_directory() . '/assets/js/main.js')) {
         wp_enqueue_script(
             'hypersanati-main',
             get_template_directory_uri() . '/assets/js/main.js',
-            [], // اگر از جی‌کوئری استفاده نمی‌کنید خالی بگذارید، در غیر این صورت: ['jquery']
-            filemtime(get_template_directory() . '/assets/js/main.js'),
-            true // مقدار true باعث می‌شود اسکریپت در فوتر لود شود
+            array(),
+            hypersanati_asset_version('/assets/js/main.js'),
+            true
+        );
+    }
+
+    /* =========================================================
+    CHECKOUT PAGE
+    ========================================================= */
+
+    if (function_exists('is_checkout') && is_checkout() && !is_order_received_page()) {
+        wp_enqueue_style(
+            'hsb-checkout-page',
+            get_template_directory_uri() . '/assets/css/check-out.css',
+            array('hypersanati-style'),
+            hypersanati_asset_version('/assets/css/check-out.css')
+        );
+
+        wp_enqueue_script(
+            'hsb-checkout-page',
+            get_template_directory_uri() . '/assets/js/check-out.js',
+            array('jquery'),
+            hypersanati_asset_version('/assets/js/check-out.js'),
+            true
+        );
+    }
+
+    /* =========================================================
+    THANK YOU PAGE + SALES INVOICE
+    ========================================================= */
+    if (function_exists('is_order_received_page') && is_order_received_page()) {
+        wp_enqueue_style(
+            'hsb-thank-you-page',
+            get_template_directory_uri() . '/assets/css/thank-you-page.css',
+            array('hypersanati-style'),
+            hypersanati_asset_version('/assets/css/thank-you-page.css')
+        );
+
+        wp_enqueue_style(
+            'hsb-sales-invoice',
+            get_template_directory_uri() . '/assets/css/sales-invoice.css',
+            array('hypersanati-style', 'hsb-thank-you-page'),
+            hypersanati_asset_version('/assets/css/sales-invoice.css')
+        );
+
+        wp_enqueue_script(
+            'hsb-html2pdf',
+            get_template_directory_uri() . '/assets/js/html2pdf.bundle.min.js',
+            array(),
+            hypersanati_asset_version('/assets/js/html2pdf.bundle.min.js'),
+            true
+        );
+
+        wp_enqueue_script(
+            'hsb-sales-invoice',
+            get_template_directory_uri() . '/assets/js/sales-invoice.js',
+            array('hsb-html2pdf'),
+            hypersanati_asset_version('/assets/js/sales-invoice.js'),
+            true
+        );
+
+        wp_enqueue_script(
+            'hsb-thank-you-page',
+            get_template_directory_uri() . '/assets/js/thank-you-page.js',
+            array('hsb-sales-invoice'),
+            hypersanati_asset_version('/assets/js/thank-you-page.js'),
+            true
         );
     }
 
@@ -74,15 +155,55 @@ function hypersanati_enqueue_assets() {
         wp_enqueue_style(
             'hypersanati-404',
             get_template_directory_uri() . '/assets/css/404.css',
-            ['hypersanati-style'],
-            filemtime(get_template_directory() . '/assets/css/404.css')
+            array('hypersanati-style'),
+            hypersanati_asset_version('/assets/css/404.css')
         );
 
         wp_enqueue_script(
             'hypersanati-404',
             get_template_directory_uri() . '/assets/js/404.js',
-            [],
-            filemtime(get_template_directory() . '/assets/js/404.js'),
+            array(),
+            hypersanati_asset_version('/assets/js/404.js'),
+            true
+        );
+    }
+
+    /* =========================================================
+       CART PAGE
+    ========================================================= */
+    if (function_exists('is_cart') && is_cart()) {
+        wp_enqueue_style(
+            'hsb-cart-page-items',
+            get_template_directory_uri() . '/assets/css/cart-page-items.css',
+            array('hypersanati-style'),
+            hypersanati_asset_version('/assets/css/cart-page-items.css')
+        );
+
+        wp_enqueue_script(
+            'hsb-cart-page-items',
+            get_template_directory_uri() . '/assets/js/cart-page-items.js',
+            array(),
+            hypersanati_asset_version('/assets/js/cart-page-items.js'),
+            true
+        );
+    }
+
+    /* =========================================================
+       CONTACT US PAGE
+    ========================================================= */
+    if (is_page('contact-us') || is_page_template('page-contact-us.php')) {
+        wp_enqueue_style(
+            'hypersanati-contact-us',
+            get_template_directory_uri() . '/assets/css/contact-us.css',
+            array('hypersanati-style'),
+            hypersanati_asset_version('/assets/css/contact-us.css')
+        );
+
+        wp_enqueue_script(
+            'hypersanati-contact-us',
+            get_template_directory_uri() . '/assets/js/contact-us.js',
+            array(),
+            hypersanati_asset_version('/assets/js/contact-us.js'),
             true
         );
     }
@@ -94,15 +215,15 @@ function hypersanati_enqueue_assets() {
         wp_enqueue_style(
             'hypersanati-about-us',
             get_template_directory_uri() . '/assets/css/about-us.css',
-            ['hypersanati-style'],
-            filemtime(get_template_directory() . '/assets/css/about-us.css')
+            array('hypersanati-style'),
+            hypersanati_asset_version('/assets/css/about-us.css')
         );
 
         wp_enqueue_script(
             'hypersanati-about-us',
             get_template_directory_uri() . '/assets/js/about-us.js',
-            [],
-            filemtime(get_template_directory() . '/assets/js/about-us.js'),
+            array(),
+            hypersanati_asset_version('/assets/js/about-us.js'),
             true
         );
     }
@@ -110,103 +231,110 @@ function hypersanati_enqueue_assets() {
     /* =========================================================
        CATEGORY PAGE
     ========================================================= */
-    if (is_category() || is_archive()) {
+    if (is_category() || is_tag() || is_date() || is_author()) {
         wp_enqueue_style(
             'hypersanati-category',
             get_template_directory_uri() . '/assets/css/article-category.css',
-            ['hypersanati-style'],
-            filemtime(get_template_directory() . '/assets/css/article-category.css')
+            array('hypersanati-style'),
+            hypersanati_asset_version('/assets/css/article-category.css')
         );
 
         wp_enqueue_script(
             'hypersanati-category',
             get_template_directory_uri() . '/assets/js/article-category.js',
-            [],
-            filemtime(get_template_directory() . '/assets/js/article-category.js'),
+            array(),
+            hypersanati_asset_version('/assets/js/article-category.js'),
             true
         );
     }
 
     /* =========================================================
-       SINGLE POST
+       SINGLE ARTICLE
     ========================================================= */
-    if (is_single()) {
+    if (is_singular('post')) {
         wp_enqueue_style(
             'single-article-css',
             get_template_directory_uri() . '/assets/css/single-article.css',
-            array(),
-            filemtime(get_template_directory() . '/assets/css/single-article.css')
+            array('hypersanati-style'),
+            hypersanati_asset_version('/assets/css/single-article.css')
         );
 
         wp_enqueue_script(
             'single-article-js',
             get_template_directory_uri() . '/assets/js/single-article.js',
             array('jquery'),
-            filemtime(get_template_directory() . '/assets/js/single-article.js'),
+            hypersanati_asset_version('/assets/js/single-article.js'),
             true
         );
     }
+
+
     /* =========================================================
-       Shop Page
+       SHOP PAGE
     ========================================================= */
-    if (is_shop() || is_post_type_archive('product')) {
+    if (function_exists('is_shop') && (is_shop() || is_post_type_archive('product'))) {
         wp_enqueue_style(
             'shop-css',
             get_template_directory_uri() . '/assets/css/shop.css',
-            array(),
-            filemtime(get_template_directory() . '/assets/css/shop.css')
+            array('hypersanati-style'),
+            hypersanati_asset_version('/assets/css/shop.css')
         );
 
         wp_enqueue_script(
             'shop-js',
             get_template_directory_uri() . '/assets/js/shop.js',
             array('jquery'),
-            filemtime(get_template_directory() . '/assets/js/shop.js'),
+            hypersanati_asset_version('/assets/js/shop.js'),
             true
         );
 
-        wp_localize_script('shop-js', 'hypersanatiSearch', [
-            'shopUrl' => hypersanati_get_shop_url(),
-        ]);
+        if (function_exists('hypersanati_get_shop_url')) {
+            wp_localize_script('shop-js', 'hypersanatiSearch', array(
+                'shopUrl' => hypersanati_get_shop_url(),
+            ));
+        }
     }
 
     /* =========================================================
-       Front Page (Dimension Search)
+       FRONT PAGE
     ========================================================= */
     if (is_front_page() || is_home()) {
         wp_enqueue_script(
             'index-search-js',
             get_template_directory_uri() . '/assets/js/index-search.js',
-            [],
-            filemtime(get_template_directory() . '/assets/js/index-search.js'),
+            array(),
+            hypersanati_asset_version('/assets/js/index-search.js'),
             true
         );
 
-        wp_localize_script('index-search-js', 'hypersanatiSearch', [
-            'shopUrl' => hypersanati_get_shop_url(),
-        ]);
+        if (function_exists('hypersanati_get_shop_url')) {
+            wp_localize_script('index-search-js', 'hypersanatiSearch', array(
+                'shopUrl' => hypersanati_get_shop_url(),
+            ));
+        }
     }
 
     /* =========================================================
-       Single Product
+       SINGLE PRODUCT
     ========================================================= */
-    if (is_product()) {
+    if (function_exists('is_product') && is_product()) {
         wp_enqueue_style(
             'single-product-css',
             get_template_directory_uri() . '/assets/css/single-product.css',
-            array(),
-            filemtime(get_template_directory() . '/assets/css/single-product.css')
+            array('hypersanati-style'),
+            hypersanati_asset_version('/assets/css/single-product.css')
         );
 
         wp_enqueue_script(
             'single-product-js',
             get_template_directory_uri() . '/assets/js/single-product.js',
             array('jquery'),
-            filemtime(get_template_directory() . '/assets/js/single-product.js'),
+            hypersanati_asset_version('/assets/js/single-product.js'),
             true
         );
     }
 }
+
 add_action('wp_enqueue_scripts', 'hypersanati_enqueue_assets');
 
 /* =========================================================
@@ -620,6 +748,14 @@ function load_shop_categories() {
     
     // دریافت کلمه کلیدی جستجو از آژاکس
     $search_keyword = isset($_GET['search_keyword']) ? sanitize_text_field($_GET['search_keyword']) : '';
+    
+    // دریافت فیلترهای ابعادی
+    $inner_min = isset($_GET['inner_min']) ? sanitize_text_field($_GET['inner_min']) : '';
+    $inner_max = isset($_GET['inner_max']) ? sanitize_text_field($_GET['inner_max']) : '';
+    $outer_min = isset($_GET['outer_min']) ? sanitize_text_field($_GET['outer_min']) : '';
+    $outer_max = isset($_GET['outer_max']) ? sanitize_text_field($_GET['outer_max']) : '';
+    $height_min = isset($_GET['height_min']) ? sanitize_text_field($_GET['height_min']) : '';
+    $height_max = isset($_GET['height_max']) ? sanitize_text_field($_GET['height_max']) : '';
 
     $uncategorized = get_term_by('slug', 'uncategorized', 'product_cat');
     $exclude_ids = $uncategorized ? array($uncategorized->term_id) : array();
@@ -686,6 +822,70 @@ function load_shop_categories() {
                 // اضافه کردن فیلتر جستجوی متنی در صورت وجود کلمه کلیدی
                 if (!empty($search_keyword)) {
                     $product_args['s'] = $search_keyword;
+                }
+                
+                // اضافه کردن فیلترهای ابعادی
+                $meta_query = [];
+                
+                if (!empty($inner_min)) {
+                    $meta_query[] = [
+                        'key' => '_inner_diameter',
+                        'value' => floatval($inner_min),
+                        'compare' => '>=',
+                        'type' => 'DECIMAL',
+                    ];
+                }
+                
+                if (!empty($inner_max)) {
+                    $meta_query[] = [
+                        'key' => '_inner_diameter',
+                        'value' => floatval($inner_max),
+                        'compare' => '<=',
+                        'type' => 'DECIMAL',
+                    ];
+                }
+                
+                if (!empty($outer_min)) {
+                    $meta_query[] = [
+                        'key' => '_outer_diameter',
+                        'value' => floatval($outer_min),
+                        'compare' => '>=',
+                        'type' => 'DECIMAL',
+                    ];
+                }
+                
+                if (!empty($outer_max)) {
+                    $meta_query[] = [
+                        'key' => '_outer_diameter',
+                        'value' => floatval($outer_max),
+                        'compare' => '<=',
+                        'type' => 'DECIMAL',
+                    ];
+                }
+                
+                if (!empty($height_min)) {
+                    $meta_query[] = [
+                        'key' => '_bearing_width',
+                        'value' => floatval($height_min),
+                        'compare' => '>=',
+                        'type' => 'DECIMAL',
+                    ];
+                }
+                
+                if (!empty($height_max)) {
+                    $meta_query[] = [
+                        'key' => '_bearing_width',
+                        'value' => floatval($height_max),
+                        'compare' => '<=',
+                        'type' => 'DECIMAL',
+                    ];
+                }
+                
+                if (!empty($meta_query)) {
+                    $product_args['meta_query'] = $meta_query;
+                    if (count($meta_query) > 1) {
+                        $product_args['meta_query']['relation'] = 'AND';
+                    }
                 }
 
                 $products = new WP_Query($product_args);
@@ -994,24 +1194,727 @@ function bearing_technical_specs_fields() {
 add_action('woocommerce_process_product_meta', 'hypersanati_save_bearing_specs', 20);
 
 function hypersanati_save_bearing_specs($post_id) {
-    $dimension_fields = [
+    $spec_fields = [
+        '_mpn_part_number',
         '_inner_diameter',
         '_outer_diameter',
         '_bearing_width',
+        '_bearing_seal',
+        '_bearing_clearance',
+        '_bearing_precision',
+        '_bearing_material',
+        '_bearing_cage',
+        '_bearing_lubrication',
+        '_dynamic_load',
+        '_static_load',
+        '_max_rpm',
+        '_country_origin',
+        '_bearing_usage',
+        '_bearing_industry',
+        '_datasheet_link',
+        '_equivalent_codes',
     ];
 
-    foreach ($dimension_fields as $field) {
+    foreach ($spec_fields as $field) {
         if (isset($_POST[$field])) {
-            update_post_meta($post_id, $field, sanitize_text_field(wp_unslash($_POST[$field])));
+            if ($field === '_equivalent_codes') {
+                update_post_meta($post_id, $field, sanitize_textarea_field(wp_unslash($_POST[$field])));
+            } else {
+                update_post_meta($post_id, $field, sanitize_text_field(wp_unslash($_POST[$field])));
+            }
         }
     }
 }
+
+
+
+
+// NEXT SECTION PORSESH VA PASOKH
+defined('ABSPATH') || exit;
+
+/**
+ * تبدیل اعداد انگلیسی به فارسی
+ */
+if (!function_exists('theme_fa_digits')) {
+    function theme_fa_digits($text) {
+        return strtr((string) $text, array(
+            '0' => '۰',
+            '1' => '۱',
+            '2' => '۲',
+            '3' => '۳',
+            '4' => '۴',
+            '5' => '۵',
+            '6' => '۶',
+            '7' => '۷',
+            '8' => '۸',
+            '9' => '۹',
+        ));
+    }
+}
+
+/**
+ * گرفتن تعداد پرسش‌های تایید شده محصول
+ */
+if (!function_exists('theme_get_product_question_count')) {
+    function theme_get_product_question_count($product_id) {
+        return (int) get_comments(array(
+            'post_id' => $product_id,
+            'status'  => 'approve',
+            'type'    => 'product_question',
+            'parent'  => 0,
+            'count'   => true,
+        ));
+    }
+}
+
+/**
+ * خروجی HTML لیست پرسش و پاسخ محصول
+ */
+if (!function_exists('theme_render_product_qa_list')) {
+    function theme_render_product_qa_list($product_id, $qa_sort = 'newest') {
+        $product_id = absint($product_id);
+        $qa_sort    = $qa_sort === 'popular' ? 'popular' : 'newest';
+
+        $question_args = array(
+            'post_id' => $product_id,
+            'status'  => 'approve',
+            'type'    => 'product_question',
+            'parent'  => 0,
+            'number'  => 50,
+        );
+
+        if ($qa_sort === 'popular') {
+            $question_args['meta_key'] = 'qa_same_count';
+            $question_args['orderby']  = 'meta_value_num';
+            $question_args['order']    = 'DESC';
+        } else {
+            $question_args['orderby'] = 'comment_date_gmt';
+            $question_args['order']   = 'DESC';
+        }
+
+        $questions = get_comments($question_args);
+
+        ob_start();
+        ?>
+
+        <?php if (!empty($questions)) : ?>
+
+            <?php foreach ($questions as $question) : ?>
+                <?php
+                $same_count = (int) get_comment_meta($question->comment_ID, 'qa_same_count', true);
+
+                $is_buyer = false;
+                if (function_exists('wc_customer_bought_product')) {
+                    $is_buyer = wc_customer_bought_product(
+                        $question->comment_author_email,
+                        (int) $question->user_id,
+                        $product_id
+                    );
+                }
+
+                $answers = get_comments(array(
+                    'post_id' => $product_id,
+                    'status'  => 'approve',
+                    'type'    => 'product_answer',
+                    'parent'  => $question->comment_ID,
+                    'orderby' => 'comment_date_gmt',
+                    'order'   => 'ASC',
+                ));
+                ?>
+
+                <div class="qa-thread">
+
+                    <article class="qa-item question" id="question-<?php echo esc_attr($question->comment_ID); ?>">
+                        <div class="qa-header">
+                            <i class="fa-regular fa-circle-user user-icon"></i>
+
+                            <div class="qa-meta">
+                                <span class="qa-name">
+                                    <?php echo esc_html(get_comment_author($question)); ?>
+                                </span>
+
+                                <?php if ($is_buyer) : ?>
+                                    <span class="qa-role">خریدار</span>
+                                <?php else : ?>
+                                    <span class="qa-role">کاربر سایت</span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <div class="qa-text">
+                            <?php echo wp_kses_post(wpautop(get_comment_text($question))); ?>
+                        </div>
+
+                        <div class="qa-footer">
+                            <span class="qa-date">
+                                <?php echo esc_html(theme_fa_digits(get_comment_date(get_option('date_format'), $question))); ?>
+                            </span>
+
+                            <form class="same-question-form">
+                                <input type="hidden" name="question_id" value="<?php echo esc_attr($question->comment_ID); ?>">
+
+                                <button class="same-question" type="submit">
+                                    <i class="fa-regular fa-thumbs-up"></i>
+                                    سوال منم همین بود
+
+                                    <span class="same-question-count">
+                                        <?php echo esc_html(theme_fa_digits($same_count)); ?>
+                                    </span>
+                                </button>
+                            </form>
+                        </div>
+                    </article>
+
+                    <?php if (!empty($answers)) : ?>
+                        <?php foreach ($answers as $answer) : ?>
+                            <article class="qa-item answer seller" id="answer-<?php echo esc_attr($answer->comment_ID); ?>">
+                                <div class="qa-header">
+                                    <i class="fa-solid fa-store seller-icon"></i>
+
+                                    <div class="qa-meta">
+                                        <span class="qa-name">
+                                            <?php echo esc_html(get_bloginfo('name')); ?>
+                                        </span>
+                                        <span class="qa-role">واحد پشتیبانی</span>
+                                    </div>
+                                </div>
+
+                                <div class="qa-text">
+                                    <?php echo wp_kses_post(wpautop(get_comment_text($answer))); ?>
+                                </div>
+
+                                <div class="qa-footer">
+                                    <span class="qa-date">
+                                        <?php echo esc_html(theme_fa_digits(get_comment_date(get_option('date_format'), $answer))); ?>
+                                    </span>
+                                </div>
+                            </article>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <div class="qa-no-answer">
+                            هنوز پاسخی برای این پرسش ثبت نشده است.
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (current_user_can('edit_post', $product_id) || current_user_can('manage_woocommerce')) : ?>
+                        <details class="qa-answer-details">
+                            <summary>ثبت پاسخ فروشنده</summary>
+
+                            <form class="qa-answer-form">
+                                <input type="hidden" name="question_id" value="<?php echo esc_attr($question->comment_ID); ?>">
+
+                                <textarea name="answer_text" rows="4" required placeholder="پاسخ خود را بنویسید..."></textarea>
+
+                                <button type="submit" class="reply-btn">
+                                    ثبت پاسخ
+                                </button>
+                            </form>
+                        </details>
+                    <?php endif; ?>
+
+                </div>
+            <?php endforeach; ?>
+
+        <?php else : ?>
+
+            <div class="qa-empty-state">
+                <i class="fa-regular fa-message"></i>
+                <h4>هنوز پرسشی ثبت نشده است</h4>
+                <p>اولین نفری باشید که درباره این محصول پرسش ثبت می‌کند.</p>
+            </div>
+
+        <?php endif; ?>
+
+        <?php
+        return ob_get_clean();
+    }
+}
+
+/**
+ * enqueue اسکریپت AJAX فقط در صفحه محصول
+ */
+add_action('wp_enqueue_scripts', 'theme_enqueue_product_qa_ajax_script');
+
+function theme_enqueue_product_qa_ajax_script() {
+    if (!is_product()) {
+        return;
+    }
+
+    wp_enqueue_script(
+        'theme-product-qa-ajax',
+        get_stylesheet_directory_uri() . '/assets/js/product-qa-ajax.js',
+        array('jquery'),
+        '1.0.0',
+        true
+    );
+
+    wp_localize_script('theme-product-qa-ajax', 'themeProductQa', array(
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+    ));
+}
+
+/**
+ * AJAX: مرتب‌سازی و دریافت لیست پرسش‌ها
+ */
+add_action('wp_ajax_theme_load_product_qa', 'theme_ajax_load_product_qa');
+add_action('wp_ajax_nopriv_theme_load_product_qa', 'theme_ajax_load_product_qa');
+
+function theme_ajax_load_product_qa() {
+    $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
+    $qa_sort    = isset($_POST['qa_sort']) ? sanitize_text_field(wp_unslash($_POST['qa_sort'])) : 'newest';
+    $nonce      = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
+
+    if (!$product_id || !wp_verify_nonce($nonce, 'product_qa_ajax_' . $product_id)) {
+        wp_send_json_error(array(
+            'message' => 'درخواست نامعتبر است.',
+        ));
+    }
+
+    wp_send_json_success(array(
+        'html'     => theme_render_product_qa_list($product_id, $qa_sort),
+        'count'    => theme_get_product_question_count($product_id),
+        'count_fa' => theme_fa_digits(number_format_i18n(theme_get_product_question_count($product_id))),
+    ));
+}
+
+/**
+ * AJAX: ثبت پرسش
+ */
+add_action('wp_ajax_theme_submit_product_question', 'theme_ajax_submit_product_question');
+add_action('wp_ajax_nopriv_theme_submit_product_question', 'theme_ajax_submit_product_question');
+
+function theme_ajax_submit_product_question() {
+    $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
+    $nonce      = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
+
+    if (!$product_id || !wp_verify_nonce($nonce, 'product_qa_ajax_' . $product_id)) {
+        wp_send_json_error(array(
+            'message' => 'درخواست نامعتبر است.',
+        ));
+    }
+
+    $question_text = isset($_POST['question_text']) ? sanitize_textarea_field(wp_unslash($_POST['question_text'])) : '';
+
+    if (empty($question_text)) {
+        wp_send_json_error(array(
+            'message' => 'متن پرسش نمی‌تواند خالی باشد.',
+        ));
+    }
+
+    $user_id = get_current_user_id();
+
+    if ($user_id) {
+        $user         = wp_get_current_user();
+        $author_name  = $user->display_name;
+        $author_email = $user->user_email;
+    } else {
+        $author_name  = isset($_POST['question_author']) ? sanitize_text_field(wp_unslash($_POST['question_author'])) : '';
+        $author_email = isset($_POST['question_email']) ? sanitize_email(wp_unslash($_POST['question_email'])) : '';
+
+        if (empty($author_name) || empty($author_email)) {
+            wp_send_json_error(array(
+                'message' => 'نام و ایمیل خود را وارد کنید.',
+            ));
+        }
+    }
+
+    $approved = get_option('comment_moderation') ? 0 : 1;
+
+    $comment_id = wp_insert_comment(array(
+        'comment_post_ID'      => $product_id,
+        'comment_author'       => $author_name,
+        'comment_author_email' => $author_email,
+        'comment_content'      => $question_text,
+        'comment_type'         => 'product_question',
+        'comment_parent'       => 0,
+        'comment_approved'     => $approved,
+        'user_id'              => $user_id,
+    ));
+
+    if (!$comment_id) {
+        wp_send_json_error(array(
+            'message' => 'ثبت پرسش انجام نشد. دوباره تلاش کنید.',
+        ));
+    }
+
+    add_comment_meta($comment_id, 'qa_same_count', 0, true);
+
+    $message = $approved
+        ? 'پرسش شما با موفقیت ثبت شد.'
+        : 'پرسش شما ثبت شد و پس از تایید نمایش داده می‌شود.';
+
+    wp_send_json_success(array(
+        'message'  => $message,
+        'html'     => theme_render_product_qa_list($product_id, 'newest'),
+        'count'    => theme_get_product_question_count($product_id),
+        'count_fa' => theme_fa_digits(number_format_i18n(theme_get_product_question_count($product_id))),
+    ));
+}
+
+/**
+ * AJAX: ثبت پاسخ مدیر / فروشنده
+ */
+add_action('wp_ajax_theme_submit_product_answer', 'theme_ajax_submit_product_answer');
+
+function theme_ajax_submit_product_answer() {
+    $product_id  = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
+    $question_id = isset($_POST['question_id']) ? absint($_POST['question_id']) : 0;
+    $nonce       = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
+
+    if (!$product_id || !wp_verify_nonce($nonce, 'product_qa_ajax_' . $product_id)) {
+        wp_send_json_error(array(
+            'message' => 'درخواست نامعتبر است.',
+        ));
+    }
+
+    if (!current_user_can('edit_post', $product_id) && !current_user_can('manage_woocommerce')) {
+        wp_send_json_error(array(
+            'message' => 'شما اجازه ثبت پاسخ ندارید.',
+        ));
+    }
+
+    $answer_text = isset($_POST['answer_text']) ? sanitize_textarea_field(wp_unslash($_POST['answer_text'])) : '';
+
+    if (!$question_id || empty($answer_text)) {
+        wp_send_json_error(array(
+            'message' => 'متن پاسخ نمی‌تواند خالی باشد.',
+        ));
+    }
+
+    $parent_question = get_comment($question_id);
+
+    if (!$parent_question || (int) $parent_question->comment_post_ID !== $product_id) {
+        wp_send_json_error(array(
+            'message' => 'پرسش معتبر نیست.',
+        ));
+    }
+
+    $user = wp_get_current_user();
+
+    wp_insert_comment(array(
+        'comment_post_ID'      => $product_id,
+        'comment_author'       => $user->display_name ? $user->display_name : get_bloginfo('name'),
+        'comment_author_email' => $user->user_email,
+        'comment_content'      => $answer_text,
+        'comment_type'         => 'product_answer',
+        'comment_parent'       => $question_id,
+        'comment_approved'     => 1,
+        'user_id'              => get_current_user_id(),
+    ));
+
+    wp_send_json_success(array(
+        'message'  => 'پاسخ با موفقیت ثبت شد.',
+        'html'     => theme_render_product_qa_list($product_id, 'newest'),
+        'count'    => theme_get_product_question_count($product_id),
+        'count_fa' => theme_fa_digits(number_format_i18n(theme_get_product_question_count($product_id))),
+    ));
+}
+
+/**
+ * AJAX: سوال منم همین بود
+ */
+add_action('wp_ajax_theme_same_product_question', 'theme_ajax_same_product_question');
+add_action('wp_ajax_nopriv_theme_same_product_question', 'theme_ajax_same_product_question');
+
+function theme_ajax_same_product_question() {
+    $product_id  = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
+    $question_id = isset($_POST['question_id']) ? absint($_POST['question_id']) : 0;
+    $nonce       = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
+
+    if (!$product_id || !$question_id || !wp_verify_nonce($nonce, 'product_qa_ajax_' . $product_id)) {
+        wp_send_json_error(array(
+            'message' => 'درخواست نامعتبر است.',
+        ));
+    }
+
+    $cookie_key = 'qa_same_' . $question_id;
+
+    if (!empty($_COOKIE[$cookie_key])) {
+        wp_send_json_error(array(
+            'message' => 'قبلاً این پرسش را تایید کرده‌اید.',
+        ));
+    }
+
+    $current_count = (int) get_comment_meta($question_id, 'qa_same_count', true);
+    $new_count     = $current_count + 1;
+
+    update_comment_meta($question_id, 'qa_same_count', $new_count);
+
+    setcookie($cookie_key, '1', time() + MONTH_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN);
+
+    wp_send_json_success(array(
+        'message'  => 'درخواست شما ثبت شد.',
+        'count'    => $new_count,
+        'count_fa' => theme_fa_digits($new_count),
+    ));
+}
+
+// END -------------------------
+
+
+
+
+// Start Maziyat Reghabati Singpe Product -----------------------------------
+defined('ABSPATH') || exit;
+
+/**
+ * Register product benefit widget areas
+ */
+add_action('widgets_init', 'theme_register_product_benefit_sidebars');
+
+function theme_register_product_benefit_sidebars() {
+    register_sidebar(array(
+        'name'          => 'مزیت‌های محصول - کم‌رنگ',
+        'id'            => 'single_product_benefits_soft',
+        'description'   => 'این ابزارک‌ها در سینگل محصول با حالت کم‌رنگ نمایش داده می‌شوند.',
+        'before_widget' => '<div id="%1$s" class="pb-usp-item %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '',
+        'after_title'   => '',
+    ));
+
+    register_sidebar(array(
+        'name'          => 'مزیت‌های محصول - پررنگ',
+        'id'            => 'single_product_benefits_strong',
+        'description'   => 'این ابزارک‌ها در سینگل محصول با حالت پررنگ و جذاب نمایش داده می‌شوند.',
+        'before_widget' => '<div id="%1$s" class="pb-usp-item %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '',
+        'after_title'   => '',
+    ));
+
+    register_widget('Theme_Product_Benefit_Widget');
+}
+
+/**
+ * Product benefit item widget
+ */
+class Theme_Product_Benefit_Widget extends WP_Widget {
+
+    public function __construct() {
+        parent::__construct(
+            'theme_product_benefit_widget',
+            'آیتم مزیت رقابتی محصول',
+            array(
+                'description' => 'نمایش یک مزیت رقابتی با تصویر یا آیکون در صفحه محصول',
+            )
+        );
+    }
+
+    public function widget($args, $instance) {
+        $title       = !empty($instance['title']) ? $instance['title'] : '';
+        $subtitle    = !empty($instance['subtitle']) ? $instance['subtitle'] : '';
+        $image_url   = !empty($instance['image_url']) ? $instance['image_url'] : '';
+        $icon_class  = !empty($instance['icon_class']) ? $instance['icon_class'] : 'fa-solid fa-circle-check';
+        $link_url    = !empty($instance['link_url']) ? $instance['link_url'] : '';
+        $open_new    = !empty($instance['open_new']);
+
+        echo $args['before_widget'];
+
+        $tag = !empty($link_url) ? 'a' : 'div';
+
+        $attrs = '';
+
+        if (!empty($link_url)) {
+            $attrs .= ' href="' . esc_url($link_url) . '"';
+
+            if ($open_new) {
+                $attrs .= ' target="_blank" rel="noopener noreferrer"';
+            }
+        }
+
+        ?>
+        <<?php echo esc_html($tag); ?> class="pb-usp-card"<?php echo $attrs; ?>>
+            <span class="pb-usp-icon">
+                <?php if (!empty($image_url)) : ?>
+                    <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($title); ?>">
+                <?php else : ?>
+                    <i class="<?php echo esc_attr($icon_class); ?>"></i>
+                <?php endif; ?>
+            </span>
+
+            <span class="pb-usp-content">
+                <?php if (!empty($title)) : ?>
+                    <strong><?php echo esc_html($title); ?></strong>
+                <?php endif; ?>
+
+                <?php if (!empty($subtitle)) : ?>
+                    <small><?php echo esc_html($subtitle); ?></small>
+                <?php endif; ?>
+            </span>
+        </<?php echo esc_html($tag); ?>>
+        <?php
+
+        echo $args['after_widget'];
+    }
+
+    public function form($instance) {
+        $title      = !empty($instance['title']) ? $instance['title'] : '';
+        $subtitle   = !empty($instance['subtitle']) ? $instance['subtitle'] : '';
+        $image_url  = !empty($instance['image_url']) ? $instance['image_url'] : '';
+        $icon_class = !empty($instance['icon_class']) ? $instance['icon_class'] : '';
+        $link_url   = !empty($instance['link_url']) ? $instance['link_url'] : '';
+        $open_new   = !empty($instance['open_new']);
+        ?>
+
+        <p>
+            <label for="<?php echo esc_attr($this->get_field_id('title')); ?>">عنوان</label>
+            <input class="widefat"
+                   id="<?php echo esc_attr($this->get_field_id('title')); ?>"
+                   name="<?php echo esc_attr($this->get_field_name('title')); ?>"
+                   type="text"
+                   value="<?php echo esc_attr($title); ?>"
+                   placeholder="مثلاً امکان تحویل اکسپرس">
+        </p>
+
+        <p>
+            <label for="<?php echo esc_attr($this->get_field_id('subtitle')); ?>">توضیح کوتاه</label>
+            <input class="widefat"
+                   id="<?php echo esc_attr($this->get_field_id('subtitle')); ?>"
+                   name="<?php echo esc_attr($this->get_field_name('subtitle')); ?>"
+                   type="text"
+                   value="<?php echo esc_attr($subtitle); ?>"
+                   placeholder="مثلاً ارسال سریع به سراسر کشور">
+        </p>
+
+        <p>
+            <label for="<?php echo esc_attr($this->get_field_id('image_url')); ?>">آدرس تصویر / آیکون آپلودی</label>
+            <input class="widefat pb-usp-image-url"
+                   id="<?php echo esc_attr($this->get_field_id('image_url')); ?>"
+                   name="<?php echo esc_attr($this->get_field_name('image_url')); ?>"
+                   type="text"
+                   value="<?php echo esc_url($image_url); ?>"
+                   placeholder="لینک تصویر از رسانه وردپرس">
+            <button type="button" class="button pb-usp-upload-btn" style="margin-top:8px;">انتخاب تصویر</button>
+            <button type="button" class="button pb-usp-remove-btn" style="margin-top:8px;">حذف تصویر</button>
+        </p>
+
+        <p>
+            <label for="<?php echo esc_attr($this->get_field_id('icon_class')); ?>">کلاس آیکون FontAwesome</label>
+            <input class="widefat"
+                   id="<?php echo esc_attr($this->get_field_id('icon_class')); ?>"
+                   name="<?php echo esc_attr($this->get_field_name('icon_class')); ?>"
+                   type="text"
+                   value="<?php echo esc_attr($icon_class); ?>"
+                   placeholder="مثلاً fa-solid fa-truck-fast">
+            <small>اگر تصویر وارد شود، تصویر نمایش داده می‌شود؛ اگر تصویر خالی باشد، آیکون FontAwesome نمایش داده می‌شود.</small>
+        </p>
+
+        <p>
+            <label for="<?php echo esc_attr($this->get_field_id('link_url')); ?>">لینک اختیاری</label>
+            <input class="widefat"
+                   id="<?php echo esc_attr($this->get_field_id('link_url')); ?>"
+                   name="<?php echo esc_attr($this->get_field_name('link_url')); ?>"
+                   type="url"
+                   value="<?php echo esc_url($link_url); ?>"
+                   placeholder="مثلاً لینک صفحه ضمانت">
+        </p>
+
+        <p>
+            <input id="<?php echo esc_attr($this->get_field_id('open_new')); ?>"
+                   name="<?php echo esc_attr($this->get_field_name('open_new')); ?>"
+                   type="checkbox"
+                   value="1"
+                <?php checked($open_new); ?>>
+            <label for="<?php echo esc_attr($this->get_field_id('open_new')); ?>">
+                باز شدن لینک در تب جدید
+            </label>
+        </p>
+
+        <?php
+    }
+
+    public function update($new_instance, $old_instance) {
+        $instance = array();
+
+        $instance['title']      = sanitize_text_field($new_instance['title'] ?? '');
+        $instance['subtitle']   = sanitize_text_field($new_instance['subtitle'] ?? '');
+        $instance['image_url']  = esc_url_raw($new_instance['image_url'] ?? '');
+        $instance['icon_class'] = sanitize_text_field($new_instance['icon_class'] ?? '');
+        $instance['link_url']   = esc_url_raw($new_instance['link_url'] ?? '');
+        $instance['open_new']   = !empty($new_instance['open_new']) ? 1 : 0;
+
+        return $instance;
+    }
+}
+
+/**
+ * Media uploader for widget image field
+ */
+add_action('admin_enqueue_scripts', 'theme_product_benefit_widget_admin_assets');
+
+function theme_product_benefit_widget_admin_assets($hook) {
+    if ($hook !== 'widgets.php' && $hook !== 'customize.php') {
+        return;
+    }
+
+    wp_enqueue_media();
+    wp_enqueue_script('jquery');
+
+    $js = "
+    jQuery(document).on('click', '.pb-usp-upload-btn', function(e) {
+        e.preventDefault();
+
+        var button = jQuery(this);
+        var input = button.closest('p').find('.pb-usp-image-url');
+
+        var frame = wp.media({
+            title: 'انتخاب تصویر مزیت',
+            button: {
+                text: 'استفاده از این تصویر'
+            },
+            multiple: false
+        });
+
+        frame.on('select', function() {
+            var attachment = frame.state().get('selection').first().toJSON();
+            input.val(attachment.url).trigger('change');
+        });
+
+        frame.open();
+    });
+
+    jQuery(document).on('click', '.pb-usp-remove-btn', function(e) {
+        e.preventDefault();
+
+        var button = jQuery(this);
+        var input = button.closest('p').find('.pb-usp-image-url');
+
+        input.val('').trigger('change');
+    });
+    ";
+
+    wp_add_inline_script('jquery', $js);
+}
+
+/**
+ * Render product benefits widget area
+ */
+if (!function_exists('theme_render_product_benefits_area')) {
+    function theme_render_product_benefits_area($sidebar_id, $style = 'soft') {
+        if (!is_active_sidebar($sidebar_id)) {
+            return;
+        }
+
+        $style = $style === 'strong' ? 'strong' : 'soft';
+        ?>
+        <section class="pb-usp-strip pb-usp-strip--<?php echo esc_attr($style); ?>">
+            <div class="pb-usp-inner">
+                <?php dynamic_sidebar($sidebar_id); ?>
+            </div>
+        </section>
+        <?php
+    }
+}
+// END Maziyat Reghabati Singpe Product -----------------------------------
+
+
+
 // ==========================================
 // Hypersanati WooCommerce & Account / OTP Module
 // ==========================================
 
-
-/* =============================================================
+/* ============================================================
    Hypersanati OTP Login / Register Module
    محل فایل‌ها طبق ساختار پروژه:
    - assets/css/otp.css
@@ -1020,8 +1923,7 @@ function hypersanati_save_bearing_specs($post_id) {
    - woocommerce/myaccount/dashboard.php
    این ماژول کاملاً مستقل و درون functions.php است؛
    نیازی به inc/enqueue.php ندارد.
-============================================================= */
-
+*/
 if (!defined('ABSPATH')) exit;
 
 define('HYPERSANATI_OTP_LENGTH', 5);        // تعداد ارقام کد تایید (۴ یا ۵)
@@ -1074,7 +1976,7 @@ function hypersanati_enqueue_otp_assets()
 }
 
 
-/* -------------------------------------------------------------
+ /*-------------------------------------------------------------
    ۲. تزریق مودال OTP قبل از </body>
    فقط برای کاربران مهمان (کاربر لاگین‌شده نیازی به این فرم ندارد)
 ------------------------------------------------------------- */
@@ -1231,3 +2133,918 @@ function hypersanati_ajax_verify_otp()
         'redirect' => function_exists('wc_get_page_permalink') ? wc_get_page_permalink('myaccount') : home_url('/my-account/'),
     ]);
 }
+
+
+
+
+
+// START TAMAS BA MA --------------------------------------------------
+
+// Contact page dynamic info in WordPress Customizer
+add_action( 'customize_register', 'hypersanati_contact_customizer_settings' );
+
+function hypersanati_contact_customizer_settings( $wp_customize ) {
+
+    $wp_customize->add_section(
+        'hypersanati_contact_info_section',
+        array(
+            'title'    => 'اطلاعات تماس فروشگاه',
+            'priority' => 160,
+        )
+    );
+
+    $wp_customize->add_setting(
+        'hypersanati_contact_address',
+        array(
+            'default'           => 'تهران، خیابان سعدی جنوبی، خیابان اکباتان، کوچه ناظم الاطبا شمالی، پاساژ امام حسین، زیر همکف، پلاک 32 بلبرینگ همگام صنعت برتر',
+            'sanitize_callback' => 'sanitize_textarea_field',
+        )
+    );
+
+    $wp_customize->add_control(
+        'hypersanati_contact_address',
+        array(
+            'label'   => 'آدرس فروشگاه',
+            'section' => 'hypersanati_contact_info_section',
+            'type'    => 'textarea',
+        )
+    );
+
+    $wp_customize->add_setting(
+        'hypersanati_contact_phone',
+        array(
+            'default'           => '۰۲۱-۳۳۹۸۹۹۳۰ - ۰۲۱-۳۳۹۸۹۹۴۰',
+            'sanitize_callback' => 'sanitize_text_field',
+        )
+    );
+
+    $wp_customize->add_control(
+        'hypersanati_contact_phone',
+        array(
+            'label'   => 'شماره تماس',
+            'section' => 'hypersanati_contact_info_section',
+            'type'    => 'text',
+        )
+    );
+
+    $wp_customize->add_setting(
+        'hypersanati_contact_fax',
+        array(
+            'default'           => '۰۲۱-۳۳۹۸۹۹۴۰',
+            'sanitize_callback' => 'sanitize_text_field',
+        )
+    );
+
+    $wp_customize->add_control(
+        'hypersanati_contact_fax',
+        array(
+            'label'   => 'فکس',
+            'section' => 'hypersanati_contact_info_section',
+            'type'    => 'text',
+        )
+    );
+
+    $wp_customize->add_setting(
+        'hypersanati_contact_email',
+        array(
+            'default'           => 'info@hamgamsanatbartar.com',
+            'sanitize_callback' => 'sanitize_email',
+        )
+    );
+
+    $wp_customize->add_control(
+        'hypersanati_contact_email',
+        array(
+            'label'   => 'ایمیل',
+            'section' => 'hypersanati_contact_info_section',
+            'type'    => 'email',
+        )
+    );
+
+    $wp_customize->add_setting(
+        'hypersanati_contact_terms_url',
+        array(
+            'default'           => '#',
+            'sanitize_callback' => 'esc_url_raw',
+        )
+    );
+
+    $wp_customize->add_control(
+        'hypersanati_contact_terms_url',
+        array(
+            'label'   => 'لینک قوانین و مقررات',
+            'section' => 'hypersanati_contact_info_section',
+            'type'    => 'url',
+        )
+    );
+}
+
+
+// Register contact messages post type
+add_action( 'init', 'hypersanati_register_contact_message_post_type' );
+
+function hypersanati_register_contact_message_post_type() {
+
+    register_post_type(
+        'hs_contact_message',
+        array(
+            'labels' => array(
+                'name'               => 'پیام‌های تماس',
+                'singular_name'      => 'پیام تماس',
+                'menu_name'          => 'پیام‌های تماس',
+                'add_new_item'       => 'افزودن پیام تماس',
+                'edit_item'          => 'مشاهده پیام تماس',
+                'view_item'          => 'نمایش پیام تماس',
+                'search_items'       => 'جستجوی پیام‌ها',
+                'not_found'          => 'پیامی پیدا نشد',
+                'not_found_in_trash' => 'پیامی در زباله‌دان پیدا نشد',
+            ),
+            'public'              => false,
+            'show_ui'             => true,
+            'show_in_menu'        => true,
+            'menu_icon'           => 'dashicons-email-alt2',
+            'supports'            => array( 'title', 'editor' ),
+            'capability_type'     => 'post',
+            'map_meta_cap'        => true,
+            'exclude_from_search' => true,
+        )
+    );
+}
+
+
+// Save contact form - Ajax + normal fallback
+add_action( 'admin_post_hypersanati_contact_form', 'hypersanati_handle_contact_form' );
+add_action( 'admin_post_nopriv_hypersanati_contact_form', 'hypersanati_handle_contact_form' );
+
+add_action( 'wp_ajax_hypersanati_contact_form', 'hypersanati_handle_contact_form' );
+add_action( 'wp_ajax_nopriv_hypersanati_contact_form', 'hypersanati_handle_contact_form' );
+
+function hypersanati_handle_contact_form() {
+
+    $is_ajax = wp_doing_ajax();
+
+    if (
+        ! isset( $_POST['hypersanati_contact_nonce'] ) ||
+        ! wp_verify_nonce(
+            sanitize_text_field( wp_unslash( $_POST['hypersanati_contact_nonce'] ) ),
+            'hypersanati_contact_form_action'
+        )
+    ) {
+        hypersanati_contact_response(
+            'security',
+            $is_ajax,
+            false,
+            'درخواست معتبر نیست. لطفاً صفحه را دوباره بارگذاری کنید.',
+            403
+        );
+    }
+
+    $subject      = isset( $_POST['contact_subject'] ) ? sanitize_text_field( wp_unslash( $_POST['contact_subject'] ) ) : '';
+    $phone        = isset( $_POST['contact_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['contact_phone'] ) ) : '';
+    $country_code = isset( $_POST['country_code'] ) ? sanitize_text_field( wp_unslash( $_POST['country_code'] ) ) : '+98';
+    $message      = isset( $_POST['contact_message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['contact_message'] ) ) : '';
+    $terms        = isset( $_POST['terms'] ) ? 'accepted' : '';
+
+    if ( empty( $subject ) || empty( $phone ) || empty( $message ) || empty( $terms ) ) {
+        hypersanati_contact_response(
+            'required',
+            $is_ajax,
+            false,
+            'لطفاً موضوع، شماره همراه، پیام و پذیرش قوانین را کامل کنید.',
+            422
+        );
+    }
+
+    $attachment_url = '';
+    $attachment_id  = 0;
+
+    if ( ! empty( $_FILES['contact_attachment']['name'] ) ) {
+
+        $file_size = isset( $_FILES['contact_attachment']['size'] ) ? absint( $_FILES['contact_attachment']['size'] ) : 0;
+
+        if ( $file_size > 5 * 1024 * 1024 ) {
+            hypersanati_contact_response(
+                'file_size',
+                $is_ajax,
+                false,
+                'حجم فایل نباید بیشتر از ۵ مگابایت باشد.',
+                422
+            );
+        }
+
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+
+        $allowed_mimes = array(
+            'jpg|jpeg|jpe' => 'image/jpeg',
+            'png'          => 'image/png',
+            'webp'         => 'image/webp',
+            'pdf'          => 'application/pdf',
+            'doc'          => 'application/msword',
+            'docx'         => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'xls'          => 'application/vnd.ms-excel',
+            'xlsx'         => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'zip'          => 'application/zip',
+        );
+
+        $upload = wp_handle_upload(
+            $_FILES['contact_attachment'],
+            array(
+                'test_form' => false,
+                'mimes'     => $allowed_mimes,
+            )
+        );
+
+        if ( isset( $upload['error'] ) ) {
+            hypersanati_contact_response(
+                'file_error',
+                $is_ajax,
+                false,
+                'فایل انتخاب‌شده قابل بارگذاری نیست. لطفاً فایل دیگری انتخاب کنید.',
+                422
+            );
+        }
+
+        if ( ! empty( $upload['file'] ) ) {
+            $file_type = wp_check_filetype( basename( $upload['file'] ), null );
+
+            $attachment = array(
+                'post_mime_type' => $file_type['type'],
+                'post_title'     => sanitize_file_name( basename( $upload['file'] ) ),
+                'post_content'   => '',
+                'post_status'    => 'inherit',
+            );
+
+            $attachment_id = wp_insert_attachment( $attachment, $upload['file'] );
+
+            if ( ! is_wp_error( $attachment_id ) ) {
+                $attachment_data = wp_generate_attachment_metadata( $attachment_id, $upload['file'] );
+                wp_update_attachment_metadata( $attachment_id, $attachment_data );
+                $attachment_url = wp_get_attachment_url( $attachment_id );
+            }
+        }
+    }
+
+    $post_id = wp_insert_post(
+        array(
+            'post_type'    => 'hs_contact_message',
+            'post_status'  => 'private',
+            'post_title'   => $subject,
+            'post_content' => $message,
+        )
+    );
+
+    if ( is_wp_error( $post_id ) || ! $post_id ) {
+        hypersanati_contact_response(
+            'save_error',
+            $is_ajax,
+            false,
+            'در ذخیره پیام مشکلی پیش آمد. لطفاً چند لحظه دیگر دوباره تلاش کنید.',
+            500
+        );
+    }
+
+    update_post_meta( $post_id, '_contact_phone', $phone );
+    update_post_meta( $post_id, '_contact_country_code', $country_code );
+    update_post_meta( $post_id, '_contact_terms', $terms );
+    update_post_meta( $post_id, '_contact_attachment_id', $attachment_id );
+    update_post_meta( $post_id, '_contact_attachment_url', $attachment_url );
+    update_post_meta(
+        $post_id,
+        '_contact_ip',
+        isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : ''
+    );
+
+    $admin_email = get_option( 'admin_email' );
+
+    $email_body  = "موضوع: {$subject}\n";
+    $email_body .= "شماره تماس: {$country_code} {$phone}\n\n";
+    $email_body .= "پیام:\n{$message}\n\n";
+
+    if ( $attachment_url ) {
+        $email_body .= "فایل پیوست:\n{$attachment_url}\n";
+    }
+
+    wp_mail(
+        $admin_email,
+        'پیام جدید از فرم تماس سایت',
+        $email_body
+    );
+
+    hypersanati_contact_response(
+        'success',
+        $is_ajax,
+        true,
+        'پیام شما با موفقیت ثبت شد. همکاران ما در حال بررسی هستند و در سریع‌ترین زمان ممکن با شما تماس می‌گیرند.'
+    );
+}
+
+function hypersanati_contact_response( $status, $is_ajax, $success, $message, $http_code = 200 ) {
+
+    if ( $is_ajax ) {
+        if ( $success ) {
+            wp_send_json_success(
+                array(
+                    'status'  => $status,
+                    'message' => $message,
+                ),
+                $http_code
+            );
+        }
+
+        wp_send_json_error(
+            array(
+                'status'  => $status,
+                'message' => $message,
+            ),
+            $http_code
+        );
+    }
+
+    $redirect_url = isset( $_POST['redirect_to'] )
+        ? esc_url_raw( wp_unslash( $_POST['redirect_to'] ) )
+        : home_url( '/contact-us/' );
+
+    wp_safe_redirect(
+        add_query_arg(
+            'contact_status',
+            sanitize_key( $status ),
+            $redirect_url
+        )
+    );
+
+    exit;
+}
+
+
+// Contact message meta box
+add_action( 'add_meta_boxes', 'hypersanati_contact_message_meta_boxes' );
+
+function hypersanati_contact_message_meta_boxes() {
+    add_meta_box(
+        'hypersanati_contact_message_info',
+        'اطلاعات پیام',
+        'hypersanati_contact_message_meta_box_html',
+        'hs_contact_message',
+        'normal',
+        'high'
+    );
+}
+
+function hypersanati_contact_message_meta_box_html( $post ) {
+
+    $phone          = get_post_meta( $post->ID, '_contact_phone', true );
+    $country_code   = get_post_meta( $post->ID, '_contact_country_code', true );
+    $attachment_url = get_post_meta( $post->ID, '_contact_attachment_url', true );
+    $ip             = get_post_meta( $post->ID, '_contact_ip', true );
+
+    ?>
+    <table class="widefat striped">
+        <tbody>
+            <tr>
+                <th style="width: 180px;">شماره تماس</th>
+                <td><?php echo esc_html( $country_code . ' ' . $phone ); ?></td>
+            </tr>
+
+            <tr>
+                <th>فایل پیوست</th>
+                <td>
+                    <?php if ( $attachment_url ) : ?>
+                        <a href="<?php echo esc_url( $attachment_url ); ?>" target="_blank" rel="noopener">
+                            مشاهده / دانلود فایل
+                        </a>
+                    <?php else : ?>
+                        فایلی ارسال نشده است.
+                    <?php endif; ?>
+                </td>
+            </tr>
+
+            <tr>
+                <th>IP ارسال‌کننده</th>
+                <td><?php echo esc_html( $ip ); ?></td>
+            </tr>
+        </tbody>
+    </table>
+    <?php
+}
+
+
+// Admin list columns
+add_filter( 'manage_hs_contact_message_posts_columns', 'hypersanati_contact_message_columns' );
+
+function hypersanati_contact_message_columns( $columns ) {
+
+    $new_columns = array();
+
+    $new_columns['cb']            = $columns['cb'];
+    $new_columns['title']         = 'موضوع';
+    $new_columns['contact_phone'] = 'شماره تماس';
+    $new_columns['contact_file']  = 'فایل';
+    $new_columns['date']          = 'تاریخ';
+
+    return $new_columns;
+}
+
+add_action( 'manage_hs_contact_message_posts_custom_column', 'hypersanati_contact_message_column_content', 10, 2 );
+
+function hypersanati_contact_message_column_content( $column, $post_id ) {
+
+    if ( 'contact_phone' === $column ) {
+        $phone        = get_post_meta( $post_id, '_contact_phone', true );
+        $country_code = get_post_meta( $post_id, '_contact_country_code', true );
+
+        echo esc_html( $country_code . ' ' . $phone );
+    }
+
+    if ( 'contact_file' === $column ) {
+        $attachment_url = get_post_meta( $post_id, '_contact_attachment_url', true );
+
+        if ( $attachment_url ) {
+            echo '<a href="' . esc_url( $attachment_url ) . '" target="_blank" rel="noopener">مشاهده فایل</a>';
+        } else {
+            echo '—';
+        }
+    }
+}
+
+
+// Load contact page CSS and JS only on contact page
+add_action( 'wp_enqueue_scripts', 'hypersanati_contact_page_assets', 30 );
+
+function hypersanati_contact_page_assets() {
+
+    if ( ! is_page( 'contact-us' ) && ! is_page_template( 'page-contact-us.php' ) ) {
+        return;
+    }
+
+    $theme_version = wp_get_theme()->get( 'Version' );
+
+    $contact_css_path = get_template_directory() . '/assets/css/contact-us.css';
+    $contact_css_uri  = get_template_directory_uri() . '/assets/css/contact-us.css';
+
+    if ( file_exists( $contact_css_path ) ) {
+        wp_enqueue_style(
+            'hypersanati-contact-us',
+            $contact_css_uri,
+            array(),
+            filemtime( $contact_css_path )
+        );
+    }
+
+    $contact_js_path = get_template_directory() . '/assets/js/contact-us.js';
+    $contact_js_uri  = get_template_directory_uri() . '/assets/js/contact-us.js';
+
+    if ( file_exists( $contact_js_path ) ) {
+        wp_enqueue_script(
+            'hypersanati-contact-us',
+            $contact_js_uri,
+            array(),
+            filemtime( $contact_js_path ),
+            true
+        );
+        wp_localize_script(
+            'hypersanati-contact-us',
+            'HypersanatiContactAjax',
+            array(
+                'ajax_url'     => admin_url( 'admin-ajax.php' ),
+                'sending_text' => 'در حال ارسال...',
+            )
+        );
+    }
+}
+
+// PAYAN TAMAS BA MA --------------------------------------------------
+
+
+
+
+
+// Start -- AJAX - EZAFE KARDANE MAHSUL BA DOKME AFZODAN BE SABADE KHARID ------------------------->
+add_action('wp_enqueue_scripts', 'hsb_enqueue_cart_ajax_popup_assets');
+function hsb_enqueue_cart_ajax_popup_assets() {
+    if (!function_exists('is_product') || !is_product()) {
+        return;
+    }
+
+    $css_path = get_template_directory() . '/assets/css/cart-ajax-pop-up.css';
+    $js_path  = get_template_directory() . '/assets/js/cart-ajax-pop-up.js';
+
+    wp_enqueue_style(
+        'hsb-cart-ajax-popup',
+        get_template_directory_uri() . '/assets/css/cart-ajax-pop-up.css',
+        array(),
+        file_exists($css_path) ? filemtime($css_path) : '1.0.0'
+    );
+
+    wp_enqueue_script(
+        'hsb-cart-ajax-popup',
+        get_template_directory_uri() . '/assets/js/cart-ajax-pop-up.js',
+        array(),
+        file_exists($js_path) ? filemtime($js_path) : '1.0.0',
+        true
+    );
+
+    wp_localize_script('hsb-cart-ajax-popup', 'hsbCartPopup', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('hsb_cart_popup_nonce'),
+    ));
+}
+
+// مرحله ۳: پاپ‌آپ را با wp_footer چاپ کن
+add_action('wp_footer', 'hsb_render_cart_ajax_popup');
+function hsb_render_cart_ajax_popup() {
+    if (!function_exists('is_product') || !is_product()) {
+        return;
+    }
+
+    if (!function_exists('WC')) {
+        return;
+    }
+    ?>
+
+    <section class="cart-ajax-popup-section is-hidden" id="cartAjaxPopupSection" aria-hidden="true">
+        <div class="cart-ajax-popup-overlay" id="cartAjaxPopupOverlay"></div>
+
+        <div class="cart-ajax-popup" id="cartAjaxPopup" role="dialog" aria-modal="true">
+            <button class="cart-ajax-popup__close" id="cartAjaxPopupClose" type="button" aria-label="بستن">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="cart-ajax-popup__content">
+                <div class="cart-ajax-popup__top">
+                    <div class="cart-ajax-popup__summary">
+                        <div class="cart-ajax-popup__summary-box">
+                            <p class="cart-ajax-popup__summary-title" id="cartAjaxPopupSummaryTitle">
+                                محصول به سبد خرید اضافه شد.
+                            </p>
+
+                            <div class="cart-ajax-popup__prices">
+                                <p>خرید جزء: <span id="cartAjaxPopupSubtotal">۰ تومان</span></p>
+                                <p>مالیات: <span id="cartAjaxPopupTax">۰ تومان</span></p>
+                                <p class="cart-ajax-popup__total">جمع خرید: <span id="cartAjaxPopupTotal">۰ تومان</span></p>
+                            </div>
+
+                            <div class="cart-ajax-popup__actions">
+                                <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="cart-ajax-popup__btn" id="cartAjaxPopupCartUrl">
+                                    ویرایش سبد خرید
+                                </a>
+
+                                <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="cart-ajax-popup__btn" id="cartAjaxPopupCheckoutUrl">
+                                    رفتن به تسویه حساب
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cart-ajax-popup__product">
+                        <div class="cart-ajax-popup__notice">
+                            <div class="cart-ajax-popup__notice-icon">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+
+                            <div class="cart-ajax-popup__notice-text">
+                                <p class="cart-ajax-popup__notice-title">
+                                    شما <span id="cartAjaxPopupProductNoticeTitle">این محصول</span>
+                                </p>
+                                <p class="cart-ajax-popup__notice-subtitle">
+                                    را به سبد خرید خود اضافه کردید.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="cart-ajax-popup__product-box">
+                            <div class="cart-ajax-popup__product-text" id="cartAjaxPopupProductText">
+                                <p>محصول</p>
+                            </div>
+
+                            <div class="cart-ajax-popup__product-image">
+                                <img id="cartAjaxPopupProductImage"
+                                     src="<?php echo esc_url(wc_placeholder_img_src()); ?>"
+                                     alt="product" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cart-ajax-popup__bottom">
+                    <p class="cart-ajax-popup__bottom-title">
+                        مشتری‌های ما همراه با محصول انتخابی شما، این محصولات را هم سفارش داده‌اند.
+                    </p>
+
+                    <div class="cart-ajax-popup__suggestions" id="cartAjaxPopupSuggestions"></div>
+
+                    <div class="cart-ajax-popup__continue">
+                        <button type="button" class="cart-ajax-popup__btn cart-ajax-popup__btn--single" id="cartAjaxPopupContinue">
+                            ادامه خرید
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <?php
+}
+
+
+
+// مرحله ۴: AJAX افزودن به سبد خرید را بساز
+add_action('wp_ajax_hsb_ajax_add_to_cart', 'hsb_ajax_add_to_cart');
+add_action('wp_ajax_nopriv_hsb_ajax_add_to_cart', 'hsb_ajax_add_to_cart');
+
+function hsb_ajax_add_to_cart() {
+    check_ajax_referer('hsb_cart_popup_nonce', 'nonce');
+
+    if (!function_exists('WC')) {
+        wp_send_json_error(array(
+            'message' => 'ووکامرس فعال نیست.'
+        ));
+    }
+
+    if (null === WC()->cart) {
+        wc_load_cart();
+    }
+
+    $product_id = 0;
+
+    if (!empty($_POST['product_id'])) {
+        $product_id = absint($_POST['product_id']);
+    } elseif (!empty($_POST['add-to-cart'])) {
+        $product_id = absint($_POST['add-to-cart']);
+    }
+
+    $variation_id = !empty($_POST['variation_id']) ? absint($_POST['variation_id']) : 0;
+
+    if (!$product_id && $variation_id) {
+        $product_id = wp_get_post_parent_id($variation_id);
+    }
+
+    $quantity = !empty($_POST['quantity']) ? wc_stock_amount(wp_unslash($_POST['quantity'])) : 1;
+
+    if ($quantity < 1) {
+        $quantity = 1;
+    }
+
+    $variation = array();
+
+    foreach ($_POST as $key => $value) {
+        if (strpos($key, 'attribute_') === 0) {
+            $variation[sanitize_title(wp_unslash($key))] = wc_clean(wp_unslash($value));
+        }
+    }
+
+    $product = wc_get_product($product_id);
+
+    if (!$product) {
+        wp_send_json_error(array(
+            'message' => 'محصول پیدا نشد.'
+        ));
+    }
+
+    $passed_validation = apply_filters(
+        'woocommerce_add_to_cart_validation',
+        true,
+        $product_id,
+        $quantity,
+        $variation_id,
+        $variation
+    );
+
+    if (!$passed_validation) {
+        wp_send_json_error(array(
+            'message' => 'امکان افزودن این محصول به سبد خرید وجود ندارد.'
+        ));
+    }
+
+    try {
+        $cart_item_key = WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $variation);
+
+        if (!$cart_item_key) {
+            wp_send_json_error(array(
+                'message' => 'محصول به سبد خرید اضافه نشد. لطفاً دوباره تلاش کنید.'
+            ));
+        }
+
+        WC()->cart->calculate_totals();
+
+        $display_product = $variation_id ? wc_get_product($variation_id) : $product;
+
+        $image_url = '';
+
+        if ($display_product && $display_product->get_image_id()) {
+            $image_url = wp_get_attachment_image_url($display_product->get_image_id(), 'woocommerce_thumbnail');
+        }
+
+        if (!$image_url && $product->get_image_id()) {
+            $image_url = wp_get_attachment_image_url($product->get_image_id(), 'woocommerce_thumbnail');
+        }
+
+        if (!$image_url) {
+            $image_url = wc_placeholder_img_src();
+        }
+
+        ob_start();
+        woocommerce_mini_cart();
+        $mini_cart = ob_get_clean();
+
+        $fragments = apply_filters('woocommerce_add_to_cart_fragments', array(
+            'div.widget_shopping_cart_content' => '<div class="widget_shopping_cart_content">' . $mini_cart . '</div>',
+            '.sell-number p' => '<p>' . esc_html(WC()->cart->get_cart_contents_count()) . '</p>',
+        ));
+
+        wp_send_json_success(array(
+            'product_title'    => $product->get_name(),
+            'product_image'    => $image_url,
+            'cart_count'       => WC()->cart->get_cart_contents_count(),
+            'subtotal'         => wp_strip_all_tags(WC()->cart->get_cart_subtotal()),
+            'tax'              => wp_strip_all_tags(wc_price(WC()->cart->get_taxes_total())),
+            'total'            => wp_strip_all_tags(WC()->cart->get_total()),
+            'cart_url'         => wc_get_cart_url(),
+            'checkout_url'     => wc_get_checkout_url(),
+            'suggestions_html' => hsb_cart_ajax_popup_suggestions_html($product_id),
+            'fragments'        => $fragments,
+        ));
+    } catch (Exception $e) {
+        wp_send_json_error(array(
+            'message' => $e->getMessage()
+        ));
+    }
+}
+
+
+// مرحله ۵: محصولات پیشنهادی داخل پاپ‌آپ
+function hsb_cart_ajax_popup_suggestions_html($product_id) {
+    $product = wc_get_product($product_id);
+
+    if (!$product) {
+        return '';
+    }
+
+    $suggested_ids = $product->get_cross_sell_ids();
+
+    if (empty($suggested_ids)) {
+        $suggested_ids = wc_get_related_products($product_id, 4);
+    }
+
+    if (empty($suggested_ids)) {
+        $suggested_ids = wc_get_products(array(
+            'status'  => 'publish',
+            'limit'   => 4,
+            'exclude' => array($product_id),
+            'orderby' => 'date',
+            'order'   => 'DESC',
+            'return'  => 'ids',
+        ));
+    }
+
+    if (empty($suggested_ids)) {
+        return '';
+    }
+
+    ob_start();
+
+    foreach (array_slice($suggested_ids, 0, 4) as $suggested_id) {
+        $suggested_product = wc_get_product($suggested_id);
+
+        if (!$suggested_product) {
+            continue;
+        }
+        ?>
+
+        <a href="<?php echo esc_url(get_permalink($suggested_id)); ?>" class="cart-ajax-popup__suggestion-card">
+            <?php echo $suggested_product->get_image('woocommerce_thumbnail'); ?>
+        </a>
+
+        <?php
+    }
+
+    return ob_get_clean();
+}
+// End -- AJAX - EZAFE KARDANE MAHSUL BA DOKME AFZODAN BE SABADE KHARID ------------------------->
+
+
+
+// Start Checkout Page -------------------------------------------------------------------------->
+/* =========================================================
+   CUSTOM CHECKOUT FIELDS
+========================================================= */
+
+
+add_filter('woocommerce_checkout_fields', 'hsb_custom_checkout_fields');
+function hsb_custom_checkout_fields($fields) {
+
+    $fields['billing']['billing_gender'] = array(
+        'type'     => 'text',
+        'label'    => 'جنسیت',
+        'required' => false,
+        'priority' => 5,
+    );
+
+    $fields['billing']['billing_plaque'] = array(
+        'type'     => 'text',
+        'label'    => 'پلاک',
+        'required' => true,
+        'priority' => 75,
+    );
+
+    $fields['billing']['billing_national_code'] = array(
+        'type'     => 'text',
+        'label'    => 'کد ملی',
+        'required' => true,
+        'priority' => 120,
+    );
+
+    $fields['billing']['billing_birth_date'] = array(
+        'type'     => 'text',
+        'label'    => 'تاریخ تولد',
+        'required' => false,
+        'priority' => 130,
+    );
+
+    if (isset($fields['billing']['billing_email'])) {
+        $fields['billing']['billing_email']['required'] = false;
+    }
+
+    if (isset($fields['billing']['billing_company'])) {
+        $fields['billing']['billing_company']['label'] = 'نام فروشگاه یا کارگاه';
+        $fields['billing']['billing_company']['required'] = false;
+    }
+
+    return $fields;
+}
+
+add_action('woocommerce_checkout_create_order', 'hsb_save_custom_checkout_fields', 10, 2);
+function hsb_save_custom_checkout_fields($order, $data) {
+    $custom_fields = array(
+        'billing_gender'        => 'جنسیت',
+        'billing_plaque'        => 'پلاک',
+        'billing_national_code' => 'کد ملی',
+        'billing_birth_date'    => 'تاریخ تولد',
+    );
+
+    foreach ($custom_fields as $field_key => $field_label) {
+        if (isset($_POST[$field_key])) {
+            $order->update_meta_data('_' . $field_key, sanitize_text_field(wp_unslash($_POST[$field_key])));
+        }
+    }
+}
+
+add_action('woocommerce_after_checkout_validation', 'hsb_validate_checkout_password_confirmation', 10, 2);
+function hsb_validate_checkout_password_confirmation($data, $errors) {
+    if (
+        isset($_POST['account_password'], $_POST['confirm_password']) &&
+        !empty($_POST['account_password']) &&
+        sanitize_text_field(wp_unslash($_POST['account_password'])) !== sanitize_text_field(wp_unslash($_POST['confirm_password']))
+    ) {
+        $errors->add('password_confirmation_error', 'رمز عبور و تکرار رمز عبور یکسان نیستند.');
+    }
+}
+// End Checkout Page -------------------------------------------------------------------------->
+
+
+// Start Email Invoice to Customer ----------------------------------------------------------->
+if (!function_exists('hsb_add_invoice_link_to_customer_email')) {
+    add_action('woocommerce_email_after_order_table', 'hsb_add_invoice_link_to_customer_email', 20, 4);
+
+    function hsb_add_invoice_link_to_customer_email($order, $sent_to_admin, $plain_text, $email) {
+        if ($sent_to_admin || !($order instanceof WC_Order)) {
+            return;
+        }
+
+        $allowed_emails = array(
+            'customer_processing_order',
+            'customer_completed_order',
+            'customer_on_hold_order',
+        );
+
+        if (!isset($email->id) || !in_array($email->id, $allowed_emails, true)) {
+            return;
+        }
+
+        $invoice_url = $order->get_checkout_order_received_url() . '#salesInvoiceSection';
+
+        if ($plain_text) {
+            echo "\n";
+            echo "مشاهده فاکتور خرید: " . esc_url($invoice_url) . "\n";
+            return;
+        }
+        ?>
+
+        <div style="margin:24px 0;padding:18px;border:1px solid #e5e5e5;border-radius:10px;background:#fafafa;text-align:right;direction:rtl;">
+            <h2 style="margin:0 0 10px;font-size:18px;">فاکتور خرید شما</h2>
+
+            <p style="margin:0 0 14px;line-height:1.8;">
+                برای مشاهده و دانلود فاکتور سفارش خود روی دکمه زیر کلیک کنید.
+            </p>
+
+            <a href="<?php echo esc_url($invoice_url); ?>"
+               style="display:inline-block;padding:10px 18px;background:#9f8561;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:bold;">
+                مشاهده فاکتور خرید
+            </a>
+        </div>
+
+        <?php
+    }
+}
+// End Email Invoice to Customer ----------------------------------------------------------->
