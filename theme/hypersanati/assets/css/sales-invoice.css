@@ -180,8 +180,8 @@
 }
 
 .sales-invoice__summary {
-  width: 260px;
-  border: 1px solid #7f7f7f;
+  /* width: 260px; */
+  /* border: 1px solid #7f7f7f; */
   background: var(--color-white);
 }
 
