@@ -1,0 +1,1222 @@
+/* ================================================================
+   Dashboard CSS - Hypersanati Theme
+   Mobile-first approach
+================================================================ */
+
+/* ----------------------------------------------------------------
+   Variables
+---------------------------------------------------------------- */
+:root {
+  --dashboard-sidebar-width: 260px;
+  --dashboard-gap: 1.5rem;
+  --dashboard-card-padding: 1.5rem;
+  --dashboard-border-radius: 8px;
+}
+
+/* ----------------------------------------------------------------
+   Container Layout
+---------------------------------------------------------------- */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-light);
+  padding: 1rem;
+  gap: 1rem;
+}
+
+/* ----------------------------------------------------------------
+   Sidebar
+---------------------------------------------------------------- */
+.dashboard-sidebar {
+  width: 100%;
+  background: var(--color-white);
+  border-radius: var(--dashboard-border-radius);
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.dashboard-user-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.dashboard-user-welcome i {
+  font-size: 3.5rem;
+  color: var(--color-primary);
+  margin-bottom: 0.75rem;
+}
+
+.dashboard-user-welcome h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  color: var(--color-dark);
+}
+
+.dashboard-user-welcome .user-phone {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------
+   Navigation Buttons
+---------------------------------------------------------------- */
+.dashboard-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dashboard-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--dashboard-border-radius);
+  color: var(--gray-700);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: right;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  text-decoration: none;
+}
+
+.dashboard-nav-btn i {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+  color: var(--gray-500);
+  transition: color 0.3s ease;
+}
+
+.dashboard-nav-btn:hover {
+  background: var(--gray-100);
+  color: var(--color-dark);
+}
+
+.dashboard-nav-btn:hover i {
+  color: var(--color-primary);
+}
+
+.dashboard-nav-btn.active {
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 600;
+}
+
+.dashboard-nav-btn.active i {
+  color: var(--color-white);
+}
+
+.dashboard-nav-btn .badge {
+  margin-right: auto;
+  background: var(--color-danger);
+  color: var(--color-dark);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  min-width: 22px;
+  text-align: center;
+}
+
+.dashboard-nav-btn.active .badge {
+  background: var(--color-white);
+  color: var(--color-primary);
+}
+
+.dashboard-nav-btn.logout-btn {
+  margin-top: 1rem;
+  border-top: 1px solid var(--gray-200);
+  padding-top: 1.25rem;
+  color: var(--color-red);
+}
+
+.dashboard-nav-btn.logout-btn:hover {
+  background: var(--color-red);
+  color: var(--color-white);
+}
+
+.dashboard-nav-btn.logout-btn:hover i {
+  color: var(--color-white);
+}
+
+/* ----------------------------------------------------------------
+   Main Content Area
+---------------------------------------------------------------- */
+.dashboard-content {
+  flex: 1;
+  width: 100%;
+}
+
+.dashboard-tab {
+  display: none;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.dashboard-tab.active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----------------------------------------------------------------
+   Header
+---------------------------------------------------------------- */
+.dashboard-header {
+  background: var(--color-white);
+  padding: 1.5rem;
+  border-radius: var(--dashboard-border-radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 1rem;
+}
+
+.dashboard-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  color: var(--color-dark);
+}
+
+.dashboard-subtitle {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------
+   Cards
+---------------------------------------------------------------- */
+.dashboard-card {
+  background: var(--color-white);
+  padding: var(--dashboard-card-padding);
+  border-radius: var(--dashboard-border-radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 1.25rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--color-primary);
+  color: var(--color-dark);
+}
+
+/* ----------------------------------------------------------------
+   Forms
+---------------------------------------------------------------- */
+.profile-form,
+.password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--dashboard-border-radius);
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(159, 133, 97, 0.1);
+}
+
+/* ----------------------------------------------------------------
+   Buttons
+---------------------------------------------------------------- */
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--dashboard-border-radius);
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(159, 133, 97, 0.3);
+}
+
+.btn-secondary {
+  background: var(--gray-200);
+  color: var(--color-dark);
+}
+
+.btn-secondary:hover {
+  background: var(--gray-300);
+}
+
+/* ----------------------------------------------------------------
+   Orders List
+---------------------------------------------------------------- */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.order-card {
+  background: var(--color-white);
+  border-radius: var(--dashboard-border-radius);
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.order-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--gray-200);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.order-number {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.order-number .label {
+  color: var(--gray-600);
+}
+
+.order-number .value {
+  color: var(--color-primary);
+}
+
+.order-status {
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.order-status.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.order-status.status-processing {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.order-status.status-completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.order-status.status-cancelled,
+.order-status.status-failed {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.order-status.status-on-hold {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.order-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--gray-700);
+}
+
+.order-meta > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.order-meta i {
+  color: var(--color-primary);
+}
+
+.order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: var(--gray-50);
+  border-radius: var(--dashboard-border-radius);
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background: var(--color-white);
+  border-radius: 6px;
+}
+
+.order-item .item-image {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--gray-100);
+}
+
+.order-item .item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.order-item .item-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.order-item .item-details h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+  color: var(--color-dark);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.order-item .item-qty {
+  font-size: 0.8rem;
+  color: var(--gray-600);
+}
+
+.order-item .item-price {
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.order-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gray-200);
+}
+
+/* ----------------------------------------------------------------
+   Addresses
+---------------------------------------------------------------- */
+.addresses-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.address-card {
+  background: var(--color-white);
+  padding: 1.5rem;
+  border-radius: var(--dashboard-border-radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.address-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.address-header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-dark);
+}
+
+.address-content {
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: var(--gray-700);
+}
+
+.address-content p {
+  margin: 0.25rem 0;
+}
+
+.address-content strong {
+  color: var(--color-dark);
+  font-weight: 700;
+}
+
+.no-address {
+  padding: 2rem;
+  text-align: center;
+  color: var(--gray-500);
+  font-style: italic;
+}
+
+.edit-address-btn {
+  width: 100%;
+}
+
+/* ----------------------------------------------------------------
+   Empty State
+---------------------------------------------------------------- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: var(--color-white);
+  border-radius: var(--dashboard-border-radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.empty-state i {
+  font-size: 4rem;
+  color: var(--gray-400);
+  margin-bottom: 1.5rem;
+}
+
+.empty-state h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: var(--color-dark);
+}
+
+.empty-state p {
+  font-size: 0.95rem;
+  color: var(--gray-600);
+  margin: 0 0 1.5rem 0;
+  max-width: 400px;
+}
+
+/* ----------------------------------------------------------------
+   Support
+---------------------------------------------------------------- */
+.support-card {
+  background: var(--color-white);
+  padding: 1.5rem;
+  border-radius: var(--dashboard-border-radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.support-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--color-primary);
+  color: var(--color-dark);
+}
+
+.contact-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--gray-50);
+  border-radius: var(--dashboard-border-radius);
+}
+
+.contact-item i {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin-top: 0.25rem;
+}
+
+.contact-item h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  color: var(--color-dark);
+}
+
+.contact-item p {
+  font-size: 0.9rem;
+  color: var(--gray-700);
+  margin: 0;
+  direction: ltr;
+  text-align: right;
+}
+
+/* ----------------------------------------------------------------
+   Responsive - Tablet (≥768px)
+---------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .dashboard-container {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .form-row {
+    flex-direction: row;
+  }
+
+  .dashboard-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .addresses-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .order-actions {
+    justify-content: flex-end;
+  }
+}
+
+/* ----------------------------------------------------------------
+   Responsive - Desktop (≥992px)
+---------------------------------------------------------------- */
+@media (min-width: 992px) {
+  .dashboard-container {
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 2rem;
+    gap: 2rem;
+  }
+
+  .dashboard-sidebar {
+    width: var(--dashboard-sidebar-width);
+    flex-shrink: 0;
+    position: sticky;
+    top: 2rem;
+  }
+
+  .dashboard-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .contact-methods {
+    flex-direction: row;
+  }
+
+  .contact-item {
+    flex: 1;
+  }
+}
+
+/* ----------------------------------------------------------------
+   Print Styles
+---------------------------------------------------------------- */
+@media print {
+  .dashboard-sidebar,
+  .dashboard-nav,
+  .btn-primary,
+  .btn-secondary {
+    display: none !important;
+  }
+
+  .dashboard-container {
+    padding: 0;
+  }
+
+  .dashboard-card,
+  .order-card {
+    box-shadow: none;
+    border: 1px solid var(--gray-300);
+  }
+}
+
+/* ================================================================
+   TICKET SYSTEM STYLES
+================================================================ */
+
+/* ----------------------------------------------------------------
+   Ticket Stats Cards
+---------------------------------------------------------------- */
+.ticket-stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ticket-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--color-white);
+  border-radius: var(--dashboard-border-radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ticket-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.ticket-stat-card i {
+  font-size: 2.5rem;
+  color: var(--gray-400);
+}
+
+.ticket-stat-card.active i {
+  color: var(--color-primary);
+}
+
+.ticket-stat-card.closed i {
+  color: var(--color-success);
+}
+
+.ticket-stat-info h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  color: var(--color-dark);
+}
+
+.ticket-stat-info p {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------
+   Ticket Form
+---------------------------------------------------------------- */
+.ticket-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.ticket-form .form-hint {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+.ticket-form .required {
+  color: var(--color-red);
+  margin-right: 2px;
+}
+
+/* ----------------------------------------------------------------
+   Tickets List
+---------------------------------------------------------------- */
+.tickets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  color: var(--color-dark);
+  padding: 1rem;
+  background: var(--color-white);
+  border-radius: var(--dashboard-border-radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.section-title i {
+  color: var(--color-primary);
+}
+
+/* ----------------------------------------------------------------
+   Ticket Card
+---------------------------------------------------------------- */
+.ticket-card {
+  background: var(--color-white);
+  border-radius: var(--dashboard-border-radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+  border-right: 4px solid var(--gray-300);
+}
+
+.ticket-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.ticket-card.ticket-status-open {
+  border-right-color: var(--color-primary);
+}
+
+.ticket-card.ticket-status-answered {
+  border-right-color: var(--color-success);
+}
+
+.ticket-card.ticket-status-closed {
+  border-right-color: var(--gray-400);
+  opacity: 0.85;
+}
+
+.ticket-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.25rem;
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-200);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ticket-card-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.ticket-card-title h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem 0;
+  color: var(--color-dark);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.ticket-number {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.ticket-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.ticket-card-meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  background: var(--color-white);
+  border-radius: 4px;
+  color: var(--gray-700);
+}
+
+.ticket-card-meta i {
+  font-size: 0.85rem;
+  color: var(--color-primary);
+}
+
+.status-badge-open {
+  background: var(--color-primary) !important;
+  color: var(--color-white) !important;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge-answered {
+  background: var(--color-success) !important;
+  color: var(--color-white) !important;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge-closed {
+  background: var(--gray-400) !important;
+  color: var(--color-white) !important;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------
+   Ticket Card Body
+---------------------------------------------------------------- */
+.ticket-card-body {
+  padding: 1.25rem;
+  background: var(--color-white);
+}
+
+/* ----------------------------------------------------------------
+   Ticket Messages
+---------------------------------------------------------------- */
+.ticket-message {
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  border-radius: var(--dashboard-border-radius);
+  background: var(--gray-50);
+}
+
+.ticket-message.user-message {
+  background: #e8f4fd;
+  border-right: 3px solid #2196F3;
+}
+
+.ticket-message.support-message {
+  background: #fff3e0;
+  border-right: 3px solid #ff9800;
+}
+
+.ticket-message-author {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.ticket-message-author i {
+  font-size: 1.2rem;
+}
+
+.ticket-message.user-message .ticket-message-author i {
+  color: #2196F3;
+}
+
+.ticket-message.support-message .ticket-message-author i {
+  color: #ff9800;
+}
+
+.ticket-message-author strong {
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.message-time {
+  margin-right: auto;
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  font-weight: normal;
+}
+
+.ticket-message-content {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--gray-700);
+}
+
+.ticket-message-content p {
+  margin: 0.5rem 0;
+}
+
+.ticket-message-content p:first-child {
+  margin-top: 0;
+}
+
+.ticket-message-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* ----------------------------------------------------------------
+   Ticket Replies Section
+---------------------------------------------------------------- */
+.ticket-replies {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px dashed var(--gray-200);
+}
+
+/* ----------------------------------------------------------------
+   Ticket Reply Form
+---------------------------------------------------------------- */
+.ticket-reply-form {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--gray-50);
+  border-radius: var(--dashboard-border-radius);
+  border: 2px dashed var(--color-primary);
+}
+
+.reply-ticket-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.reply-ticket-form .form-group {
+  margin-bottom: 0;
+}
+
+.reply-ticket-form label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-dark);
+  margin-bottom: 0.5rem;
+}
+
+.reply-ticket-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.reply-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn-cancel-reply {
+  background: var(--gray-300);
+  color: var(--gray-700);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--dashboard-border-radius);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-cancel-reply:hover {
+  background: var(--gray-400);
+}
+
+/* ----------------------------------------------------------------
+   Ticket Card Footer
+---------------------------------------------------------------- */
+.ticket-card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: var(--gray-50);
+  border-top: 1px solid var(--gray-200);
+}
+
+.btn-reply {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--dashboard-border-radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-reply:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-2px);
+}
+
+.btn-close-ticket {
+  background: var(--color-red);
+  color: var(--color-white);
+  border: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--dashboard-border-radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-close-ticket:hover {
+  background: #c62828;
+  transform: translateY(-2px);
+}
+
+.ticket-closed-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background: var(--gray-300);
+  color: var(--gray-700);
+  border-radius: var(--dashboard-border-radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.ticket-closed-note i {
+  color: var(--gray-600);
+}
+
+/* ----------------------------------------------------------------
+   Support Info Card
+---------------------------------------------------------------- */
+.support-info-card {
+  margin-top: 2rem;
+}
+
+.support-info-card .card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.support-info-card .card-title i {
+  color: var(--color-primary);
+}
+
+/* ----------------------------------------------------------------
+   Responsive - Tablet
+---------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .ticket-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .ticket-form .form-row {
+    flex-direction: row;
+  }
+
+  .order-actions .btn-invoice {
+    margin-right: auto;
+  }
+}
+
+/* ----------------------------------------------------------------
+   Responsive - Desktop
+---------------------------------------------------------------- */
+@media (min-width: 992px) {
+  .ticket-card-footer {
+    justify-content: flex-start;
+  }
+
+  .contact-methods {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* ----------------------------------------------------------------
+   Color Variables (if not defined)
+---------------------------------------------------------------- */
+:root {
+  --color-success: #4caf50;
+  --color-red: #f44336;
+  --color-danger: #ffc107;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --color-primary-hover: #8a7256;
+}
