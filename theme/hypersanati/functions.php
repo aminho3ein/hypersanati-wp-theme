@@ -464,6 +464,37 @@ function hypersanati_enqueue_assets() {
     }
 
     /* =========================================================
+       DASHBOARD / MY ACCOUNT
+    ========================================================= */
+
+    if (function_exists('is_account_page') && is_account_page()) {
+
+        hypersanati_enqueue_theme_style(
+            'dashboard-css',
+            '/assets/css/dashboard.css',
+            $page_css_deps
+        );
+
+        $dashboard_js_loaded = hypersanati_enqueue_theme_script(
+            'dashboard-js',
+            '/assets/js/dashboard.js',
+            array('jquery'),
+            true
+        );
+
+        if ($dashboard_js_loaded) {
+            wp_localize_script(
+                'dashboard-js',
+                'dashboardData',
+                array(
+                    'ajaxurl' => admin_url('admin-ajax.php'),
+                    'nonce' => wp_create_nonce('dashboard_ajax'),
+                )
+            );
+        }
+    }
+
+    /* =========================================================
        SINGLE PRODUCT
     ========================================================= */
 
@@ -3150,3 +3181,499 @@ if (!function_exists('hsb_add_invoice_link_to_customer_email')) {
     }
 }
 // End Email Invoice to Customer ----------------------------------------------------------->
+
+
+
+// Start Dashboard AJAX Handlers ---------------------------------------------------------------
+/**
+ * Update User Profile - AJAX Handler
+ */
+add_action('wp_ajax_update_user_profile', 'hypersanati_update_user_profile');
+function hypersanati_update_user_profile() {
+    check_ajax_referer('dashboard_ajax', 'nonce');
+
+    if (!is_user_logged_in()) {
+        wp_send_json_error(array('message' => 'شما وارد نشده‌اید'));
+    }
+
+    $user_id = get_current_user_id();
+    $customer = new WC_Customer($user_id);
+
+    // Validate required fields
+    $first_name = isset($_POST['first_name']) ? sanitize_text_field(wp_unslash($_POST['first_name'])) : '';
+    $last_name = isset($_POST['last_name']) ? sanitize_text_field(wp_unslash($_POST['last_name'])) : '';
+    $billing_phone = isset($_POST['billing_phone']) ? sanitize_text_field(wp_unslash($_POST['billing_phone'])) : '';
+
+    if (empty($first_name) || empty($last_name)) {
+        wp_send_json_error(array('message' => 'نام و نام خانوادگی الزامی است'));
+    }
+
+    // Update user data
+    wp_update_user(array(
+        'ID' => $user_id,
+        'first_name' => $first_name,
+        'last_name' => $last_name,
+        'display_name' => $first_name . ' ' . $last_name,
+    ));
+
+    // Update billing information
+    if (isset($_POST['billing_email'])) {
+        $customer->set_billing_email(sanitize_email(wp_unslash($_POST['billing_email'])));
+    }
+
+    if (!empty($billing_phone)) {
+        $customer->set_billing_phone($billing_phone);
+    }
+
+    if (isset($_POST['billing_company'])) {
+        $customer->set_billing_company(sanitize_text_field(wp_unslash($_POST['billing_company'])));
+    }
+
+    if (isset($_POST['billing_national_code'])) {
+        update_user_meta($user_id, '_billing_national_code', sanitize_text_field(wp_unslash($_POST['billing_national_code'])));
+    }
+
+    $customer->save();
+
+    wp_send_json_success(array(
+        'message' => 'اطلاعات با موفقیت به‌روزرسانی شد',
+        'user' => array(
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+        )
+    ));
+}
+
+/**
+ * Change User Password - AJAX Handler
+ */
+add_action('wp_ajax_change_user_password', 'hypersanati_change_user_password');
+function hypersanati_change_user_password() {
+    check_ajax_referer('dashboard_ajax', 'nonce');
+
+    if (!is_user_logged_in()) {
+        wp_send_json_error(array('message' => 'شما وارد نشده‌اید'));
+    }
+
+    $user_id = get_current_user_id();
+    $user = get_user_by('id', $user_id);
+
+    // Validate current password
+    $current_password = isset($_POST['current_password']) ? wp_unslash($_POST['current_password']) : '';
+    $new_password = isset($_POST['new_password']) ? wp_unslash($_POST['new_password']) : '';
+    $confirm_password = isset($_POST['confirm_password']) ? wp_unslash($_POST['confirm_password']) : '';
+
+    if (empty($current_password) || empty($new_password) || empty($confirm_password)) {
+        wp_send_json_error(array('message' => 'تمام فیلدها الزامی است'));
+    }
+
+    // Check if current password is correct
+    if (!wp_check_password($current_password, $user->user_pass, $user_id)) {
+        wp_send_json_error(array('message' => 'رمز عبور فعلی صحیح نیست'));
+    }
+
+    // Check if new passwords match
+    if ($new_password !== $confirm_password) {
+        wp_send_json_error(array('message' => 'رمز عبور جدید و تکرار آن یکسان نیستند'));
+    }
+
+    // Validate password strength
+    if (strlen($new_password) < 6) {
+        wp_send_json_error(array('message' => 'رمز عبور باید حداقل ۶ کاراکتر باشد'));
+    }
+
+    // Update password
+    wp_set_password($new_password, $user_id);
+
+    // Re-authenticate user
+    wp_set_current_user($user_id);
+    wp_set_auth_cookie($user_id, true);
+
+    wp_send_json_success(array(
+        'message' => 'رمز عبور با موفقیت تغییر یافت'
+    ));
+}
+
+/**
+ * Handle Profile Form Submission (Non-AJAX fallback)
+ */
+add_action('template_redirect', 'hypersanati_handle_profile_update');
+function hypersanati_handle_profile_update() {
+    if (!isset($_POST['update_profile']) || !isset($_POST['profile_nonce'])) {
+        return;
+    }
+
+    if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['profile_nonce'])), 'update_user_profile')) {
+        return;
+    }
+
+    if (!is_user_logged_in()) {
+        return;
+    }
+
+    $user_id = get_current_user_id();
+    $customer = new WC_Customer($user_id);
+
+    $first_name = isset($_POST['first_name']) ? sanitize_text_field(wp_unslash($_POST['first_name'])) : '';
+    $last_name = isset($_POST['last_name']) ? sanitize_text_field(wp_unslash($_POST['last_name'])) : '';
+
+    if (empty($first_name) || empty($last_name)) {
+        wc_add_notice('نام و نام خانوادگی الزامی است', 'error');
+        return;
+    }
+
+    wp_update_user(array(
+        'ID' => $user_id,
+        'first_name' => $first_name,
+        'last_name' => $last_name,
+        'display_name' => $first_name . ' ' . $last_name,
+    ));
+
+    if (isset($_POST['billing_email'])) {
+        $customer->set_billing_email(sanitize_email(wp_unslash($_POST['billing_email'])));
+    }
+
+    if (isset($_POST['billing_phone'])) {
+        $customer->set_billing_phone(sanitize_text_field(wp_unslash($_POST['billing_phone'])));
+    }
+
+    if (isset($_POST['billing_company'])) {
+        $customer->set_billing_company(sanitize_text_field(wp_unslash($_POST['billing_company'])));
+    }
+
+    if (isset($_POST['billing_national_code'])) {
+        update_user_meta($user_id, '_billing_national_code', sanitize_text_field(wp_unslash($_POST['billing_national_code'])));
+    }
+
+    $customer->save();
+
+    wc_add_notice('اطلاعات با موفقیت به‌روزرسانی شد', 'success');
+    wp_safe_redirect(wc_get_page_permalink('myaccount'));
+    exit;
+}
+
+/**
+ * Handle Password Change (Non-AJAX fallback)
+ */
+add_action('template_redirect', 'hypersanati_handle_password_change');
+function hypersanati_handle_password_change() {
+    if (!isset($_POST['change_password']) || !isset($_POST['password_nonce'])) {
+        return;
+    }
+
+    if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['password_nonce'])), 'change_user_password')) {
+        return;
+    }
+
+    if (!is_user_logged_in()) {
+        return;
+    }
+
+    $user_id = get_current_user_id();
+    $user = get_user_by('id', $user_id);
+
+    $current_password = isset($_POST['current_password']) ? wp_unslash($_POST['current_password']) : '';
+    $new_password = isset($_POST['new_password']) ? wp_unslash($_POST['new_password']) : '';
+    $confirm_password = isset($_POST['confirm_password']) ? wp_unslash($_POST['confirm_password']) : '';
+
+    if (empty($current_password) || empty($new_password) || empty($confirm_password)) {
+        wc_add_notice('تمام فیلدها الزامی است', 'error');
+        return;
+    }
+
+    if (!wp_check_password($current_password, $user->user_pass, $user_id)) {
+        wc_add_notice('رمز عبور فعلی صحیح نیست', 'error');
+        return;
+    }
+
+    if ($new_password !== $confirm_password) {
+        wc_add_notice('رمز عبور جدید و تکرار آن یکسان نیستند', 'error');
+        return;
+    }
+
+    if (strlen($new_password) < 6) {
+        wc_add_notice('رمز عبور باید حداقل ۶ کاراکتر باشد', 'error');
+        return;
+    }
+
+    wp_set_password($new_password, $user_id);
+
+    wp_set_current_user($user_id);
+    wp_set_auth_cookie($user_id, true);
+
+    wc_add_notice('رمز عبور با موفقیت تغییر یافت', 'success');
+    wp_safe_redirect(wc_get_page_permalink('myaccount'));
+    exit;
+}
+// End Dashboard AJAX Handlers -----------------------------------------------------------------
+
+/* ===============================================================
+   TICKET SYSTEM HANDLERS
+   سیستم تیکتینگ پشتیبانی
+=============================================================== */
+
+/**
+ * Create New Ticket Handler
+ */
+add_action('template_redirect', 'hypersanati_handle_create_ticket');
+function hypersanati_handle_create_ticket() {
+    if (!isset($_POST['create_ticket']) || !isset($_POST['ticket_nonce'])) {
+        return;
+    }
+
+    if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['ticket_nonce'])), 'create_support_ticket')) {
+        wc_add_notice('درخواست نامعتبر است', 'error');
+        return;
+    }
+
+    if (!is_user_logged_in()) {
+        wc_add_notice('برای ایجاد تیکت باید وارد شوید', 'error');
+        return;
+    }
+
+    $user_id = get_current_user_id();
+    $user = get_user_by('id', $user_id);
+
+    // Sanitize and validate input
+    $category = isset($_POST['ticket_category']) ? sanitize_text_field(wp_unslash($_POST['ticket_category'])) : '';
+    $subject = isset($_POST['ticket_subject']) ? sanitize_text_field(wp_unslash($_POST['ticket_subject'])) : '';
+    $message = isset($_POST['ticket_message']) ? sanitize_textarea_field(wp_unslash($_POST['ticket_message'])) : '';
+    $order_id = isset($_POST['ticket_order_id']) ? sanitize_text_field(wp_unslash($_POST['ticket_order_id'])) : '';
+
+    if (empty($category) || empty($subject) || empty($message)) {
+        wc_add_notice('لطفاً تمام فیلدهای الزامی را پر کنید', 'error');
+        return;
+    }
+
+    // Create ticket as comment
+    $ticket_id = wp_insert_comment(array(
+        'comment_post_ID' => 0,
+        'comment_author' => $user->display_name,
+        'comment_author_email' => $user->user_email,
+        'comment_content' => $message,
+        'comment_type' => 'support_ticket',
+        'comment_parent' => 0,
+        'comment_approved' => '1',
+        'user_id' => $user_id,
+    ));
+
+    if (!$ticket_id) {
+        wc_add_notice('خطا در ایجاد تیکت. لطفاً دوباره تلاش کنید', 'error');
+        return;
+    }
+
+    // Save ticket metadata
+    add_comment_meta($ticket_id, 'ticket_status', 'open', true);
+    add_comment_meta($ticket_id, 'ticket_category', $category, true);
+    add_comment_meta($ticket_id, 'ticket_subject', $subject, true);
+    
+    if (!empty($order_id)) {
+        add_comment_meta($ticket_id, 'ticket_order_id', $order_id, true);
+    }
+
+    // Send email notification to admin
+    $admin_email = get_option('admin_email');
+    $site_name = get_bloginfo('name');
+    
+    $email_subject = 'تیکت جدید پشتیبانی - ' . $subject;
+    $email_message = "تیکت جدیدی در سایت {$site_name} ثبت شده است:\n\n";
+    $email_message .= "کاربر: {$user->display_name} ({$user->user_email})\n";
+    $email_message .= "موضوع: {$subject}\n";
+    $email_message .= "دسته‌بندی: {$category}\n";
+    
+    if (!empty($order_id)) {
+        $email_message .= "شماره سفارش: {$order_id}\n";
+    }
+    
+    $email_message .= "\nمتن تیکت:\n{$message}\n";
+
+    wp_mail($admin_email, $email_subject, $email_message);
+
+    wc_add_notice('تیکت شما با موفقیت ثبت شد', 'success');
+    wp_safe_redirect(add_query_arg('tab', 'support', wc_get_page_permalink('myaccount')));
+    exit;
+}
+
+/**
+ * Reply to Ticket Handler
+ */
+add_action('template_redirect', 'hypersanati_handle_reply_ticket');
+function hypersanati_handle_reply_ticket() {
+    if (!isset($_POST['reply_ticket']) || !isset($_POST['ticket_id'])) {
+        return;
+    }
+
+    $ticket_id = absint($_POST['ticket_id']);
+    
+    if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['reply_nonce'])), 'reply_ticket_' . $ticket_id)) {
+        wc_add_notice('درخواست نامعتبر است', 'error');
+        return;
+    }
+
+    if (!is_user_logged_in()) {
+        wc_add_notice('برای پاسخ به تیکت باید وارد شوید', 'error');
+        return;
+    }
+
+    $user_id = get_current_user_id();
+    $user = get_user_by('id', $user_id);
+    
+    // Verify ticket belongs to user
+    $ticket = get_comment($ticket_id);
+    
+    if (!$ticket || (int)$ticket->user_id !== $user_id) {
+        wc_add_notice('دسترسی غیرمجاز', 'error');
+        return;
+    }
+
+    $reply_message = isset($_POST['reply_message']) ? sanitize_textarea_field(wp_unslash($_POST['reply_message'])) : '';
+
+    if (empty($reply_message)) {
+        wc_add_notice('لطفاً متن پاسخ را وارد کنید', 'error');
+        return;
+    }
+
+    // Create reply
+    $reply_id = wp_insert_comment(array(
+        'comment_post_ID' => 0,
+        'comment_author' => $user->display_name,
+        'comment_author_email' => $user->user_email,
+        'comment_content' => $reply_message,
+        'comment_type' => 'ticket_reply',
+        'comment_parent' => $ticket_id,
+        'comment_approved' => '1',
+        'user_id' => $user_id,
+    ));
+
+    if (!$reply_id) {
+        wc_add_notice('خطا در ارسال پاسخ', 'error');
+        return;
+    }
+
+    // Update ticket status to open (user replied)
+    update_comment_meta($ticket_id, 'ticket_status', 'open');
+    add_comment_meta($reply_id, 'is_support_reply', '0', true);
+
+    // Send email to admin
+    $admin_email = get_option('admin_email');
+    $ticket_subject = get_comment_meta($ticket_id, 'ticket_subject', true);
+    
+    $email_subject = 'پاسخ جدید به تیکت #' . $ticket_id;
+    $email_message = "کاربر {$user->display_name} به تیکت پاسخ داده است:\n\n";
+    $email_message .= "موضوع: {$ticket_subject}\n";
+    $email_message .= "شماره تیکت: #{$ticket_id}\n\n";
+    $email_message .= "پاسخ کاربر:\n{$reply_message}\n";
+
+    wp_mail($admin_email, $email_subject, $email_message);
+
+    wc_add_notice('پاسخ شما ارسال شد', 'success');
+    wp_safe_redirect(add_query_arg('tab', 'support', wc_get_page_permalink('myaccount')));
+    exit;
+}
+
+/**
+ * Close Ticket Handler
+ */
+add_action('template_redirect', 'hypersanati_handle_close_ticket');
+function hypersanati_handle_close_ticket() {
+    if (!isset($_POST['close_ticket']) || !isset($_POST['ticket_id'])) {
+        return;
+    }
+
+    $ticket_id = absint($_POST['ticket_id']);
+    
+    if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['close_nonce'])), 'close_ticket_' . $ticket_id)) {
+        wc_add_notice('درخواست نامعتبر است', 'error');
+        return;
+    }
+
+    if (!is_user_logged_in()) {
+        wc_add_notice('برای بستن تیکت باید وارد شوید', 'error');
+        return;
+    }
+
+    $user_id = get_current_user_id();
+    
+    // Verify ticket belongs to user
+    $ticket = get_comment($ticket_id);
+    
+    if (!$ticket || (int)$ticket->user_id !== $user_id) {
+        wc_add_notice('دسترسی غیرمجاز', 'error');
+        return;
+    }
+
+    // Update ticket status
+    update_comment_meta($ticket_id, 'ticket_status', 'closed');
+
+    wc_add_notice('تیکت با موفقیت بسته شد', 'success');
+    wp_safe_redirect(add_query_arg('tab', 'support', wc_get_page_permalink('myaccount')));
+    exit;
+}
+
+/**
+ * Admin Reply to Ticket (for support staff)
+ */
+add_action('wp_ajax_admin_reply_ticket', 'hypersanati_admin_reply_ticket');
+function hypersanati_admin_reply_ticket() {
+    check_ajax_referer('dashboard_ajax', 'nonce');
+
+    if (!current_user_can('manage_woocommerce') && !current_user_can('edit_others_posts')) {
+        wp_send_json_error(array('message' => 'دسترسی غیرمجاز'));
+    }
+
+    $ticket_id = isset($_POST['ticket_id']) ? absint($_POST['ticket_id']) : 0;
+    $reply_message = isset($_POST['reply_message']) ? sanitize_textarea_field(wp_unslash($_POST['reply_message'])) : '';
+
+    if (!$ticket_id || empty($reply_message)) {
+        wp_send_json_error(array('message' => 'اطلاعات ناقص است'));
+    }
+
+    $ticket = get_comment($ticket_id);
+    
+    if (!$ticket || $ticket->comment_type !== 'support_ticket') {
+        wp_send_json_error(array('message' => 'تیکت معتبر نیست'));
+    }
+
+    $current_user = wp_get_current_user();
+
+    // Create support reply
+    $reply_id = wp_insert_comment(array(
+        'comment_post_ID' => 0,
+        'comment_author' => $current_user->display_name,
+        'comment_author_email' => $current_user->user_email,
+        'comment_content' => $reply_message,
+        'comment_type' => 'ticket_reply',
+        'comment_parent' => $ticket_id,
+        'comment_approved' => '1',
+        'user_id' => get_current_user_id(),
+    ));
+
+    if (!$reply_id) {
+        wp_send_json_error(array('message' => 'خطا در ارسال پاسخ'));
+    }
+
+    // Mark as support reply
+    add_comment_meta($reply_id, 'is_support_reply', '1', true);
+    
+    // Update ticket status
+    update_comment_meta($ticket_id, 'ticket_status', 'answered');
+
+    // Send email to customer
+    $customer = get_user_by('id', $ticket->user_id);
+    
+    if ($customer) {
+        $ticket_subject = get_comment_meta($ticket_id, 'ticket_subject', true);
+        
+        $email_subject = 'پاسخ تیکت پشتیبانی #' . $ticket_id;
+        $email_message = "سلام {$customer->display_name}\n\n";
+        $email_message .= "تیکت شما پاسخ داده شده است:\n\n";
+        $email_message .= "موضوع: {$ticket_subject}\n";
+        $email_message .= "شماره تیکت: #{$ticket_id}\n\n";
+        $email_message .= "پاسخ پشتیبانی:\n{$reply_message}\n\n";
+        $email_message .= "برای مشاهده و ادامه گفتگو به داشبورد خود مراجعه کنید.\n";
+
+        wp_mail($customer->user_email, $email_subject, $email_message);
+    }
+
+    wp_send_json_success(array('message' => 'پاسخ با موفقیت ارسال شد'));
+}
