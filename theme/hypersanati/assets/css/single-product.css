@@ -4004,3 +4004,130 @@ body.single-product .sp-products-row {
     max-width: 100%;
   }
 }
+
+
+/* HS INDUSTRIAL QUANTITY CONTROL */
+.product-quantity-control {
+  width: 100%;
+  height: 52px;
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) 52px;
+  align-items: stretch;
+  direction: ltr;
+  border: 1px solid rgba(17, 24, 39, 0.13);
+  background: #fff;
+  overflow: hidden;
+}
+
+.product-quantity-btn {
+  width: 52px;
+  height: 50px;
+  border: 0;
+  background: #f7f8fa;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.product-quantity-btn:hover {
+  background: #eef2f7;
+  color: var(--color-primary, #2563eb);
+}
+
+.product-quantity-btn:active {
+  background: #e5e7eb;
+}
+
+.product-quantity-input {
+  width: 100%;
+  min-width: 0;
+  height: 50px;
+  border: 0;
+  border-right: 1px solid rgba(17, 24, 39, 0.1);
+  border-left: 1px solid rgba(17, 24, 39, 0.1);
+  background: #fff;
+  color: #111827;
+  text-align: center;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  outline: none;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.product-quantity-input::-webkit-inner-spin-button,
+.product-quantity-input::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.product-quantity-control:focus-within {
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+@media (max-width: 480px) {
+  .product-quantity-control {
+    grid-template-columns: 48px minmax(0, 1fr) 48px;
+  }
+
+  .product-quantity-btn {
+    width: 48px;
+  }
+}
+
+
+/* HS PREINVOICE UI */
+
+.preinvoice-price-note {
+  font-size: 0.9rem !important;
+  font-weight: 800 !important;
+  line-height: 1.9 !important;
+  color: #111827 !important;
+}
+
+.product-preinvoice-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.preinvoice-add-button {
+  width: 100%;
+}
+
+.preinvoice-add-button.loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.preinvoice-add-message {
+  display: none;
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.preinvoice-add-message.is-success {
+  display: block;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #047857;
+}
+
+.preinvoice-add-message.is-error {
+  display: block;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+}

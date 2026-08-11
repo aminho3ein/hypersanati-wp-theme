@@ -3677,3 +3677,124 @@ function hypersanati_admin_reply_ticket() {
 
     wp_send_json_success(array('message' => 'پاسخ با موفقیت ارسال شد'));
 }
+
+
+/* ============================================================
+ * HSB PREINVOICE ENGINE
+ * Products may be added even without price or stock.
+ * ============================================================ */
+
+add_action('wp_ajax_hsb_preinvoice_add_item', 'hsb_preinvoice_add_item');
+add_action('wp_ajax_nopriv_hsb_preinvoice_add_item', 'hsb_preinvoice_add_item');
+
+function hsb_preinvoice_add_item() {
+
+    check_ajax_referer('hsb_preinvoice_nonce', 'nonce');
+
+    if (!function_exists('WC')) {
+        wp_send_json_error(array(
+            'message' => 'ووکامرس در دسترس نیست.'
+        ));
+    }
+
+    if (null === WC()->session) {
+        WC()->initialize_session();
+    }
+
+    if (null === WC()->session) {
+        wp_send_json_error(array(
+            'message' => 'امکان ایجاد پیش‌فاکتور وجود ندارد.'
+        ));
+    }
+
+    $product_id = isset($_POST['product_id'])
+        ? absint($_POST['product_id'])
+        : 0;
+
+    $quantity = isset($_POST['quantity'])
+        ? absint($_POST['quantity'])
+        : 1;
+
+    if ($quantity < 1) {
+        $quantity = 1;
+    }
+
+    $product = wc_get_product($product_id);
+
+    if (!$product || 'publish' !== $product->get_status()) {
+        wp_send_json_error(array(
+            'message' => 'محصول موردنظر پیدا نشد.'
+        ));
+    }
+
+    /*
+     * Important:
+     * Do NOT check:
+     * is_purchasable()
+     * is_in_stock()
+     * get_price()
+     *
+     * Preinvoice requests must work regardless of
+     * current WooCommerce price and stock.
+     */
+
+    $items = WC()->session->get('hsb_preinvoice_items', array());
+
+    if (!is_array($items)) {
+        $items = array();
+    }
+
+    $item_key = (string) $product_id;
+
+    if (isset($items[$item_key])) {
+        $items[$item_key]['quantity'] += $quantity;
+    } else {
+        $items[$item_key] = array(
+            'product_id' => $product_id,
+            'quantity'   => $quantity,
+            'added_at'   => time(),
+        );
+    }
+
+    WC()->session->set('hsb_preinvoice_items', $items);
+
+    $total_quantity = 0;
+
+    foreach ($items as $item) {
+        $total_quantity += isset($item['quantity'])
+            ? absint($item['quantity'])
+            : 0;
+    }
+
+    wp_send_json_success(array(
+        'message'        => 'محصول به پیش‌فاکتور اضافه شد.',
+        'product_id'     => $product_id,
+        'product_name'   => $product->get_name(),
+        'quantity'       => $items[$item_key]['quantity'],
+        'items_count'    => count($items),
+        'total_quantity' => $total_quantity,
+    ));
+}
+
+
+/**
+ * Return current preinvoice items.
+ */
+function hsb_get_preinvoice_items() {
+
+    if (
+        !function_exists('WC') ||
+        null === WC()->session
+    ) {
+        return array();
+    }
+
+    $items = WC()->session->get(
+        'hsb_preinvoice_items',
+        array()
+    );
+
+    return is_array($items)
+        ? $items
+        : array();
+}

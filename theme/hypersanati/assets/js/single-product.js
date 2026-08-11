@@ -222,3 +222,167 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+
+/* HS PREINVOICE PRODUCT FORM */
+document.addEventListener("DOMContentLoaded", function () {
+
+  /*
+   * Quantity stepper
+   */
+  document.addEventListener("click", function (event) {
+    const button = event.target.closest(".product-quantity-btn");
+
+    if (!button) return;
+
+    const wrapper = button.closest(".product-quantity-control");
+    if (!wrapper) return;
+
+    const input = wrapper.querySelector(".product-quantity-input");
+    if (!input) return;
+
+    const min = parseInt(input.min || "1", 10);
+    const step = parseInt(input.step || "1", 10);
+
+    let value = parseInt(input.value || min, 10);
+
+    if (Number.isNaN(value)) {
+      value = min;
+    }
+
+    if (button.classList.contains("qty-plus")) {
+      value += step;
+    }
+
+    if (button.classList.contains("qty-minus")) {
+      value -= step;
+    }
+
+    if (value < min) {
+      value = min;
+    }
+
+    input.value = value;
+  });
+
+
+  /*
+   * Sanitize manual quantity input.
+   */
+  document.addEventListener("change", function (event) {
+    if (!event.target.classList.contains("product-quantity-input")) {
+      return;
+    }
+
+    const input = event.target;
+    const min = parseInt(input.min || "1", 10);
+
+    let value = parseInt(input.value || min, 10);
+
+    if (Number.isNaN(value) || value < min) {
+      value = min;
+    }
+
+    input.value = value;
+  });
+
+
+  /*
+   * Add to preinvoice.
+   * This is intentionally independent from:
+   * - WooCommerce product price
+   * - WooCommerce stock status
+   * - WooCommerce cart purchasability
+   */
+  document.addEventListener("submit", function (event) {
+    const form = event.target.closest(".product-preinvoice-form");
+
+    if (!form) return;
+
+    event.preventDefault();
+
+    const button = form.querySelector(".preinvoice-add-button");
+    const message = form.querySelector(".preinvoice-add-message");
+
+    if (!button || button.disabled) {
+      return;
+    }
+
+    const productId = form.querySelector('[name="product_id"]')?.value;
+    const quantity =
+      form.querySelector('[name="quantity"]')?.value || "1";
+
+    const ajaxUrl = form.dataset.ajaxUrl;
+    const nonce = form.dataset.nonce;
+
+    if (!productId || !ajaxUrl || !nonce) {
+      if (message) {
+        message.textContent = "اطلاعات پیش‌فاکتور کامل نیست.";
+        message.className = "preinvoice-add-message is-error";
+      }
+      return;
+    }
+
+    const body = new FormData();
+
+    body.append("action", "hsb_preinvoice_add_item");
+    body.append("nonce", nonce);
+    body.append("product_id", productId);
+    body.append("quantity", quantity);
+
+    const oldText = button.textContent;
+
+    button.disabled = true;
+    button.classList.add("loading");
+    button.textContent = "در حال افزودن...";
+
+    if (message) {
+      message.textContent = "";
+      message.className = "preinvoice-add-message";
+    }
+
+    fetch(ajaxUrl, {
+      method: "POST",
+      credentials: "same-origin",
+      body: body,
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (response) {
+        if (!response.success) {
+          throw new Error(
+            response.data && response.data.message
+              ? response.data.message
+              : "امکان افزودن محصول به پیش‌فاکتور وجود ندارد."
+          );
+        }
+
+        if (message) {
+          message.textContent =
+            response.data.message ||
+            "محصول به پیش‌فاکتور اضافه شد.";
+
+          message.className =
+            "preinvoice-add-message is-success";
+        }
+
+        document.dispatchEvent(
+          new CustomEvent("hsb_preinvoice_updated", {
+            detail: response.data,
+          })
+        );
+      })
+      .catch(function (error) {
+        if (message) {
+          message.textContent = error.message;
+          message.className =
+            "preinvoice-add-message is-error";
+        }
+      })
+      .finally(function () {
+        button.disabled = false;
+        button.classList.remove("loading");
+        button.textContent = oldText;
+      });
+  });
+});
