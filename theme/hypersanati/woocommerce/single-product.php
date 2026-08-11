@@ -173,48 +173,67 @@ if ($product) :
                 <div class="price-label">قیمت محصول</div>
 
                 <div class="price-sec">
-                    <p><?php echo wc_price($product->get_price()); ?></p>
+                    <p class="preinvoice-price-note">
+                        قیمت نهایی پس از بررسی و تأیید واحد فروش اعلام می‌شود
+                    </p>
                 </div>
             </div>
 
             <div class="add-to-cart-and-dropdown-sec">
-                <form class="cart product-cart-form"
-                      action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>"
-                      method="post"
-                      enctype="multipart/form-data">
+                <form
+                      class="product-preinvoice-form"
+                      data-ajax-url="<?php echo esc_url(admin_url('admin-ajax.php')); ?>"
+                      data-nonce="<?php echo esc_attr(wp_create_nonce('hsb_preinvoice_nonce')); ?>">
 
-                    <?php do_action('woocommerce_before_add_to_cart_button'); ?>
+                    <input
+                        type="hidden"
+                        name="product_id"
+                        value="<?php echo esc_attr($product->get_id()); ?>">
 
                     <div class="purchase-field">
-                        <label for="product-count">تعداد خرید</label>
+                        <label for="product-quantity">تعداد موردنیاز</label>
 
-                        <select id="product-count" name="quantity" class="product-count-select">
-                            <?php
-                                $max_qty = $product->get_max_purchase_quantity();
-                                $limit   = $max_qty > 0 ? min(10, $max_qty) : 10;
-                            ?>
+                        <div class="product-quantity-control">
+                            <button
+                                type="button"
+                                class="product-quantity-btn qty-minus"
+                                aria-label="کاهش تعداد">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
 
-                            <?php for ($i = 1; $i <= $limit; $i++) : ?>
-                                <option value="<?php echo esc_attr($i); ?>">
-                                    <?php echo esc_html($i); ?> عدد
-                                </option>
-                            <?php endfor; ?>
-                        </select>
+                            <input
+                                type="number"
+                                id="product-quantity"
+                                name="quantity"
+                                class="product-quantity-input"
+                                value="1"
+                                min="1"
+                                step="1"
+                                inputmode="numeric"
+                                aria-label="تعداد موردنیاز">
+
+                            <button
+                                type="button"
+                                class="product-quantity-btn qty-plus"
+                                aria-label="افزایش تعداد">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
                     </div>
 
-                    <button type="submit"
-                            name="add-to-cart"
-                            value="<?php echo esc_attr($product->get_id()); ?>"
-                            class="single_add_to_cart_button add-to-cart">
-                        افزودن به سبد خرید
+                    <button
+                        type="submit"
+                        class="add-to-cart preinvoice-add-button">
+                        افزودن به پیش‌فاکتور
                     </button>
 
-                    <?php do_action('woocommerce_after_add_to_cart_button'); ?>
+                    <div
+                        class="preinvoice-add-message"
+                        aria-live="polite">
+                    </div>
+
                 </form>
 
-                <a href="#bulk-order" class="bulk-buy-link">
-                    خرید به تعداد انبوه / استعلام قیمت
-                </a>
             </div>
 
         </div>
@@ -342,11 +361,11 @@ $stock_status = '';
 
 if ($product) {
     if ($product->is_in_stock()) {
-        $stock_status = 'موجود';
+        $stock_status = 'موجود در انبار';
     } elseif ($product->is_on_backorder()) {
-        $stock_status = 'قابل پیش‌خرید';
+        $stock_status = 'قابل سفارش';
     } else {
-        $stock_status = 'ناموجود';
+        $stock_status = 'نیازمند تأیید موجودی و زمان تأمین';
     }
 }
 

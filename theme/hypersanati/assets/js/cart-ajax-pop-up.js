@@ -129,15 +129,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const formData = new FormData(form);
 
+    /*
+     * IMPORTANT:
+     * Never send the WooCommerce "add-to-cart" request parameter
+     * through this custom AJAX endpoint.
+     *
+     * WooCommerce listens for that parameter during wp_loaded and
+     * would add the product once before our custom AJAX handler runs.
+     * The custom handler then adds it again, resulting in double quantity.
+     */
+    formData.delete("add-to-cart");
+
     formData.append("action", "hsb_ajax_add_to_cart");
     formData.append("nonce", hsbCartPopup.nonce);
 
     if (!formData.get("product_id") && submitButton.value) {
       formData.append("product_id", submitButton.value);
-    }
-
-    if (!formData.get("add-to-cart") && submitButton.value) {
-      formData.append("add-to-cart", submitButton.value);
     }
 
     const oldButtonText = submitButton.textContent;
