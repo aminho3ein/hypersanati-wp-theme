@@ -295,7 +295,7 @@ h4 {
 }
 
 /*===================================================
- 
+
             - product category section - col-8
 
 ====================================================*/
@@ -607,7 +607,7 @@ h4 {
   }
 
   /*===================================================
- 
+
             - product category section - col-8
 
 ====================================================*/
@@ -2110,5 +2110,138 @@ h4 {
     .hsb-family-card-body.product-name {
         padding:
             14px 13px 13px;
+    }
+}
+
+
+/* ============================================================
+   HSB PRODUCT CARD FINAL MEDIA + RATING
+   ============================================================ */
+
+/* Image frame is always exactly 1:1 */
+.products-section
+.hsb-family-product-card
+.hsb-shop-card-media.product-cat-frame {
+    width: 100% !important;
+    height: auto !important;
+
+    aspect-ratio: 1 / 1 !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    overflow: hidden;
+
+    background: #fff;
+}
+
+
+/* Image reaches all four edges of media frame */
+.products-section
+.hsb-family-product-card
+.hsb-shop-card-media img,
+.products-section
+.hsb-family-product-card
+.hsb-shop-card-media img:hover,
+.products-section
+.hsb-family-product-card:hover
+.hsb-shop-card-media img {
+    display: block;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    max-width: none !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    object-fit: cover;
+
+    transform: none !important;
+
+    transition: none !important;
+}
+
+
+/* Card hover: shadow only, no image zoom */
+.products-section
+.hsb-family-product-card.product-section:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 14px 32px
+        rgba(24, 30, 35, 0.16);
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(--color-secondary) 72%,
+            #555
+        ) !important;
+}
+
+
+/* Rating */
+.hsb-card-rating {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+
+    margin: 2px 0 11px;
+
+    color: var(--color-secondary);
+
+    font-size: 10px;
+    font-weight: 750;
+}
+
+.hsb-card-rating__stars {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 2px;
+
+    direction: ltr;
+}
+
+.hsb-card-rating__stars i {
+    color: #c7c9cb;
+
+    font-size: 11px;
+}
+
+.hsb-card-rating__stars i.is-active {
+    color: #e5a316;
+}
+
+
+/* Force square media at every breakpoint */
+@media (max-width: 1200px) {
+
+    .products-section
+    .hsb-family-product-card
+    .hsb-shop-card-media.product-cat-frame {
+        aspect-ratio: 1 / 1 !important;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .products-section
+    .hsb-family-product-card
+    .hsb-shop-card-media.product-cat-frame {
+        aspect-ratio: 1 / 1 !important;
+    }
+
+    .products-section
+    .hsb-family-product-card
+    .hsb-shop-card-media img,
+    .products-section
+    .hsb-family-product-card
+    .hsb-shop-card-media img:hover {
+        padding: 0 !important;
     }
 }

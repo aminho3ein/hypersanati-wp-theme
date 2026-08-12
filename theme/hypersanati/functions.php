@@ -871,6 +871,69 @@ function hypersanati_build_dimension_meta_query($params) {
     return $meta_query;
 }
 
+
+function hsb_render_product_card_rating(
+    $rating,
+    $rating_count
+) {
+    $rating = (float) $rating;
+    $rating_count = absint($rating_count);
+
+    ?>
+    <div
+        class="hsb-card-rating"
+        aria-label="<?php echo esc_attr(
+            number_format_i18n(
+                $rating,
+                1
+            ) . ' از ۵'
+        ); ?>">
+
+        <div class="hsb-card-rating__stars">
+
+            <?php
+            for ($i = 1; $i <= 5; $i++) :
+
+                if ($rating >= $i) {
+                    $class =
+                        'fa-solid fa-star is-active';
+                } elseif (
+                    $rating >= ($i - 0.5)
+                ) {
+                    $class =
+                        'fa-solid fa-star-half-stroke is-active';
+                } else {
+                    $class =
+                        'fa-regular fa-star';
+                }
+            ?>
+
+                <i
+                    class="<?php echo esc_attr(
+                        $class
+                    ); ?>">
+                </i>
+
+            <?php endfor; ?>
+
+        </div>
+
+        <span>
+            <?php
+            echo esc_html(
+                number_format_i18n(
+                    $rating_count
+                )
+            );
+            ?>
+            رأی
+        </span>
+
+    </div>
+    <?php
+}
+
+
 function hypersanati_render_product_card(
     $product_id = 0,
     $family = array()
@@ -962,6 +1025,31 @@ function hypersanati_render_product_card(
 
         return $value;
     };
+
+    /* hsb-card-auto-family */
+    if (
+        empty($family) &&
+        function_exists(
+            'hsb_get_product_family_ids'
+        ) &&
+        function_exists(
+            'hsb_group_product_ids_by_part_number'
+        )
+    ) {
+        $family_ids =
+            hsb_get_product_family_ids(
+                $product_id
+            );
+
+        $family_groups =
+            hsb_group_product_ids_by_part_number(
+                $family_ids
+            );
+
+        if (!empty($family_groups[0])) {
+            $family = $family_groups[0];
+        }
+    }
 
     $family_key = !empty(
         $family['family_key']
@@ -1073,7 +1161,7 @@ function hypersanati_render_product_card(
                 <?php if ($part_number) : ?>
 
                     <div class="hsb-family-card-part">
-                        <span>Part Number</span>
+                        <span>شماره محصول</span>
 
                         <strong dir="ltr">
                             <?php
@@ -1130,6 +1218,14 @@ function hypersanati_render_product_card(
                 );
                 ?>
             </h3>
+
+
+            <?php
+            hsb_render_product_card_rating(
+                $card_product->get_average_rating(),
+                $card_product->get_rating_count()
+            );
+            ?>
 
 
             <div class="hsb-family-card-dimensions">
@@ -4355,6 +4451,351 @@ function hypersanati_admin_reply_ticket() {
 
 
 
+
+/* ============================================================
+ * HSB PRODUCT COUNTRY FLAGS
+ * ============================================================ */
+
+add_action('init', function () {
+    register_taxonomy(
+        'product_country',
+        array('product'),
+        array(
+            'labels' => array(
+                'name'          => 'کشورهای سازنده',
+                'singular_name' => 'کشور سازنده',
+                'menu_name'     => 'کشورهای سازنده',
+                'add_new_item'  => 'افزودن کشور سازنده',
+                'edit_item'     => 'ویرایش کشور سازنده',
+            ),
+            'public'            => false,
+            'show_ui'           => true,
+            'show_in_menu'      => true,
+            'show_admin_column' => false,
+            'hierarchical'      => false,
+            'rewrite'           => false,
+            'query_var'         => false,
+        )
+    );
+}, 20);
+
+
+function hsb_country_flag_add_field() {
+    ?>
+    <div class="form-field">
+        <label>پرچم کشور</label>
+
+        <input
+            type="hidden"
+            name="country_flag_image_id"
+            class="hsb-country-flag-id"
+            value="">
+
+        <div class="hsb-country-flag-preview"></div>
+
+        <button
+            type="button"
+            class="button hsb-country-flag-upload">
+            انتخاب پرچم
+        </button>
+
+        <button
+            type="button"
+            class="button hsb-country-flag-remove">
+            حذف پرچم
+        </button>
+    </div>
+    <?php
+}
+add_action(
+    'product_country_add_form_fields',
+    'hsb_country_flag_add_field'
+);
+
+
+function hsb_country_flag_edit_field($term) {
+    $image_id = absint(
+        get_term_meta(
+            $term->term_id,
+            'country_flag_image_id',
+            true
+        )
+    );
+
+    $image_url = $image_id
+        ? wp_get_attachment_image_url(
+            $image_id,
+            'thumbnail'
+        )
+        : '';
+    ?>
+    <tr class="form-field">
+        <th scope="row">
+            <label>پرچم کشور</label>
+        </th>
+
+        <td>
+            <input
+                type="hidden"
+                name="country_flag_image_id"
+                class="hsb-country-flag-id"
+                value="<?php echo esc_attr($image_id); ?>">
+
+            <div
+                class="hsb-country-flag-preview"
+                style="margin-bottom:10px;">
+                <?php if ($image_url) : ?>
+                    <img
+                        src="<?php echo esc_url($image_url); ?>"
+                        style="width:80px;height:55px;object-fit:contain;border:1px solid #ddd;background:#fff;">
+                <?php endif; ?>
+            </div>
+
+            <button
+                type="button"
+                class="button hsb-country-flag-upload">
+                انتخاب پرچم
+            </button>
+
+            <button
+                type="button"
+                class="button hsb-country-flag-remove">
+                حذف پرچم
+            </button>
+        </td>
+    </tr>
+    <?php
+}
+add_action(
+    'product_country_edit_form_fields',
+    'hsb_country_flag_edit_field'
+);
+
+
+function hsb_save_country_flag($term_id) {
+    if (!isset($_POST['country_flag_image_id'])) {
+        return;
+    }
+
+    update_term_meta(
+        $term_id,
+        'country_flag_image_id',
+        absint($_POST['country_flag_image_id'])
+    );
+}
+
+add_action(
+    'created_product_country',
+    'hsb_save_country_flag'
+);
+
+add_action(
+    'edited_product_country',
+    'hsb_save_country_flag'
+);
+
+
+add_action('admin_enqueue_scripts', function () {
+    $screen = get_current_screen();
+
+    if (
+        !$screen ||
+        'edit-product_country' !== $screen->id
+    ) {
+        return;
+    }
+
+    wp_enqueue_media();
+
+    wp_add_inline_script(
+        'jquery-core',
+        <<<'JS'
+jQuery(function ($) {
+
+    $(document).on(
+        'click',
+        '.hsb-country-flag-upload',
+        function (event) {
+            event.preventDefault();
+
+            const button = $(this);
+            const wrapper = button.closest(
+                '.form-field, td'
+            );
+
+            const frame = wp.media({
+                title: 'انتخاب پرچم کشور',
+                button: {
+                    text: 'استفاده از این تصویر'
+                },
+                multiple: false
+            });
+
+            frame.on('select', function () {
+                const attachment =
+                    frame.state()
+                        .get('selection')
+                        .first()
+                        .toJSON();
+
+                wrapper
+                    .find('.hsb-country-flag-id')
+                    .val(attachment.id);
+
+                wrapper
+                    .find('.hsb-country-flag-preview')
+                    .html(
+                        '<img src="' +
+                        attachment.url +
+                        '" style="width:80px;height:55px;object-fit:contain;border:1px solid #ddd;background:#fff;">'
+                    );
+            });
+
+            frame.open();
+        }
+    );
+
+    $(document).on(
+        'click',
+        '.hsb-country-flag-remove',
+        function (event) {
+            event.preventDefault();
+
+            const wrapper = $(this).closest(
+                '.form-field, td'
+            );
+
+            wrapper
+                .find('.hsb-country-flag-id')
+                .val('');
+
+            wrapper
+                .find('.hsb-country-flag-preview')
+                .empty();
+        }
+    );
+});
+JS
+    );
+});
+
+
+function hsb_get_country_flag_data($country_name) {
+    $country_name = trim(
+        (string) $country_name
+    );
+
+    if ('' === $country_name) {
+        return array(
+            'id'        => 0,
+            'term_id'   => 0,
+            'image_id'  => 0,
+            'image_url' => '',
+        );
+    }
+
+    $term = get_term_by(
+        'name',
+        $country_name,
+        'product_country'
+    );
+
+    if (!$term || is_wp_error($term)) {
+        $term = get_term_by(
+            'slug',
+            sanitize_title($country_name),
+            'product_country'
+        );
+    }
+
+    if (!$term || is_wp_error($term)) {
+        return array(
+            'id'        => 0,
+            'term_id'   => 0,
+            'image_id'  => 0,
+            'image_url' => '',
+        );
+    }
+
+    $image_id = absint(
+        get_term_meta(
+            $term->term_id,
+            'country_flag_image_id',
+            true
+        )
+    );
+
+    return array(
+        'id'        => (int) $term->term_id,
+        'term_id'   => (int) $term->term_id,
+        'image_id'  => $image_id,
+        'image_url' => $image_id
+            ? (string) wp_get_attachment_image_url(
+                $image_id,
+                'thumbnail'
+            )
+            : '',
+    );
+}
+
+
+/*
+ * Create country terms once from existing imported
+ * _country_origin values. Products continue using the
+ * existing meta field, so imports remain compatible.
+ */
+add_action('admin_init', function () {
+
+    if (
+        get_option(
+            'hsb_country_terms_seeded_v1'
+        )
+    ) {
+        return;
+    }
+
+    global $wpdb;
+
+    $countries = $wpdb->get_col(
+        $wpdb->prepare(
+            "
+            SELECT DISTINCT meta_value
+            FROM {$wpdb->postmeta}
+            WHERE meta_key = %s
+              AND meta_value <> ''
+            ORDER BY meta_value ASC
+            ",
+            '_country_origin'
+        )
+    );
+
+    foreach ((array) $countries as $country) {
+        $country = trim((string) $country);
+
+        if ('' === $country) {
+            continue;
+        }
+
+        if (
+            !term_exists(
+                $country,
+                'product_country'
+            )
+        ) {
+            wp_insert_term(
+                $country,
+                'product_country'
+            );
+        }
+    }
+
+    update_option(
+        'hsb_country_terms_seeded_v1',
+        1,
+        false
+    );
+});
+
 /* ============================================================
  * HSB INDUSTRIAL PRODUCT RELATIONS
  * ============================================================ */
@@ -4371,18 +4812,49 @@ function hsb_get_product_brand_data($product_id) {
 
     if (is_wp_error($terms) || empty($terms)) {
         return array(
-            'id'   => 0,
-            'name' => '',
-            'slug' => '',
+            'id'        => 0,
+            'name'      => '',
+            'slug'      => '',
+            'image_id'  => 0,
+            'image_url' => '',
         );
     }
 
     $term = reset($terms);
 
+    /*
+     * WooCommerce brand image is stored in thumbnail_id.
+     * Keep brand_image_id only as legacy fallback.
+     */
+    $brand_image_id = absint(
+        get_term_meta(
+            $term->term_id,
+            'thumbnail_id',
+            true
+        )
+    );
+
+    if (!$brand_image_id) {
+        $brand_image_id = absint(
+            get_term_meta(
+                $term->term_id,
+                'brand_image_id',
+                true
+            )
+        );
+    }
+
     return array(
-        'id'   => (int) $term->term_id,
-        'name' => (string) $term->name,
-        'slug' => (string) $term->slug,
+        'id'        => (int) $term->term_id,
+        'name'      => (string) $term->name,
+        'slug'      => (string) $term->slug,
+        'image_id'  => $brand_image_id,
+        'image_url' => $brand_image_id
+            ? (string) wp_get_attachment_image_url(
+                $brand_image_id,
+                'thumbnail'
+            )
+            : '',
     );
 }
 
@@ -4458,7 +4930,17 @@ function hsb_get_product_alternatives($product_id) {
             (string) get_post_meta($id, '_country_origin', true)
         );
 
-        $items[] = array(
+        $live_brand_data =
+        function_exists('hsb_get_product_brand_data')
+            ? hsb_get_product_brand_data($id)
+            : array();
+
+    $live_country_flag =
+        function_exists('hsb_get_country_flag_data')
+            ? hsb_get_country_flag_data($country)
+            : array();
+
+    $items[] = array(
             'product_id'  => $id,
             'name'        => $product->get_name(),
             'sku'         => $product->get_sku(),
@@ -4832,6 +5314,16 @@ function hsb_get_product_family_live_data($product_id) {
             ? hsb_get_required_product_ids($id)
             : array();
 
+        $live_brand_data =
+            function_exists('hsb_get_product_brand_data')
+                ? hsb_get_product_brand_data($id)
+                : array();
+
+        $live_country_flag =
+            function_exists('hsb_get_country_flag_data')
+                ? hsb_get_country_flag_data($country)
+                : array();
+
         $items[] = array(
             'product_id' => $id,
             'name'       => $product->get_name(),
@@ -4840,10 +5332,16 @@ function hsb_get_product_family_live_data($product_id) {
             'brand'      => (string) (
                 $alternative['brand'] ?? ''
             ),
+            'brand_image_url' => (string) (
+                $live_brand_data['image_url'] ?? ''
+            ),
             'brand_slug' => (string) (
                 $alternative['brand_slug'] ?? ''
             ),
             'country'    => $country,
+            'country_flag_url' => (string) (
+                $live_country_flag['image_url'] ?? ''
+            ),
             'url'        => (string) get_permalink($id),
 
             'rating' => (float)
