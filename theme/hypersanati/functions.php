@@ -618,7 +618,7 @@ register_sidebar([
     'id' => 'sidebar-1'
 ]);
 
-// Add seo_summary_box for Any 
+// Add seo_summary_box for Any
 function hypersanati_add_seo_summary_box() {
 
     add_meta_box(
@@ -640,7 +640,7 @@ function hypersanati_seo_summary_box_callback($post) {
     wp_nonce_field('save_seo_summary', 'seo_summary_nonce');
     ?>
 
-    <textarea 
+    <textarea
         style="width:100%;height:120px;font-size:14px;line-height:1.6"
         name="seo_summary_field"
         placeholder="خلاصه سئو مقاله را اینجا بنویسید..."
@@ -871,22 +871,408 @@ function hypersanati_build_dimension_meta_query($params) {
     return $meta_query;
 }
 
-function hypersanati_render_product_card() {
+function hypersanati_render_product_card(
+    $product_id = 0,
+    $family = array()
+) {
+    $product_id = absint(
+        $product_id ?: get_the_ID()
+    );
+
+    $card_product = wc_get_product(
+        $product_id
+    );
+
+    if (
+        !$card_product ||
+        'publish' !== $card_product->get_status()
+    ) {
+        return;
+    }
+
+    $part_number = trim(
+        (string) get_post_meta(
+            $product_id,
+            '_mpn_part_number',
+            true
+        )
+    );
+
+    $inner_diameter = trim(
+        (string) get_post_meta(
+            $product_id,
+            '_inner_diameter',
+            true
+        )
+    );
+
+    $outer_diameter = trim(
+        (string) get_post_meta(
+            $product_id,
+            '_outer_diameter',
+            true
+        )
+    );
+
+    $bearing_width = trim(
+        (string) get_post_meta(
+            $product_id,
+            '_bearing_width',
+            true
+        )
+    );
+
+    $country = trim(
+        (string) get_post_meta(
+            $product_id,
+            '_country_origin',
+            true
+        )
+    );
+
+    $brand_data = function_exists(
+        'hsb_get_product_brand_data'
+    )
+        ? hsb_get_product_brand_data(
+            $product_id
+        )
+        : array();
+
+    $brand_name = trim(
+        (string) (
+            $brand_data['name'] ?? ''
+        )
+    );
+
+    $format_mm = static function ($value) {
+        $value = trim((string) $value);
+
+        if ('' === $value) {
+            return '—';
+        }
+
+        if (
+            preg_match(
+                '/^-?[0-9]+(?:[.,][0-9]+)?$/',
+                $value
+            )
+        ) {
+            return $value . ' mm';
+        }
+
+        return $value;
+    };
+
+    $family_key = !empty(
+        $family['family_key']
+    )
+        ? (string) $family['family_key']
+        : (
+            '' !== $part_number
+                ? 'part:' . mb_strtoupper(
+                    preg_replace(
+                        '/\s+/u',
+                        '',
+                        $part_number
+                    ),
+                    'UTF-8'
+                )
+                : 'product:' . $product_id
+        );
+
+    $version_count = max(
+        1,
+        absint(
+            $family['version_count'] ?? 1
+        )
+    );
+
+    $brand_count = absint(
+        $family['brand_count'] ?? 0
+    );
+
+    $country_count = absint(
+        $family['country_count'] ?? 0
+    );
+
+    $is_family = $version_count > 1;
+
+    $product_url = get_permalink(
+        $product_id
+    );
     ?>
-    <a href="<?php the_permalink(); ?>" class="product-section" style="text-decoration: none; color: inherit; display: block;">
-        <div class="product-cat-frame">
-            <?php if (has_post_thumbnail()) : ?>
-                <?php the_post_thumbnail('medium'); ?>
+
+    <a
+        href="<?php echo esc_url($product_url); ?>"
+        class="product-section hsb-family-product-card"
+        data-family-key="<?php echo esc_attr(
+            $family_key
+        ); ?>"
+        data-part-number="<?php echo esc_attr(
+            $part_number
+        ); ?>">
+
+                <?php
+        $display_image_id = absint(
+            $card_product->get_image_id()
+        );
+        ?>
+
+        <div class="hsb-shop-card-media product-cat-frame"><?php if ($display_image_id) : ?>
+
+                <?php
+                echo wp_get_attachment_image(
+                    $display_image_id,
+                    'woocommerce_thumbnail',
+                    false,
+                    array(
+                        'loading' => 'lazy',
+                        'alt' => $card_product->get_name(),
+                    )
+                );
+                ?>
+
             <?php else : ?>
-                <img src="<?php echo esc_url(wc_placeholder_img_src()); ?>" alt="<?php the_title_attribute(); ?>" />
+
+                <img
+                    loading="lazy"
+                    src="<?php echo esc_url(
+                        wc_placeholder_img_src()
+                    ); ?>"
+                    alt="<?php echo esc_attr(
+                        $card_product->get_name()
+                    ); ?>">
+
             <?php endif; ?>
+
+
+            <?php if ($is_family) : ?>
+
+                <span class="hsb-family-card-badge">
+                    <i class="fa-solid fa-layer-group"></i>
+
+                    <?php
+                    echo esc_html(
+                        number_format_i18n(
+                            $version_count
+                        )
+                    );
+                    ?>
+                    گزینه
+                </span>
+
+            <?php endif; ?>
+
         </div>
-        <div class="product-name">
-            <p><?php the_title(); ?></p>
+
+
+        <div class="product-name hsb-family-card-body">
+
+            <div class="hsb-family-card-topline">
+
+                <?php if ($part_number) : ?>
+
+                    <div class="hsb-family-card-part">
+                        <span>Part Number</span>
+
+                        <strong dir="ltr">
+                            <?php
+                            echo esc_html(
+                                $part_number
+                            );
+                            ?>
+                        </strong>
+                    </div>
+
+                <?php endif; ?>
+
+
+                <?php
+                if (
+                    !$is_family &&
+                    ($brand_name || $country)
+                ) :
+                ?>
+
+                    <div class="hsb-family-card-origin">
+
+                        <?php if ($brand_name) : ?>
+                            <span>
+                                <?php
+                                echo esc_html(
+                                    $brand_name
+                                );
+                                ?>
+                            </span>
+                        <?php endif; ?>
+
+                        <?php if ($country) : ?>
+                            <small>
+                                <?php
+                                echo esc_html(
+                                    $country
+                                );
+                                ?>
+                            </small>
+                        <?php endif; ?>
+
+                    </div>
+
+                <?php endif; ?>
+
+            </div>
+
+
+            <h3 class="hsb-family-card-title">
+                <?php
+                echo esc_html(
+                    $card_product->get_name()
+                );
+                ?>
+            </h3>
+
+
+            <div class="hsb-family-card-dimensions">
+
+                <div class="hsb-family-card-dimension">
+                    <span>قطر داخلی</span>
+
+                    <strong dir="ltr">
+                        <?php
+                        echo esc_html(
+                            $format_mm(
+                                $inner_diameter
+                            )
+                        );
+                        ?>
+                    </strong>
+
+                    <small>d</small>
+                </div>
+
+
+                <div class="hsb-family-card-dimension">
+                    <span>قطر خارجی</span>
+
+                    <strong dir="ltr">
+                        <?php
+                        echo esc_html(
+                            $format_mm(
+                                $outer_diameter
+                            )
+                        );
+                        ?>
+                    </strong>
+
+                    <small>D</small>
+                </div>
+
+
+                <div class="hsb-family-card-dimension">
+                    <span>عرض</span>
+
+                    <strong dir="ltr">
+                        <?php
+                        echo esc_html(
+                            $format_mm(
+                                $bearing_width
+                            )
+                        );
+                        ?>
+                    </strong>
+
+                    <small>B</small>
+                </div>
+
+            </div>
+
+
+            <?php if ($is_family) : ?>
+
+                <div class="hsb-family-card-options">
+
+                    <span>
+                        <i class="fa-solid fa-layer-group"></i>
+
+                        <?php
+                        echo esc_html(
+                            number_format_i18n(
+                                $version_count
+                            )
+                        );
+                        ?>
+                        گزینه
+                    </span>
+
+                    <?php if ($brand_count > 0) : ?>
+
+                        <span>
+                            <i class="fa-solid fa-tag"></i>
+
+                            <?php
+                            echo esc_html(
+                                number_format_i18n(
+                                    $brand_count
+                                )
+                            );
+                            ?>
+                            برند
+                        </span>
+
+                    <?php endif; ?>
+
+                    <?php if ($country_count > 1) : ?>
+
+                        <span>
+                            <i class="fa-solid fa-earth-asia"></i>
+
+                            <?php
+                            echo esc_html(
+                                number_format_i18n(
+                                    $country_count
+                                )
+                            );
+                            ?>
+                            کشور
+                        </span>
+
+                    <?php endif; ?>
+
+                </div>
+
+            <?php endif; ?>
+
+
+            <div class="hsb-family-card-price-note">
+                <i class="fa-solid fa-file-invoice"></i>
+
+                <span>
+                    قیمت پس از بررسی واحد فروش
+                </span>
+            </div>
+
+
+            <div class="hsb-family-card-action">
+
+                <span>
+                    <?php
+                    echo $is_family
+                        ? 'مشاهده و انتخاب برند'
+                        : 'مشاهده محصول';
+                    ?>
+                </span>
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+            </div>
+
         </div>
+
     </a>
+
     <?php
 }
+
 
 function hypersanati_get_dimension_search_label($params) {
     $mode = isset($params['dimension_search']) ? sanitize_text_field($params['dimension_search']) : '';
@@ -918,17 +1304,17 @@ function hypersanati_get_dimension_search_label($params) {
 }
 
 
-// آژاکس بارگذاری محصولات و دسته‌ها (نسخه نهایی همراه با لینک محصول)
+// آژاکس بارگذاری محصولات و دسته‌ها (گزینه نهایی همراه با لینک محصول)
 add_action('wp_ajax_load_shop_categories', 'load_shop_categories');
 add_action('wp_ajax_nopriv_load_shop_categories', 'load_shop_categories');
 
 function load_shop_categories() {
     $offset = isset($_GET['index']) ? intval($_GET['index']) : 0;
     $selected_cat_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
-    
+
     // دریافت کلمه کلیدی جستجو از آژاکس
     $search_keyword = isset($_GET['search_keyword']) ? sanitize_text_field($_GET['search_keyword']) : '';
-    
+
     // دریافت فیلترهای ابعادی
     $inner_min = isset($_GET['inner_min']) ? sanitize_text_field($_GET['inner_min']) : '';
     $inner_max = isset($_GET['inner_max']) ? sanitize_text_field($_GET['inner_max']) : '';
@@ -976,8 +1362,15 @@ function load_shop_categories() {
         }
     }
 
+    /*
+     * In progressive mode the first request only renders
+     * subcategory shells/sentinels. Actual products arrive
+     * through hsb_load_shop_family_batch(), so existence of
+     * subcategories is enough to return the structure.
+     */
+    $has_product = !empty($subcats);
+
     ob_start();
-    $has_product = false;
     ?>
     <div class="category" data-id="<?php echo esc_attr($cat->term_id); ?>">
         <div class="category-name">
@@ -985,108 +1378,57 @@ function load_shop_categories() {
         </div>
         <div class="sub-category">
             <?php foreach ($subcats as $sub) : ?>
-                <?php
-                // آرایه اصلی کوئری محصولات
-                $product_args = [
-                    'post_type'      => 'product',
-                    'posts_per_page' => -1,
-                    'tax_query'      => [
-                        [
-                            'taxonomy' => 'product_cat',
-                            'field'    => 'term_id',
-                            'terms'    => $sub->term_id
-                        ]
-                    ]
-                ];
 
-                // اضافه کردن فیلتر جستجوی متنی در صورت وجود کلمه کلیدی
-                if (!empty($search_keyword)) {
-                    $product_args['s'] = $search_keyword;
-                }
-                
-                // اضافه کردن فیلترهای ابعادی
-                $meta_query = [];
-                
-                if (!empty($inner_min)) {
-                    $meta_query[] = [
-                        'key' => '_inner_diameter',
-                        'value' => floatval($inner_min),
-                        'compare' => '>=',
-                        'type' => 'DECIMAL',
-                    ];
-                }
-                
-                if (!empty($inner_max)) {
-                    $meta_query[] = [
-                        'key' => '_inner_diameter',
-                        'value' => floatval($inner_max),
-                        'compare' => '<=',
-                        'type' => 'DECIMAL',
-                    ];
-                }
-                
-                if (!empty($outer_min)) {
-                    $meta_query[] = [
-                        'key' => '_outer_diameter',
-                        'value' => floatval($outer_min),
-                        'compare' => '>=',
-                        'type' => 'DECIMAL',
-                    ];
-                }
-                
-                if (!empty($outer_max)) {
-                    $meta_query[] = [
-                        'key' => '_outer_diameter',
-                        'value' => floatval($outer_max),
-                        'compare' => '<=',
-                        'type' => 'DECIMAL',
-                    ];
-                }
-                
-                if (!empty($height_min)) {
-                    $meta_query[] = [
-                        'key' => '_bearing_width',
-                        'value' => floatval($height_min),
-                        'compare' => '>=',
-                        'type' => 'DECIMAL',
-                    ];
-                }
-                
-                if (!empty($height_max)) {
-                    $meta_query[] = [
-                        'key' => '_bearing_width',
-                        'value' => floatval($height_max),
-                        'compare' => '<=',
-                        'type' => 'DECIMAL',
-                    ];
-                }
-                
-                if (!empty($meta_query)) {
-                    $product_args['meta_query'] = $meta_query;
-                    if (count($meta_query) > 1) {
-                        $product_args['meta_query']['relation'] = 'AND';
-                    }
-                }
+                <section
+                    class="hsb-shop-lazy-subcategory"
+                    data-subcategory-id="<?php echo esc_attr(
+                        $sub->term_id
+                    ); ?>">
 
-                $products = new WP_Query($product_args);
-                ?>
-                <?php if ($products->have_posts()) : $has_product = true; ?>
                     <div class="sub-category-name">
-                        <p class="sub-cat-name"><?php echo esc_html($sub->name); ?></p>
+
+                        <p class="sub-cat-name">
+                            <?php
+                            echo esc_html(
+                                $sub->name
+                            );
+                            ?>
+                        </p>
+
                     </div>
-                    <div class="child-category">
-                        <?php while ($products->have_posts()) : $products->the_post(); ?>
-                            <a href="<?php the_permalink(); ?>" class="product-section" style="text-decoration: none; color: inherit; display: block;">
-                                <div class="product-cat-frame">
-                                    <?php the_post_thumbnail('medium'); ?>
-                                </div>
-                                <div class="product-name">
-                                    <p><?php the_title(); ?></p>
-                                </div>
-                            </a>
-                        <?php endwhile; ?>
+
+
+                    <div
+                        class="child-category hsb-shop-lazy-grid"
+                        data-subcategory-id="<?php echo esc_attr(
+                            $sub->term_id
+                        ); ?>">
                     </div>
-                <?php endif; wp_reset_postdata(); ?>
+
+
+                    <div
+                        class="hsb-shop-lazy-sentinel"
+                        data-subcategory-id="<?php echo esc_attr(
+                            $sub->term_id
+                        ); ?>"
+                        data-page="0"
+                        data-loading="0"
+                        data-complete="0">
+
+                        <span class="hsb-shop-lazy-status">
+                            <i
+                                class="fa-solid fa-circle-notch fa-spin">
+                            </i>
+
+                            <span>
+                                در حال آماده‌سازی محصولات...
+                            </span>
+                        </span>
+
+                    </div>
+
+                </section>
+
             <?php endforeach; ?>
         </div>
     </div>
@@ -1103,44 +1445,377 @@ add_action('wp_ajax_search_products_by_dimensions', 'hypersanati_search_products
 add_action('wp_ajax_nopriv_search_products_by_dimensions', 'hypersanati_search_products_by_dimensions');
 
 function hypersanati_search_products_by_dimensions() {
-    $page = isset($_GET['index']) ? max(0, intval($_GET['index'])) : 0;
+    $page = isset($_GET['index'])
+        ? max(0, intval($_GET['index']))
+        : 0;
+
     $per_page = 12;
 
-    $meta_query = hypersanati_build_dimension_meta_query($_GET);
+    $meta_query =
+        hypersanati_build_dimension_meta_query(
+            $_GET
+        );
+
     if (empty($meta_query)) {
         wp_die();
     }
 
-    $products = new WP_Query([
-        'post_type'      => 'product',
-        'post_status'    => 'publish',
-        'posts_per_page' => $per_page,
-        'offset'         => $page * $per_page,
-        'meta_query'     => $meta_query,
-        'orderby'        => 'title',
-        'order'          => 'ASC',
-    ]);
+    /*
+     * Query IDs only, group matching SKUs by Part Number,
+     * then paginate the visible families.
+     *
+     * This prevents page 2 from showing a sibling that was
+     * already represented on page 1.
+     */
+    $all_matching_ids = get_posts(array(
+        'post_type'              => 'product',
+        'post_status'            => 'publish',
+        'posts_per_page'         => -1,
+        'fields'                 => 'ids',
+        'meta_query'             => $meta_query,
+        'orderby'                => 'title',
+        'order'                  => 'ASC',
+        'no_found_rows'          => true,
+        'update_post_meta_cache' => true,
+        'update_post_term_cache' => true,
+    ));
 
-    if (!$products->have_posts()) {
+    if (empty($all_matching_ids)) {
+        wp_die();
+    }
+
+    $family_groups =
+        function_exists(
+            'hsb_group_product_ids_by_part_number'
+        )
+            ? hsb_group_product_ids_by_part_number(
+                $all_matching_ids
+            )
+            : array_map(
+                static function ($id) {
+                    return array(
+                        'representative_id' =>
+                            absint($id),
+                        'version_count' => 1,
+                        'brand_count'   => 0,
+                        'country_count' => 0,
+                    );
+                },
+                $all_matching_ids
+            );
+
+    $offset = $page * $per_page;
+
+    $page_families = array_slice(
+        $family_groups,
+        $offset,
+        $per_page
+    );
+
+    if (empty($page_families)) {
         wp_die();
     }
 
     ob_start();
     ?>
+
     <div class="category dimension-search-results">
+
         <div class="sub-category">
+
             <div class="child-category">
-                <?php while ($products->have_posts()) : $products->the_post(); ?>
-                    <?php hypersanati_render_product_card(); ?>
-                <?php endwhile; ?>
+
+                <?php
+                foreach (
+                    $page_families as
+                    $family_group
+                ) :
+
+                    hypersanati_render_product_card(
+                        $family_group[
+                            'representative_id'
+                        ],
+                        $family_group
+                    );
+
+                endforeach;
+                ?>
+
             </div>
+
         </div>
+
     </div>
+
     <?php
     echo ob_get_clean();
-    wp_reset_postdata();
+
     wp_die();
 }
+
+
+
+/* ============================================================
+ * HSB PROGRESSIVE SHOP FAMILY LOADING
+ * ============================================================ */
+
+/**
+ * Small cache version used for shop-family queries.
+ * Whenever a product changes, future requests automatically
+ * use a fresh cache namespace.
+ */
+function hsb_get_shop_family_cache_version() {
+    return max(
+        1,
+        absint(
+            get_option(
+                'hsb_shop_family_cache_version',
+                1
+            )
+        )
+    );
+}
+
+
+/**
+ * Invalidate cached shop-family collections after a product
+ * is changed.
+ */
+function hsb_bump_shop_family_cache_version($post_id = 0) {
+    if (
+        $post_id &&
+        'product' !== get_post_type($post_id)
+    ) {
+        return;
+    }
+
+    update_option(
+        'hsb_shop_family_cache_version',
+        hsb_get_shop_family_cache_version() + 1,
+        false
+    );
+}
+
+add_action(
+    'save_post_product',
+    'hsb_bump_shop_family_cache_version',
+    50
+);
+
+add_action(
+    'before_delete_post',
+    function ($post_id) {
+        if ('product' === get_post_type($post_id)) {
+            hsb_bump_shop_family_cache_version(
+                $post_id
+            );
+        }
+    }
+);
+
+
+/**
+ * Return grouped product families for one subcategory.
+ *
+ * The expensive grouping work is cached, while presentation
+ * remains paginated in small batches.
+ */
+function hsb_get_shop_subcategory_family_groups(
+    $subcategory_id,
+    $search_keyword = ''
+) {
+    $subcategory_id = absint(
+        $subcategory_id
+    );
+
+    $search_keyword = trim(
+        sanitize_text_field(
+            $search_keyword
+        )
+    );
+
+    if ($subcategory_id < 1) {
+        return array();
+    }
+
+    $cache_version =
+        hsb_get_shop_family_cache_version();
+
+    $cache_key =
+        'hsb_shop_family_' .
+        $cache_version . '_' .
+        $subcategory_id . '_' .
+        md5($search_keyword);
+
+    $cached = get_transient($cache_key);
+
+    if (is_array($cached)) {
+        return $cached;
+    }
+
+    $args = array(
+        'post_type'              => 'product',
+        'post_status'            => 'publish',
+        'posts_per_page'         => -1,
+        'fields'                 => 'ids',
+        'orderby'                => 'title',
+        'order'                  => 'ASC',
+        'no_found_rows'          => true,
+        'update_post_meta_cache' => true,
+        'update_post_term_cache' => true,
+        'tax_query'              => array(
+            array(
+                'taxonomy' => 'product_cat',
+                'field'    => 'term_id',
+                'terms'    => $subcategory_id,
+            ),
+        ),
+    );
+
+    if ('' !== $search_keyword) {
+        $args['s'] = $search_keyword;
+    }
+
+    $ids = get_posts($args);
+
+    $groups = function_exists(
+        'hsb_group_product_ids_by_part_number'
+    )
+        ? hsb_group_product_ids_by_part_number(
+            $ids
+        )
+        : array();
+
+    /*
+     * Ten minutes is enough to make repeated browsing fast
+     * without leaving catalog changes stale for long.
+     */
+    set_transient(
+        $cache_key,
+        $groups,
+        10 * MINUTE_IN_SECONDS
+    );
+
+    return $groups;
+}
+
+
+/**
+ * AJAX: progressively return one small family batch.
+ */
+add_action(
+    'wp_ajax_hsb_load_shop_family_batch',
+    'hsb_load_shop_family_batch'
+);
+
+add_action(
+    'wp_ajax_nopriv_hsb_load_shop_family_batch',
+    'hsb_load_shop_family_batch'
+);
+
+function hsb_load_shop_family_batch() {
+    $subcategory_id = isset(
+        $_GET['subcategory_id']
+    )
+        ? absint(
+            $_GET['subcategory_id']
+        )
+        : 0;
+
+    $page = isset($_GET['page'])
+        ? max(
+            0,
+            absint($_GET['page'])
+        )
+        : 0;
+
+    $search_keyword = isset(
+        $_GET['search_keyword']
+    )
+        ? sanitize_text_field(
+            wp_unslash(
+                $_GET['search_keyword']
+            )
+        )
+        : '';
+
+    if ($subcategory_id < 1) {
+        wp_send_json_error(
+            array(
+                'message' =>
+                    'زیر‌دسته معتبر نیست.',
+            ),
+            400
+        );
+    }
+
+    /*
+     * Eight visible families at a time gives a useful
+     * desktop row while keeping each request light.
+     */
+    $per_page = 8;
+
+    $groups =
+        hsb_get_shop_subcategory_family_groups(
+            $subcategory_id,
+            $search_keyword
+        );
+
+    if (empty($groups)) {
+        wp_send_json_success(
+            array(
+                'html'      => '',
+                'has_more'  => false,
+                'next_page' => $page,
+                'count'     => 0,
+            )
+        );
+    }
+
+    $offset = $page * $per_page;
+
+    $batch = array_slice(
+        $groups,
+        $offset,
+        $per_page
+    );
+
+    ob_start();
+
+    foreach ($batch as $family_group) {
+        hypersanati_render_product_card(
+            $family_group[
+                'representative_id'
+            ],
+            $family_group
+        );
+    }
+
+    $html = ob_get_clean();
+
+    $next_offset =
+        $offset + count($batch);
+
+    wp_send_json_success(
+        array(
+            'html' => $html,
+
+            'has_more' =>
+                $next_offset <
+                count($groups),
+
+            'next_page' =>
+                $page + 1,
+
+            'count' =>
+                count($batch),
+
+            'total' =>
+                count($groups),
+        )
+    );
+}
+
 
 // ۲. آژاکس ساخت ساختار درختی دسته‌ها و زیردسته‌ها در سایدبار
 add_action('wp_ajax_get_sidebar_categories', 'get_sidebar_categories');
@@ -1169,7 +1844,7 @@ function get_sidebar_categories() {
             <span>همه دسته محصولات</span>
         </label>
     </div>
-    
+
     <?php
     foreach ($main_categories as $main_cat) {
         ?>
@@ -3466,7 +4141,7 @@ function hypersanati_handle_create_ticket() {
     add_comment_meta($ticket_id, 'ticket_status', 'open', true);
     add_comment_meta($ticket_id, 'ticket_category', $category, true);
     add_comment_meta($ticket_id, 'ticket_subject', $subject, true);
-    
+
     if (!empty($order_id)) {
         add_comment_meta($ticket_id, 'ticket_order_id', $order_id, true);
     }
@@ -3474,17 +4149,17 @@ function hypersanati_handle_create_ticket() {
     // Send email notification to admin
     $admin_email = get_option('admin_email');
     $site_name = get_bloginfo('name');
-    
+
     $email_subject = 'تیکت جدید پشتیبانی - ' . $subject;
     $email_message = "تیکت جدیدی در سایت {$site_name} ثبت شده است:\n\n";
     $email_message .= "کاربر: {$user->display_name} ({$user->user_email})\n";
     $email_message .= "موضوع: {$subject}\n";
     $email_message .= "دسته‌بندی: {$category}\n";
-    
+
     if (!empty($order_id)) {
         $email_message .= "شماره سفارش: {$order_id}\n";
     }
-    
+
     $email_message .= "\nمتن تیکت:\n{$message}\n";
 
     wp_mail($admin_email, $email_subject, $email_message);
@@ -3504,7 +4179,7 @@ function hypersanati_handle_reply_ticket() {
     }
 
     $ticket_id = absint($_POST['ticket_id']);
-    
+
     if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['reply_nonce'])), 'reply_ticket_' . $ticket_id)) {
         wc_add_notice('درخواست نامعتبر است', 'error');
         return;
@@ -3517,10 +4192,10 @@ function hypersanati_handle_reply_ticket() {
 
     $user_id = get_current_user_id();
     $user = get_user_by('id', $user_id);
-    
+
     // Verify ticket belongs to user
     $ticket = get_comment($ticket_id);
-    
+
     if (!$ticket || (int)$ticket->user_id !== $user_id) {
         wc_add_notice('دسترسی غیرمجاز', 'error');
         return;
@@ -3557,7 +4232,7 @@ function hypersanati_handle_reply_ticket() {
     // Send email to admin
     $admin_email = get_option('admin_email');
     $ticket_subject = get_comment_meta($ticket_id, 'ticket_subject', true);
-    
+
     $email_subject = 'پاسخ جدید به تیکت #' . $ticket_id;
     $email_message = "کاربر {$user->display_name} به تیکت پاسخ داده است:\n\n";
     $email_message .= "موضوع: {$ticket_subject}\n";
@@ -3581,7 +4256,7 @@ function hypersanati_handle_close_ticket() {
     }
 
     $ticket_id = absint($_POST['ticket_id']);
-    
+
     if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['close_nonce'])), 'close_ticket_' . $ticket_id)) {
         wc_add_notice('درخواست نامعتبر است', 'error');
         return;
@@ -3593,10 +4268,10 @@ function hypersanati_handle_close_ticket() {
     }
 
     $user_id = get_current_user_id();
-    
+
     // Verify ticket belongs to user
     $ticket = get_comment($ticket_id);
-    
+
     if (!$ticket || (int)$ticket->user_id !== $user_id) {
         wc_add_notice('دسترسی غیرمجاز', 'error');
         return;
@@ -3629,7 +4304,7 @@ function hypersanati_admin_reply_ticket() {
     }
 
     $ticket = get_comment($ticket_id);
-    
+
     if (!$ticket || $ticket->comment_type !== 'support_ticket') {
         wp_send_json_error(array('message' => 'تیکت معتبر نیست'));
     }
@@ -3654,16 +4329,16 @@ function hypersanati_admin_reply_ticket() {
 
     // Mark as support reply
     add_comment_meta($reply_id, 'is_support_reply', '1', true);
-    
+
     // Update ticket status
     update_comment_meta($ticket_id, 'ticket_status', 'answered');
 
     // Send email to customer
     $customer = get_user_by('id', $ticket->user_id);
-    
+
     if ($customer) {
         $ticket_subject = get_comment_meta($ticket_id, 'ticket_subject', true);
-        
+
         $email_subject = 'پاسخ تیکت پشتیبانی #' . $ticket_id;
         $email_message = "سلام {$customer->display_name}\n\n";
         $email_message .= "تیکت شما پاسخ داده شده است:\n\n";
@@ -3676,6 +4351,1361 @@ function hypersanati_admin_reply_ticket() {
     }
 
     wp_send_json_success(array('message' => 'پاسخ با موفقیت ارسال شد'));
+}
+
+
+
+/* ============================================================
+ * HSB INDUSTRIAL PRODUCT RELATIONS
+ * ============================================================ */
+
+/**
+ * Get the brand assigned to a WooCommerce product.
+ */
+function hsb_get_product_brand_data($product_id) {
+    $terms = wp_get_post_terms(
+        absint($product_id),
+        'product_brand',
+        array('number' => 1)
+    );
+
+    if (is_wp_error($terms) || empty($terms)) {
+        return array(
+            'id'   => 0,
+            'name' => '',
+            'slug' => '',
+        );
+    }
+
+    $term = reset($terms);
+
+    return array(
+        'id'   => (int) $term->term_id,
+        'name' => (string) $term->name,
+        'slug' => (string) $term->slug,
+    );
+}
+
+/**
+ * Products having exactly the same technical Part Number.
+ *
+ * Each SKU remains an independent WooCommerce product.
+ * This only creates the navigation/relation layer between them.
+ */
+function hsb_get_same_part_number_products($product_id, $limit = 30) {
+    $product_id = absint($product_id);
+    $part_number = trim(
+        (string) get_post_meta($product_id, '_mpn_part_number', true)
+    );
+
+    if ($product_id < 1 || $part_number === '') {
+        return array();
+    }
+
+    $ids = get_posts(array(
+        'post_type'              => 'product',
+        'post_status'            => 'publish',
+        'posts_per_page'         => absint($limit),
+        'post__not_in'           => array($product_id),
+        'fields'                 => 'ids',
+        'orderby'                => 'ID',
+        'order'                  => 'ASC',
+        'no_found_rows'          => true,
+        'update_post_meta_cache' => true,
+        'update_post_term_cache' => true,
+        'meta_query'             => array(
+            array(
+                'key'     => '_mpn_part_number',
+                'value'   => $part_number,
+                'compare' => '=',
+            ),
+        ),
+    ));
+
+    if (!is_array($ids)) {
+        return array();
+    }
+
+    return array_values(array_map('absint', $ids));
+}
+
+/**
+ * Build usable data for same-code product choices.
+ */
+function hsb_get_product_alternatives($product_id) {
+    $product_id = absint($product_id);
+
+    if ($product_id < 1) {
+        return array();
+    }
+
+    $all_ids = array_merge(
+        array($product_id),
+        hsb_get_same_part_number_products($product_id)
+    );
+
+    $items = array();
+
+    foreach (array_unique($all_ids) as $id) {
+        $product = wc_get_product($id);
+
+        if (!$product || 'publish' !== $product->get_status()) {
+            continue;
+        }
+
+        $brand   = hsb_get_product_brand_data($id);
+        $country = trim(
+            (string) get_post_meta($id, '_country_origin', true)
+        );
+
+        $items[] = array(
+            'product_id'  => $id,
+            'name'        => $product->get_name(),
+            'sku'         => $product->get_sku(),
+            'part_number' => get_post_meta($id, '_mpn_part_number', true),
+            'brand'       => $brand['name'],
+            'brand_slug'  => $brand['slug'],
+            'country'     => $country,
+            'url'         => get_permalink($id),
+            'current'     => $id === $product_id,
+        );
+    }
+
+    usort($items, function ($a, $b) use ($product_id) {
+        if ($a['product_id'] === $product_id) {
+            return -1;
+        }
+
+        if ($b['product_id'] === $product_id) {
+            return 1;
+        }
+
+        return strcasecmp(
+            (string) $a['brand'],
+            (string) $b['brand']
+        );
+    });
+
+    return $items;
+}
+
+/**
+ * Build lightweight front-end data for live switching between
+ * real WooCommerce products sharing the same Part Number.
+ *
+ * Metadata is preloaded with the page. Images themselves are
+ * fetched by the browser only when needed.
+ */
+function hsb_get_product_family_live_data($product_id) {
+    $product_id = absint($product_id);
+
+    if ($product_id < 1) {
+        return array();
+    }
+
+    $alternatives = hsb_get_product_alternatives($product_id);
+
+    if (empty($alternatives)) {
+        return array();
+    }
+
+    $format_mm = static function ($value) {
+        $value = trim((string) $value);
+
+        if ('' === $value) {
+            return '';
+        }
+
+        if (
+            preg_match(
+                '/^-?[0-9]+(?:[.,][0-9]+)?$/',
+                $value
+            )
+        ) {
+            return $value . ' mm';
+        }
+
+        return $value;
+    };
+
+    $items = array();
+
+    foreach ($alternatives as $alternative) {
+        $id = absint($alternative['product_id'] ?? 0);
+
+        if (!$id) {
+            continue;
+        }
+
+        $product = wc_get_product($id);
+
+        if (
+            !$product ||
+            'publish' !== $product->get_status()
+        ) {
+            continue;
+        }
+
+        $part_number = trim(
+            (string) get_post_meta(
+                $id,
+                '_mpn_part_number',
+                true
+            )
+        );
+
+        $country = trim(
+            (string) get_post_meta(
+                $id,
+                '_country_origin',
+                true
+            )
+        );
+
+        $raw_specs = array(
+            'شماره فنی / پارت نامبر' => $part_number,
+            'قطر داخلی' => get_post_meta(
+                $id,
+                '_inner_diameter',
+                true
+            ),
+            'قطر خارجی' => get_post_meta(
+                $id,
+                '_outer_diameter',
+                true
+            ),
+            'عرض' => get_post_meta(
+                $id,
+                '_bearing_width',
+                true
+            ),
+            'نوع آب‌بندی' => get_post_meta(
+                $id,
+                '_bearing_seal',
+                true
+            ),
+            'لقی' => get_post_meta(
+                $id,
+                '_bearing_clearance',
+                true
+            ),
+            'کلاس دقت' => get_post_meta(
+                $id,
+                '_bearing_precision',
+                true
+            ),
+            'جنس' => get_post_meta(
+                $id,
+                '_bearing_material',
+                true
+            ),
+            'قفسه' => get_post_meta(
+                $id,
+                '_bearing_cage',
+                true
+            ),
+            'روانکاری' => get_post_meta(
+                $id,
+                '_bearing_lubrication',
+                true
+            ),
+            'بار دینامیکی' => get_post_meta(
+                $id,
+                '_dynamic_load',
+                true
+            ),
+            'بار استاتیکی' => get_post_meta(
+                $id,
+                '_static_load',
+                true
+            ),
+            'حداکثر دور' => get_post_meta(
+                $id,
+                '_max_rpm',
+                true
+            ),
+            'کشور سازنده' => $country,
+            'کاربرد' => get_post_meta(
+                $id,
+                '_bearing_usage',
+                true
+            ),
+            'صنعت' => get_post_meta(
+                $id,
+                '_bearing_industry',
+                true
+            ),
+            'کدهای معادل' => get_post_meta(
+                $id,
+                '_equivalent_codes',
+                true
+            ),
+        );
+
+        $full_specs = array();
+
+        foreach ($raw_specs as $label => $value) {
+            $value = trim((string) $value);
+
+            if ('' === $value) {
+                continue;
+            }
+
+            if (
+                in_array(
+                    $label,
+                    array(
+                        'قطر داخلی',
+                        'قطر خارجی',
+                        'عرض',
+                    ),
+                    true
+                )
+            ) {
+                $value = $format_mm($value);
+            }
+
+            $full_specs[] = array(
+                'label' => $label,
+                'value' => $value,
+            );
+        }
+
+        $key_specs = array(
+            array(
+                'label'  => 'قطر داخلی',
+                'value'  => $format_mm(
+                    get_post_meta(
+                        $id,
+                        '_inner_diameter',
+                        true
+                    )
+                ),
+                'icon'   => 'fa-circle-dot',
+                'detail' => false,
+            ),
+            array(
+                'label'  => 'قطر خارجی',
+                'value'  => $format_mm(
+                    get_post_meta(
+                        $id,
+                        '_outer_diameter',
+                        true
+                    )
+                ),
+                'icon'   => 'fa-circle',
+                'detail' => false,
+            ),
+            array(
+                'label'  => 'عرض',
+                'value'  => $format_mm(
+                    get_post_meta(
+                        $id,
+                        '_bearing_width',
+                        true
+                    )
+                ),
+                'icon'   => 'fa-arrows-left-right',
+                'detail' => false,
+            ),
+            array(
+                'label'  => 'آب‌بندی',
+                'value'  => trim(
+                    (string) get_post_meta(
+                        $id,
+                        '_bearing_seal',
+                        true
+                    )
+                ),
+                'icon'   => 'fa-shield-halved',
+                'detail' => true,
+            ),
+            array(
+                'label'  => 'لقی',
+                'value'  => trim(
+                    (string) get_post_meta(
+                        $id,
+                        '_bearing_clearance',
+                        true
+                    )
+                ),
+                'icon'   => 'fa-up-right-and-down-left-from-center',
+                'detail' => true,
+            ),
+            array(
+                'label'  => 'کلاس دقت',
+                'value'  => trim(
+                    (string) get_post_meta(
+                        $id,
+                        '_bearing_precision',
+                        true
+                    )
+                ),
+                'icon'   => 'fa-crosshairs',
+                'detail' => true,
+            ),
+        );
+
+        $key_specs = array_values(
+            array_filter(
+                $key_specs,
+                static function ($spec) {
+                    return '' !== trim(
+                        (string) ($spec['value'] ?? '')
+                    );
+                }
+            )
+        );
+
+        $image_id = $product->get_image_id();
+
+        $gallery_ids = array_values(
+            array_unique(
+                array_filter(
+                    array_merge(
+                        $image_id
+                            ? array($image_id)
+                            : array(),
+                        $product->get_gallery_image_ids()
+                    )
+                )
+            )
+        );
+
+        $images = array();
+
+        foreach ($gallery_ids as $attachment_id) {
+            $full = wp_get_attachment_image_url(
+                $attachment_id,
+                'large'
+            );
+
+            $thumb = wp_get_attachment_image_url(
+                $attachment_id,
+                'thumbnail'
+            );
+
+            if (!$full) {
+                continue;
+            }
+
+            $alt = trim(
+                (string) get_post_meta(
+                    $attachment_id,
+                    '_wp_attachment_image_alt',
+                    true
+                )
+            );
+
+            if ('' === $alt) {
+                $alt = $product->get_name();
+            }
+
+            $images[] = array(
+                'full' => $full,
+                'thumb' => $thumb ?: $full,
+                'srcset' => (string)
+                    wp_get_attachment_image_srcset(
+                        $attachment_id,
+                        'large'
+                    ),
+                'alt' => $alt,
+            );
+        }
+
+        $has_real_image = !empty($images);
+
+        if (!$has_real_image) {
+            $placeholder = wc_placeholder_img_src();
+
+            $images[] = array(
+                'full'   => $placeholder,
+                'thumb'  => $placeholder,
+                'srcset' => '',
+                'alt'    => $product->get_name(),
+            );
+        }
+
+        $required_ids = function_exists(
+            'hsb_get_required_product_ids'
+        )
+            ? hsb_get_required_product_ids($id)
+            : array();
+
+        $items[] = array(
+            'product_id' => $id,
+            'name'       => $product->get_name(),
+            'sku'        => (string) $product->get_sku(),
+            'part_number'=> $part_number,
+            'brand'      => (string) (
+                $alternative['brand'] ?? ''
+            ),
+            'brand_slug' => (string) (
+                $alternative['brand_slug'] ?? ''
+            ),
+            'country'    => $country,
+            'url'        => (string) get_permalink($id),
+
+            'rating' => (float)
+                $product->get_average_rating(),
+
+            'rating_count' => (int)
+                $product->get_rating_count(),
+
+            'key_specs'  => $key_specs,
+            'full_specs' => $full_specs,
+
+            'images' => $images,
+
+            'has_real_image' => $has_real_image,
+
+            'required_count' => count($required_ids),
+        );
+    }
+
+    return $items;
+}
+
+
+/**
+ * Return every published WooCommerce product belonging
+ * to the same technical Part Number family.
+ */
+function hsb_get_product_family_ids($product_id) {
+    $product_id = absint($product_id);
+
+    if ($product_id < 1) {
+        return array();
+    }
+
+    $items = hsb_get_product_alternatives($product_id);
+    $ids   = array();
+
+    foreach ($items as $item) {
+        if (!empty($item['product_id'])) {
+            $ids[] = absint($item['product_id']);
+        }
+    }
+
+    return array_values(
+        array_unique(
+            array_filter($ids)
+        )
+    );
+}
+
+
+/**
+ * Group a list of WooCommerce product IDs into storefront
+ * families based on technical Part Number.
+ *
+ * Each SKU remains a real independent product. This helper
+ * only controls how products are presented in catalog lists.
+ */
+function hsb_group_product_ids_by_part_number($ids) {
+    $groups = array();
+
+    foreach ((array) $ids as $id) {
+        $id = absint($id);
+
+        if (!$id) {
+            continue;
+        }
+
+        $product = wc_get_product($id);
+
+        if (
+            !$product ||
+            'publish' !== $product->get_status()
+        ) {
+            continue;
+        }
+
+        $part_number = trim(
+            (string) get_post_meta(
+                $id,
+                '_mpn_part_number',
+                true
+            )
+        );
+
+        if ('' !== $part_number) {
+            $normalized_part = mb_strtoupper(
+                preg_replace(
+                    '/\s+/u',
+                    '',
+                    $part_number
+                ),
+                'UTF-8'
+            );
+
+            $family_key =
+                'part:' . $normalized_part;
+        } else {
+            /*
+             * Products without Part Number must never be
+             * collapsed together.
+             */
+            $family_key =
+                'product:' . $id;
+        }
+
+        if (!isset($groups[$family_key])) {
+            $groups[$family_key] = array(
+                'family_key'        => $family_key,
+                'representative_id' => $id,
+                'part_number'       => $part_number,
+                'ids'               => array(),
+                'brands'            => array(),
+                'countries'         => array(),
+            );
+        }
+
+        $groups[$family_key]['ids'][] = $id;
+
+        $brand = function_exists(
+            'hsb_get_product_brand_data'
+        )
+            ? hsb_get_product_brand_data($id)
+            : array();
+
+        $brand_name = trim(
+            (string) (
+                $brand['name'] ?? ''
+            )
+        );
+
+        if ('' !== $brand_name) {
+            $groups[$family_key]['brands'][
+                mb_strtolower(
+                    $brand_name,
+                    'UTF-8'
+                )
+            ] = $brand_name;
+        }
+
+        $country = trim(
+            (string) get_post_meta(
+                $id,
+                '_country_origin',
+                true
+            )
+        );
+
+        if ('' !== $country) {
+            $groups[$family_key]['countries'][
+                mb_strtolower(
+                    $country,
+                    'UTF-8'
+                )
+            ] = $country;
+        }
+    }
+
+    $result = array();
+
+    foreach ($groups as $group) {
+        $group['ids'] = array_values(
+            array_unique(
+                array_map(
+                    'absint',
+                    $group['ids']
+                )
+            )
+        );
+
+        $group['brands'] =
+            array_values(
+                $group['brands']
+            );
+
+        $group['countries'] =
+            array_values(
+                $group['countries']
+            );
+
+        $group['version_count'] =
+            count($group['ids']);
+
+        $group['brand_count'] =
+            count($group['brands']);
+
+        $group['country_count'] =
+            count($group['countries']);
+
+        $result[] = $group;
+    }
+
+    return $result;
+}
+
+
+/**
+ * Keep only one representative product from each
+ * technical Part Number family.
+ *
+ * The individual WooCommerce products remain untouched.
+ * This helper is only for storefront/list presentation.
+ */
+function hsb_dedupe_product_ids_by_part_number($ids, $limit = 12) {
+    $clean = array();
+    $seen  = array();
+    $limit = max(1, absint($limit));
+
+    foreach ((array) $ids as $id) {
+        $id = absint($id);
+
+        if (!$id) {
+            continue;
+        }
+
+        $product = wc_get_product($id);
+
+        if (
+            !$product ||
+            'publish' !== $product->get_status()
+        ) {
+            continue;
+        }
+
+        $part_number = trim(
+            (string) get_post_meta(
+                $id,
+                '_mpn_part_number',
+                true
+            )
+        );
+
+        if ('' !== $part_number) {
+            $family_key = 'part:' . mb_strtolower(
+                preg_replace('/\s+/u', '', $part_number),
+                'UTF-8'
+            );
+        } else {
+            $family_key = 'product:' . $id;
+        }
+
+        if (isset($seen[$family_key])) {
+            continue;
+        }
+
+        $seen[$family_key] = true;
+        $clean[] = $id;
+
+        if (count($clean) >= $limit) {
+            break;
+        }
+    }
+
+    return $clean;
+}
+
+
+/**
+ * Required companion products.
+ */
+function hsb_get_required_product_ids($product_id) {
+    $ids = get_post_meta(
+        absint($product_id),
+        '_hsb_required_product_ids',
+        true
+    );
+
+    if (!is_array($ids)) {
+        $ids = array_filter(
+            array_map(
+                'absint',
+                preg_split(
+                    '/[\s,|]+/',
+                    (string) $ids
+                )
+            )
+        );
+    }
+
+    $ids = array_values(
+        array_unique(
+            array_filter(
+                array_map('absint', $ids)
+            )
+        )
+    );
+
+    return array_values(
+        array_filter($ids, function ($id) use ($product_id) {
+            if ($id === absint($product_id)) {
+                return false;
+            }
+
+            $product = wc_get_product($id);
+
+            return $product &&
+                   'publish' === $product->get_status();
+        })
+    );
+}
+
+
+/* ------------------------------------------------------------
+ * Required-products field in WooCommerce product admin.
+ * ------------------------------------------------------------ */
+
+add_action(
+    'woocommerce_product_options_related',
+    'hsb_required_products_admin_field'
+);
+
+function hsb_required_products_admin_field() {
+    global $post;
+
+    if (!$post) {
+        return;
+    }
+
+    $selected = hsb_get_required_product_ids($post->ID);
+    ?>
+    <p class="form-field hsb_required_product_ids_field">
+        <label for="_hsb_required_product_ids">
+            <?php esc_html_e('محصولات همراه اجباری', 'hypersanati'); ?>
+        </label>
+
+        <select
+            class="wc-product-search"
+            multiple="multiple"
+            style="width: 50%;"
+            id="_hsb_required_product_ids"
+            name="_hsb_required_product_ids[]"
+            data-placeholder="<?php esc_attr_e('جستجوی محصول...', 'hypersanati'); ?>"
+            data-action="woocommerce_json_search_products_and_variations">
+
+            <?php foreach ($selected as $selected_id) : ?>
+                <?php $selected_product = wc_get_product($selected_id); ?>
+
+                <?php if ($selected_product) : ?>
+                    <option
+                        value="<?php echo esc_attr($selected_id); ?>"
+                        selected="selected">
+                        <?php
+                        echo esc_html(
+                            wp_strip_all_tags(
+                                $selected_product->get_formatted_name()
+                            )
+                        );
+                        ?>
+                    </option>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </select>
+
+        <?php
+        echo wc_help_tip(
+            'محصولاتی که باید هنگام درخواست پیش‌فاکتور این کالا به‌صورت خودکار همراه آن اضافه شوند.'
+        );
+        ?>
+    </p>
+    <?php
+}
+
+
+add_action(
+    'woocommerce_process_product_meta',
+    'hsb_save_required_products',
+    30
+);
+
+function hsb_save_required_products($product_id) {
+    $ids = isset($_POST['_hsb_required_product_ids'])
+        ? (array) wp_unslash($_POST['_hsb_required_product_ids'])
+        : array();
+
+    $ids = array_values(
+        array_unique(
+            array_filter(
+                array_map('absint', $ids)
+            )
+        )
+    );
+
+    $ids = array_values(
+        array_filter($ids, function ($id) use ($product_id) {
+            return $id !== absint($product_id);
+        })
+    );
+
+    if (empty($ids)) {
+        delete_post_meta(
+            $product_id,
+            '_hsb_required_product_ids'
+        );
+        return;
+    }
+
+    update_post_meta(
+        $product_id,
+        '_hsb_required_product_ids',
+        $ids
+    );
+}
+
+
+/**
+ * Add one item into the current preinvoice session array.
+ */
+function hsb_preinvoice_put_item(&$items, $product_id, $quantity, $context = array()) {
+    $product_id = absint($product_id);
+    $quantity   = max(1, absint($quantity));
+
+    $product = wc_get_product($product_id);
+
+    if (!$product || 'publish' !== $product->get_status()) {
+        return false;
+    }
+
+    $item_key = (string) $product_id;
+
+    if (isset($items[$item_key])) {
+        $items[$item_key]['quantity'] += $quantity;
+    } else {
+        $items[$item_key] = array(
+            'product_id' => $product_id,
+            'quantity'   => $quantity,
+            'added_at'   => time(),
+        );
+    }
+
+    if (!empty($context)) {
+        $items[$item_key]['relation'] = $context;
+    }
+
+    return true;
+}
+
+
+
+/* ============================================================
+ * HSB PERSISTENT PREINVOICE ORDERS
+ * ============================================================ */
+
+/**
+ * Register permanent preinvoice order statuses.
+ */
+add_action('init', 'hsb_register_preinvoice_order_statuses');
+
+function hsb_register_preinvoice_order_statuses() {
+
+    register_post_status('wc-preinvoice-review', array(
+        'label'                     => 'درخواست پیش‌فاکتور',
+        'public'                    => true,
+        'exclude_from_search'       => false,
+        'show_in_admin_all_list'    => true,
+        'show_in_admin_status_list' => true,
+        'label_count'               => _n_noop(
+            'درخواست پیش‌فاکتور <span class="count">(%s)</span>',
+            'درخواست‌های پیش‌فاکتور <span class="count">(%s)</span>',
+            'hypersanati'
+        ),
+    ));
+
+    register_post_status('wc-preinv-approved', array(
+        'label'                     => 'پیش‌فاکتور تأیید شده',
+        'public'                    => true,
+        'exclude_from_search'       => false,
+        'show_in_admin_all_list'    => true,
+        'show_in_admin_status_list' => true,
+        'label_count'               => _n_noop(
+            'پیش‌فاکتور تأیید شده <span class="count">(%s)</span>',
+            'پیش‌فاکتورهای تأیید شده <span class="count">(%s)</span>',
+            'hypersanati'
+        ),
+    ));
+}
+
+
+add_filter('wc_order_statuses', 'hsb_add_preinvoice_order_statuses');
+
+function hsb_add_preinvoice_order_statuses($statuses) {
+
+    $new_statuses = array();
+
+    foreach ($statuses as $key => $label) {
+
+        $new_statuses[$key] = $label;
+
+        if ('wc-pending' === $key) {
+            $new_statuses['wc-preinvoice-review'] =
+                'درخواست پیش‌فاکتور';
+
+            $new_statuses['wc-preinv-approved'] =
+                'پیش‌فاکتور تأیید شده';
+        }
+    }
+
+    return $new_statuses;
+}
+
+
+/**
+ * Convert current preinvoice session into permanent WooCommerce order.
+ */
+function hsb_create_preinvoice_order_from_session() {
+
+    if (!function_exists('WC')) {
+        return new WP_Error(
+            'woocommerce_missing',
+            'ووکامرس در دسترس نیست.'
+        );
+    }
+
+    if (!is_user_logged_in()) {
+        return new WP_Error(
+            'login_required',
+            'برای ارسال پیش‌فاکتور ابتدا وارد حساب کاربری شوید.'
+        );
+    }
+
+    $items = hsb_get_preinvoice_items();
+
+    if (empty($items)) {
+        return new WP_Error(
+            'empty_preinvoice',
+            'پیش‌فاکتور شما خالی است.'
+        );
+    }
+
+    $customer_id = get_current_user_id();
+
+    try {
+
+        $order = wc_create_order(array(
+            'customer_id' => $customer_id,
+            'created_via' => 'hsb-preinvoice',
+        ));
+
+        if (is_wp_error($order)) {
+            return $order;
+        }
+
+        $customer = new WC_Customer($customer_id);
+
+        if ($customer->get_billing_first_name()) {
+
+            $order->set_address(array(
+                'first_name' => $customer->get_billing_first_name(),
+                'last_name'  => $customer->get_billing_last_name(),
+                'company'    => $customer->get_billing_company(),
+                'address_1'  => $customer->get_billing_address_1(),
+                'address_2'  => $customer->get_billing_address_2(),
+                'city'       => $customer->get_billing_city(),
+                'state'      => $customer->get_billing_state(),
+                'postcode'   => $customer->get_billing_postcode(),
+                'country'    => $customer->get_billing_country(),
+                'email'      => $customer->get_billing_email(),
+                'phone'      => $customer->get_billing_phone(),
+            ), 'billing');
+        }
+
+        foreach ($items as $item) {
+
+            $product_id = isset($item['product_id'])
+                ? absint($item['product_id'])
+                : 0;
+
+            $quantity = isset($item['quantity'])
+                ? max(1, absint($item['quantity']))
+                : 1;
+
+            $product = wc_get_product($product_id);
+
+            if (!$product) {
+                continue;
+            }
+
+            /*
+             * Price is intentionally zero until sales team approves it.
+             */
+            $order_item_id = $order->add_product(
+                $product,
+                $quantity,
+                array(
+                    'subtotal' => 0,
+                    'total'    => 0,
+                )
+            );
+
+            if (!$order_item_id) {
+                continue;
+            }
+
+            $order_item = $order->get_item($order_item_id);
+
+            if (!$order_item) {
+                continue;
+            }
+
+            $relation_type = isset(
+                $item['relation']['type']
+            )
+                ? sanitize_key(
+                    $item['relation']['type']
+                )
+                : 'primary';
+
+            $order_item->add_meta_data(
+                '_hsb_relation_type',
+                $relation_type,
+                true
+            );
+
+            if (
+                isset(
+                    $item['relation']['parent_product_id']
+                )
+            ) {
+                $order_item->add_meta_data(
+                    '_hsb_parent_product_id',
+                    absint(
+                        $item['relation']['parent_product_id']
+                    ),
+                    true
+                );
+            }
+
+            $order_item->save();
+        }
+
+        if (0 === count($order->get_items())) {
+
+            $order->delete(true);
+
+            return new WP_Error(
+                'no_valid_items',
+                'هیچ کالای معتبری برای ثبت پیش‌فاکتور پیدا نشد.'
+            );
+        }
+
+        $order->update_meta_data(
+            '_hsb_is_preinvoice',
+            'yes'
+        );
+
+        $order->update_meta_data(
+            '_hsb_preinvoice_submitted_at',
+            current_time('mysql')
+        );
+
+        $order->set_status('preinvoice-review');
+
+        $order->add_order_note(
+            'درخواست پیش‌فاکتور توسط مشتری ثبت شد و منتظر بررسی واحد فروش است.'
+        );
+
+        $order->calculate_totals(false);
+        $order->save();
+
+        /*
+         * Current draft is finished.
+         */
+        if (WC()->session) {
+            WC()->session->set(
+                'hsb_preinvoice_items',
+                array()
+            );
+
+            WC()->session->set(
+                'hsb_last_preinvoice_order_id',
+                $order->get_id()
+            );
+        }
+
+        return $order;
+
+    } catch (Throwable $e) {
+
+        return new WP_Error(
+            'preinvoice_create_failed',
+            $e->getMessage()
+        );
+    }
+}
+
+
+
+/* ============================================================
+ * HSB PREINVOICE SALES APPROVAL
+ * ============================================================ */
+
+/**
+ * Allow sales staff to edit line-item prices while
+ * preinvoice is under review.
+ */
+add_filter(
+    'wc_order_is_editable',
+    'hsb_preinvoice_order_is_editable',
+    20,
+    2
+);
+
+function hsb_preinvoice_order_is_editable($editable, $order) {
+
+    if (!$order instanceof WC_Order) {
+        return $editable;
+    }
+
+    if (
+        'yes' === $order->get_meta('_hsb_is_preinvoice') &&
+        'preinvoice-review' === $order->get_status()
+    ) {
+        return true;
+    }
+
+    return $editable;
+}
+
+
+/**
+ * Add approval action to WooCommerce order actions.
+ */
+add_filter(
+    'woocommerce_order_actions',
+    'hsb_add_preinvoice_admin_actions',
+    20,
+    2
+);
+
+function hsb_add_preinvoice_admin_actions($actions, $order) {
+
+    if (!$order instanceof WC_Order) {
+        return $actions;
+    }
+
+    if (
+        'yes' === $order->get_meta('_hsb_is_preinvoice') &&
+        'preinvoice-review' === $order->get_status()
+    ) {
+        $actions['hsb_approve_preinvoice'] =
+            'تأیید و آماده‌سازی پیش‌فاکتور برای پرداخت';
+    }
+
+    return $actions;
+}
+
+
+/**
+ * Approve priced preinvoice.
+ */
+add_action(
+    'woocommerce_order_action_hsb_approve_preinvoice',
+    'hsb_approve_preinvoice'
+);
+
+function hsb_approve_preinvoice($order) {
+
+    if (!$order instanceof WC_Order) {
+        return;
+    }
+
+    if (
+        'yes' !== $order->get_meta('_hsb_is_preinvoice') ||
+        'preinvoice-review' !== $order->get_status()
+    ) {
+        return;
+    }
+
+    /*
+     * Recalculate totals after sales staff edits
+     * individual line-item prices.
+     */
+    $order->calculate_totals(false);
+
+    if ((float) $order->get_total() <= 0) {
+
+        $order->add_order_note(
+            'تأیید پیش‌فاکتور انجام نشد: مبلغ نهایی هنوز صفر است.'
+        );
+
+        $order->save();
+
+        return;
+    }
+
+    $order->update_meta_data(
+        '_hsb_preinvoice_approved_at',
+        current_time('mysql')
+    );
+
+    $order->update_meta_data(
+        '_hsb_preinvoice_approved_by',
+        get_current_user_id()
+    );
+
+    $order->set_status(
+        'preinv-approved',
+        'پیش‌فاکتور توسط واحد فروش قیمت‌گذاری و تأیید شد.'
+    );
+
+    $order->save();
+
+    /*
+     * SMS integration hook.
+     * Actual SMS provider will be connected separately.
+     */
+    do_action(
+        'hsb_preinvoice_approved_sms',
+        $order->get_id(),
+        $order
+    );
+}
+
+
+/**
+ * Allow approved preinvoice to be paid.
+ */
+add_filter(
+    'woocommerce_valid_order_statuses_for_payment',
+    'hsb_preinvoice_valid_payment_status',
+    20,
+    2
+);
+
+function hsb_preinvoice_valid_payment_status($statuses, $order) {
+
+    if (
+        $order instanceof WC_Order &&
+        'yes' === $order->get_meta('_hsb_is_preinvoice')
+    ) {
+        $statuses[] = 'preinv-approved';
+    }
+
+    return array_values(array_unique($statuses));
+}
+
+
+/**
+ * Allow payment without forcing status to pending first.
+ */
+add_filter(
+    'woocommerce_order_needs_payment',
+    'hsb_preinvoice_needs_payment',
+    20,
+    3
+);
+
+function hsb_preinvoice_needs_payment(
+    $needs_payment,
+    $order,
+    $valid_order_statuses
+) {
+
+    if (
+        $order instanceof WC_Order &&
+        'yes' === $order->get_meta('_hsb_is_preinvoice') &&
+        'preinv-approved' === $order->get_status() &&
+        (float) $order->get_total() > 0
+    ) {
+        return true;
+    }
+
+    return $needs_payment;
 }
 
 
@@ -3746,13 +5776,48 @@ function hsb_preinvoice_add_item() {
 
     $item_key = (string) $product_id;
 
-    if (isset($items[$item_key])) {
-        $items[$item_key]['quantity'] += $quantity;
-    } else {
-        $items[$item_key] = array(
-            'product_id' => $product_id,
+    /*
+     * Add primary requested product.
+     */
+    hsb_preinvoice_put_item(
+        $items,
+        $product_id,
+        $quantity,
+        array(
+            'type' => 'primary',
+        )
+    );
+
+    /*
+     * Automatically add required companion products.
+     */
+    $required_product_ids = hsb_get_required_product_ids($product_id);
+    $required_added = array();
+
+    foreach ($required_product_ids as $required_product_id) {
+
+        $added = hsb_preinvoice_put_item(
+            $items,
+            $required_product_id,
+            $quantity,
+            array(
+                'type'              => 'required',
+                'parent_product_id' => $product_id,
+            )
+        );
+
+        if (!$added) {
+            continue;
+        }
+
+        $required_product = wc_get_product($required_product_id);
+
+        $required_added[] = array(
+            'product_id' => $required_product_id,
+            'name'       => $required_product
+                ? $required_product->get_name()
+                : '',
             'quantity'   => $quantity,
-            'added_at'   => time(),
         );
     }
 
@@ -3766,13 +5831,18 @@ function hsb_preinvoice_add_item() {
             : 0;
     }
 
+    $response_message = empty($required_added)
+        ? 'محصول به پیش‌فاکتور اضافه شد.'
+        : 'محصول و اقلام همراه اجباری به پیش‌فاکتور اضافه شدند.';
+
     wp_send_json_success(array(
-        'message'        => 'محصول به پیش‌فاکتور اضافه شد.',
-        'product_id'     => $product_id,
-        'product_name'   => $product->get_name(),
-        'quantity'       => $items[$item_key]['quantity'],
-        'items_count'    => count($items),
-        'total_quantity' => $total_quantity,
+        'message'           => $response_message,
+        'product_id'        => $product_id,
+        'product_name'      => $product->get_name(),
+        'quantity'          => $items[$item_key]['quantity'],
+        'required_products' => $required_added,
+        'items_count'       => count($items),
+        'total_quantity'    => $total_quantity,
     ));
 }
 
