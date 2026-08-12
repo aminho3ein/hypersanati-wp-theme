@@ -608,8 +608,8 @@ document.addEventListener(
         function setBadge(
           selector,
           className,
-          iconClass,
-          value
+          imageUrl,
+          altText
         ) {
 
           const kicker =
@@ -624,7 +624,7 @@ document.addEventListener(
           let badge =
             document.querySelector(selector);
 
-          if (!badge && value) {
+          if (!badge && imageUrl) {
             badge =
               document.createElement("span");
 
@@ -637,7 +637,7 @@ document.addEventListener(
             return;
           }
 
-          if (!value) {
+          if (!imageUrl) {
             badge.hidden = true;
             return;
           }
@@ -645,19 +645,15 @@ document.addEventListener(
           badge.hidden = false;
           badge.replaceChildren();
 
-          const icon =
-            document.createElement("i");
+          const image =
+            document.createElement("img");
 
-          icon.className = iconClass;
+          image.src = imageUrl;
+          image.alt = altText || "";
 
-          const label =
-            document.createElement("span");
-
-          label.textContent = value;
-
-          badge.append(icon, label);
+          badge.title = altText || "";
+          badge.appendChild(image);
         }
-
 
         function setCode(label, value) {
 
@@ -1382,24 +1378,24 @@ document.addEventListener(
             setBadge(
               ".hsb-sp-brand-badge",
               "hsb-sp-brand-badge",
-              "fa-solid fa-certificate",
+              item.brand_image_url || "",
               item.brand || ""
             );
 
             setBadge(
               ".hsb-sp-country-badge",
               "hsb-sp-country-badge",
-              "fa-solid fa-earth-asia",
+              item.country_flag_url || "",
               item.country || ""
             );
 
             setCode(
-              "Part Number",
+              "شماره محصول",
               item.part_number || ""
             );
 
             setCode(
-              "SKU",
+              "شناسه یکتای محصول",
               item.sku || ""
             );
 

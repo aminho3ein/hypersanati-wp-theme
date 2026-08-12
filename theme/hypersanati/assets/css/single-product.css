@@ -5716,3 +5716,570 @@ body.single-product .sp-products-row {
         justify-content: space-between;
     }
 }
+
+
+/* ============================================================
+   HSB FAMILY BRAND COUNTRY VISUALS
+   ============================================================ */
+
+.hsb-sp-family-brand {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+}
+
+.hsb-sp-family-choice-icon {
+    flex: 0 0 auto;
+
+    width: 28px;
+    height: 22px;
+
+    object-fit: contain;
+
+    filter:
+        grayscale(1)
+        saturate(0);
+
+    opacity: 0.62;
+
+    transition:
+        filter 0.18s ease,
+        opacity 0.18s ease,
+        transform 0.18s ease;
+}
+
+.hsb-sp-family-country-flag {
+    width: 28px;
+    height: 19px;
+
+    border-radius: 3px;
+
+    object-fit: cover;
+
+    box-shadow:
+        0 0 0 1px
+        rgba(30, 37, 43, 0.08);
+}
+
+
+/*
+ * One image only:
+ * grayscale is CSS-only and active state restores
+ * the original color image.
+ */
+.hsb-sp-family-brand.is-active
+.hsb-sp-family-choice-icon,
+.hsb-sp-family-country.is-active
+.hsb-sp-family-choice-icon {
+    filter:
+        grayscale(0)
+        saturate(1);
+
+    opacity: 1;
+
+    transform: scale(1.03);
+}
+
+
+/* ============================================================
+   SHARED SHOP CARDS INSIDE RELATED / SIMILAR
+   ============================================================ */
+
+.sp-products-row
+.hsb-family-product-card {
+    flex: 0 0 270px;
+
+    width: 270px;
+    max-width: 270px;
+
+    display: block;
+
+    overflow: hidden;
+
+    border: 1.5px solid
+        rgba(45, 52, 58, 0.30);
+
+    border-radius: 12px;
+
+    background: #fff;
+
+    color: inherit;
+    text-decoration: none;
+
+    box-shadow:
+        0 6px 18px
+        rgba(24, 30, 35, 0.07);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease;
+}
+
+.sp-products-row
+.hsb-family-product-card:hover {
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(45, 52, 58, 0.48);
+
+    box-shadow:
+        0 14px 32px
+        rgba(24, 30, 35, 0.14);
+}
+
+
+.sp-products-row
+.hsb-shop-card-media {
+    position: relative;
+
+    width: 100%;
+    aspect-ratio: 1 / 1;
+
+    padding: 0;
+
+    overflow: hidden;
+
+    background: #fff;
+}
+
+.sp-products-row
+.hsb-shop-card-media img,
+.sp-products-row
+.hsb-family-product-card:hover
+.hsb-shop-card-media img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 0;
+    margin: 0;
+
+    object-fit: cover;
+
+    transform: none !important;
+}
+
+
+.sp-products-row
+.hsb-family-card-badge {
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px 8px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(255,255,255,0.94);
+
+    color: var(--color-secondary);
+
+    font-size: 9px;
+    font-weight: 850;
+
+    box-shadow:
+        0 3px 12px
+        rgba(20, 26, 31, 0.10);
+}
+
+
+.sp-products-row
+.hsb-family-card-body {
+    padding: 13px;
+}
+
+
+.sp-products-row
+.hsb-family-card-topline {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 8px;
+}
+
+
+.sp-products-row
+.hsb-family-card-part {
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.sp-products-row
+.hsb-family-card-part span {
+    color: var(--color-secondary);
+
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.sp-products-row
+.hsb-family-card-part strong {
+    color: #20272c;
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+
+.sp-products-row
+.hsb-family-card-title {
+    min-height: 49px;
+
+    margin: 10px 0 8px;
+
+    color: #262d32;
+
+    font-size: 13px;
+    font-weight: 850;
+    line-height: 1.85;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+
+.sp-products-row
+.hsb-card-rating {
+    display: flex;
+}
+
+
+.sp-products-row
+.hsb-family-card-dimensions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 6px;
+
+    margin-top: 8px;
+}
+
+
+.sp-products-row
+.hsb-family-card-dimension {
+    min-width: 0;
+
+    padding: 7px 4px;
+
+    border: 1px solid
+        rgba(30, 37, 43, 0.08);
+
+    border-radius: 8px;
+
+    background: #f8f8f8;
+
+    text-align: center;
+}
+
+.sp-products-row
+.hsb-family-card-dimension span,
+.sp-products-row
+.hsb-family-card-dimension small {
+    display: block;
+
+    color: var(--color-secondary);
+
+    font-size: 8px;
+}
+
+.sp-products-row
+.hsb-family-card-dimension strong {
+    display: block;
+
+    margin: 2px 0;
+
+    color: #272e33;
+
+    font-size: 10px;
+    font-weight: 900;
+}
+
+
+.sp-products-row
+.hsb-family-card-options {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 5px;
+
+    margin-top: 9px;
+}
+
+.sp-products-row
+.hsb-family-card-options span {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 4px;
+
+    color: var(--color-secondary);
+
+    font-size: 8px;
+    font-weight: 750;
+}
+
+
+.sp-products-row
+.hsb-family-card-price-note {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 10px;
+
+    color: var(--color-secondary);
+
+    font-size: 9px;
+    font-weight: 750;
+}
+
+
+.sp-products-row
+.hsb-family-card-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+
+    margin-top: 11px;
+    padding-top: 10px;
+
+    border-top:
+        1px solid
+        rgba(30, 37, 43, 0.08);
+
+    color: var(--color-secondary);
+
+    font-size: 10px;
+    font-weight: 850;
+}
+
+
+@media (max-width: 768px) {
+
+    .sp-products-row
+    .hsb-family-product-card {
+        flex-basis: 245px;
+
+        width: 245px;
+        max-width: 245px;
+    }
+}
+
+
+/* HSB FAMILY VISUAL SLOT FIX */
+
+.hsb-sp-family-choice-visual {
+    flex: 0 0 34px;
+
+    width: 34px;
+    height: 28px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border: 1px solid
+        rgba(30, 37, 43, 0.10);
+
+    border-radius: 7px;
+
+    background: #f7f7f7;
+}
+
+
+/* Brand logo */
+.hsb-sp-family-brand-visual {
+    padding: 3px;
+}
+
+
+/* Country flag */
+.hsb-sp-family-country-visual {
+    padding: 0;
+}
+
+
+.hsb-sp-family-choice-visual
+.hsb-sp-family-choice-icon {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    max-width: 100%;
+
+    object-fit: contain;
+
+    margin: 0;
+
+    filter:
+        grayscale(1)
+        saturate(0);
+
+    opacity: 0.58;
+
+    transition:
+        filter 0.18s ease,
+        opacity 0.18s ease;
+}
+
+
+.hsb-sp-family-country-visual
+.hsb-sp-family-country-flag {
+    object-fit: cover;
+}
+
+
+/* Generic placeholder when no logo/flag has been uploaded yet */
+.hsb-sp-family-choice-fallback {
+    color: #9b9fa2;
+
+    font-size: 14px;
+
+    opacity: 0.75;
+}
+
+
+/* Selected brand/country restores real image color */
+.hsb-sp-family-brand.is-active
+.hsb-sp-family-choice-icon,
+.hsb-sp-family-country.is-active
+.hsb-sp-family-choice-icon {
+    filter:
+        grayscale(0)
+        saturate(1);
+
+    opacity: 1;
+}
+
+
+/* Selected fallback is also visually emphasized */
+.hsb-sp-family-brand.is-active
+.hsb-sp-family-choice-fallback,
+.hsb-sp-family-country.is-active
+.hsb-sp-family-choice-fallback {
+    color: #806331;
+    opacity: 1;
+}
+
+
+.hsb-sp-family-brand,
+.hsb-sp-family-country {
+    align-items: center;
+}
+
+
+.hsb-sp-family-brand > span:last-child,
+.hsb-sp-family-country > span:not(.hsb-sp-family-choice-visual) {
+    white-space: nowrap;
+}
+
+
+/* HSB HERO VISUAL BADGES */
+.hsb-sp-kicker {
+    align-items: center;
+    gap: 10px;
+}
+
+.hsb-sp-brand-badge,
+.hsb-sp-country-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid rgba(30, 37, 43, 0.10);
+    box-shadow: 0 4px 12px rgba(20, 26, 31, 0.06);
+}
+
+.hsb-sp-brand-badge {
+    width: 72px;
+    height: 52px;
+    padding: 6px 8px;
+    border-radius: 13px;
+}
+
+.hsb-sp-country-badge {
+    width: 50px;
+    height: 36px;
+    border-radius: 10px;
+}
+
+.hsb-sp-brand-badge img,
+.hsb-sp-country-badge img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.hsb-sp-brand-badge img {
+    object-fit: contain;
+}
+
+.hsb-sp-country-badge img {
+    object-fit: cover;
+}
+
+/* Bigger selector visuals */
+.hsb-sp-family-brand {
+    min-height: 56px;
+    gap: 10px;
+}
+
+.hsb-sp-family-country {
+    min-height: 56px;
+    gap: 10px;
+}
+
+.hsb-sp-family-brand-visual {
+    width: 60px;
+    height: 42px;
+    flex: 0 0 60px;
+    padding: 4px 6px;
+    border-radius: 10px;
+}
+
+.hsb-sp-family-country-visual {
+    width: 46px;
+    height: 32px;
+    flex: 0 0 46px;
+    border-radius: 8px;
+}
+
+.hsb-sp-family-brand-visual .hsb-sp-family-choice-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.hsb-sp-family-country-visual .hsb-sp-family-choice-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

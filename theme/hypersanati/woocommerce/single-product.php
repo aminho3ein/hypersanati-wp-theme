@@ -287,7 +287,28 @@ if ($product) :
     ?>
 
 
-    <main class="hsb-sp-page" dir="rtl">
+    <?php
+$hero_brand_image_url = trim(
+    (string) (
+        $brand_data['image_url']
+        ?? ''
+    )
+);
+
+$hero_country_flag_data =
+    function_exists('hsb_get_country_flag_data')
+        ? hsb_get_country_flag_data($country_origin)
+        : array();
+
+$hero_country_flag_url = trim(
+    (string) (
+        $hero_country_flag_data['image_url']
+        ?? ''
+    )
+);
+?>
+
+<main class="hsb-sp-page" dir="rtl">
 
         <!-- Breadcrumb -->
         <div class="hsb-sp-breadcrumb">
@@ -305,33 +326,29 @@ if ($product) :
 
                 <div class="hsb-sp-kicker">
 
-                    <?php if ($brand_name) : ?>
-                        <span class="hsb-sp-brand-badge">
-                            <i class="fa-solid fa-certificate"></i>
+                <?php if ($hero_brand_image_url) : ?>
+                    <span
+                        class="hsb-sp-brand-badge"
+                        title="<?php echo esc_attr($brand_name); ?>">
+                        <img
+                            src="<?php echo esc_url($hero_brand_image_url); ?>"
+                            alt="<?php echo esc_attr($brand_name); ?>">
+                    </span>
+                <?php endif; ?>
 
-                            <?php
-                            echo esc_html($brand_name);
-                            ?>
-                        </span>
-                    <?php endif; ?>
+                <?php if ($hero_country_flag_url) : ?>
+                    <span
+                        class="hsb-sp-country-badge"
+                        title="<?php echo esc_attr($country_origin); ?>">
+                        <img
+                            src="<?php echo esc_url($hero_country_flag_url); ?>"
+                            alt="<?php echo esc_attr($country_origin); ?>">
+                    </span>
+                <?php endif; ?>
 
+            </div>
 
-                    <?php if ($country_origin) : ?>
-                        <span class="hsb-sp-country-badge">
-                            <i class="fa-solid fa-earth-asia"></i>
-
-                            <?php
-                            echo esc_html(
-                                $country_origin
-                            );
-                            ?>
-                        </span>
-                    <?php endif; ?>
-
-                </div>
-
-
-                <h1 class="hsb-sp-title">
+            <h1 class="hsb-sp-title">
                     <?php the_title(); ?>
                 </h1>
 
@@ -341,7 +358,7 @@ if ($product) :
                     <?php if ($part_number) : ?>
 
                         <div class="hsb-sp-code-box">
-                            <span>Part Number</span>
+                            <span>شماره محصول</span>
 
                             <strong dir="ltr">
                                 <?php
@@ -358,7 +375,7 @@ if ($product) :
                     <?php if ($product_sku) : ?>
 
                         <div class="hsb-sp-code-box">
-                            <span>SKU</span>
+                            <span>شناسه یکتای محصول</span>
 
                             <strong dir="ltr">
                                 <?php
@@ -587,7 +604,7 @@ if ($product) :
 
                             <div>
                                 <span>
-                                    همین Part Number با برند یا کشور دیگر
+                                    همین محصول را می‌توانید با برند و کشور سازنده دیگری هم انتخاب کنید.
                                 </span>
 
                                 <strong>
@@ -620,6 +637,54 @@ if ($product) :
                                 ) :
                                 ?>
 
+                                    <?php
+                                    $family_brand_term =
+                                        get_term_by(
+                                            'slug',
+                                            $family_brand_slug,
+                                            'product_brand'
+                                        );
+
+                                    $family_brand_image_id = 0;
+
+                                    if (
+                                        $family_brand_term &&
+                                        !is_wp_error(
+                                            $family_brand_term
+                                        )
+                                    ) {
+                                        $family_brand_image_id =
+                                            absint(
+                                                get_term_meta(
+                                                    $family_brand_term->term_id,
+                                                    'thumbnail_id',
+                                                    true
+                                                )
+                                            );
+
+                                        if (
+                                            !$family_brand_image_id
+                                        ) {
+                                            $family_brand_image_id =
+                                                absint(
+                                                    get_term_meta(
+                                                        $family_brand_term->term_id,
+                                                        'brand_image_id',
+                                                        true
+                                                    )
+                                                );
+                                        }
+                                    }
+
+                                    $family_brand_image_url =
+                                        $family_brand_image_id
+                                            ? wp_get_attachment_image_url(
+                                                $family_brand_image_id,
+                                                'thumbnail'
+                                            )
+                                            : '';
+                                    ?>
+
                                     <button
                                         type="button"
                                         class="hsb-sp-family-brand<?php echo $family_brand_slug === $current_brand_slug ? ' is-active' : ''; ?>"
@@ -627,11 +692,33 @@ if ($product) :
                                             $family_brand_slug
                                         ); ?>">
 
-                                        <?php
-                                        echo esc_html(
-                                            $family_brand_name
-                                        );
-                                        ?>
+                                        <span class="hsb-sp-family-choice-visual hsb-sp-family-brand-visual">
+
+                                            <?php
+                                            if (
+                                                $family_brand_image_url
+                                            ) :
+                                            ?>
+                                                <img
+                                                    class="hsb-sp-family-choice-icon"
+                                                    src="<?php echo esc_url(
+                                                        $family_brand_image_url
+                                                    ); ?>"
+                                                    alt="<?php echo esc_attr(
+                                                        $family_brand_name
+                                                    ); ?>"
+                                                    loading="lazy">
+                                            <?php endif; ?>
+
+                                        </span>
+
+                                        <span>
+                                            <?php
+                                            echo esc_html(
+                                                $family_brand_name
+                                            );
+                                            ?>
+                                        </span>
 
                                     </button>
 
@@ -745,6 +832,43 @@ if ($product) :
                                             $family_item['url']
                                         ); ?>"
                                         <?php echo $family_is_hidden ? 'hidden' : ''; ?>>
+
+                                        <?php
+                                        $family_flag =
+                                            function_exists(
+                                                'hsb_get_country_flag_data'
+                                            )
+                                                ? hsb_get_country_flag_data(
+                                                    $family_country
+                                                )
+                                                : array();
+
+                                        $family_flag_url =
+                                            trim(
+                                                (string) (
+                                                    $family_flag[
+                                                        'image_url'
+                                                    ]
+                                                    ?? ''
+                                                )
+                                            );
+                                        ?>
+
+                                        <span class="hsb-sp-family-choice-visual hsb-sp-family-country-visual">
+
+                                            <?php if ($family_flag_url) : ?>
+                                                <img
+                                                    class="hsb-sp-family-choice-icon hsb-sp-family-country-flag"
+                                                    src="<?php echo esc_url(
+                                                        $family_flag_url
+                                                    ); ?>"
+                                                    alt="<?php echo esc_attr(
+                                                        $family_country
+                                                    ); ?>"
+                                                    loading="lazy">
+                                            <?php endif; ?>
+
+                                        </span>
 
                                         <span>
                                             <?php
@@ -1121,7 +1245,7 @@ if ($product) :
 
                     <div class="hsb-sp-spec-panel__code">
                         <?php if ($part_number) : ?>
-                            <small>Part Number</small>
+                            <small>شماره محصول</small>
                             <strong dir="ltr">
                                 <?php
                                 echo esc_html(
@@ -2082,67 +2206,16 @@ if (!function_exists('theme_product_card_stars')) {
 
 if (!function_exists('theme_render_smart_product_card')) {
     function theme_render_smart_product_card($product_id) {
-        $card_product = wc_get_product($product_id);
 
-        if (!$card_product || $card_product->get_status() !== 'publish') {
-            return;
+        if (
+            function_exists(
+                'hypersanati_render_product_card'
+            )
+        ) {
+            hypersanati_render_product_card(
+                $product_id
+            );
         }
-
-        $regular_price = (float) $card_product->get_regular_price();
-        $sale_price    = (float) $card_product->get_sale_price();
-        $discount      = 0;
-
-        if ($card_product->is_on_sale() && $regular_price > 0 && $sale_price > 0) {
-            $discount = round((($regular_price - $sale_price) / $regular_price) * 100);
-        }
-
-        $is_simple_add_to_cart = $card_product->is_type('simple') && $card_product->is_purchasable() && $card_product->is_in_stock();
-
-        $button_url   = $is_simple_add_to_cart ? $card_product->add_to_cart_url() : get_permalink($product_id);
-        $button_text  = $is_simple_add_to_cart ? 'افزودن به سبد' : 'مشاهده محصول';
-        $button_class = $is_simple_add_to_cart ? 'ajax_add_to_cart add_to_cart_button' : '';
-
-        ?>
-        <article class="sp-product-card">
-            <a class="sp-card-image-link" href="<?php echo esc_url(get_permalink($product_id)); ?>">
-                <div class="sp-card-image">
-                    <?php echo $card_product->get_image('woocommerce_thumbnail'); ?>
-
-                    <?php if ($discount > 0) : ?>
-                        <span class="sp-sale-badge">
-                            <?php echo esc_html(theme_fa_digits($discount)); ?>٪ تخفیف
-                        </span>
-                    <?php endif; ?>
-                </div>
-            </a>
-
-            <div class="sp-card-body">
-                <a class="sp-card-title" href="<?php echo esc_url(get_permalink($product_id)); ?>">
-                    <?php echo esc_html($card_product->get_name()); ?>
-                </a>
-
-                <div class="sp-card-meta">
-                    <?php echo theme_product_card_stars($card_product->get_average_rating()); ?>
-
-                    <span>
-                        <?php echo esc_html(theme_fa_digits(number_format_i18n($card_product->get_rating_count()))); ?>
-                        رای
-                    </span>
-                </div>
-
-                <div class="sp-card-price">
-                    <?php echo wp_kses_post($card_product->get_price_html()); ?>
-                </div>
-
-                <a href="<?php echo esc_url($button_url); ?>"
-                   data-product_id="<?php echo esc_attr($product_id); ?>"
-                   data-quantity="1"
-                   class="sp-card-btn <?php echo esc_attr($button_class); ?>">
-                    <?php echo esc_html($button_text); ?>
-                </a>
-            </div>
-        </article>
-        <?php
     }
 }
 

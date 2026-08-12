@@ -65,6 +65,26 @@
     if (!$account_url) {
         $account_url = wp_login_url();
     }
+
+    $profile_url = function_exists(
+        'wc_get_account_endpoint_url'
+    )
+        ? wc_get_account_endpoint_url(
+            'edit-account'
+        )
+        : $account_url;
+
+    $preinvoices_url = add_query_arg(
+        'dashboard_tab',
+        'preinvoices',
+        $account_url
+    ) . '#tab-preinvoices';
+
+    $logout_url = function_exists(
+        'wc_logout_url'
+    )
+        ? wc_logout_url($account_url)
+        : wp_logout_url($account_url);
     ?>
 
     <!-- Desktop nav actions -->
@@ -91,21 +111,51 @@
       <li>
         <?php if (is_user_logged_in()) : ?>
 
-          <a
-            class="ui-btn ui-btn-account hsb-account-link"
-            href="<?php echo esc_url($account_url); ?>"
-          >
-            حساب کاربری
-          </a>
+          <div class="hsb-account-menu">
+
+            <a
+              class="ui-btn ui-btn-account hsb-account-link hsb-account-icon"
+              href="<?php echo esc_url($account_url); ?>"
+              aria-label="حساب کاربری"
+              title="حساب کاربری"
+            >
+              <i class="fa-solid fa-user"></i>
+            </a>
+
+            <div class="hsb-account-dropdown">
+
+              <a href="<?php echo esc_url($profile_url); ?>">
+                <i class="fa-regular fa-user"></i>
+                <span>مشاهده پروفایل</span>
+              </a>
+
+              <a href="<?php echo esc_url($preinvoices_url); ?>">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>پیش‌فاکتورهای من</span>
+              </a>
+
+              <a
+                class="hsb-account-dropdown__logout"
+                href="<?php echo esc_url($logout_url); ?>"
+              >
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>خروج از حساب</span>
+              </a>
+
+            </div>
+
+          </div>
 
         <?php else : ?>
 
           <button
-            class="ui-btn ui-btn-account"
+            class="ui-btn ui-btn-account hsb-account-icon"
             type="button"
             id="ui-open-otp"
+            aria-label="ورود به حساب کاربری"
+            title="ورود به حساب کاربری"
           >
-            حساب کاربری
+            <i class="fa-solid fa-user"></i>
           </button>
 
         <?php endif; ?>
@@ -136,10 +186,12 @@
 
         <li>
           <a
-            class="my-profile"
+            class="my-profile hsb-account-icon"
             href="<?php echo esc_url($account_url); ?>"
+            aria-label="حساب کاربری"
+            title="حساب کاربری"
           >
-            حساب کاربری
+            <i class="fa-solid fa-user"></i>
           </a>
         </li>
 
