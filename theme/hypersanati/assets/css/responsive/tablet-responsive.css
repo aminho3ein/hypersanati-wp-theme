@@ -174,29 +174,3 @@
   .handle-frame-section i{
     font-size: 34px;
   }
-
-  /* ---------- Footer ---------- */
-
-  /* .my-foot{
-    padding: 3rem 2rem;
-
-    justify-content: space-between;
-  } */
-  .my-foot {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  align-items: start; /* جلوگیری از کشیده شدن المان‌ها به ارتفاع بلندترین المان */
-}
-
-  /* .intro,
-  .top-product,
-  .top-content,
-  .contact{
-    width: calc(50% - 1rem);
-  } */
-
-  .bottom-of-footer{
-    height: 55px;
-  }
-
