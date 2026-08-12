@@ -1720,3 +1720,76 @@ button.handle-frame-section:disabled {
     height: 72px;
   }
 }
+
+
+/* HSB PREINVOICE HEADER BADGE */
+.preinvoice-cart {
+    position: relative;
+    overflow: visible !important;
+    background: transparent !important;
+}
+
+.preinvoice-cart-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    text-decoration: none !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.preinvoice-count-badge {
+    position: absolute;
+    z-index: 10;
+    top: -10px;
+    right: -12px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 21px;
+    height: 21px;
+    padding: 0 5px;
+
+    border: 2px solid #fff;
+    border-radius: 999px;
+
+    background: #e53935;
+    color: #fff;
+
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+    font-family: inherit;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 2px 7px rgba(0, 0, 0, 0.22);
+
+    pointer-events: none;
+
+    transform: translateZ(0);
+}
+
+.preinvoice-count-badge.is-empty {
+    display: none;
+}
+
+.hsb-account-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important;
+    cursor: pointer;
+}
+
+/* Remove the obsolete old yellow counter if any old markup remains cached. */
+.nav-actions > .sell-number,
+.mobile-nav-actions > .sell-number {
+    display: none !important;
+}

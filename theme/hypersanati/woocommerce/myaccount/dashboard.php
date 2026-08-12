@@ -203,19 +203,46 @@ if (isset($_POST['close_ticket'])) {
     $redirect_to_support('closed');
 }
 
-// دریافت سفارشات کاربر
-$customer_orders = wc_get_orders(array(
+// دریافت سفارشات و پیش‌فاکتورهای کاربر
+$all_customer_orders = wc_get_orders(array(
     'customer_id' => $customer_id,
-    'limit' => 10,
-    'orderby' => 'date',
-    'order' => 'DESC',
+    'limit'       => 50,
+    'orderby'     => 'date',
+    'order'       => 'DESC',
 ));
+
+$customer_orders  = array();
+$preinvoice_orders = array();
+
+foreach ($all_customer_orders as $customer_order) {
+    if ('yes' === $customer_order->get_meta('_hsb_is_preinvoice')) {
+        $preinvoice_orders[] = $customer_order;
+    } else {
+        $customer_orders[] = $customer_order;
+    }
+}
+
+$requested_dashboard_tab = isset($_GET['dashboard_tab'])
+    ? sanitize_key(wp_unslash($_GET['dashboard_tab']))
+    : 'account';
+
+$allowed_dashboard_tabs = array(
+    'account',
+    'orders',
+    'preinvoices',
+    'addresses',
+    'support',
+);
+
+if (!in_array($requested_dashboard_tab, $allowed_dashboard_tabs, true)) {
+    $requested_dashboard_tab = 'account';
+}
 
 get_header();
 ?>
 
 <div class="dashboard-container">
-    
+
     <!-- Sidebar Navigation -->
     <aside class="dashboard-sidebar">
         <div class="dashboard-user-welcome">
@@ -225,16 +252,24 @@ get_header();
         </div>
 
         <nav class="dashboard-nav">
-            <button class="dashboard-nav-btn active" data-tab="account">
+            <button class="dashboard-nav-btn<?php echo 'account' === $requested_dashboard_tab ? ' active' : ''; ?>" data-tab="account">
                 <i class="fa-solid fa-user"></i>
                 <span>حساب کاربری</span>
             </button>
-            
-            <button class="dashboard-nav-btn" data-tab="orders">
+
+            <button class="dashboard-nav-btn<?php echo 'orders' === $requested_dashboard_tab ? ' active' : ''; ?>" data-tab="orders">
                 <i class="fa-solid fa-shopping-bag"></i>
                 <span>سفارش‌های من</span>
                 <?php if (count($customer_orders) > 0) : ?>
                     <span class="badge"><?php echo count($customer_orders); ?></span>
+                <?php endif; ?>
+            </button>
+
+            <button class="dashboard-nav-btn<?php echo 'preinvoices' === $requested_dashboard_tab ? ' active' : ''; ?>" data-tab="preinvoices">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                <span>پیش‌فاکتورهای من</span>
+                <?php if (count($preinvoice_orders) > 0) : ?>
+                    <span class="badge"><?php echo count($preinvoice_orders); ?></span>
                 <?php endif; ?>
             </button>
 
@@ -246,7 +281,7 @@ get_header();
             <button class="dashboard-nav-btn" data-tab="support">
                 <i class="fa-solid fa-headset"></i>
                 <span>تیکت‌های پشتیبانی</span>
-                <?php 
+                <?php
                 $open_tickets_count = get_comments(array(
                     'user_id' => $customer_id,
                     'type'    => 'support_ticket',
@@ -276,7 +311,7 @@ get_header();
     <main class="dashboard-content">
 
         <!-- Tab: حساب کاربری -->
-        <section class="dashboard-tab active" id="tab-account">
+        <section class="dashboard-tab<?php echo 'account' === $requested_dashboard_tab ? ' active' : ''; ?>" id="tab-account">
             <div class="dashboard-header">
                 <h2>حساب کاربری من</h2>
                 <p class="dashboard-subtitle">مدیریت اطلاعات شخصی</p>
@@ -284,16 +319,16 @@ get_header();
 
             <div class="dashboard-card">
                 <h3 class="card-title">اطلاعات شخصی</h3>
-                
+
                 <form class="profile-form" method="post" action="">
                     <?php wp_nonce_field('update_user_profile', 'profile_nonce'); ?>
-                    
+
                     <div class="form-row">
                         <div class="form-group">
                             <label>نام</label>
                             <input type="text" name="first_name" value="<?php echo esc_attr($customer->get_first_name()); ?>" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label>نام خانوادگی</label>
                             <input type="text" name="last_name" value="<?php echo esc_attr($customer->get_last_name()); ?>" required>
@@ -305,7 +340,7 @@ get_header();
                             <label>شماره موبایل</label>
                             <input type="tel" name="billing_phone" value="<?php echo esc_attr($customer->get_billing_phone()); ?>" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label>ایمیل</label>
                             <input type="email" name="billing_email" value="<?php echo esc_attr($customer->get_billing_email()); ?>">
@@ -317,7 +352,7 @@ get_header();
                             <label>کد ملی</label>
                             <input type="text" name="billing_national_code" value="<?php echo esc_attr(get_user_meta($customer_id, '_billing_national_code', true)); ?>">
                         </div>
-                        
+
                         <div class="form-group">
                             <label>نام فروشگاه/کارگاه (اختیاری)</label>
                             <input type="text" name="billing_company" value="<?php echo esc_attr($customer->get_billing_company()); ?>">
@@ -333,10 +368,10 @@ get_header();
 
             <div class="dashboard-card">
                 <h3 class="card-title">تغییر رمز عبور</h3>
-                
+
                 <form class="password-form" method="post" action="">
                     <?php wp_nonce_field('change_user_password', 'password_nonce'); ?>
-                    
+
                     <div class="form-group">
                         <label>رمز عبور فعلی</label>
                         <input type="password" name="current_password" required>
@@ -361,7 +396,7 @@ get_header();
         </section>
 
         <!-- Tab: سفارش‌های من -->
-        <section class="dashboard-tab" id="tab-orders">
+        <section class="dashboard-tab<?php echo 'orders' === $requested_dashboard_tab ? ' active' : ''; ?>" id="tab-orders">
             <div class="dashboard-header">
                 <h2>سفارش‌های من</h2>
                 <p class="dashboard-subtitle">مشاهده و پیگیری سفارشات</p>
@@ -376,7 +411,7 @@ get_header();
                         $order_status = $order->get_status();
                         $order_total = $order->get_total();
                         $order_items = $order->get_items();
-                        
+
                         $status_labels = array(
                             'pending' => 'در انتظار پرداخت',
                             'processing' => 'در حال پردازش',
@@ -386,17 +421,17 @@ get_header();
                             'refunded' => 'بازپرداخت شده',
                             'failed' => 'ناموفق',
                         );
-                        
+
                         $status_label = isset($status_labels[$order_status]) ? $status_labels[$order_status] : $order_status;
                         ?>
-                        
+
                         <div class="order-card">
                             <div class="order-header">
                                 <div class="order-number">
                                     <span class="label">سفارش #</span>
                                     <span class="value"><?php echo esc_html($order_id); ?></span>
                                 </div>
-                                
+
                                 <span class="order-status status-<?php echo esc_attr($order_status); ?>">
                                     <?php echo esc_html($status_label); ?>
                                 </span>
@@ -407,7 +442,7 @@ get_header();
                                     <i class="fa-solid fa-calendar"></i>
                                     <?php echo esc_html($order_date->date_i18n('j F Y')); ?>
                                 </div>
-                                
+
                                 <div class="order-total">
                                     <i class="fa-solid fa-money-bill"></i>
                                     <?php echo wc_price($order_total); ?>
@@ -445,7 +480,7 @@ get_header();
                                     <i class="fa-solid fa-eye"></i>
                                     مشاهده جزئیات
                                 </a>
-                                
+
                                 <a href="<?php echo esc_url($order->get_checkout_order_received_url()); ?>#salesInvoiceSection" class="btn-secondary btn-invoice" target="_blank">
                                     <i class="fa-solid fa-file-invoice"></i>
                                     مشاهده فاکتور
@@ -466,8 +501,256 @@ get_header();
             <?php endif; ?>
         </section>
 
+        <!-- Tab: پیش‌فاکتورهای من -->
+        <section class="dashboard-tab<?php echo 'preinvoices' === $requested_dashboard_tab ? ' active' : ''; ?>" id="tab-preinvoices">
+
+            <div class="dashboard-header">
+                <h2>پیش‌فاکتورهای من</h2>
+                <p class="dashboard-subtitle">
+                    مشاهده وضعیت درخواست‌ها و پیش‌فاکتورهای تأییدشده
+                </p>
+            </div>
+
+            <?php if (isset($_GET['preinvoice_submitted'])) : ?>
+                <div class="dashboard-card preinvoice-success-message">
+                    <strong>
+                        درخواست پیش‌فاکتور شما با موفقیت برای واحد فروش ارسال شد.
+                    </strong>
+
+                    <?php if (!empty($_GET['preinvoice_id'])) : ?>
+                        <span>
+                            شماره درخواست:
+                            #<?php echo esc_html(absint($_GET['preinvoice_id'])); ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!empty($preinvoice_orders)) : ?>
+
+                <div class="orders-list preinvoice-orders-list">
+
+                    <?php foreach ($preinvoice_orders as $preinvoice_order) : ?>
+
+                        <?php
+                        $preinvoice_id     = $preinvoice_order->get_id();
+                        $preinvoice_date   = $preinvoice_order->get_date_created();
+                        $preinvoice_status = $preinvoice_order->get_status();
+                        $preinvoice_total  = (float) $preinvoice_order->get_total();
+                        $preinvoice_items  = $preinvoice_order->get_items();
+
+                        $preinvoice_status_labels = array(
+                            'preinvoice-review' => 'در انتظار بررسی فروش',
+                            'preinv-approved'   => 'پیش‌فاکتور تأیید شده',
+                            'pending'           => 'در انتظار پرداخت',
+                            'processing'        => 'پرداخت شده / در حال پردازش',
+                            'completed'         => 'تکمیل شده',
+                            'cancelled'         => 'لغو شده',
+                            'failed'            => 'ناموفق',
+                        );
+
+                        $preinvoice_status_label =
+                            isset($preinvoice_status_labels[$preinvoice_status])
+                                ? $preinvoice_status_labels[$preinvoice_status]
+                                : wc_get_order_status_name($preinvoice_status);
+                        ?>
+
+                        <div class="order-card preinvoice-order-card">
+
+                            <div class="order-header">
+
+                                <div class="order-number">
+                                    <span class="label">پیش‌فاکتور #</span>
+                                    <span class="value">
+                                        <?php echo esc_html($preinvoice_id); ?>
+                                    </span>
+                                </div>
+
+                                <span class="order-status status-<?php echo esc_attr($preinvoice_status); ?>">
+                                    <?php echo esc_html($preinvoice_status_label); ?>
+                                </span>
+
+                            </div>
+
+
+                            <div class="order-meta">
+
+                                <div class="order-date">
+                                    <i class="fa-solid fa-calendar"></i>
+
+                                    <?php
+                                    if ($preinvoice_date) {
+                                        echo esc_html(
+                                            $preinvoice_date->date_i18n('j F Y')
+                                        );
+                                    }
+                                    ?>
+                                </div>
+
+                                <div class="order-items-count">
+                                    <i class="fa-solid fa-box"></i>
+                                    <?php echo esc_html(count($preinvoice_items)); ?>
+                                    قلم
+                                </div>
+
+                                <div class="order-total">
+                                    <i class="fa-solid fa-money-bill"></i>
+
+                                    <?php if ('preinvoice-review' === $preinvoice_status) : ?>
+                                        قیمت در حال بررسی
+                                    <?php else : ?>
+                                        <?php echo wp_kses_post(wc_price($preinvoice_total)); ?>
+                                    <?php endif; ?>
+                                </div>
+
+                            </div>
+
+
+                            <div class="order-items">
+
+                                <?php foreach ($preinvoice_items as $preinvoice_item) : ?>
+
+                                    <?php
+                                    $preinvoice_product = $preinvoice_item->get_product();
+
+                                    if (!$preinvoice_product) {
+                                        continue;
+                                    }
+
+                                    $relation_type = $preinvoice_item->get_meta(
+                                        '_hsb_relation_type'
+                                    );
+                                    ?>
+
+                                    <div class="order-item">
+
+                                        <div class="item-image">
+                                            <?php
+                                            echo wp_kses_post(
+                                                $preinvoice_product->get_image('thumbnail')
+                                            );
+                                            ?>
+                                        </div>
+
+                                        <div class="item-details">
+
+                                            <h4>
+                                                <?php
+                                                echo esc_html(
+                                                    $preinvoice_item->get_name()
+                                                );
+                                                ?>
+                                            </h4>
+
+                                            <span class="item-qty">
+                                                تعداد:
+                                                <?php
+                                                echo esc_html(
+                                                    $preinvoice_item->get_quantity()
+                                                );
+                                                ?>
+                                            </span>
+
+                                            <?php if ('required' === $relation_type) : ?>
+                                                <span class="preinvoice-required-badge">
+                                                    همراه اجباری
+                                                </span>
+                                            <?php endif; ?>
+
+                                        </div>
+
+                                        <div class="item-price">
+
+                                            <?php if ('preinvoice-review' === $preinvoice_status) : ?>
+
+                                                <span>
+                                                    در حال قیمت‌گذاری
+                                                </span>
+
+                                            <?php else : ?>
+
+                                                <?php
+                                                echo wp_kses_post(
+                                                    wc_price(
+                                                        $preinvoice_item->get_total()
+                                                    )
+                                                );
+                                                ?>
+
+                                            <?php endif; ?>
+
+                                        </div>
+
+                                    </div>
+
+                                <?php endforeach; ?>
+
+                            </div>
+
+
+                            <div class="order-actions">
+
+                                <a
+                                    href="<?php echo esc_url($preinvoice_order->get_view_order_url()); ?>"
+                                    class="btn-secondary">
+
+                                    <i class="fa-solid fa-eye"></i>
+                                    مشاهده جزئیات
+
+                                </a>
+
+                                <?php if ('preinv-approved' === $preinvoice_status) : ?>
+
+                                    <a
+                                        href="<?php echo esc_url($preinvoice_order->get_checkout_payment_url()); ?>"
+                                        class="btn-primary preinvoice-approved-indicator">
+
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        پیش‌فاکتور تأیید شده — ادامه و پرداخت
+
+                                    </a>
+
+                                <?php endif; ?>
+
+                            </div>
+
+                        </div>
+
+                    <?php endforeach; ?>
+
+                </div>
+
+            <?php else : ?>
+
+                <div class="empty-state">
+
+                    <i class="fa-solid fa-file-invoice"></i>
+
+                    <h3>
+                        هنوز پیش‌فاکتوری ثبت نکرده‌اید
+                    </h3>
+
+                    <p>
+                        محصولات موردنیاز را انتخاب و برای بررسی واحد فروش ارسال کنید.
+                    </p>
+
+                    <a
+                        href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>"
+                        class="btn-primary">
+
+                        مشاهده محصولات
+
+                    </a>
+
+                </div>
+
+            <?php endif; ?>
+
+        </section>
+
+
         <!-- Tab: آدرس‌ها -->
-        <section class="dashboard-tab" id="tab-addresses">
+        <section class="dashboard-tab<?php echo 'addresses' === $requested_dashboard_tab ? ' active' : ''; ?>" id="tab-addresses">
             <div class="dashboard-header">
                 <h2>آدرس‌های من</h2>
                 <p class="dashboard-subtitle">مدیریت آدرس‌های ارسال</p>
@@ -478,7 +761,7 @@ get_header();
                     <div class="address-header">
                         <h3>آدرس صورتحساب</h3>
                     </div>
-                    
+
                     <?php if ($customer->get_billing_address_1()) : ?>
                         <div class="address-content">
                             <p><strong><?php echo esc_html($customer->get_billing_first_name() . ' ' . $customer->get_billing_last_name()); ?></strong></p>
@@ -504,7 +787,7 @@ get_header();
                     <div class="address-header">
                         <h3>آدرس ارسال</h3>
                     </div>
-                    
+
                     <?php if ($customer->get_shipping_address_1()) : ?>
                         <div class="address-content">
                             <p><strong><?php echo esc_html($customer->get_shipping_first_name() . ' ' . $customer->get_shipping_last_name()); ?></strong></p>
@@ -533,5 +816,57 @@ get_header();
     </main>
 
 </div>
+
+
+<?php if ('account' !== $requested_dashboard_tab) : ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    setTimeout(function () {
+
+        var requestedTab = <?php echo wp_json_encode($requested_dashboard_tab); ?>;
+
+        document
+            .querySelectorAll('.dashboard-nav-btn[data-tab]')
+            .forEach(function (button) {
+                button.classList.remove('active');
+            });
+
+        document
+            .querySelectorAll('.dashboard-tab')
+            .forEach(function (tab) {
+                tab.classList.remove('active');
+            });
+
+        var button = document.querySelector(
+            '.dashboard-nav-btn[data-tab="' + requestedTab + '"]'
+        );
+
+        var tab = document.getElementById(
+            'tab-' + requestedTab
+        );
+
+        if (button) {
+            button.classList.add('active');
+        }
+
+        if (tab) {
+            tab.classList.add('active');
+        }
+
+        try {
+            localStorage.setItem(
+                'hypersanati_dashboard_tab',
+                requestedTab
+            );
+        } catch (e) {}
+
+    }, 0);
+
+});
+</script>
+
+<?php endif; ?>
 
 <?php get_footer(); ?>

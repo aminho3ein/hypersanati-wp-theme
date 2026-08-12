@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const container = document.getElementById("shop-container");
     const loader = document.querySelector(".shop-loader");
     const sidebarContainer = document.getElementById("sidebar-category");
+    const mobileSidebarContainer = document.getElementById("mobile-sidebar-category");
 
     const searchInput = document.getElementById("search-term");
     const searchForm = document.getElementById("ajax-search-form");
@@ -41,12 +42,354 @@ document.addEventListener("DOMContentLoaded", function () {
         ? hypersanatiSearch.shopUrl
         : window.location.pathname;
 
+
+    /* ========================================================
+       Progressive product-family loading
+       ======================================================== */
+
+    let shopFamilyObserver = null;
+
+
+    function disconnectShopFamilyObserver() {
+        if (shopFamilyObserver) {
+            shopFamilyObserver.disconnect();
+            shopFamilyObserver = null;
+        }
+    }
+
+
+    function getNextShopFamilySentinel() {
+        if (!container) {
+            return null;
+        }
+
+        return container.querySelector(
+            '.hsb-shop-lazy-sentinel[data-complete="0"]'
+        );
+    }
+
+
+    function activateNextShopFamilySentinel() {
+
+        disconnectShopFamilyObserver();
+
+        const sentinel =
+            getNextShopFamilySentinel();
+
+        if (!sentinel) {
+            return;
+        }
+
+        shopFamilyObserver =
+            new IntersectionObserver(
+                function (entries) {
+
+                    entries.forEach(
+                        function (entry) {
+
+                            if (!entry.isIntersecting) {
+                                return;
+                            }
+
+                            shopFamilyObserver.unobserve(
+                                sentinel
+                            );
+
+                            loadShopFamilyBatch(
+                                sentinel
+                            );
+                        }
+                    );
+                },
+                {
+                    root: null,
+
+                    /*
+                     * Begin shortly before the loader enters
+                     * the viewport, not several screens early.
+                     */
+                    rootMargin:
+                        '180px 0px 180px 0px',
+
+                    threshold: 0.01
+                }
+            );
+
+        shopFamilyObserver.observe(
+            sentinel
+        );
+    }
+
+
+    function loadShopFamilyBatch(sentinel) {
+
+        if (!sentinel) {
+            return;
+        }
+
+        if (
+            sentinel.dataset.loading === '1' ||
+            sentinel.dataset.complete === '1'
+        ) {
+            return;
+        }
+
+        const subcategoryId =
+            parseInt(
+                sentinel.dataset.subcategoryId ||
+                '0',
+                10
+            );
+
+        const page =
+            parseInt(
+                sentinel.dataset.page ||
+                '0',
+                10
+            );
+
+        if (!subcategoryId) {
+            sentinel.dataset.complete = '1';
+            sentinel.remove();
+            activateNextShopFamilySentinel();
+            return;
+        }
+
+        sentinel.dataset.loading = '1';
+        sentinel.classList.add(
+            'is-loading'
+        );
+
+        const statusText =
+            sentinel.querySelector(
+                '.hsb-shop-lazy-status span'
+            );
+
+        if (statusText) {
+            statusText.textContent =
+                'در حال بارگذاری محصولات...';
+        }
+
+        const params =
+            new URLSearchParams({
+                action:
+                    'hsb_load_shop_family_batch',
+
+                subcategory_id:
+                    String(subcategoryId),
+
+                page:
+                    String(page),
+
+                search_keyword:
+                    searchQuery
+            });
+
+        fetch(
+            '/wp-admin/admin-ajax.php?' +
+            params.toString(),
+            {
+                credentials: 'same-origin'
+            }
+        )
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error(
+                        'خطا در دریافت محصولات'
+                    );
+                }
+
+                return response.json();
+            })
+            .then(function (response) {
+
+                if (
+                    !response ||
+                    !response.success ||
+                    !response.data
+                ) {
+                    throw new Error(
+                        'پاسخ نامعتبر سرور'
+                    );
+                }
+
+                const section =
+                    sentinel.closest(
+                        '.hsb-shop-lazy-subcategory'
+                    );
+
+                const grid =
+                    section
+                        ? section.querySelector(
+                            '.hsb-shop-lazy-grid'
+                        )
+                        : null;
+
+                const html =
+                    response.data.html || '';
+
+                if (grid && html.trim()) {
+
+                    /*
+                     * Defensive client-side family dedupe.
+                     * Useful if the same family ever crosses
+                     * server-side result boundaries.
+                     */
+                    const temporary =
+                        document.createElement(
+                            'div'
+                        );
+
+                    temporary.innerHTML = html;
+
+                    const existingKeys =
+                        new Set(
+                            Array.from(
+                                container.querySelectorAll(
+                                    '.hsb-family-product-card[data-family-key]'
+                                )
+                            ).map(
+                                function (card) {
+                                    return card.dataset.familyKey;
+                                }
+                            )
+                        );
+
+                    Array.from(
+                        temporary.children
+                    ).forEach(
+                        function (card) {
+
+                            const key =
+                                card.dataset
+                                    ? card.dataset.familyKey
+                                    : '';
+
+                            if (
+                                key &&
+                                existingKeys.has(key)
+                            ) {
+                                return;
+                            }
+
+                            if (key) {
+                                existingKeys.add(key);
+                            }
+
+                            grid.appendChild(card);
+                        }
+                    );
+                }
+
+
+                const hasMore =
+                    Boolean(
+                        response.data.has_more
+                    );
+
+                const nextPage =
+                    parseInt(
+                        response.data.next_page,
+                        10
+                    );
+
+                sentinel.dataset.loading = '0';
+                sentinel.classList.remove(
+                    'is-loading'
+                );
+
+
+                if (hasMore) {
+
+                    sentinel.dataset.page =
+                        String(
+                            Number.isFinite(
+                                nextPage
+                            )
+                                ? nextPage
+                                : page + 1
+                        );
+
+                    if (statusText) {
+                        statusText.textContent =
+                            'برای مشاهده محصولات بیشتر، ادامه دهید';
+                    }
+
+                    /*
+                     * New cards push the sentinel downward.
+                     * Re-observe it so the next batch loads
+                     * only when the user actually reaches it.
+                     */
+                    requestAnimationFrame(
+                        function () {
+                            activateNextShopFamilySentinel();
+                        }
+                    );
+
+                    return;
+                }
+
+
+                sentinel.dataset.complete = '1';
+
+                /*
+                 * Empty result after title search:
+                 * remove the whole empty subcategory.
+                 */
+                if (
+                    section &&
+                    grid &&
+                    !grid.children.length
+                ) {
+                    section.remove();
+                } else {
+                    sentinel.remove();
+                }
+
+                requestAnimationFrame(
+                    function () {
+                        activateNextShopFamilySentinel();
+                    }
+                );
+            })
+            .catch(function (error) {
+
+                console.error(
+                    'HSB progressive Shop load:',
+                    error
+                );
+
+                sentinel.dataset.loading = '0';
+
+                sentinel.classList.remove(
+                    'is-loading'
+                );
+
+                if (statusText) {
+                    statusText.textContent =
+                        'بارگذاری انجام نشد؛ با اسکرول دوباره تلاش می‌شود';
+                }
+
+                setTimeout(
+                    function () {
+                        activateNextShopFamilySentinel();
+                    },
+                    1200
+                );
+            });
+    }
+
     function loadSidebarCategories() {
         if (!sidebarContainer) return;
         fetch('/wp-admin/admin-ajax.php?action=get_sidebar_categories')
             .then(res => res.text())
             .then(html => {
                 sidebarContainer.innerHTML = html;
+
+                if (mobileSidebarContainer) {
+                    mobileSidebarContainer.innerHTML = html;
+                }
+
                 listenToSidebarChanges();
             })
             .catch(err => console.error("خطا در بارگذاری سایدبار:", err));
@@ -56,6 +399,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!container) return;
 
         if (reset) {
+            disconnectShopFamilyObserver();
+
             index = 0;
             finished = false;
             loading = false;
@@ -84,9 +429,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 container.insertAdjacentHTML("beforeend", html);
+
                 index++;
                 loading = false;
-                if (loader) loader.style.display = "none";
+
+                if (loader) {
+                    loader.style.display = "none";
+                }
+
+                /*
+                 * Only one product-family sentinel is active
+                 * at a time. This prevents an entire catalog
+                 * from preloading below the fold.
+                 */
+                activateNextShopFamilySentinel();
             })
             .catch(err => {
                 console.error(err);
@@ -147,14 +503,47 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function listenToSidebarChanges() {
-        const radioButtons = document.querySelectorAll('input[name="product_category"]');
+        const radioButtons =
+            document.querySelectorAll(
+                'input[name="product_category"]'
+            );
+
         radioButtons.forEach(radio => {
-            radio.addEventListener('change', function () {
-                if (this.checked) {
-                    currentSelectedCategory = parseInt(this.value);
+
+            if (radio.dataset.hsbBound === '1') {
+                return;
+            }
+
+            radio.dataset.hsbBound = '1';
+
+            radio.addEventListener(
+                'change',
+                function () {
+
+                    if (!this.checked) {
+                        return;
+                    }
+
+                    currentSelectedCategory =
+                        parseInt(
+                            this.value,
+                            10
+                        ) || 0;
+
+                    const mobileFilter =
+                        this.closest(
+                            '.hsb-mobile-category-filter'
+                        );
+
+                    if (mobileFilter) {
+                        mobileFilter.removeAttribute(
+                            'open'
+                        );
+                    }
+
                     loadProducts(true);
                 }
-            });
+            );
         });
     }
 
@@ -244,9 +633,31 @@ document.addEventListener("DOMContentLoaded", function () {
     handleDimensionSearchReset();
 
     window.addEventListener("scroll", function () {
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 400) {
-            loadProducts();
+
+        if (
+            window.innerHeight +
+            window.scrollY <
+            document.body.offsetHeight - 400
+        ) {
+            return;
         }
+
+        /*
+         * Finish progressive batches in the current category
+         * before adding another top-level category below it.
+         */
+        const pendingFamilyBatch =
+            container
+                ? container.querySelector(
+                    '.hsb-shop-lazy-sentinel[data-complete="0"]'
+                )
+                : null;
+
+        if (pendingFamilyBatch) {
+            return;
+        }
+
+        loadProducts();
     });
 
 });

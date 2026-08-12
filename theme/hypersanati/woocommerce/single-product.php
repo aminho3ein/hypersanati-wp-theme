@@ -49,156 +49,992 @@ if ($product) :
     ];
     ?>
 
-    <!-- breadcrumb and product name section -->
-    <div class="name-rate-sec">
-        <div class="rate-sec-2">
-            <div class="bread-crumb">
-                <?php woocommerce_breadcrumb(); ?>
-            </div>
-            <div class="product-title">
-                <h4><?php the_title(); ?></h4>
-            </div>
-        </div>
-        <!-- Start TOP RATING FROM DATA--------- -->
+    <?php
+    /* =========================================================
+     * HSB INDUSTRIAL SINGLE PRODUCT HERO
+     * ========================================================= */
 
-        <?php
-        global $product;
+    $product_sku = trim((string) $product->get_sku());
 
-        if (!$product) {
-            $product = wc_get_product(get_the_ID());
+    $part_number = trim(
+        (string) get_post_meta(
+            $product_id,
+            '_mpn_part_number',
+            true
+        )
+    );
+
+    $country_origin = trim(
+        (string) get_post_meta(
+            $product_id,
+            '_country_origin',
+            true
+        )
+    );
+
+    $brand_name = '';
+
+    if (function_exists('hsb_get_product_brand_data')) {
+        $brand_data = hsb_get_product_brand_data($product_id);
+
+        if (
+            is_array($brand_data) &&
+            !empty($brand_data['name'])
+        ) {
+            $brand_name = trim(
+                (string) $brand_data['name']
+            );
+        }
+    }
+
+    if ('' === $brand_name) {
+        $brand_terms = get_the_terms(
+            $product_id,
+            'product_brand'
+        );
+
+        if (
+            !empty($brand_terms) &&
+            !is_wp_error($brand_terms)
+        ) {
+            $brand_name = trim(
+                (string) $brand_terms[0]->name
+            );
+        }
+    }
+
+
+    /*
+     * Products with the same Part Number remain real,
+     * independent WooCommerce products.
+     *
+     * This array provides the UX layer used for switching
+     * between brand / country versions.
+     */
+    $product_alternatives = array();
+
+    if (
+        function_exists(
+            'hsb_get_product_alternatives'
+        )
+    ) {
+        $product_alternatives =
+            hsb_get_product_alternatives(
+                $product_id
+            );
+    }
+
+
+    /*
+     * Lightweight metadata for no-reload family switching.
+     * Images themselves are not aggressively preloaded.
+     */
+    $product_family_live_data = function_exists(
+        'hsb_get_product_family_live_data'
+    )
+        ? hsb_get_product_family_live_data(
+            $product_id
+        )
+        : array();
+
+
+    /*
+     * Required companion products.
+     */
+    $required_product_ids = array();
+
+    if (
+        function_exists(
+            'hsb_get_required_product_ids'
+        )
+    ) {
+        $required_product_ids =
+            hsb_get_required_product_ids(
+                $product_id
+            );
+    }
+
+
+    /*
+     * Key buyer-facing technical specs.
+     */
+    $format_mm = static function ($value) {
+        $value = trim((string) $value);
+
+        if ('' === $value) {
+            return '';
         }
 
-        $average_rating = $product ? (float) $product->get_average_rating() : 0;
-        $rating_count   = $product ? (int) $product->get_rating_count() : 0;
+        if (
+            preg_match(
+                '/^-?[0-9]+(?:[.,][0-9]+)?$/',
+                $value
+            )
+        ) {
+            return $value . ' mm';
+        }
 
-        if (!function_exists('theme_fa_digits')) {
-            function theme_fa_digits($text) {
-                return strtr((string) $text, array(
-                    '0' => '۰',
-                    '1' => '۱',
-                    '2' => '۲',
-                    '3' => '۳',
-                    '4' => '۴',
-                    '5' => '۵',
-                    '6' => '۶',
-                    '7' => '۷',
-                    '8' => '۸',
-                    '9' => '۹',
-                ));
+        return $value;
+    };
+
+    $key_specs = array(
+        array(
+            'label' => 'قطر داخلی',
+            'value' => $format_mm(
+                get_post_meta(
+                    $product_id,
+                    '_inner_diameter',
+                    true
+                )
+            ),
+            'icon' => 'fa-circle-dot',
+        ),
+        array(
+            'label' => 'قطر خارجی',
+            'value' => $format_mm(
+                get_post_meta(
+                    $product_id,
+                    '_outer_diameter',
+                    true
+                )
+            ),
+            'icon' => 'fa-circle',
+        ),
+        array(
+            'label' => 'عرض',
+            'value' => $format_mm(
+                get_post_meta(
+                    $product_id,
+                    '_bearing_width',
+                    true
+                )
+            ),
+            'icon' => 'fa-arrows-left-right',
+        ),
+        array(
+            'label' => 'آب‌بندی',
+            'value' => trim(
+                (string) get_post_meta(
+                    $product_id,
+                    '_bearing_seal',
+                    true
+                )
+            ),
+            'icon' => 'fa-shield-halved',
+        ),
+        array(
+            'label' => 'لقی',
+            'value' => trim(
+                (string) get_post_meta(
+                    $product_id,
+                    '_bearing_clearance',
+                    true
+                )
+            ),
+            'icon' => 'fa-up-right-and-down-left-from-center',
+        ),
+        array(
+            'label' => 'کلاس دقت',
+            'value' => trim(
+                (string) get_post_meta(
+                    $product_id,
+                    '_bearing_precision',
+                    true
+                )
+            ),
+            'icon' => 'fa-crosshairs',
+        ),
+    );
+
+    $key_specs = array_values(
+        array_filter(
+            $key_specs,
+            static function ($spec) {
+                return '' !== trim(
+                    (string) $spec['value']
+                );
             }
+        )
+    );
+
+    $full_specs = array();
+
+    foreach ($specs as $label => $value) {
+        $value = trim((string) $value);
+
+        if ('' === $value) {
+            continue;
         }
 
-        if (!function_exists('theme_wc_rating_stars')) {
-            function theme_wc_rating_stars($rating, $class = '') {
-                $rating = (float) $rating;
+        if (
+            in_array(
+                $label,
+                array(
+                    'قطر داخلی',
+                    'قطر خارجی',
+                    'عرض',
+                ),
+                true
+            )
+        ) {
+            $value = $format_mm($value);
+        }
 
-                ob_start();
-                ?>
-                <div class="theme-rating-stars <?php echo esc_attr($class); ?>"
-                    aria-label="<?php echo esc_attr(theme_fa_digits(number_format_i18n($rating, 2)) . ' از ۵'); ?>">
+        $full_specs[$label] = $value;
+    }
 
-                    <?php for ($i = 1; $i <= 5; $i++) : ?>
+    $gallery_count = count($attachment_ids);
+    ?>
+
+
+    <main class="hsb-sp-page" dir="rtl">
+
+        <!-- Breadcrumb -->
+        <div class="hsb-sp-breadcrumb">
+            <?php woocommerce_breadcrumb(); ?>
+        </div>
+
+
+        <!-- Main industrial product hero -->
+        <section class="hsb-sp-hero">
+
+            <!-- =========================================
+                 PRODUCT IDENTITY / TECHNICAL DECISION
+                 ========================================= -->
+            <div class="hsb-sp-identity">
+
+                <div class="hsb-sp-kicker">
+
+                    <?php if ($brand_name) : ?>
+                        <span class="hsb-sp-brand-badge">
+                            <i class="fa-solid fa-certificate"></i>
+
+                            <?php
+                            echo esc_html($brand_name);
+                            ?>
+                        </span>
+                    <?php endif; ?>
+
+
+                    <?php if ($country_origin) : ?>
+                        <span class="hsb-sp-country-badge">
+                            <i class="fa-solid fa-earth-asia"></i>
+
+                            <?php
+                            echo esc_html(
+                                $country_origin
+                            );
+                            ?>
+                        </span>
+                    <?php endif; ?>
+
+                </div>
+
+
+                <h1 class="hsb-sp-title">
+                    <?php the_title(); ?>
+                </h1>
+
+
+                <div class="hsb-sp-product-codes">
+
+                    <?php if ($part_number) : ?>
+
+                        <div class="hsb-sp-code-box">
+                            <span>Part Number</span>
+
+                            <strong dir="ltr">
+                                <?php
+                                echo esc_html(
+                                    $part_number
+                                );
+                                ?>
+                            </strong>
+                        </div>
+
+                    <?php endif; ?>
+
+
+                    <?php if ($product_sku) : ?>
+
+                        <div class="hsb-sp-code-box">
+                            <span>SKU</span>
+
+                            <strong dir="ltr">
+                                <?php
+                                echo esc_html(
+                                    $product_sku
+                                );
+                                ?>
+                            </strong>
+                        </div>
+
+                    <?php endif; ?>
+
+                </div>
+
+
+                <!-- Rating -->
+                <div class="hsb-sp-rating">
+
+                    <div class="hsb-sp-stars"
+                        aria-label="<?php echo esc_attr(
+                            number_format_i18n(
+                                (float) $average_rating,
+                                1
+                            ) . ' از ۵'
+                        ); ?>">
+
+                        <?php for ($i = 1; $i <= 5; $i++) : ?>
+
+                            <?php
+                            if (
+                                (float) $average_rating >= $i
+                            ) {
+                                $star_class =
+                                    'fa-solid fa-star is-active';
+                            } elseif (
+                                (float) $average_rating >=
+                                ($i - 0.5)
+                            ) {
+                                $star_class =
+                                    'fa-solid fa-star-half-stroke is-active';
+                            } else {
+                                $star_class =
+                                    'fa-regular fa-star';
+                            }
+                            ?>
+
+                            <i class="<?php echo esc_attr(
+                                $star_class
+                            ); ?>"></i>
+
+                        <?php endfor; ?>
+
+                    </div>
+
+                    <span>
+                        <?php if ($rating_count > 0) : ?>
+
+                            <?php
+                            echo esc_html(
+                                number_format_i18n(
+                                    $rating_count
+                                )
+                            );
+                            ?>
+                            رأی
+
+                        <?php else : ?>
+
+                            هنوز امتیازی ثبت نشده
+
+                        <?php endif; ?>
+                    </span>
+
+                </div>
+
+
+                <!-- Key dimensions/specs -->
+                <?php if (!empty($key_specs)) : ?>
+
+                    <div class="hsb-sp-key-specs">
+
                         <?php
-                        if ($rating >= $i) {
-                            $icon_class = 'fa-solid fa-star is-active';
-                        } elseif ($rating >= ($i - 0.5)) {
-                            $icon_class = 'fa-solid fa-star-half-stroke is-active is-half';
-                        } else {
-                            $icon_class = 'fa-regular fa-star';
-                        }
+                        foreach ($key_specs as $spec) :
                         ?>
 
-                        <i class="<?php echo esc_attr($icon_class); ?>"></i>
-                    <?php endfor; ?>
+                            <?php
+                            $is_detail_spec = in_array(
+                                $spec['label'],
+                                array(
+                                    'آب‌بندی',
+                                    'لقی',
+                                    'کلاس دقت',
+                                ),
+                                true
+                            );
+                            ?>
 
-                </div>
-                <?php
-                return ob_get_clean();
-            }
-        }
-        ?>
+                            <div class="hsb-sp-key-spec<?php echo $is_detail_spec ? ' is-detail-spec' : ''; ?>">
 
-        <div class="rate-sec-2 left-side product-top-rating">
-            <div class="rate-passage">
-                <h5>
-                    امتیاز
-                    <?php echo esc_html(theme_fa_digits(number_format_i18n($average_rating, 2))); ?>
-                    از میان
-                    <?php echo esc_html(theme_fa_digits(number_format_i18n($rating_count))); ?>
-                    رای
-                </h5>
-            </div>
+                                <span class="hsb-sp-key-spec__icon">
+                                    <i
+                                        class="fa-solid <?php echo esc_attr(
+                                            $spec['icon']
+                                        ); ?>">
+                                    </i>
+                                </span>
 
-            <div class="star-sec">
-                <div class="rate-section">
-                    <?php echo theme_wc_rating_stars($average_rating, 'product-page-rating-stars'); ?>
-                </div>
-            </div>
+                                <div>
+                                    <small>
+                                        <?php
+                                        echo esc_html(
+                                            $spec['label']
+                                        );
+                                        ?>
+                                    </small>
 
-            <div class="ctr-passage">
-                <p>با ثبت امتیاز و نظر در خرید بعدی تخفیف بگیرید!</p>
-            </div>
-        </div>
+                                    <strong>
+                                        <?php
+                                        echo esc_html(
+                                            $spec['value']
+                                        );
+                                        ?>
+                                    </strong>
+                                </div>
 
-        <!-- End Start TOP RATING FROM DATA--------- -->
-    </div>
+                            </div>
 
-    <!-- product detail and price -->
-<div class="product-and-price-detail product-hero" dir="rtl">
+                        <?php endforeach; ?>
 
-    <div class="product-price-card-sec product-hero__purchase">
-        <div class="price-card">
-
-            <div class="price-and-discont-sec">
-                <?php
-                    $regular_price = (float) $product->get_regular_price();
-                    $sale_price    = (float) $product->get_sale_price();
-                    $discount      = ($regular_price > 0 && $sale_price > 0)
-                        ? round((($regular_price - $sale_price) / $regular_price) * 100)
-                        : 0;
-                ?>
-
-                <?php if ($product->is_on_sale() && $discount > 0) : ?>
-                    <div class="discont-sec">
-                        <div class="old-price">
-                            <p><?php echo wc_price($product->get_regular_price()); ?></p>
-                        </div>
-
-                        <div class="discont-sec-frame">
-                            <p><?php echo esc_html($discount); ?>٪ تخفیف</p>
-                        </div>
                     </div>
+
                 <?php endif; ?>
 
-                <div class="price-label">قیمت محصول</div>
 
-                <div class="price-sec">
-                    <p class="preinvoice-price-note">
-                        قیمت نهایی پس از بررسی و تأیید واحد فروش اعلام می‌شود
-                    </p>
-                </div>
+                <!-- Product family selector -->
+                <?php
+                if (
+                    is_array($product_alternatives) &&
+                    count($product_alternatives) > 1
+                ) :
+
+                    $family_brands = array();
+
+                    foreach (
+                        $product_alternatives as
+                        $family_item
+                    ) {
+                        $family_brand = trim(
+                            (string) (
+                                $family_item['brand']
+                                ?? ''
+                            )
+                        );
+
+                        $family_brand_slug = trim(
+                            (string) (
+                                $family_item['brand_slug']
+                                ?? ''
+                            )
+                        );
+
+                        if ('' === $family_brand) {
+                            $family_brand = 'بدون برند';
+                        }
+
+                        if ('' === $family_brand_slug) {
+                            $family_brand_slug =
+                                sanitize_title(
+                                    $family_brand
+                                );
+                        }
+
+                        $family_brands[
+                            $family_brand_slug
+                        ] = $family_brand;
+                    }
+
+                    $current_brand_slug = '';
+
+                    foreach (
+                        $product_alternatives as
+                        $family_item
+                    ) {
+                        if (
+                            !empty(
+                                $family_item['current']
+                            )
+                        ) {
+                            $current_brand_slug = trim(
+                                (string) (
+                                    $family_item[
+                                        'brand_slug'
+                                    ]
+                                    ?? ''
+                                )
+                            );
+
+                            if (
+                                '' ===
+                                $current_brand_slug
+                            ) {
+                                $current_brand_slug =
+                                    sanitize_title(
+                                        (string) (
+                                            $family_item[
+                                                'brand'
+                                            ]
+                                            ?? ''
+                                        )
+                                    );
+                            }
+
+                            break;
+                        }
+                    }
+                ?>
+
+                    <div
+                        class="hsb-sp-family-switcher"
+                        data-current-product="<?php echo esc_attr(
+                            $product_id
+                        ); ?>">
+
+                        <div
+                            class="hsb-sp-family-switcher__head">
+
+                            <div>
+                                <span>
+                                    همین Part Number با برند یا کشور دیگر
+                                </span>
+
+                                <strong>
+                                    انتخاب برند و کشور سازنده
+                                </strong>
+                            </div>
+
+                            <i
+                                class="fa-solid fa-code-compare">
+                            </i>
+
+                        </div>
+
+
+                        <div class="hsb-sp-family-field">
+
+                            <span
+                                class="hsb-sp-family-field__label">
+                                ۱. برند
+                            </span>
+
+                            <div
+                                class="hsb-sp-family-brand-list">
+
+                                <?php
+                                foreach (
+                                    $family_brands as
+                                    $family_brand_slug =>
+                                    $family_brand_name
+                                ) :
+                                ?>
+
+                                    <button
+                                        type="button"
+                                        class="hsb-sp-family-brand<?php echo $family_brand_slug === $current_brand_slug ? ' is-active' : ''; ?>"
+                                        data-family-brand="<?php echo esc_attr(
+                                            $family_brand_slug
+                                        ); ?>">
+
+                                        <?php
+                                        echo esc_html(
+                                            $family_brand_name
+                                        );
+                                        ?>
+
+                                    </button>
+
+                                <?php endforeach; ?>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="hsb-sp-family-field">
+
+                            <span
+                                class="hsb-sp-family-field__label">
+                                ۲. کشور سازنده
+                            </span>
+
+                            <div
+                                class="hsb-sp-family-country-list">
+
+                                <?php
+                                foreach (
+                                    $product_alternatives as
+                                    $family_item
+                                ) :
+
+                                    $family_id = absint(
+                                        $family_item[
+                                            'product_id'
+                                        ] ?? 0
+                                    );
+
+                                    if (!$family_id) {
+                                        continue;
+                                    }
+
+                                    $family_item_brand_slug =
+                                        trim(
+                                            (string) (
+                                                $family_item[
+                                                    'brand_slug'
+                                                ]
+                                                ?? ''
+                                            )
+                                        );
+
+                                    if (
+                                        '' ===
+                                        $family_item_brand_slug
+                                    ) {
+                                        $family_item_brand_slug =
+                                            sanitize_title(
+                                                (string) (
+                                                    $family_item[
+                                                        'brand'
+                                                    ]
+                                                    ?? ''
+                                                )
+                                            );
+                                    }
+
+                                    $family_country = trim(
+                                        (string) (
+                                            $family_item[
+                                                'country'
+                                            ]
+                                            ?? ''
+                                        )
+                                    );
+
+                                    if (
+                                        '' ===
+                                        $family_country
+                                    ) {
+                                        $family_country =
+                                            'کشور نامشخص';
+                                    }
+
+                                    $family_sku = trim(
+                                        (string) (
+                                            $family_item[
+                                                'sku'
+                                            ]
+                                            ?? ''
+                                        )
+                                    );
+
+                                    $family_is_current =
+                                        !empty(
+                                            $family_item[
+                                                'current'
+                                            ]
+                                        );
+
+                                    $family_is_hidden =
+                                        $family_item_brand_slug
+                                        !==
+                                        $current_brand_slug;
+                                ?>
+
+                                    <button
+                                        type="button"
+                                        class="hsb-sp-family-country<?php echo $family_is_current ? ' is-active' : ''; ?>"
+                                        data-family-brand="<?php echo esc_attr(
+                                            $family_item_brand_slug
+                                        ); ?>"
+                                        data-product-id="<?php echo esc_attr(
+                                            $family_id
+                                        ); ?>"
+                                        data-product-url="<?php echo esc_url(
+                                            $family_item['url']
+                                        ); ?>"
+                                        <?php echo $family_is_hidden ? 'hidden' : ''; ?>>
+
+                                        <span>
+                                            <?php
+                                            echo esc_html(
+                                                $family_country
+                                            );
+                                            ?>
+                                        </span>
+
+                                        <?php
+                                        if ($family_sku) :
+                                        ?>
+                                            <small dir="ltr">
+                                                <?php
+                                                echo esc_html(
+                                                    $family_sku
+                                                );
+                                                ?>
+                                            </small>
+                                        <?php endif; ?>
+
+                                        <?php
+                                        if ($family_is_current) :
+                                        ?>
+                                            <i
+                                                class="fa-solid fa-check">
+                                            </i>
+                                        <?php endif; ?>
+
+                                    </button>
+
+                                <?php endforeach; ?>
+
+                            </div>
+
+                        </div>
+
+
+                        <script
+                            type="application/json"
+                            class="hsb-sp-family-live-data"><?php
+                            echo wp_json_encode(
+                                $product_family_live_data,
+                                JSON_UNESCAPED_UNICODE
+                                | JSON_UNESCAPED_SLASHES
+                                | JSON_HEX_TAG
+                                | JSON_HEX_AMP
+                                | JSON_HEX_APOS
+                                | JSON_HEX_QUOT
+                            );
+                        ?></script>
+
+                    </div>
+
+                <?php endif; ?>
+
             </div>
 
-            <div class="add-to-cart-and-dropdown-sec">
+
+            <!-- =========================================
+                 PRODUCT MEDIA
+                 Keep legacy gallery hooks for JS.
+                 ========================================= -->
+            <div class="hsb-sp-media product-images">
+
+                <div class="hsb-sp-main-image single-image">
+
+                    <div
+                        class="hsb-sp-main-image__frame single-image-frame">
+
+                        <?php if (has_post_thumbnail()) : ?>
+
+                            <?php
+                            echo get_the_post_thumbnail(
+                                $product_id,
+                                'large',
+                                array(
+                                    'class' =>
+                                        'main-product-image',
+                                )
+                            );
+                            ?>
+
+                        <?php else : ?>
+
+                            <img
+                                src="<?php echo esc_url(
+                                    wc_placeholder_img_src()
+                                ); ?>"
+                                alt="<?php echo esc_attr(
+                                    get_the_title()
+                                ); ?>">
+
+                        <?php endif; ?>
+
+                    </div>
+
+
+                    <?php if ($gallery_count > 1) : ?>
+
+                        <button
+                            class="hsb-sp-gallery-arrow hsb-sp-gallery-arrow--right carousel-control-prev custom-btn"
+                            type="button"
+                            id="prev-image"
+                            aria-label="تصویر قبلی">
+
+                            <i
+                                class="fa-solid fa-chevron-right">
+                            </i>
+
+                        </button>
+
+
+                        <button
+                            class="hsb-sp-gallery-arrow hsb-sp-gallery-arrow--left carousel-control-next custom-btn"
+                            type="button"
+                            id="next-image"
+                            aria-label="تصویر بعدی">
+
+                            <i
+                                class="fa-solid fa-chevron-left">
+                            </i>
+
+                        </button>
+
+                    <?php endif; ?>
+
+                </div>
+
+
+                <?php if (!empty($attachment_ids)) : ?>
+
+                    <div
+                        class="hsb-sp-gallery product-image-gallery">
+
+                        <?php
+                        foreach (
+                            $attachment_ids as
+                            $index => $attachment_id
+                        ) :
+                        ?>
+
+                            <button
+                                type="button"
+                                class="hsb-sp-gallery-thumb product-image-gallery-frame <?php echo 0 === $index ? 'active' : ''; ?>"
+                                data-index="<?php echo esc_attr(
+                                    $index
+                                ); ?>"
+                                aria-label="نمایش تصویر <?php echo esc_attr(
+                                    $index + 1
+                                ); ?>">
+
+                                <?php
+                                echo wp_get_attachment_image(
+                                    $attachment_id,
+                                    'thumbnail'
+                                );
+                                ?>
+
+                            </button>
+
+                        <?php endforeach; ?>
+
+                    </div>
+
+                <?php endif; ?>
+
+
+                <?php if (!$main_image_id) : ?>
+
+                    <span class="hsb-sp-media-note is-placeholder-note">
+                        <i class="fa-regular fa-image"></i>
+                        تصویر محصول هنوز ثبت نشده است
+                    </span>
+
+                <?php endif; ?>
+
+            </div>
+
+
+            <!-- =========================================
+                 PREINVOICE / SALES REVIEW CARD
+                 ========================================= -->
+            <aside class="hsb-sp-inquiry">
+
+                <div class="hsb-sp-inquiry__icon">
+                    <i class="fa-solid fa-file-invoice"></i>
+                </div>
+
+                <span class="hsb-sp-inquiry__eyebrow">
+                    استعلام قیمت و موجودی
+                </span>
+
+                <h2>
+                    درخواست پیش‌فاکتور
+                </h2>
+
+                <p class="hsb-sp-inquiry__intro">
+                    قیمت، موجودی و زمان تأمین این کالا
+                    توسط واحد فروش بررسی و تأیید می‌شود.
+                </p>
+
+
+                <div class="hsb-sp-review-status">
+
+                    <span>
+                        <i class="fa-solid fa-circle-check"></i>
+                    </span>
+
+                    <div>
+                        <strong>
+                            بررسی قبل از پرداخت
+                        </strong>
+
+                        <small>
+                            در این مرحله پرداختی انجام نمی‌شود
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <?php if (!empty($required_product_ids)) : ?>
+
+                    <div class="hsb-sp-required-note">
+
+                        <i class="fa-solid fa-link"></i>
+
+                        <div>
+                            <strong>
+                                دارای کالای همراه اجباری
+                            </strong>
+
+                            <span>
+                                هنگام افزودن،
+                                <?php
+                                echo esc_html(
+                                    number_format_i18n(
+                                        count(
+                                            $required_product_ids
+                                        )
+                                    )
+                                );
+                                ?>
+                                قلم همراه نیز خودکار به
+                                پیش‌فاکتور اضافه می‌شود.
+                            </span>
+                        </div>
+
+                    </div>
+
+                <?php endif; ?>
+
+
                 <form
-                      class="product-preinvoice-form"
-                      data-ajax-url="<?php echo esc_url(admin_url('admin-ajax.php')); ?>"
-                      data-nonce="<?php echo esc_attr(wp_create_nonce('hsb_preinvoice_nonce')); ?>">
+                    class="product-preinvoice-form hsb-sp-preinvoice-form"
+                    data-ajax-url="<?php echo esc_url(
+                        admin_url('admin-ajax.php')
+                    ); ?>"
+                    data-nonce="<?php echo esc_attr(
+                        wp_create_nonce(
+                            'hsb_preinvoice_nonce'
+                        )
+                    ); ?>">
 
                     <input
                         type="hidden"
                         name="product_id"
-                        value="<?php echo esc_attr($product->get_id()); ?>">
+                        value="<?php echo esc_attr(
+                            $product_id
+                        ); ?>">
 
-                    <div class="purchase-field">
-                        <label for="product-quantity">تعداد موردنیاز</label>
 
-                        <div class="product-quantity-control">
+                    <div class="purchase-field hsb-sp-qty-field">
+
+                        <label for="product-quantity">
+                            تعداد موردنیاز
+                        </label>
+
+
+                        <div
+                            class="product-quantity-control hsb-sp-qty">
+
                             <button
                                 type="button"
                                 class="product-quantity-btn qty-minus"
                                 aria-label="کاهش تعداد">
-                                <i class="fa-solid fa-minus"></i>
+                                <i
+                                    class="fa-solid fa-minus">
+                                </i>
                             </button>
 
                             <input
@@ -216,16 +1052,26 @@ if ($product) :
                                 type="button"
                                 class="product-quantity-btn qty-plus"
                                 aria-label="افزایش تعداد">
-                                <i class="fa-solid fa-plus"></i>
+                                <i
+                                    class="fa-solid fa-plus">
+                                </i>
                             </button>
+
                         </div>
+
                     </div>
+
 
                     <button
                         type="submit"
-                        class="add-to-cart preinvoice-add-button">
+                        class="preinvoice-add-button hsb-sp-add-button">
+
+                        <i class="fa-solid fa-plus"></i>
+
                         افزودن به پیش‌فاکتور
+
                     </button>
+
 
                     <div
                         class="preinvoice-add-message"
@@ -234,79 +1080,97 @@ if ($product) :
 
                 </form>
 
-            </div>
 
-        </div>
-    </div>
+                <div class="hsb-sp-inquiry__footer">
 
-    <div class="product-images product-hero__media">
-        <div class="single-image">
-            <div class="single-image-frame">
-                <?php if (has_post_thumbnail()) : ?>
-                    <?php echo get_the_post_thumbnail($product_id, 'large', ['class' => 'main-product-image']); ?>
-                <?php else : ?>
-                    <img src="<?php echo esc_url(wc_placeholder_img_src()); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" />
-                <?php endif; ?>
-            </div>
-
-            <button class="carousel-control-prev custom-btn" type="button" id="prev-image" aria-label="تصویر قبلی">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
-
-            <button class="carousel-control-next custom-btn" type="button" id="next-image" aria-label="تصویر بعدی">
-                <span class="carousel-control-next-icon"></span>
-            </button>
-        </div>
-
-        <?php if (!empty($attachment_ids)) : ?>
-            <div class="product-image-gallery">
-                <?php foreach ($attachment_ids as $index => $attachment_id) : ?>
-                    <div class="product-image-gallery-frame <?php echo $index === 0 ? 'active' : ''; ?>"
-                         data-index="<?php echo esc_attr($index); ?>">
-                        <?php echo wp_get_attachment_image($attachment_id, 'thumbnail'); ?>
+                    <div>
+                        <i class="fa-solid fa-headset"></i>
+                        بررسی توسط واحد فروش
                     </div>
-                <?php endforeach; ?>
-            </div>
+
+                    <div>
+                        <i class="fa-solid fa-shield-halved"></i>
+                        تأیید مشخصات قبل از خرید
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+
+        <!-- =============================================
+             FULL TECHNICAL SPECIFICATION PANEL
+             ============================================= -->
+        <?php if (!empty($full_specs)) : ?>
+
+            <section class="hsb-sp-spec-panel">
+
+                <div class="hsb-sp-spec-panel__head">
+
+                    <div>
+                        <span>
+                            اطلاعات فنی محصول انتخاب‌شده
+                        </span>
+
+                        <h2>
+                            مشخصات فنی
+                        </h2>
+                    </div>
+
+                    <div class="hsb-sp-spec-panel__code">
+                        <?php if ($part_number) : ?>
+                            <small>Part Number</small>
+                            <strong dir="ltr">
+                                <?php
+                                echo esc_html(
+                                    $part_number
+                                );
+                                ?>
+                            </strong>
+                        <?php endif; ?>
+                    </div>
+
+                </div>
+
+
+                <div class="hsb-sp-full-specs">
+
+                    <?php
+                    foreach (
+                        $full_specs as
+                        $label => $value
+                    ) :
+                    ?>
+
+                        <div class="hsb-sp-full-spec">
+
+                            <span>
+                                <?php
+                                echo esc_html($label);
+                                ?>
+                            </span>
+
+                            <strong>
+                                <?php
+                                echo esc_html($value);
+                                ?>
+                            </strong>
+
+                        </div>
+
+                    <?php endforeach; ?>
+
+                </div>
+
+            </section>
+
         <?php endif; ?>
-    </div>
 
-    <div class="product-name-detail-sec product-hero__specs">
-        <div class="product-name-detail-sec-title">
-            <h5>مشخصات فنی کالا</h5>
-        </div>
+    </main>
 
-        <div class="product-details">
-            <ul class="product-specs">
-                <?php foreach ($specs as $label => $value) : ?>
-                    <?php if (!empty($value)) : ?>
-                        <li>
-                            <span class="label"><?php echo esc_html($label); ?></span>
-                            <span class="value"><?php echo esc_html($value); ?></span>
-                        </li>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    </div>
 
-</div>
-    <div class="product-name-detail-sec-mobile">
-        <div class="product-name-detail-sec-title-mobile">
-            <h5>مشخصات فنی کالا</h5>
-        </div>
-        <div class="product-details">
-            <ul class="product-specs">
-                <?php foreach ($specs as $label => $value) : ?>
-                    <?php if (!empty($value)) : ?>
-                        <li>
-                            <span class="label"><?php echo esc_html($label); ?>:</span>
-                            <span class="value"><?php echo esc_html($value); ?></span>
-                        </li>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    </div>
 <?php theme_render_product_benefits_area('single_product_benefits_soft', 'soft'); ?>
     <!-- product-meta-tabs -->
     <div class="product-meta-tabs">
@@ -496,7 +1360,7 @@ if (!function_exists('theme_fa_digits')) {
         </div>
         <!-- End Product Informatin And Descriprion -->
 
-        
+
 
         <!-- Start Porsesh Pasokh -->
         <?php
@@ -1095,10 +1959,23 @@ if (!function_exists('theme_query_products_by_title_keywords')) {
 }
 
 if (!function_exists('theme_get_similar_product_ids')) {
-    function theme_get_similar_product_ids($product, $limit = 12) {
+    function theme_get_similar_product_ids($product, $limit = 12, $extra_exclude = array()) {
         $product_id = $product->get_id();
         $ids        = array();
-        $exclude    = array($product_id);
+
+        $exclude = array_values(
+            array_unique(
+                array_filter(
+                    array_map(
+                        'absint',
+                        array_merge(
+                            array($product_id),
+                            (array) $extra_exclude
+                        )
+                    )
+                )
+            )
+        );
 
         $leaf_cat_ids = theme_get_leaf_product_category_ids($product_id);
 
@@ -1309,8 +2186,63 @@ if (!function_exists('theme_render_smart_products_section')) {
     }
 }
 
-$similar_product_ids = theme_get_similar_product_ids($product, 12);
-$related_product_ids = theme_get_broad_related_product_ids($product, 12, $similar_product_ids);
+/*
+ * Do not repeat sibling products from the current Part Number
+ * family inside Similar / Related sections.
+ *
+ * Also collapse every other repeated Part Number family to
+ * a single storefront card.
+ */
+$family_product_ids = function_exists(
+    'hsb_get_product_family_ids'
+)
+    ? hsb_get_product_family_ids($product_id)
+    : array($product_id);
+
+
+$similar_candidates =
+    theme_get_similar_product_ids(
+        $product,
+        36,
+        $family_product_ids
+    );
+
+$similar_product_ids = function_exists(
+    'hsb_dedupe_product_ids_by_part_number'
+)
+    ? hsb_dedupe_product_ids_by_part_number(
+        $similar_candidates,
+        12
+    )
+    : array_slice(
+        $similar_candidates,
+        0,
+        12
+    );
+
+
+$related_candidates =
+    theme_get_broad_related_product_ids(
+        $product,
+        36,
+        array_merge(
+            $family_product_ids,
+            $similar_product_ids
+        )
+    );
+
+$related_product_ids = function_exists(
+    'hsb_dedupe_product_ids_by_part_number'
+)
+    ? hsb_dedupe_product_ids_by_part_number(
+        $related_candidates,
+        12
+    )
+    : array_slice(
+        $related_candidates,
+        0,
+        12
+    );
 ?>
 
 <div class="smart-product-sections">

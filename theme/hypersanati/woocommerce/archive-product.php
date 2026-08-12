@@ -5,8 +5,8 @@
 <form class="search-input" id="ajax-search-form" onsubmit="return false;">
     <h5>عنوان محصول</h5>
     <div class="big-input-division" style="position: relative; display: flex; align-items: center;">
-        
-        <input 
+
+        <input
             type="search"
             id="search-term"
             name="s"
@@ -14,7 +14,7 @@
             value="<?php echo get_search_query(); ?>"
             autocomplete="off"
         />
-        
+
         <!-- دکمه ضربدر برای پاک کردن جستجو (ابتدا مخفی است) -->
         <button type="button" class="clear-search" id="reset-search" style="display: none; position: absolute; left: 50px; background: none; border: none; cursor: pointer; color: #999;">
             <i class="fa-solid fa-xmark"></i>
@@ -134,8 +134,32 @@ $shop_height_max = isset($_GET['height_max']) && is_numeric($_GET['height_max'])
 
   </div>
 </div>
-  
+
     <hr class="main-hr" />
+
+    <!-- Mobile category filter -->
+    <details class="hsb-mobile-category-filter">
+
+        <summary>
+
+            <span>
+                <i class="fa-solid fa-sliders"></i>
+                فیلتر دسته‌بندی محصولات
+            </span>
+
+            <i
+                class="fa-solid fa-chevron-down hsb-mobile-filter-arrow">
+            </i>
+
+        </summary>
+
+        <div
+            id="mobile-sidebar-category"
+            class="hsb-mobile-category-filter__body">
+        </div>
+
+    </details>
+
 
     <div class="shop-container">
       <div class="col-4 side-bar">

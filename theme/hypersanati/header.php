@@ -44,11 +44,19 @@
     <?php
     $cart_count = 0;
 
-    if (function_exists('WC') && WC()->cart) {
-        $cart_count = WC()->cart->get_cart_contents_count();
+    if (function_exists('hsb_get_preinvoice_items')) {
+        $preinvoice_items = hsb_get_preinvoice_items();
+
+        foreach ($preinvoice_items as $preinvoice_item) {
+            $cart_count += isset($preinvoice_item['quantity'])
+                ? absint($preinvoice_item['quantity'])
+                : 0;
+        }
     }
 
-    $cart_url = function_exists('wc_get_cart_url') ? wc_get_cart_url() : '#';
+    $cart_url = function_exists('wc_get_cart_url')
+        ? wc_get_cart_url()
+        : '#';
 
     $account_url = function_exists('wc_get_page_permalink')
         ? wc_get_page_permalink('myaccount')
@@ -61,44 +69,80 @@
 
     <!-- Desktop nav actions -->
     <ul class="nav-actions">
-      <div class="sell-number">
-        <p><?php echo esc_html(number_format_i18n($cart_count)); ?></p>
-      </div>
 
-      <div class="cart">
-        <a href="<?php echo esc_url($cart_url); ?>">
+      <div class="cart preinvoice-cart">
+        <a
+          class="preinvoice-cart-link"
+          href="<?php echo esc_url($cart_url); ?>"
+          aria-label="پیش‌فاکتور من"
+          title="پیش‌فاکتور من"
+        >
           <i class="fa-solid fa-cart-shopping"></i>
+
+          <span
+            class="preinvoice-count-badge<?php echo $cart_count > 0 ? '' : ' is-empty'; ?>"
+            aria-label="<?php echo esc_attr($cart_count); ?> قلم در پیش‌فاکتور"
+          >
+            <?php echo esc_html(number_format_i18n($cart_count)); ?>
+          </span>
         </a>
       </div>
 
       <li>
-        <button class="ui-btn ui-btn-account " type="button" id="ui-open-otp">
-           حساب کاربری
-        </button>
-        <!-- <a class="my-profile" href="<?php //echo esc_url($account_url); ?>">
-          حساب کاربری
-        </a> -->
+        <?php if (is_user_logged_in()) : ?>
+
+          <a
+            class="ui-btn ui-btn-account hsb-account-link"
+            href="<?php echo esc_url($account_url); ?>"
+          >
+            حساب کاربری
+          </a>
+
+        <?php else : ?>
+
+          <button
+            class="ui-btn ui-btn-account"
+            type="button"
+            id="ui-open-otp"
+          >
+            حساب کاربری
+          </button>
+
+        <?php endif; ?>
       </li>
+
     </ul>
 
     <!-- Hamburger button mobile only -->
     <div class="menu-and-cart">
       <ul class="mobile-nav-actions">
-        <div class="sell-number">
-          <p><?php echo esc_html(number_format_i18n($cart_count)); ?></p>
-        </div>
 
-        <div class="cart">
-          <a href="<?php echo esc_url($cart_url); ?>">
+        <div class="cart preinvoice-cart">
+          <a
+            class="preinvoice-cart-link"
+            href="<?php echo esc_url($cart_url); ?>"
+            aria-label="پیش‌فاکتور من"
+            title="پیش‌فاکتور من"
+          >
             <i class="fa-solid fa-cart-shopping"></i>
+
+            <span
+              class="preinvoice-count-badge<?php echo $cart_count > 0 ? '' : ' is-empty'; ?>"
+            >
+              <?php echo esc_html(number_format_i18n($cart_count)); ?>
+            </span>
           </a>
         </div>
 
         <li>
-          <a class="my-profile" href="<?php echo esc_url($account_url); ?>">
+          <a
+            class="my-profile"
+            href="<?php echo esc_url($account_url); ?>"
+          >
             حساب کاربری
           </a>
         </li>
+
       </ul>
 
       <button
