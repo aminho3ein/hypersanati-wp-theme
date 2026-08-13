@@ -61,10 +61,16 @@ document.querySelectorAll('.new-range-card').forEach(card => {
             if (isMin) {
                 if (actualVal <= parseFloat(maxInput.value)) {
                     input.value = Math.round(actualVal);
+                    input.dispatchEvent(
+                        new Event('input', { bubbles: true })
+                    );
                 }
             } else {
                 if (actualVal >= parseFloat(minInput.value)) {
                     input.value = Math.round(actualVal);
+                    input.dispatchEvent(
+                        new Event('input', { bubbles: true })
+                    );
                 }
             }
             updateSlider();
@@ -82,10 +88,16 @@ document.querySelectorAll('.new-range-card').forEach(card => {
             if (isMin) {
                 if (actualVal <= parseFloat(maxInput.value)) {
                     input.value = Math.round(actualVal);
+                    input.dispatchEvent(
+                        new Event('input', { bubbles: true })
+                    );
                 }
             } else {
                 if (actualVal >= parseFloat(minInput.value)) {
                     input.value = Math.round(actualVal);
+                    input.dispatchEvent(
+                        new Event('input', { bubbles: true })
+                    );
                 }
             }
             updateSlider();
