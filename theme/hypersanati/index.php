@@ -1,5 +1,25 @@
 <?php get_header(); ?>
 
+<?php
+$home_dimension_ranges =
+    hypersanati_get_dimension_ranges();
+
+$home_inner_min =
+    (float) $home_dimension_ranges['inner']['min'];
+$home_inner_max =
+    (float) $home_dimension_ranges['inner']['max'];
+
+$home_outer_min =
+    (float) $home_dimension_ranges['outer']['min'];
+$home_outer_max =
+    (float) $home_dimension_ranges['outer']['max'];
+
+$home_height_min =
+    (float) $home_dimension_ranges['height']['min'];
+$home_height_max =
+    (float) $home_dimension_ranges['height']['max'];
+?>
+
 
     <!-- search-feat -->
     <div class="search-area">
@@ -64,21 +84,28 @@
             
             <!-- بازه قطر داخلی -->
             <div class="new-range-card" id="range-inner">
-                <span class="new-card-title">بازه قطر داخلی</span>
+                <span class="new-card-title">
+                      بازه قطر داخلی —
+                      موجود:
+                      <?php echo esc_html($home_inner_min); ?>
+                      تا
+                      <?php echo esc_html($home_inner_max); ?>
+                      میلی‌متر
+                  </span>
                 <div class="new-slider-wrapper">
                     <div class="new-dual-slider">
                         <!-- دایره حداقل (Min) همراه با بالون -->
                         <div class="new-slider-handle min-handle">
                             <div class="new-tooltip-bubble">
                                 <span class="new-tooltip-label">از</span>
-                                <input type="number" class="new-handle-input" value="15" min="10" max="100">
+                                <input type="number" class="new-handle-input" value="<?php echo esc_attr($home_inner_min); ?>" min="<?php echo esc_attr($home_inner_min); ?>" max="<?php echo esc_attr($home_inner_max); ?>">
                             </div>
                         </div>
                         <!-- دایره حداکثر (Max) همراه با بالون -->
                         <div class="new-slider-handle max-handle">
                             <div class="new-tooltip-bubble">
                                 <span class="new-tooltip-label">تا</span>
-                                <input type="number" class="new-handle-input" value="45" min="10" max="100">
+                                <input type="number" class="new-handle-input" value="<?php echo esc_attr($home_inner_max); ?>" min="<?php echo esc_attr($home_inner_min); ?>" max="<?php echo esc_attr($home_inner_max); ?>">
                             </div>
                         </div>
                         <div class="new-slider-track"></div>
@@ -89,19 +116,26 @@
 
             <!-- بازه قطر خارجی -->
             <div class="new-range-card" id="range-outer">
-                <span class="new-card-title">بازه قطر خارجی</span>
+                <span class="new-card-title">
+                      بازه قطر خارجی —
+                      موجود:
+                      <?php echo esc_html($home_outer_min); ?>
+                      تا
+                      <?php echo esc_html($home_outer_max); ?>
+                      میلی‌متر
+                  </span>
                 <div class="new-slider-wrapper">
                     <div class="new-dual-slider">
                         <div class="new-slider-handle min-handle">
                             <div class="new-tooltip-bubble">
                                 <span class="new-tooltip-label">از</span>
-                                <input type="number" class="new-handle-input" value="20" min="10" max="100">
+                                <input type="number" class="new-handle-input" value="<?php echo esc_attr($home_outer_min); ?>" min="<?php echo esc_attr($home_outer_min); ?>" max="<?php echo esc_attr($home_outer_max); ?>">
                             </div>
                         </div>
                         <div class="new-slider-handle max-handle">
                             <div class="new-tooltip-bubble">
                                 <span class="new-tooltip-label">تا</span>
-                                <input type="number" class="new-handle-input" value="60" min="10" max="100">
+                                <input type="number" class="new-handle-input" value="<?php echo esc_attr($home_outer_max); ?>" min="<?php echo esc_attr($home_outer_min); ?>" max="<?php echo esc_attr($home_outer_max); ?>">
                             </div>
                         </div>
                         <div class="new-slider-track"></div>
@@ -112,19 +146,26 @@
 
             <!-- بازه ارتفاع -->
             <div class="new-range-card" id="range-height">
-                <span class="new-card-title">بازه ارتفاع</span>
+                <span class="new-card-title">
+                      بازه ارتفاع —
+                      موجود:
+                      <?php echo esc_html($home_height_min); ?>
+                      تا
+                      <?php echo esc_html($home_height_max); ?>
+                      میلی‌متر
+                  </span>
                 <div class="new-slider-wrapper">
                     <div class="new-dual-slider">
                         <div class="new-slider-handle min-handle">
                             <div class="new-tooltip-bubble">
                                 <span class="new-tooltip-label">از</span>
-                                <input type="number" class="new-handle-input" value="10" min="10" max="100">
+                                <input type="number" class="new-handle-input" value="<?php echo esc_attr($home_height_min); ?>" min="<?php echo esc_attr($home_height_min); ?>" max="<?php echo esc_attr($home_height_max); ?>">
                             </div>
                         </div>
                         <div class="new-slider-handle max-handle">
                             <div class="new-tooltip-bubble">
                                 <span class="new-tooltip-label">تا</span>
-                                <input type="number" class="new-handle-input" value="30" min="10" max="100">
+                                <input type="number" class="new-handle-input" value="<?php echo esc_attr($home_height_max); ?>" min="<?php echo esc_attr($home_height_min); ?>" max="<?php echo esc_attr($home_height_max); ?>">
                             </div>
                         </div>
                         <div class="new-slider-track"></div>

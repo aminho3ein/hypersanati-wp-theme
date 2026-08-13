@@ -6,8 +6,16 @@ document.querySelectorAll('.new-range-card').forEach(card => {
     const maxInput = maxHandle.querySelector('.new-handle-input');
     const rangeBar = card.querySelector('.new-slider-range-bar');
 
-    const MIN_VAL = 10;
-    const MAX_VAL = 100;
+    const MIN_VAL = parseFloat(minInput.min);
+    const MAX_VAL = parseFloat(maxInput.max);
+
+    if (
+        !Number.isFinite(MIN_VAL) ||
+        !Number.isFinite(MAX_VAL) ||
+        MAX_VAL <= MIN_VAL
+    ) {
+        return;
+    }
 
     function updateSlider() {
         let minVal = parseFloat(minInput.value) || MIN_VAL;

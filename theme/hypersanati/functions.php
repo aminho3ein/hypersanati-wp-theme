@@ -799,6 +799,141 @@ function hypersanati_get_shop_url() {
     return home_url('/shop/');
 }
 
+/**
+ * Return the real available bearing-dimension bounds from
+ * published WooCommerce products.
+ *
+ * Empty, invalid, zero and negative values are ignored.
+ * Results are cached using the existing shop-family cache
+ * version so product changes automatically invalidate them.
+ */
+function hypersanati_get_dimension_ranges() {
+    global $wpdb;
+
+    $cache_version =
+        function_exists(
+            'hsb_get_shop_family_cache_version'
+        )
+            ? hsb_get_shop_family_cache_version()
+            : max(
+                1,
+                absint(
+                    get_option(
+                        'hsb_shop_family_cache_version',
+                        1
+                    )
+                )
+            );
+
+    $cache_key =
+        'hsb_dimension_ranges_v' .
+        $cache_version;
+
+    $cached =
+        get_transient(
+            $cache_key
+        );
+
+    if (
+        is_array($cached) &&
+        isset(
+            $cached['inner'],
+            $cached['outer'],
+            $cached['height']
+        )
+    ) {
+        return $cached;
+    }
+
+    $map = array(
+        '_inner_diameter' => 'inner',
+        '_outer_diameter' => 'outer',
+        '_bearing_width'  => 'height',
+    );
+
+    $ranges = array(
+        'inner' => array(
+            'min' => null,
+            'max' => null,
+        ),
+        'outer' => array(
+            'min' => null,
+            'max' => null,
+        ),
+        'height' => array(
+            'min' => null,
+            'max' => null,
+        ),
+    );
+
+    $rows =
+        $wpdb->get_results(
+            "
+            SELECT
+                pm.meta_key,
+                MIN(
+                    CAST(
+                        pm.meta_value
+                        AS DECIMAL(20, 6)
+                    )
+                ) AS min_value,
+                MAX(
+                    CAST(
+                        pm.meta_value
+                        AS DECIMAL(20, 6)
+                    )
+                ) AS max_value
+            FROM {$wpdb->postmeta} AS pm
+            INNER JOIN {$wpdb->posts} AS p
+                ON p.ID = pm.post_id
+            WHERE
+                p.post_type = 'product'
+                AND p.post_status = 'publish'
+                AND pm.meta_key IN (
+                    '_inner_diameter',
+                    '_outer_diameter',
+                    '_bearing_width'
+                )
+                AND TRIM(pm.meta_value) <> ''
+                AND CAST(
+                    pm.meta_value
+                    AS DECIMAL(20, 6)
+                ) > 0
+            GROUP BY pm.meta_key
+            "
+        );
+
+    foreach ($rows as $row) {
+        if (
+            !isset(
+                $map[$row->meta_key]
+            )
+        ) {
+            continue;
+        }
+
+        $key =
+            $map[$row->meta_key];
+
+        $ranges[$key] = array(
+            'min' =>
+                (float) $row->min_value,
+
+            'max' =>
+                (float) $row->max_value,
+        );
+    }
+
+    set_transient(
+        $cache_key,
+        $ranges,
+        DAY_IN_SECONDS
+    );
+
+    return $ranges;
+}
+
+
 function hypersanati_build_dimension_meta_query($params) {
     $meta_query = [];
     $mode = isset($params['dimension_search']) ? sanitize_text_field($params['dimension_search']) : '';

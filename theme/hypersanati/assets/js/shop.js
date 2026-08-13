@@ -591,12 +591,62 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    function getShopRangeValues(cardId) {
+        const card = document.getElementById(cardId);
+
+        if (!card) {
+            return { min: '', max: '' };
+        }
+
+        const inputs = card.querySelectorAll('.new-handle-input');
+
+        return {
+            min: inputs[0] ? inputs[0].value : '',
+            max: inputs[1] ? inputs[1].value : ''
+        };
+    }
+
+    function handleShopDimensionSearch() {
+        const searchBtn = document.getElementById('approximate-search-btn');
+
+        if (!searchBtn) return;
+
+        searchBtn.addEventListener('click', function () {
+            const inner = getShopRangeValues('shop-range-inner');
+            const outer = getShopRangeValues('shop-range-outer');
+            const height = getShopRangeValues('shop-range-height');
+
+            const params = new URLSearchParams({
+                dimension_search: 'approx',
+                inner_min: inner.min,
+                inner_max: inner.max,
+                outer_min: outer.min,
+                outer_max: outer.max,
+                height_min: height.min,
+                height_max: height.max
+            });
+
+            window.location.href =
+                shopUrl +
+                (shopUrl.includes('?') ? '&' : '?') +
+                params.toString();
+        });
+    }
+
     function handleDimensionSearchReset() {
         const resetBtn = document.getElementById('reset-dimension-search');
         if (!resetBtn) return;
 
         resetBtn.addEventListener('click', function () {
-            window.location.href = shopUrl;
+            const url = new URL(window.location.href);
+
+            /*
+             * Disable dimension filtering without discarding the
+             * range values currently selected by the customer.
+             */
+            url.searchParams.delete('dimension_search');
+
+            window.location.href = url.toString();
         });
     }
 
@@ -630,6 +680,7 @@ document.addEventListener("DOMContentLoaded", function () {
     loadProducts();
     handleSearchFiltering();
     handleIndexSearch();
+    handleShopDimensionSearch();
     handleDimensionSearchReset();
 
     window.addEventListener("scroll", function () {
