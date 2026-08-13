@@ -315,76 +315,187 @@ endif;
 
     <!-- new-post-cards-section -->
 
-<div class="card-boxes">
-  <div class="name-and-controll-section">
-    <div>
-      <button class="handle-frame-section" id="scrollRightBtn" type="button" aria-label="قبلی">
-        <i class="fa-solid fa-angle-right"></i>
-      </button>
-    </div>
-    <div><h3>آخرین به روز رسانی وبلاگ</h3></div>
-    <div>
-      <button class="handle-frame-section" id="scrollLeftBtn" type="button" aria-label="بعدی">
-        <i class="fa-solid fa-angle-left"></i>
-      </button>
-    </div>
+<section class="hsb-home-blog" aria-labelledby="hsb-home-blog-title">
+
+  <div class="hsb-home-blog__header">
+
+    <button
+      class="hsb-home-blog__control"
+      id="hsbHomeBlogPrev"
+      type="button"
+      aria-label="مقاله قبلی"
+    >
+      <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
+    </button>
+
+    <h3
+      class="hsb-home-blog__title"
+      id="hsb-home-blog-title"
+    >
+      آخرین به‌روزرسانی وبلاگ
+    </h3>
+
+    <button
+      class="hsb-home-blog__control"
+      id="hsbHomeBlogNext"
+      type="button"
+      aria-label="مقاله بعدی"
+    >
+      <i class="fa-solid fa-angle-left" aria-hidden="true"></i>
+    </button>
+
   </div>
-  
-  <div class="cards-sectoins" id="blogScroll">
+
+  <div
+    class="hsb-home-blog__track"
+    id="hsbHomeBlogTrack"
+  >
     <?php
-    // تنظیمات کوئری برای گرفتن ۶ پست آخر
     $blog_args = array(
         'post_type'      => 'post',
         'posts_per_page' => 6,
-        'post_status'    => 'publish'
+        'post_status'    => 'publish',
     );
+
     $blog_query = new WP_Query($blog_args);
 
     if ($blog_query->have_posts()) :
-        while ($blog_query->have_posts()) : $blog_query->the_post();
+        while ($blog_query->have_posts()) :
+            $blog_query->the_post();
     ?>
-    <div class="blog-card">
-      <div class="blog-card-img-frame">
-        <?php if (has_post_thumbnail()) : ?>
-            <img src="<?php the_post_thumbnail_url('medium'); ?>" alt="<?php the_title_attribute(); ?>" />
-        <?php else : ?>
-            <!-- تصویر پیش‌فرض در صورت نداشتن تصویر شاخص -->
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/default-blog.webp" alt="وبلاگ" />
-        <?php endif; ?>
-      </div>
-      <div class="blog-card-title">
-        <h6><?php the_title(); ?></h6>
-      </div>
-      <div class="blog-card-description">
-        <!-- نمایش خلاصه متن (20 کلمه) -->
-        <p><?php echo wp_trim_words(get_the_excerpt(), 20, ' ...'); ?></p>
-      </div>
-      <div class="blog-card-detailes">
-        <div class="blog-detail-sect">
-          <div class="time-frame">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/calendar 3.svg" alt="تاریخ" />
-            <p><?php echo get_the_date('j F'); ?></p>
+
+      <article class="hsb-home-blog__card">
+
+        <a
+          class="hsb-home-blog__image"
+          href="<?php the_permalink(); ?>"
+          aria-label="<?php the_title_attribute(); ?>"
+        >
+          <?php if (has_post_thumbnail()) : ?>
+
+            <img
+              src="<?php the_post_thumbnail_url('medium'); ?>"
+              alt="<?php the_title_attribute(); ?>"
+              loading="lazy"
+            />
+
+          <?php else : ?>
+
+            <img
+              src="<?php echo esc_url(
+                  get_template_directory_uri() .
+                  '/assets/images/default-blog.webp'
+              ); ?>"
+              alt="<?php the_title_attribute(); ?>"
+              loading="lazy"
+            />
+
+          <?php endif; ?>
+        </a>
+
+        <h4 class="hsb-home-blog__card-title">
+          <a href="<?php the_permalink(); ?>">
+            <?php the_title(); ?>
+          </a>
+        </h4>
+
+        <p class="hsb-home-blog__excerpt">
+          <?php
+          echo esc_html(
+              wp_trim_words(
+                  get_the_excerpt(),
+                  20,
+                  ' ...'
+              )
+          );
+          ?>
+        </p>
+
+        <div class="hsb-home-blog__footer">
+
+          <div class="hsb-home-blog__meta">
+
+            <div class="hsb-home-blog__meta-row">
+              <img
+                src="<?php echo esc_url(
+                    get_template_directory_uri() .
+                    '/assets/images/calendar 3.svg'
+                ); ?>"
+                alt=""
+                aria-hidden="true"
+              />
+
+              <span>
+                <?php
+                echo esc_html(
+                    strtr(
+                        get_the_date('j F'),
+                        array(
+                            '0' => '۰',
+                            '1' => '۱',
+                            '2' => '۲',
+                            '3' => '۳',
+                            '4' => '۴',
+                            '5' => '۵',
+                            '6' => '۶',
+                            '7' => '۷',
+                            '8' => '۸',
+                            '9' => '۹',
+                        )
+                    )
+                );
+                ?>
+              </span>
+            </div>
+
+            <div class="hsb-home-blog__meta-row">
+              <img
+                src="<?php echo esc_url(
+                    get_template_directory_uri() .
+                    '/assets/images/user.svg'
+                ); ?>"
+                alt=""
+                aria-hidden="true"
+              />
+
+              <span
+                class="hsb-home-blog__author"
+                title="<?php echo esc_attr(get_the_author()); ?>"
+              >
+                <?php echo esc_html(get_the_author()); ?>
+              </span>
+            </div>
+
           </div>
-          <div class="auther-frame">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/user.svg" alt="نویسنده" />
-            <p><?php the_author(); ?></p>
-          </div>
+
+          <a
+            class="hsb-home-blog__read-more"
+            href="<?php the_permalink(); ?>"
+          >
+            مطالعه
+          </a>
+
         </div>
-        <div class="rea-more-frame">
-          <a href="<?php the_permalink(); ?>" class="read-more-btn"><button class="read-more-btn">مطالعه</button>
-</a>
-        </div>
-      </div>
-    </div>
+
+      </article>
+
     <?php
         endwhile;
-        wp_reset_postdata(); // ریست کردن کوئری
+
+        wp_reset_postdata();
+
     else :
-        echo '<p>مقاله‌ای یافت نشد.</p>';
-    endif;
     ?>
+
+      <p class="hsb-home-blog__empty">
+        مقاله‌ای یافت نشد.
+      </p>
+
+    <?php endif; ?>
+
   </div>
-</div>
+
+</section>
 
 
-    <?php get_footer(); ?>
+<?php get_footer(); ?>

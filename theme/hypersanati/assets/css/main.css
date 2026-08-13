@@ -2720,3 +2720,419 @@ button.handle-frame-section:disabled {
     font-size: 0.72rem;
   }
 }
+
+/* ==========================================================================
+   HSB Homepage Blog — Isolated Component
+   ========================================================================== */
+
+.hsb-home-blog {
+  width: calc(100% - 2rem);
+  max-width: 1200px;
+
+  margin: 2.5rem auto 0;
+
+  overflow: hidden;
+}
+
+
+/* ---------- Header ---------- */
+
+.hsb-home-blog__header {
+  width: fit-content;
+  max-width: 100%;
+
+  margin-inline: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.9rem;
+}
+
+.hsb-home-blog__title {
+  margin: 0;
+
+  color: var(--color-dark);
+
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.4;
+
+  text-align: center;
+  white-space: nowrap;
+}
+
+.hsb-home-blog__control {
+  width: 40px;
+  height: 40px;
+
+  flex: 0 0 40px;
+
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: var(--color-success);
+  color: var(--color-primary-active);
+
+  cursor: pointer;
+}
+
+.hsb-home-blog__control i {
+  font-size: 22px;
+}
+
+.hsb-home-blog__control:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+
+/* ---------- Horizontal viewport ---------- */
+
+.hsb-home-blog__track {
+  width: 100%;
+
+  margin-top: 1.5rem;
+  padding: 0.35rem 0.25rem 1rem;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  gap: 1.25rem;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  direction: rtl;
+
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.hsb-home-blog__track::-webkit-scrollbar {
+  display: none;
+}
+
+.hsb-home-blog__track.is-static {
+  justify-content: center;
+}
+
+
+/* ---------- Card ---------- */
+
+.hsb-home-blog__card {
+  width: 270px;
+
+  flex: 0 0 270px;
+
+  padding: 0.85rem;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 0;
+
+  background: var(--color-white);
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 2px 8px
+    rgba(0, 0, 0, 0.14);
+}
+
+
+/* ---------- Image ---------- */
+
+.hsb-home-blog__image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  display: block;
+
+  margin-bottom: 0.55rem;
+
+  overflow: hidden;
+
+  border-radius: 7px;
+
+  background: #f3f3f3;
+}
+
+.hsb-home-blog__image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+
+/* ---------- Title ---------- */
+
+.hsb-home-blog__card-title {
+  min-height: calc(0.9rem * 1.65 * 2);
+
+  margin: 0 0 0.15rem;
+
+  display: -webkit-box;
+
+  overflow: hidden;
+
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.65;
+}
+
+.hsb-home-blog__card-title a {
+  color: var(--color-dark);
+  text-decoration: none;
+}
+
+
+/* ---------- Excerpt ---------- */
+
+.hsb-home-blog__excerpt {
+  min-height: calc(0.78rem * 1.8 * 4);
+
+  margin: 0;
+
+  display: -webkit-box;
+
+  overflow: hidden;
+
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+
+  color: #4f4a44;
+
+  font-size: 0.78rem;
+  line-height: 1.8;
+
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+
+/* ---------- Footer ---------- */
+
+.hsb-home-blog__footer {
+  width: 100%;
+
+  margin-top: 50px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 0.5rem;
+}
+
+.hsb-home-blog__meta {
+  min-width: 0;
+
+  flex: 1 1 auto;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.25rem;
+}
+
+.hsb-home-blog__meta-row {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 0.3rem;
+
+  color: #908a82;
+
+  font-size: 0.66rem;
+  font-weight: 400;
+  line-height: 1.35;
+
+  white-space: nowrap;
+}
+
+.hsb-home-blog__meta-row img {
+  width: 13px;
+  height: 13px;
+
+  flex: 0 0 13px;
+
+  opacity: 0.62;
+}
+
+.hsb-home-blog__meta-row > span {
+  min-width: 0;
+
+  overflow: hidden;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.hsb-home-blog__author {
+  max-width: 125px;
+}
+
+/*
+ * Persian Digits plugin may wrap dates in .wpd-text
+ * and add inline font variables.
+ */
+.hsb-home-blog__meta .wpd-text {
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+.hsb-home-blog__read-more {
+  width: 62px;
+  height: 30px;
+
+  flex: 0 0 62px;
+
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: var(--color-red-read-more);
+  color: var(--color-white);
+
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
+
+  text-decoration: none;
+}
+
+.hsb-home-blog__empty {
+  width: 100%;
+
+  margin: 2rem 0;
+
+  text-align: center;
+}
+
+
+/* ---------- Mouse drag ---------- */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .hsb-home-blog__track.is-scrollable {
+    cursor: grab;
+  }
+
+  .hsb-home-blog__track.is-dragging {
+    cursor: grabbing;
+
+    user-select: none;
+    scroll-behavior: auto;
+  }
+
+  .hsb-home-blog__track.is-dragging * {
+    user-select: none;
+  }
+}
+
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 900px) {
+
+  .hsb-home-blog {
+    width: calc(100% - 1.5rem);
+  }
+
+  .hsb-home-blog__card {
+    width: 250px;
+    flex-basis: 250px;
+  }
+
+  .hsb-home-blog__title {
+    font-size: 1.05rem;
+  }
+
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 600px) {
+
+  .hsb-home-blog {
+    width: calc(100% - 1rem);
+
+    margin-top: 2rem;
+  }
+
+  .hsb-home-blog__header {
+    gap: 0.45rem;
+  }
+
+  .hsb-home-blog__title {
+    font-size: 0.9rem;
+  }
+
+  .hsb-home-blog__control {
+    width: 34px;
+    height: 34px;
+
+    flex-basis: 34px;
+
+    border-radius: 8px;
+  }
+
+  .hsb-home-blog__control i {
+    font-size: 18px;
+  }
+
+  .hsb-home-blog__track {
+    margin-top: 1.1rem;
+
+    gap: 0.8rem;
+
+    padding-inline: 0.15rem;
+  }
+
+  .hsb-home-blog__card {
+    width: min(82vw, 270px);
+
+    flex-basis: min(82vw, 270px);
+
+    padding: 0.75rem;
+  }
+
+  .hsb-home-blog__card-title {
+    font-size: 0.84rem;
+  }
+
+  .hsb-home-blog__excerpt {
+    font-size: 0.74rem;
+  }
+
+  .hsb-home-blog__author {
+    max-width: 105px;
+  }
+
+}
