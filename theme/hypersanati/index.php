@@ -192,72 +192,88 @@ $home_height_max =
     </div>
 
     <!-- hero-section -->
-    <div class="best-product-of-month">
-      <div>
-        <h3>محصولات ویژه</h3>
-      </div>
 
+<section
+    class="best-product-of-month hsb-home-featured products-section"
+    aria-labelledby="hsb-home-featured-title"
+>
+    <h3 id="hsb-home-featured-title">
+        محصولات ویژه
+    </h3>
 
-<?php
-// کوئری برای دریافت ۸ محصول به صورت تصادفی
-$best_products_query = new WP_Query([
-    'post_type'      => 'product',
-    'posts_per_page' => 8,
-    'orderby'        => 'rand'
-]);
+    <?php
+    /*
+     * Get a larger random pool first, then collapse SKUs
+     * sharing the same technical Part Number into the same
+     * storefront family exactly like Shop.
+     */
+    $featured_product_ids = get_posts(
+        array(
+            'post_type'              => 'product',
+            'post_status'            => 'publish',
+            'posts_per_page'         => 64,
+            'fields'                 => 'ids',
+            'orderby'                => 'rand',
+            'no_found_rows'          => true,
+            'update_post_meta_cache' => true,
+            'update_post_term_cache' => true,
+        )
+    );
 
-if ($best_products_query->have_posts()) :
-    $counter = 0;
-    
-    // شروع ردیف اول محصولات
-    echo '<div class="best-products-row">';
-    
-    while ($best_products_query->have_posts()) : $best_products_query->the_post();
-        $counter++;
-        
-        // اگر ۴ محصول اول نمایش داده شدند، ردیف اول را می‌بندیم و ردیف دوم را باز می‌کنیم
-        if ($counter == 5) {
-            echo '</div>'; // بستن ردیف اول (.best-products-row)
-            echo '<div class="best-products-row">'; // باز کردن ردیف دوم (.best-products-row)
+    $featured_families = array();
+
+    if (!empty($featured_product_ids)) {
+        if (
+            function_exists(
+                'hsb_group_product_ids_by_part_number'
+            )
+        ) {
+            $featured_families =
+                hsb_group_product_ids_by_part_number(
+                    $featured_product_ids
+                );
+        } else {
+            foreach ($featured_product_ids as $product_id) {
+                $featured_families[] = array(
+                    'representative_id' => absint($product_id),
+                    'version_count'     => 1,
+                    'brand_count'       => 0,
+                    'country_count'     => 0,
+                );
+            }
         }
-        ?>
-        
-        <div class="single-product-container">
-            <!-- تبدیل کلاس اصلی به تگ A جهت لینک شدن کل باکس بدون تغییر در ساختار CSS -->
-            <a href="<?php the_permalink(); ?>" class="main-contains" style="text-decoration: none; color: inherit; display: block;">
-                
-                <div class="best-product-container">
-                    <?php if (has_post_thumbnail()) : ?>
-                        <?php the_post_thumbnail('medium'); ?>
-                    <?php else : ?>
-                        <!-- تصویر پیش‌فرض در صورت عدم وجود تصویر محصول -->
-                        <img src="<?php echo wc_placeholder_img_src(); ?>" alt="<?php the_title_attribute(); ?>" />
-                    <?php endif; ?>
-                </div>
-                
-                <div class="best-product-detail">
-                    <p><?php the_title(); ?></p>
-                    <div class="icon-frame">
-                        <i class="fa-solid fa-arrow-left"></i>
-                    </div>
-                </div>
+    }
 
-            </a>
+    $featured_families = array_slice(
+        $featured_families,
+        0,
+        8
+    );
+    ?>
+
+    <?php if (!empty($featured_families)) : ?>
+
+        <div class="child-category hsb-home-featured__grid">
+
+            <?php foreach ($featured_families as $family_group) : ?>
+
+                <?php
+                hypersanati_render_product_card(
+                    $family_group['representative_id'],
+                    $family_group
+                );
+                ?>
+
+            <?php endforeach; ?>
+
         </div>
 
-        <?php 
-    endwhile; 
-    
-    echo '</div>'; // بستen ردیف نهایی
-    
-    wp_reset_postdata(); 
-endif; 
-?>
-      
+    <?php endif; ?>
 
-    </div>
+</section>
 
-    <!-- news-blog-posts -->
+
+<!-- news-blog-posts -->
 
     <div class="news-blog-sect"></div>
 

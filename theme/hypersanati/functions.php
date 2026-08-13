@@ -447,6 +447,16 @@ function hypersanati_enqueue_assets() {
 
     if (is_front_page() || is_home()) {
 
+        /*
+         * Homepage featured products use the exact same
+         * product-card renderer and stylesheet as Shop.
+         */
+        hypersanati_enqueue_theme_style(
+            'shop-css',
+            '/assets/css/shop.css',
+            $page_css_deps
+        );
+
         $index_search_loaded = hypersanati_enqueue_theme_script(
             'index-search-js',
             '/assets/js/index-search.js',
