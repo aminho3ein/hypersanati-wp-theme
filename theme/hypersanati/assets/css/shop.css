@@ -1413,6 +1413,37 @@ h4 {
 }
 
 
+/*
+ * Keep the three family-summary badges permanently on one row
+ * at every desktop width, including wider Persian digits.
+ */
+@media (min-width: 1000px) {
+
+    .products-section
+    .hsb-family-card-options {
+        display: grid;
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 4px;
+    }
+
+    .products-section
+    .hsb-family-card-options span {
+        width: 100%;
+        min-width: 0;
+
+        justify-content: center;
+
+        gap: 3px;
+        padding-right: 4px;
+        padding-left: 4px;
+
+        white-space: nowrap;
+    }
+}
+
+
 /* Tablet */
 @media (
     min-width: 651px
