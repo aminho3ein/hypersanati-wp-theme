@@ -2136,6 +2136,141 @@ function save_brand_image($term_id, $tt_id) {
 }
 
 
+function hsb_product_brand_homepage_add_field() {
+    ?>
+    <div class="form-field term-hsb-homepage-brand-wrap">
+        <label for="hsb_show_on_homepage">
+            نمایش در صفحه اصلی
+        </label>
+
+        <label style="display:flex;align-items:center;gap:8px;">
+            <input
+                type="checkbox"
+                id="hsb_show_on_homepage"
+                name="hsb_show_on_homepage"
+                value="1"
+            >
+
+            <span>
+                نمایش این برند در بخش «برندهای بلبرینگ وارداتی» صفحه اصلی
+            </span>
+        </label>
+
+        <p>
+            فقط برندهایی که این گزینه برای آن‌ها فعال باشد در صفحه اصلی نمایش داده می‌شوند.
+        </p>
+
+        <?php
+        wp_nonce_field(
+            'hsb_save_homepage_brand',
+            'hsb_homepage_brand_nonce'
+        );
+        ?>
+    </div>
+    <?php
+}
+
+add_action(
+    'product_brand_add_form_fields',
+    'hsb_product_brand_homepage_add_field'
+);
+
+
+function hsb_product_brand_homepage_edit_field($term) {
+    $enabled =
+        get_term_meta(
+            $term->term_id,
+            '_hsb_show_on_homepage',
+            true
+        ) === '1';
+    ?>
+
+    <tr class="form-field term-hsb-homepage-brand-wrap">
+        <th scope="row">
+            <label for="hsb_show_on_homepage">
+                نمایش در صفحه اصلی
+            </label>
+        </th>
+
+        <td>
+            <label style="display:flex;align-items:center;gap:8px;">
+                <input
+                    type="checkbox"
+                    id="hsb_show_on_homepage"
+                    name="hsb_show_on_homepage"
+                    value="1"
+                    <?php checked($enabled); ?>
+                >
+
+                <span>
+                    نمایش این برند در بخش «برندهای بلبرینگ وارداتی» صفحه اصلی
+                </span>
+            </label>
+
+            <p class="description">
+                فقط برندهای تیک‌خورده در صفحه اصلی نمایش داده می‌شوند.
+            </p>
+
+            <?php
+            wp_nonce_field(
+                'hsb_save_homepage_brand',
+                'hsb_homepage_brand_nonce'
+            );
+            ?>
+        </td>
+    </tr>
+
+    <?php
+}
+
+add_action(
+    'product_brand_edit_form_fields',
+    'hsb_product_brand_homepage_edit_field'
+);
+
+
+function hsb_save_product_brand_homepage_setting($term_id) {
+    if (
+        !isset($_POST['hsb_homepage_brand_nonce']) ||
+        !wp_verify_nonce(
+            sanitize_text_field(
+                wp_unslash(
+                    $_POST['hsb_homepage_brand_nonce']
+                )
+            ),
+            'hsb_save_homepage_brand'
+        )
+    ) {
+        return;
+    }
+
+    if (isset($_POST['hsb_show_on_homepage'])) {
+        update_term_meta(
+            $term_id,
+            '_hsb_show_on_homepage',
+            '1'
+        );
+
+        return;
+    }
+
+    delete_term_meta(
+        $term_id,
+        '_hsb_show_on_homepage'
+    );
+}
+
+add_action(
+    'created_product_brand',
+    'hsb_save_product_brand_homepage_setting'
+);
+
+add_action(
+    'edited_product_brand',
+    'hsb_save_product_brand_homepage_setting'
+);
+
+
 
 
 

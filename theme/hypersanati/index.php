@@ -263,57 +263,101 @@ endif;
 
     <!-- brand-section -->
 
-<div class="brand-section">
-    <h3>برند های بلبرینگ وارداتی</h3>
-    
-    <?php
-    // دریافت تمام برندها
-    $brands = get_terms([
+<?php
+$brands = get_terms(
+    array(
         'taxonomy'   => 'product_brand',
         'hide_empty' => false,
-    ]);
+        'orderby'    => 'name',
+        'order'      => 'ASC',
 
-    if (!empty($brands) && !is_wp_error($brands)) :
-        $counter = 0;
-        
-        // باز کردن ردیف اول
-        echo '<div class="brand-groups">';
-        
-        foreach ($brands as $brand) :
-            // ووکامرس آیدی تصویر دسته بندی/تاکسونومی را در متای thumbnail_id ذخیره می‌کند
-            $image_id = get_term_meta($brand->term_id, 'thumbnail_id', true);
-            $image_url = $image_id ? wp_get_attachment_url($image_id) : '';
-            
-            // اگر برند تصویر نداشت، آن را رد کن
-            if (empty($image_url)) {
-                continue;
-            }
-            
-            $counter++;
-            
-            // مدیریت ساختار ردیف‌های ۴ تایی مطابق CSS شما
-            if ($counter > 1 && ($counter - 1) % 4 == 0) {
-                echo '</div>'; // بستن ردیف قبلی
-                echo '<div class="brand-groups">'; // باز کردن ردیف جدید
-            }
-            ?>
-            
-            <div class="brand-frame">
-                <!-- نمایش لوگوی برند -->
-                <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($brand->name); ?>" title="<?php echo esc_attr($brand->name); ?>" />
+        'meta_query' => array(
+            array(
+                'key'     => '_hsb_show_on_homepage',
+                'value'   => '1',
+                'compare' => '=',
+            ),
+        ),
+    )
+);
+
+$visible_brands = array();
+
+if (
+    !is_wp_error($brands) &&
+    !empty($brands)
+) {
+    foreach ($brands as $brand) {
+        $image_id =
+            absint(
+                get_term_meta(
+                    $brand->term_id,
+                    'thumbnail_id',
+                    true
+                )
+            );
+
+        $image_url =
+            $image_id
+                ? wp_get_attachment_image_url(
+                    $image_id,
+                    'medium'
+                )
+                : '';
+
+        if (!$image_url) {
+            continue;
+        }
+
+        $visible_brands[] = array(
+            'term'      => $brand,
+            'image_url' => $image_url,
+        );
+    }
+}
+?>
+
+<?php if (!empty($visible_brands)) : ?>
+
+<section
+    class="hsb-home-brands"
+    aria-labelledby="hsb-home-brands-title"
+>
+    <h3
+        class="hsb-home-brands__title"
+        id="hsb-home-brands-title"
+    >
+        برندهای بلبرینگ وارداتی
+    </h3>
+
+    <div class="hsb-home-brands__list">
+
+        <?php foreach ($visible_brands as $brand_item) : ?>
+
+            <div class="hsb-home-brands__item">
+                <img
+                    src="<?php echo esc_url(
+                        $brand_item['image_url']
+                    ); ?>"
+                    alt="<?php echo esc_attr(
+                        $brand_item['term']->name
+                    ); ?>"
+                    title="<?php echo esc_attr(
+                        $brand_item['term']->name
+                    ); ?>"
+                    loading="lazy"
+                >
             </div>
-            
-        <?php 
-        endforeach;
-        
-        echo '</div>'; // بستن آخرین ردیف
-    else:
-        echo '<p style="text-align:center;">هنوز برندی ثبت نشده است.</p>';
-    endif;
-    ?>
-</div>
 
-    <!-- new-post-cards-section -->
+        <?php endforeach; ?>
+
+    </div>
+</section>
+
+<?php endif; ?>
+
+
+<!-- new-post-cards-section -->
 
 <section class="hsb-home-blog" aria-labelledby="hsb-home-blog-title">
 
