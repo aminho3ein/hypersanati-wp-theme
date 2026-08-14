@@ -58,6 +58,8 @@
         ? wc_get_cart_url()
         : '#';
 
+    $preinvoice_cart_url = $cart_url;
+
     $account_url = function_exists('wc_get_page_permalink')
         ? wc_get_page_permalink('myaccount')
         : wp_login_url();
@@ -93,7 +95,7 @@
       <div class="cart preinvoice-cart">
         <a
           class="preinvoice-cart-link"
-          href="<?php echo esc_url($cart_url); ?>"
+          href="<?php echo esc_url($preinvoice_cart_url); ?>"
           aria-label="پیش‌فاکتور من"
           title="پیش‌فاکتور من"
         >
@@ -170,7 +172,7 @@
         <div class="cart preinvoice-cart">
           <a
             class="preinvoice-cart-link"
-            href="<?php echo esc_url($cart_url); ?>"
+            href="<?php echo esc_url($preinvoice_cart_url); ?>"
             aria-label="پیش‌فاکتور من"
             title="پیش‌فاکتور من"
           >

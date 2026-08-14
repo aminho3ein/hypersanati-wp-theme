@@ -1782,10 +1782,17 @@ document.addEventListener(
           }
 
 
-          row.innerHTML =
+          const html =
             type === "related"
               ? result.data.related_html
               : result.data.similar_html;
+
+          if (!html || !html.trim()) {
+            section.style.display = "none";
+            return;
+          }
+
+          row.innerHTML = html;
 
         }
       )
