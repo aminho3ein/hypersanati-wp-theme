@@ -1,5 +1,25 @@
 <?php get_header(); ?>
 
+<?php
+$shop_dimension_ranges =
+    hypersanati_get_dimension_ranges();
+
+$shop_inner_bound_min =
+    (float) $shop_dimension_ranges['inner']['min'];
+$shop_inner_bound_max =
+    (float) $shop_dimension_ranges['inner']['max'];
+
+$shop_outer_bound_min =
+    (float) $shop_dimension_ranges['outer']['min'];
+$shop_outer_bound_max =
+    (float) $shop_dimension_ranges['outer']['max'];
+
+$shop_height_bound_min =
+    (float) $shop_dimension_ranges['height']['min'];
+$shop_height_bound_max =
+    (float) $shop_dimension_ranges['height']['max'];
+?>
+
     <!-- search-feat -->
 
 <form class="search-input" id="ajax-search-form" onsubmit="return false;">
@@ -27,13 +47,42 @@
 </form>
 
 <?php
-/* خواندن مقادیر URL برای پر کردن پیش‌فرض اسلایدرها */
-$shop_inner_min  = isset($_GET['inner_min'])  && is_numeric($_GET['inner_min'])  ? floatval($_GET['inner_min'])  : 15;
-$shop_inner_max  = isset($_GET['inner_max'])  && is_numeric($_GET['inner_max'])  ? floatval($_GET['inner_max'])  : 45;
-$shop_outer_min  = isset($_GET['outer_min'])  && is_numeric($_GET['outer_min'])  ? floatval($_GET['outer_min'])  : 20;
-$shop_outer_max  = isset($_GET['outer_max'])  && is_numeric($_GET['outer_max'])  ? floatval($_GET['outer_max'])  : 60;
-$shop_height_min = isset($_GET['height_min']) && is_numeric($_GET['height_min']) ? floatval($_GET['height_min']) : 10;
-$shop_height_max = isset($_GET['height_max']) && is_numeric($_GET['height_max']) ? floatval($_GET['height_max']) : 30;
+/* مقادیر انتخاب‌شده کاربر؛ در نبود فیلتر، کل بازه واقعی محصولات */
+$shop_inner_min =
+    isset($_GET['inner_min']) &&
+    is_numeric($_GET['inner_min'])
+        ? floatval($_GET['inner_min'])
+        : $shop_inner_bound_min;
+
+$shop_inner_max =
+    isset($_GET['inner_max']) &&
+    is_numeric($_GET['inner_max'])
+        ? floatval($_GET['inner_max'])
+        : $shop_inner_bound_max;
+
+$shop_outer_min =
+    isset($_GET['outer_min']) &&
+    is_numeric($_GET['outer_min'])
+        ? floatval($_GET['outer_min'])
+        : $shop_outer_bound_min;
+
+$shop_outer_max =
+    isset($_GET['outer_max']) &&
+    is_numeric($_GET['outer_max'])
+        ? floatval($_GET['outer_max'])
+        : $shop_outer_bound_max;
+
+$shop_height_min =
+    isset($_GET['height_min']) &&
+    is_numeric($_GET['height_min'])
+        ? floatval($_GET['height_min'])
+        : $shop_height_bound_min;
+
+$shop_height_max =
+    isset($_GET['height_max']) &&
+    is_numeric($_GET['height_max'])
+        ? floatval($_GET['height_max'])
+        : $shop_height_bound_max;
 ?>
 
 <!-- جستجوی تقریبی بر اساس بازه ابعاد -->
@@ -50,19 +99,26 @@ $shop_height_max = isset($_GET['height_max']) && is_numeric($_GET['height_max'])
 
               <!-- بازه قطر داخلی -->
               <div class="new-range-card" id="shop-range-inner">
-                  <span class="new-card-title">بازه قطر داخلی</span>
+                  <span class="new-card-title">
+                        بازه قطر داخلی —
+                        موجود:
+                        <?php echo esc_html($shop_inner_bound_min); ?>
+                        تا
+                        <?php echo esc_html($shop_inner_bound_max); ?>
+                        میلی‌متر
+                    </span>
                   <div class="new-slider-wrapper">
                       <div class="new-dual-slider">
                           <div class="new-slider-handle min-handle">
                               <div class="new-tooltip-bubble">
                                   <span class="new-tooltip-label">از</span>
-                                  <input type="number" class="new-handle-input" value="<?php echo esc_attr($shop_inner_min); ?>" min="1" max="500">
+                                  <input type="number" class="new-handle-input" value="<?php echo esc_attr($shop_inner_min); ?>" min="<?php echo esc_attr($shop_inner_bound_min); ?>" max="<?php echo esc_attr($shop_inner_bound_max); ?>">
                               </div>
                           </div>
                           <div class="new-slider-handle max-handle">
                               <div class="new-tooltip-bubble">
                                   <span class="new-tooltip-label">تا</span>
-                                  <input type="number" class="new-handle-input" value="<?php echo esc_attr($shop_inner_max); ?>" min="1" max="500">
+                                  <input type="number" class="new-handle-input" value="<?php echo esc_attr($shop_inner_max); ?>" min="<?php echo esc_attr($shop_inner_bound_min); ?>" max="<?php echo esc_attr($shop_inner_bound_max); ?>">
                               </div>
                           </div>
                           <div class="new-slider-track"></div>
@@ -73,19 +129,26 @@ $shop_height_max = isset($_GET['height_max']) && is_numeric($_GET['height_max'])
 
               <!-- بازه قطر خارجی -->
               <div class="new-range-card" id="shop-range-outer">
-                  <span class="new-card-title">بازه قطر خارجی</span>
+                  <span class="new-card-title">
+                        بازه قطر خارجی —
+                        موجود:
+                        <?php echo esc_html($shop_outer_bound_min); ?>
+                        تا
+                        <?php echo esc_html($shop_outer_bound_max); ?>
+                        میلی‌متر
+                    </span>
                   <div class="new-slider-wrapper">
                       <div class="new-dual-slider">
                           <div class="new-slider-handle min-handle">
                               <div class="new-tooltip-bubble">
                                   <span class="new-tooltip-label">از</span>
-                                  <input type="number" class="new-handle-input" value="<?php echo esc_attr($shop_outer_min); ?>" min="1" max="500">
+                                  <input type="number" class="new-handle-input" value="<?php echo esc_attr($shop_outer_min); ?>" min="<?php echo esc_attr($shop_outer_bound_min); ?>" max="<?php echo esc_attr($shop_outer_bound_max); ?>">
                               </div>
                           </div>
                           <div class="new-slider-handle max-handle">
                               <div class="new-tooltip-bubble">
                                   <span class="new-tooltip-label">تا</span>
-                                  <input type="number" class="new-handle-input" value="<?php echo esc_attr($shop_outer_max); ?>" min="1" max="500">
+                                  <input type="number" class="new-handle-input" value="<?php echo esc_attr($shop_outer_max); ?>" min="<?php echo esc_attr($shop_outer_bound_min); ?>" max="<?php echo esc_attr($shop_outer_bound_max); ?>">
                               </div>
                           </div>
                           <div class="new-slider-track"></div>
@@ -96,19 +159,26 @@ $shop_height_max = isset($_GET['height_max']) && is_numeric($_GET['height_max'])
 
               <!-- بازه ارتفاع -->
               <div class="new-range-card" id="shop-range-height">
-                  <span class="new-card-title">بازه ارتفاع</span>
+                  <span class="new-card-title">
+                        بازه ارتفاع —
+                        موجود:
+                        <?php echo esc_html($shop_height_bound_min); ?>
+                        تا
+                        <?php echo esc_html($shop_height_bound_max); ?>
+                        میلی‌متر
+                    </span>
                   <div class="new-slider-wrapper">
                       <div class="new-dual-slider">
                           <div class="new-slider-handle min-handle">
                               <div class="new-tooltip-bubble">
                                   <span class="new-tooltip-label">از</span>
-                                  <input type="number" class="new-handle-input" value="<?php echo esc_attr($shop_height_min); ?>" min="1" max="500">
+                                  <input type="number" class="new-handle-input" value="<?php echo esc_attr($shop_height_min); ?>" min="<?php echo esc_attr($shop_height_bound_min); ?>" max="<?php echo esc_attr($shop_height_bound_max); ?>">
                               </div>
                           </div>
                           <div class="new-slider-handle max-handle">
                               <div class="new-tooltip-bubble">
                                   <span class="new-tooltip-label">تا</span>
-                                  <input type="number" class="new-handle-input" value="<?php echo esc_attr($shop_height_max); ?>" min="1" max="500">
+                                  <input type="number" class="new-handle-input" value="<?php echo esc_attr($shop_height_max); ?>" min="<?php echo esc_attr($shop_height_bound_min); ?>" max="<?php echo esc_attr($shop_height_bound_max); ?>">
                               </div>
                           </div>
                           <div class="new-slider-track"></div>

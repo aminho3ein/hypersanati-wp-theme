@@ -5,7 +5,7 @@
 <section class="single-article-hero">
   <div class="container">
     <div class="single-article-hero__inner">
-      
+
       <!-- TITLE -->
       <h1 class="single-article-title">
         <?php the_title(); ?>
@@ -15,7 +15,7 @@
       <nav class="single-article-breadcrumb" aria-label="breadcrumb">
         <a href="<?php echo home_url(); ?>">خانه</a>
         <span>/</span>
-        <a href="<?php echo get_permalink(get_option('page_for_posts')); ?>">مجله</a>
+        <a href="<?php echo esc_url(home_url('/magazine/')); ?>">مجله</a>
         <span>/</span>
 
         <?php
@@ -90,7 +90,7 @@ $discount_products = new WP_Query([
         <div class="discount-slider" id="discountSlider">
 
         <?php if ($discount_products->have_posts()) : ?>
-            <?php while ($discount_products->have_posts()) : $discount_products->the_post(); 
+            <?php while ($discount_products->have_posts()) : $discount_products->the_post();
                 $product = wc_get_product(get_the_ID());
             ?>
 

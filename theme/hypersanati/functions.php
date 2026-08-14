@@ -367,7 +367,14 @@ function hypersanati_enqueue_assets() {
        ARTICLE CATEGORY / TAG / ARCHIVE PAGE
     ========================================================= */
 
-    if (is_category() || is_tag() || is_date() || is_author()) {
+    if (
+        is_category() ||
+        is_tag() ||
+        is_date() ||
+        is_author() ||
+        is_page('magazine') ||
+        is_page_template('page-magazine.php')
+    ) {
 
         hypersanati_enqueue_theme_style(
             'hypersanati-category',
@@ -447,6 +454,16 @@ function hypersanati_enqueue_assets() {
 
     if (is_front_page() || is_home()) {
 
+        /*
+         * Homepage featured products use the exact same
+         * product-card renderer and stylesheet as Shop.
+         */
+        hypersanati_enqueue_theme_style(
+            'shop-css',
+            '/assets/css/shop.css',
+            $page_css_deps
+        );
+
         $index_search_loaded = hypersanati_enqueue_theme_script(
             'index-search-js',
             '/assets/js/index-search.js',
@@ -508,12 +525,26 @@ function hypersanati_enqueue_assets() {
             $page_css_deps
         );
 
-        hypersanati_enqueue_theme_script(
-            'single-product-js',
-            '/assets/js/single-product.js',
-            array('jquery'),
-            true
-        );
+        $single_product_js_loaded =
+            hypersanati_enqueue_theme_script(
+                'single-product-js',
+                '/assets/js/single-product.js',
+                array('jquery'),
+                true
+            );
+
+        if ($single_product_js_loaded) {
+            wp_localize_script(
+                'single-product-js',
+                'hsbSingleProduct',
+                array(
+                    'ajax_url' => admin_url('admin-ajax.php'),
+                    'nonce'    => wp_create_nonce(
+                        'hsb_single_product_nonce'
+                    ),
+                )
+            );
+        }
     }
 }
 
@@ -705,13 +736,26 @@ add_action('wp_ajax_nopriv_load_posts', 'load_posts_ajax');
 
 function load_posts_ajax() {
 
-    $paged = isset($_GET['paged']) ? intval($_GET['paged']) : 1;
+    $paged = isset($_GET['paged'])
+        ? max(1, absint($_GET['paged']))
+        : 1;
 
-    $query = new WP_Query([
-        'post_type' => 'post',
+    $category_id = isset($_GET['category_id'])
+        ? absint($_GET['category_id'])
+        : 0;
+
+    $query_args = [
+        'post_type'      => 'post',
+        'post_status'    => 'publish',
         'posts_per_page' => 8,
-        'paged' => $paged
-    ]);
+        'paged'          => $paged,
+    ];
+
+    if ($category_id > 0) {
+        $query_args['cat'] = $category_id;
+    }
+
+    $query = new WP_Query($query_args);
 
     ob_start();
 
@@ -798,6 +842,141 @@ function hypersanati_get_shop_url() {
 
     return home_url('/shop/');
 }
+
+/**
+ * Return the real available bearing-dimension bounds from
+ * published WooCommerce products.
+ *
+ * Empty, invalid, zero and negative values are ignored.
+ * Results are cached using the existing shop-family cache
+ * version so product changes automatically invalidate them.
+ */
+function hypersanati_get_dimension_ranges() {
+    global $wpdb;
+
+    $cache_version =
+        function_exists(
+            'hsb_get_shop_family_cache_version'
+        )
+            ? hsb_get_shop_family_cache_version()
+            : max(
+                1,
+                absint(
+                    get_option(
+                        'hsb_shop_family_cache_version',
+                        1
+                    )
+                )
+            );
+
+    $cache_key =
+        'hsb_dimension_ranges_v' .
+        $cache_version;
+
+    $cached =
+        get_transient(
+            $cache_key
+        );
+
+    if (
+        is_array($cached) &&
+        isset(
+            $cached['inner'],
+            $cached['outer'],
+            $cached['height']
+        )
+    ) {
+        return $cached;
+    }
+
+    $map = array(
+        '_inner_diameter' => 'inner',
+        '_outer_diameter' => 'outer',
+        '_bearing_width'  => 'height',
+    );
+
+    $ranges = array(
+        'inner' => array(
+            'min' => null,
+            'max' => null,
+        ),
+        'outer' => array(
+            'min' => null,
+            'max' => null,
+        ),
+        'height' => array(
+            'min' => null,
+            'max' => null,
+        ),
+    );
+
+    $rows =
+        $wpdb->get_results(
+            "
+            SELECT
+                pm.meta_key,
+                MIN(
+                    CAST(
+                        pm.meta_value
+                        AS DECIMAL(20, 6)
+                    )
+                ) AS min_value,
+                MAX(
+                    CAST(
+                        pm.meta_value
+                        AS DECIMAL(20, 6)
+                    )
+                ) AS max_value
+            FROM {$wpdb->postmeta} AS pm
+            INNER JOIN {$wpdb->posts} AS p
+                ON p.ID = pm.post_id
+            WHERE
+                p.post_type = 'product'
+                AND p.post_status = 'publish'
+                AND pm.meta_key IN (
+                    '_inner_diameter',
+                    '_outer_diameter',
+                    '_bearing_width'
+                )
+                AND TRIM(pm.meta_value) <> ''
+                AND CAST(
+                    pm.meta_value
+                    AS DECIMAL(20, 6)
+                ) > 0
+            GROUP BY pm.meta_key
+            "
+        );
+
+    foreach ($rows as $row) {
+        if (
+            !isset(
+                $map[$row->meta_key]
+            )
+        ) {
+            continue;
+        }
+
+        $key =
+            $map[$row->meta_key];
+
+        $ranges[$key] = array(
+            'min' =>
+                (float) $row->min_value,
+
+            'max' =>
+                (float) $row->max_value,
+        );
+    }
+
+    set_transient(
+        $cache_key,
+        $ranges,
+        DAY_IN_SECONDS
+    );
+
+    return $ranges;
+}
+
 
 function hypersanati_build_dimension_meta_query($params) {
     $meta_query = [];
@@ -1369,6 +1548,91 @@ function hypersanati_render_product_card(
     </a>
 
     <?php
+}
+
+
+/* ============================================================
+   HSB SINGLE PRODUCT LAZY RELATED PRODUCTS AJAX
+============================================================ */
+
+add_action(
+    'wp_ajax_hsb_load_single_product_sections',
+    'hsb_load_single_product_sections'
+);
+
+add_action(
+    'wp_ajax_nopriv_hsb_load_single_product_sections',
+    'hsb_load_single_product_sections'
+);
+
+
+function hsb_load_single_product_sections() {
+
+    check_ajax_referer(
+        'hsb_single_product_nonce',
+        'nonce'
+    );
+
+    $product_id = isset($_POST['product_id'])
+        ? absint($_POST['product_id'])
+        : 0;
+
+    if (!$product_id) {
+        wp_send_json_error(
+            array(
+                'message' => 'Invalid product'
+            ),
+            400
+        );
+    }
+
+
+    $related_ids = function_exists(
+        'hsb_get_indexed_related_product_ids'
+    )
+        ? array_slice(
+            hsb_get_indexed_related_product_ids($product_id),
+            0,
+            12
+        )
+        : array();
+
+
+    $similar_ids = function_exists(
+        'hsb_get_indexed_equivalent_product_ids'
+    )
+        ? array_slice(
+            hsb_get_indexed_equivalent_product_ids($product_id),
+            0,
+            12
+        )
+        : array();
+
+
+    ob_start();
+
+    foreach ($related_ids as $id) {
+        hypersanati_render_product_card($id);
+    }
+
+    $related_html = ob_get_clean();
+
+
+    ob_start();
+
+    foreach ($similar_ids as $id) {
+        hypersanati_render_product_card($id);
+    }
+
+    $similar_html = ob_get_clean();
+
+
+    wp_send_json_success(
+        array(
+            'related_html' => $related_html,
+            'similar_html' => $similar_html,
+        )
+    );
 }
 
 
@@ -1999,6 +2263,141 @@ function save_brand_image($term_id, $tt_id) {
         update_term_meta($term_id, 'brand_image_id', $image_id);
     }
 }
+
+
+function hsb_product_brand_homepage_add_field() {
+    ?>
+    <div class="form-field term-hsb-homepage-brand-wrap">
+        <label for="hsb_show_on_homepage">
+            نمایش در صفحه اصلی
+        </label>
+
+        <label style="display:flex;align-items:center;gap:8px;">
+            <input
+                type="checkbox"
+                id="hsb_show_on_homepage"
+                name="hsb_show_on_homepage"
+                value="1"
+            >
+
+            <span>
+                نمایش این برند در بخش «برندهای بلبرینگ وارداتی» صفحه اصلی
+            </span>
+        </label>
+
+        <p>
+            فقط برندهایی که این گزینه برای آن‌ها فعال باشد در صفحه اصلی نمایش داده می‌شوند.
+        </p>
+
+        <?php
+        wp_nonce_field(
+            'hsb_save_homepage_brand',
+            'hsb_homepage_brand_nonce'
+        );
+        ?>
+    </div>
+    <?php
+}
+
+add_action(
+    'product_brand_add_form_fields',
+    'hsb_product_brand_homepage_add_field'
+);
+
+
+function hsb_product_brand_homepage_edit_field($term) {
+    $enabled =
+        get_term_meta(
+            $term->term_id,
+            '_hsb_show_on_homepage',
+            true
+        ) === '1';
+    ?>
+
+    <tr class="form-field term-hsb-homepage-brand-wrap">
+        <th scope="row">
+            <label for="hsb_show_on_homepage">
+                نمایش در صفحه اصلی
+            </label>
+        </th>
+
+        <td>
+            <label style="display:flex;align-items:center;gap:8px;">
+                <input
+                    type="checkbox"
+                    id="hsb_show_on_homepage"
+                    name="hsb_show_on_homepage"
+                    value="1"
+                    <?php checked($enabled); ?>
+                >
+
+                <span>
+                    نمایش این برند در بخش «برندهای بلبرینگ وارداتی» صفحه اصلی
+                </span>
+            </label>
+
+            <p class="description">
+                فقط برندهای تیک‌خورده در صفحه اصلی نمایش داده می‌شوند.
+            </p>
+
+            <?php
+            wp_nonce_field(
+                'hsb_save_homepage_brand',
+                'hsb_homepage_brand_nonce'
+            );
+            ?>
+        </td>
+    </tr>
+
+    <?php
+}
+
+add_action(
+    'product_brand_edit_form_fields',
+    'hsb_product_brand_homepage_edit_field'
+);
+
+
+function hsb_save_product_brand_homepage_setting($term_id) {
+    if (
+        !isset($_POST['hsb_homepage_brand_nonce']) ||
+        !wp_verify_nonce(
+            sanitize_text_field(
+                wp_unslash(
+                    $_POST['hsb_homepage_brand_nonce']
+                )
+            ),
+            'hsb_save_homepage_brand'
+        )
+    ) {
+        return;
+    }
+
+    if (isset($_POST['hsb_show_on_homepage'])) {
+        update_term_meta(
+            $term_id,
+            '_hsb_show_on_homepage',
+            '1'
+        );
+
+        return;
+    }
+
+    delete_term_meta(
+        $term_id,
+        '_hsb_show_on_homepage'
+    );
+}
+
+add_action(
+    'created_product_brand',
+    'hsb_save_product_brand_homepage_setting'
+);
+
+add_action(
+    'edited_product_brand',
+    'hsb_save_product_brand_homepage_setting'
+);
 
 
 
@@ -4868,40 +5267,40 @@ function hsb_get_product_brand_data($product_id) {
  */
 function hsb_get_same_part_number_products($product_id, $limit = 30) {
     $product_id = absint($product_id);
-    $part_number = trim(
-        (string) get_post_meta($product_id, '_mpn_part_number', true)
+    $limit      = max(1, absint($limit));
+
+    if ($product_id < 1) {
+        return array();
+    }
+
+    /*
+     * Never perform a catalog-wide Part Number query during
+     * a storefront request.
+     *
+     * Family relations are prebuilt by the relationship index.
+     * If the index has not been generated yet, returning an
+     * empty sibling list keeps the product page fast and safe.
+     */
+    if (
+        !function_exists(
+            'hsb_get_indexed_family_product_ids'
+        )
+    ) {
+        return array();
+    }
+
+    $ids = hsb_get_indexed_family_product_ids(
+        $product_id,
+        false
     );
 
-    if ($product_id < 1 || $part_number === '') {
-        return array();
-    }
-
-    $ids = get_posts(array(
-        'post_type'              => 'product',
-        'post_status'            => 'publish',
-        'posts_per_page'         => absint($limit),
-        'post__not_in'           => array($product_id),
-        'fields'                 => 'ids',
-        'orderby'                => 'ID',
-        'order'                  => 'ASC',
-        'no_found_rows'          => true,
-        'update_post_meta_cache' => true,
-        'update_post_term_cache' => true,
-        'meta_query'             => array(
-            array(
-                'key'     => '_mpn_part_number',
-                'value'   => $part_number,
-                'compare' => '=',
-            ),
-        ),
-    ));
-
-    if (!is_array($ids)) {
-        return array();
-    }
-
-    return array_values(array_map('absint', $ids));
+    return array_slice(
+        $ids,
+        0,
+        $limit
+    );
 }
+
 
 /**
  * Build usable data for same-code product choices.
@@ -4931,16 +5330,6 @@ function hsb_get_product_alternatives($product_id) {
         $country = trim(
             (string) get_post_meta($id, '_country_origin', true)
         );
-
-        $live_brand_data =
-        function_exists('hsb_get_product_brand_data')
-            ? hsb_get_product_brand_data($id)
-            : array();
-
-    $live_country_flag =
-        function_exists('hsb_get_country_flag_data')
-            ? hsb_get_country_flag_data($country)
-            : array();
 
     $items[] = array(
             'product_id'  => $id,
@@ -6368,3 +6757,18 @@ function hsb_get_preinvoice_items() {
         ? $items
         : array();
 }
+
+/* =========================================================
+   HSB PRODUCT RELATIONSHIP INDEX
+   ========================================================= */
+
+require_once get_template_directory()
+    . '/inc/product-relationship-index.php';
+
+
+/* =========================================================
+   HSB HOMEPAGE HERO BOOTSTRAP
+   ========================================================= */
+
+require_once get_template_directory()
+    . '/inc/homepage-hero.php';

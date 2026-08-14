@@ -6283,3 +6283,609 @@ body.single-product .sp-products-row {
     height: 100%;
     object-fit: cover;
 }
+
+/* ==========================================================================
+   HSB SINGLE PRODUCT META TABS — UNIFIED FINAL
+   ========================================================================== */
+
+/*
+ * Desktop contract for all three tabs:
+ *
+ * RIGHT : 290px sidebar
+ * LEFT  : flexible main content
+ *
+ * Reviews is the visual reference.
+ */
+
+body.single-product .product-meta-content {
+    width: 100% !important;
+    max-width: none !important;
+
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+
+    box-sizing: border-box;
+
+    border-bottom:
+        1px solid rgba(128, 128, 128, 0.5);
+}
+
+
+/* ----------------------------------------------------------
+   Shared desktop shell
+   ---------------------------------------------------------- */
+
+@media (min-width: 1025px) {
+
+    /* Reviews */
+    body.single-product
+    #reviews.reviews-section.active {
+        display: grid !important;
+
+        grid-template-columns:
+            290px minmax(0, 1fr) !important;
+
+        gap: 1.5rem !important;
+
+        direction: rtl !important;
+        align-items: start !important;
+
+        width: 100% !important;
+        padding: 2rem !important;
+
+        box-sizing: border-box;
+    }
+
+
+    /* Questions */
+    body.single-product
+    #qa.product-qa-panel.active {
+        display: grid !important;
+
+        grid-template-columns:
+            290px minmax(0, 1fr) !important;
+
+        gap: 1.5rem !important;
+
+        direction: rtl !important;
+        align-items: start !important;
+
+        width: 100% !important;
+        padding: 2rem !important;
+
+        box-sizing: border-box;
+    }
+
+
+    /*
+     * Description has opposite source order:
+     * article first, aside second.
+     * Explicit placement keeps sidebar on RIGHT.
+     */
+    body.single-product
+    #desc.product-desc-panel.active
+    .product-desc-layout {
+        display: grid !important;
+
+        grid-template-columns:
+            290px minmax(0, 1fr) !important;
+
+        gap: 1.5rem !important;
+
+        direction: rtl !important;
+        align-items: start !important;
+
+        width: 100% !important;
+
+        box-sizing: border-box;
+    }
+
+    body.single-product
+    #desc.product-desc-panel
+    .product-desc-quick-card {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+    }
+
+    body.single-product
+    #desc.product-desc-panel
+    .desc-main-card {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+    }
+
+}
+
+
+/* ----------------------------------------------------------
+   All three sidebars: exactly same width/box model
+   ---------------------------------------------------------- */
+
+body.single-product
+#reviews.reviews-section
+.review-ctr-sec,
+
+body.single-product
+#qa.product-qa-panel
+.question-ctr-sec,
+
+body.single-product
+#desc.product-desc-panel
+.product-desc-quick-card {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+
+    height: auto !important;
+
+    padding: 1.5rem !important;
+
+    box-sizing: border-box;
+
+    background: #fff !important;
+
+    border: 1px solid
+        rgba(17, 24, 39, 0.08) !important;
+
+    box-shadow:
+        0 18px 45px
+        rgba(17, 24, 39, 0.08) !important;
+}
+
+
+@media (min-width: 1025px) {
+
+    body.single-product
+    #reviews.reviews-section
+    .review-ctr-sec,
+
+    body.single-product
+    #qa.product-qa-panel
+    .question-ctr-sec,
+
+    body.single-product
+    #desc.product-desc-panel
+    .product-desc-quick-card {
+        position: sticky !important;
+        top: 1rem !important;
+    }
+
+}
+
+
+/* QA sidebar alignment */
+body.single-product
+#qa.product-qa-panel
+.question-ctr-sec {
+    display: flex !important;
+    flex-direction: column !important;
+
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+
+    gap: 1rem;
+
+    text-align: right !important;
+
+    font-size: 0.9rem !important;
+    line-height: 1.9;
+}
+
+body.single-product
+#qa.product-qa-panel
+.question-ctr-sec p {
+    margin: 0 !important;
+
+    text-align: right !important;
+
+    font-size: 0.94rem !important;
+    line-height: 1.9;
+}
+
+body.single-product
+#qa.product-qa-panel
+.qa-help-text {
+    color: #6b7280;
+
+    font-size: 0.82rem !important;
+    line-height: 1.9;
+}
+
+
+/* ----------------------------------------------------------
+   Main columns: same sizing contract
+   ---------------------------------------------------------- */
+
+body.single-product
+#reviews.reviews-section
+.product-reviews,
+
+body.single-product
+#qa.product-qa-panel
+.question-and-answer-sec,
+
+body.single-product
+#desc.product-desc-panel
+.desc-main-card {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+
+    box-sizing: border-box;
+
+    direction: rtl;
+    text-align: right;
+}
+
+
+/* Remove the old QA 80% width / huge padding */
+body.single-product
+#qa.product-qa-panel
+.question-and-answer-sec {
+    padding: 0 !important;
+
+    font-size: 0.94rem !important;
+}
+
+
+/* ----------------------------------------------------------
+   Description typography
+   Based on readable Reviews typography
+   ---------------------------------------------------------- */
+
+body.single-product
+#desc.product-desc-panel
+.desc-section-head {
+    direction: rtl;
+    text-align: right;
+}
+
+body.single-product
+#desc.product-desc-panel
+.desc-section-head h2 {
+    margin: 0;
+
+    font-size: 1rem !important;
+    line-height: 1.9 !important;
+
+    overflow-wrap: anywhere;
+}
+
+body.single-product
+#desc.product-desc-panel
+.desc-section-head span {
+    font-size: 0.8rem !important;
+}
+
+body.single-product
+#desc.product-desc-panel
+.desc-short-text,
+
+body.single-product
+#desc.product-desc-panel
+.desc-content,
+
+body.single-product
+#desc.product-desc-panel
+.desc-content p,
+
+body.single-product
+#desc.product-desc-panel
+.desc-content li {
+    font-size: 0.94rem !important;
+    line-height: 2.1 !important;
+
+    text-align: right !important;
+}
+
+
+/* ----------------------------------------------------------
+   Description quick-info sidebar typography
+   Prevent category text from colliding / overflowing
+   ---------------------------------------------------------- */
+
+body.single-product
+#desc.product-desc-panel
+.pd-quick-head,
+
+body.single-product
+#desc.product-desc-panel
+.pd-quick-title {
+    direction: rtl;
+    text-align: right;
+}
+
+body.single-product
+#desc.product-desc-panel
+.pd-quick-title span {
+    font-size: 0.78rem !important;
+    line-height: 1.7;
+}
+
+body.single-product
+#desc.product-desc-panel
+.pd-quick-title h3 {
+    margin: 0;
+
+    font-size: 1rem !important;
+    line-height: 1.8 !important;
+}
+
+body.single-product
+#desc.product-desc-panel
+.pd-quick-list {
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+body.single-product
+#desc.product-desc-panel
+.pd-quick-item {
+    width: 100%;
+    min-width: 0;
+
+    box-sizing: border-box;
+
+    direction: rtl;
+    text-align: right;
+}
+
+body.single-product
+#desc.product-desc-panel
+.pd-quick-label {
+    font-size: 0.78rem !important;
+    line-height: 1.8 !important;
+}
+
+body.single-product
+#desc.product-desc-panel
+.pd-quick-value,
+
+body.single-product
+#desc.product-desc-panel
+.pd-quick-category,
+
+body.single-product
+#desc.product-desc-panel
+.pd-quick-category a {
+    min-width: 0;
+    max-width: 100%;
+
+    color: #374151;
+
+    font-size: 0.86rem !important;
+    font-weight: 700 !important;
+    line-height: 1.9 !important;
+
+    white-space: normal !important;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+
+    text-align: right !important;
+}
+
+
+/* ----------------------------------------------------------
+   QA typography
+   ---------------------------------------------------------- */
+
+body.single-product
+#qa.product-qa-panel
+.qa-name {
+    font-size: 0.98rem !important;
+    line-height: 1.8;
+}
+
+body.single-product
+#qa.product-qa-panel
+.qa-role,
+
+body.single-product
+#qa.product-qa-panel
+.qa-footer {
+    font-size: 0.82rem !important;
+}
+
+body.single-product
+#qa.product-qa-panel
+.qa-text {
+    font-size: 0.94rem !important;
+    line-height: 2.1 !important;
+
+    text-align: right !important;
+}
+
+body.single-product
+#qa.product-qa-panel
+.product-qa-form-card h3 {
+    font-size: 1rem !important;
+    line-height: 1.8;
+}
+
+body.single-product
+#qa.product-qa-panel
+.product-question-form label {
+    font-size: 0.88rem !important;
+}
+
+
+/* ----------------------------------------------------------
+   QA sorting — high-contrast readable controls
+   ---------------------------------------------------------- */
+
+body.single-product
+#qa.product-qa-panel
+.question-and-answer-sec-filter {
+    direction: rtl;
+
+    font-size: 0.88rem !important;
+}
+
+body.single-product
+#qa.product-qa-panel
+.question-filter {
+    gap: 0.5rem !important;
+}
+
+body.single-product
+#qa.product-qa-panel
+.question-filter
+.qa-sort-btn {
+    min-height: 34px;
+
+    padding: 0.38rem 0.75rem !important;
+
+    border: 1px solid
+        rgba(94, 68, 32, 0.18) !important;
+
+    border-radius: 8px;
+
+    background: #f3f4f6 !important;
+    color: #374151 !important;
+
+    font-family: inherit;
+    font-size: 0.84rem !important;
+    font-weight: 800 !important;
+    line-height: 1.5;
+
+    box-shadow: none !important;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.16s ease,
+        border-color 0.16s ease,
+        color 0.16s ease;
+}
+
+body.single-product
+#qa.product-qa-panel
+.question-filter
+.qa-sort-btn:hover {
+    background: #ebe7e1 !important;
+
+    border-color:
+        rgba(94, 68, 32, 0.35) !important;
+
+    color: var(--color-secondary) !important;
+}
+
+body.single-product
+#qa.product-qa-panel
+.question-filter
+.qa-sort-btn.active {
+    background:
+        var(--color-secondary) !important;
+
+    border-color:
+        var(--color-secondary) !important;
+
+    color: #fff !important;
+}
+
+
+/* ----------------------------------------------------------
+   Tablet / mobile: all three use the SAME single-column flow
+   ---------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+
+    body.single-product
+    #reviews.reviews-section.active,
+
+    body.single-product
+    #qa.product-qa-panel.active,
+
+    body.single-product
+    #desc.product-desc-panel.active
+    .product-desc-layout {
+        display: grid !important;
+
+        grid-template-columns:
+            minmax(0, 1fr) !important;
+
+        gap: 1rem !important;
+    }
+
+    body.single-product
+    #desc.product-desc-panel
+    .product-desc-quick-card,
+
+    body.single-product
+    #desc.product-desc-panel
+    .desc-main-card {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+    }
+
+    /*
+     * Sidebar first on smaller screens.
+     */
+    body.single-product
+    #desc.product-desc-panel
+    .product-desc-quick-card {
+        order: -1;
+    }
+
+    body.single-product
+    #reviews.reviews-section
+    .review-ctr-sec,
+
+    body.single-product
+    #qa.product-qa-panel
+    .question-ctr-sec,
+
+    body.single-product
+    #desc.product-desc-panel
+    .product-desc-quick-card {
+        position: static !important;
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    body.single-product .product-meta-content {
+        width: 100% !important;
+        max-width: none !important;
+    }
+
+    body.single-product
+    #reviews.reviews-section.active,
+
+    body.single-product
+    #qa.product-qa-panel.active {
+        padding: 1rem !important;
+    }
+
+    body.single-product
+    #reviews.reviews-section
+    .review-ctr-sec,
+
+    body.single-product
+    #qa.product-qa-panel
+    .question-ctr-sec,
+
+    body.single-product
+    #desc.product-desc-panel
+    .product-desc-quick-card {
+        padding: 1rem !important;
+    }
+
+    body.single-product
+    #qa.product-qa-panel
+    .question-and-answer-sec-filter {
+        align-items: flex-start !important;
+
+        flex-direction: column !important;
+
+        gap: 0.75rem !important;
+    }
+
+}

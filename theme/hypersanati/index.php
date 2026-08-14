@@ -1,22 +1,60 @@
 <?php get_header(); ?>
 
+<?php if (is_front_page() || is_home()) : ?>
+    <!-- HSB HOMEPAGE PRIMARY H1 -->
+    <h1 class="hsb-homepage-primary-title">
+        <?php echo esc_html(get_bloginfo('name')); ?>
+    </h1>
+<?php endif; ?>
+
+<?php
+$home_dimension_ranges =
+    hypersanati_get_dimension_ranges();
+
+$home_inner_min =
+    (float) $home_dimension_ranges['inner']['min'];
+$home_inner_max =
+    (float) $home_dimension_ranges['inner']['max'];
+
+$home_outer_min =
+    (float) $home_dimension_ranges['outer']['min'];
+$home_outer_max =
+    (float) $home_dimension_ranges['outer']['max'];
+
+$home_height_min =
+    (float) $home_dimension_ranges['height']['min'];
+$home_height_max =
+    (float) $home_dimension_ranges['height']['max'];
+?>
+
+
+<?php
+/* HSB HOMEPAGE HERO RENDER */
+if (
+    function_exists(
+        'hsb_render_homepage_hero_section'
+    )
+) {
+    hsb_render_homepage_hero_section();
+}
+?>
 
     <!-- search-feat -->
-    <div class="search-area">
+    <div id="hsb-home-search" class="search-area">
       <form class="search-input" method="get" action="<?php echo esc_url( home_url('/') ); ?>">
         <div class="search-input">
           <h5>عنوان محصول</h5>
           <div class="big-input-division" style="position: relative; display: flex; align-items: center;">
-            
-            <input 
-              type="search" 
+
+            <input
+              type="search"
               id="index-search-term"
-              name="s" 
+              name="s"
               placeholder="مثلا بلبرینگ تماس زاویه ای"
-              value="<?php echo get_search_query(); ?>" 
+              value="<?php echo get_search_query(); ?>"
               autocomplete="off"
             />
-            
+
             <input type="hidden" name="post_type" value="product" />
 
             <!-- دکمه ضربدر برای پاک کردن سریع متن ورودی در صفحه اصلی -->
@@ -34,7 +72,7 @@
 
 
 <div class="new-search-container new-compact new-wide-mode">
-    
+
     <!-- بخش اول: جستجوی دقیق -->
     <section class="new-search-section">
         <h2 class="new-section-title">جستجوی دقیق بر اساس اندازه (میلی‌متر)</h2>
@@ -61,24 +99,31 @@
     <section class="new-search-section">
         <h2 class="new-section-title">جستجوی تقریبی (بازه اندازه)</h2>
         <div class="new-range-grid">
-            
+
             <!-- بازه قطر داخلی -->
             <div class="new-range-card" id="range-inner">
-                <span class="new-card-title">بازه قطر داخلی</span>
+                <span class="new-card-title">
+                      بازه قطر داخلی —
+                      موجود:
+                      <?php echo esc_html($home_inner_min); ?>
+                      تا
+                      <?php echo esc_html($home_inner_max); ?>
+                      میلی‌متر
+                  </span>
                 <div class="new-slider-wrapper">
                     <div class="new-dual-slider">
                         <!-- دایره حداقل (Min) همراه با بالون -->
                         <div class="new-slider-handle min-handle">
                             <div class="new-tooltip-bubble">
                                 <span class="new-tooltip-label">از</span>
-                                <input type="number" class="new-handle-input" value="15" min="10" max="100">
+                                <input type="number" class="new-handle-input" value="<?php echo esc_attr($home_inner_min); ?>" min="<?php echo esc_attr($home_inner_min); ?>" max="<?php echo esc_attr($home_inner_max); ?>">
                             </div>
                         </div>
                         <!-- دایره حداکثر (Max) همراه با بالون -->
                         <div class="new-slider-handle max-handle">
                             <div class="new-tooltip-bubble">
                                 <span class="new-tooltip-label">تا</span>
-                                <input type="number" class="new-handle-input" value="45" min="10" max="100">
+                                <input type="number" class="new-handle-input" value="<?php echo esc_attr($home_inner_max); ?>" min="<?php echo esc_attr($home_inner_min); ?>" max="<?php echo esc_attr($home_inner_max); ?>">
                             </div>
                         </div>
                         <div class="new-slider-track"></div>
@@ -89,19 +134,26 @@
 
             <!-- بازه قطر خارجی -->
             <div class="new-range-card" id="range-outer">
-                <span class="new-card-title">بازه قطر خارجی</span>
+                <span class="new-card-title">
+                      بازه قطر خارجی —
+                      موجود:
+                      <?php echo esc_html($home_outer_min); ?>
+                      تا
+                      <?php echo esc_html($home_outer_max); ?>
+                      میلی‌متر
+                  </span>
                 <div class="new-slider-wrapper">
                     <div class="new-dual-slider">
                         <div class="new-slider-handle min-handle">
                             <div class="new-tooltip-bubble">
                                 <span class="new-tooltip-label">از</span>
-                                <input type="number" class="new-handle-input" value="20" min="10" max="100">
+                                <input type="number" class="new-handle-input" value="<?php echo esc_attr($home_outer_min); ?>" min="<?php echo esc_attr($home_outer_min); ?>" max="<?php echo esc_attr($home_outer_max); ?>">
                             </div>
                         </div>
                         <div class="new-slider-handle max-handle">
                             <div class="new-tooltip-bubble">
                                 <span class="new-tooltip-label">تا</span>
-                                <input type="number" class="new-handle-input" value="60" min="10" max="100">
+                                <input type="number" class="new-handle-input" value="<?php echo esc_attr($home_outer_max); ?>" min="<?php echo esc_attr($home_outer_min); ?>" max="<?php echo esc_attr($home_outer_max); ?>">
                             </div>
                         </div>
                         <div class="new-slider-track"></div>
@@ -112,19 +164,26 @@
 
             <!-- بازه ارتفاع -->
             <div class="new-range-card" id="range-height">
-                <span class="new-card-title">بازه ارتفاع</span>
+                <span class="new-card-title">
+                      بازه ارتفاع —
+                      موجود:
+                      <?php echo esc_html($home_height_min); ?>
+                      تا
+                      <?php echo esc_html($home_height_max); ?>
+                      میلی‌متر
+                  </span>
                 <div class="new-slider-wrapper">
                     <div class="new-dual-slider">
                         <div class="new-slider-handle min-handle">
                             <div class="new-tooltip-bubble">
                                 <span class="new-tooltip-label">از</span>
-                                <input type="number" class="new-handle-input" value="10" min="10" max="100">
+                                <input type="number" class="new-handle-input" value="<?php echo esc_attr($home_height_min); ?>" min="<?php echo esc_attr($home_height_min); ?>" max="<?php echo esc_attr($home_height_max); ?>">
                             </div>
                         </div>
                         <div class="new-slider-handle max-handle">
                             <div class="new-tooltip-bubble">
                                 <span class="new-tooltip-label">تا</span>
-                                <input type="number" class="new-handle-input" value="30" min="10" max="100">
+                                <input type="number" class="new-handle-input" value="<?php echo esc_attr($home_height_max); ?>" min="<?php echo esc_attr($home_height_min); ?>" max="<?php echo esc_attr($home_height_max); ?>">
                             </div>
                         </div>
                         <div class="new-slider-track"></div>
@@ -151,199 +210,370 @@
     </div>
 
     <!-- hero-section -->
-    <div class="best-product-of-month">
-      <div>
-        <h3>محصولات ویژه</h3>
-      </div>
 
+<section
+    class="best-product-of-month hsb-home-featured products-section"
+    aria-labelledby="hsb-home-featured-title"
+>
+    <h3 id="hsb-home-featured-title">
+        محصولات ویژه
+    </h3>
 
-<?php
-// کوئری برای دریافت ۸ محصول به صورت تصادفی
-$best_products_query = new WP_Query([
-    'post_type'      => 'product',
-    'posts_per_page' => 8,
-    'orderby'        => 'rand'
-]);
+    <?php
+    /*
+     * Get a larger random pool first, then collapse SKUs
+     * sharing the same technical Part Number into the same
+     * storefront family exactly like Shop.
+     */
+    $featured_product_ids = get_posts(
+        array(
+            'post_type'              => 'product',
+            'post_status'            => 'publish',
+            'posts_per_page'         => 64,
+            'fields'                 => 'ids',
+            'orderby'                => 'rand',
+            'no_found_rows'          => true,
+            'update_post_meta_cache' => true,
+            'update_post_term_cache' => true,
+        )
+    );
 
-if ($best_products_query->have_posts()) :
-    $counter = 0;
-    
-    // شروع ردیف اول محصولات
-    echo '<div class="best-products-row">';
-    
-    while ($best_products_query->have_posts()) : $best_products_query->the_post();
-        $counter++;
-        
-        // اگر ۴ محصول اول نمایش داده شدند، ردیف اول را می‌بندیم و ردیف دوم را باز می‌کنیم
-        if ($counter == 5) {
-            echo '</div>'; // بستن ردیف اول (.best-products-row)
-            echo '<div class="best-products-row">'; // باز کردن ردیف دوم (.best-products-row)
+    $featured_families = array();
+
+    if (!empty($featured_product_ids)) {
+        if (
+            function_exists(
+                'hsb_group_product_ids_by_part_number'
+            )
+        ) {
+            $featured_families =
+                hsb_group_product_ids_by_part_number(
+                    $featured_product_ids
+                );
+        } else {
+            foreach ($featured_product_ids as $product_id) {
+                $featured_families[] = array(
+                    'representative_id' => absint($product_id),
+                    'version_count'     => 1,
+                    'brand_count'       => 0,
+                    'country_count'     => 0,
+                );
+            }
         }
-        ?>
-        
-        <div class="single-product-container">
-            <!-- تبدیل کلاس اصلی به تگ A جهت لینک شدن کل باکس بدون تغییر در ساختار CSS -->
-            <a href="<?php the_permalink(); ?>" class="main-contains" style="text-decoration: none; color: inherit; display: block;">
-                
-                <div class="best-product-container">
-                    <?php if (has_post_thumbnail()) : ?>
-                        <?php the_post_thumbnail('medium'); ?>
-                    <?php else : ?>
-                        <!-- تصویر پیش‌فرض در صورت عدم وجود تصویر محصول -->
-                        <img src="<?php echo wc_placeholder_img_src(); ?>" alt="<?php the_title_attribute(); ?>" />
-                    <?php endif; ?>
-                </div>
-                
-                <div class="best-product-detail">
-                    <p><?php the_title(); ?></p>
-                    <div class="icon-frame">
-                        <i class="fa-solid fa-arrow-left"></i>
-                    </div>
-                </div>
+    }
 
-            </a>
+    $featured_families = array_slice(
+        $featured_families,
+        0,
+        8
+    );
+    ?>
+
+    <?php if (!empty($featured_families)) : ?>
+
+        <div class="child-category hsb-home-featured__grid">
+
+            <?php foreach ($featured_families as $family_group) : ?>
+
+                <?php
+                hypersanati_render_product_card(
+                    $family_group['representative_id'],
+                    $family_group
+                );
+                ?>
+
+            <?php endforeach; ?>
+
         </div>
 
-        <?php 
-    endwhile; 
-    
-    echo '</div>'; // بستen ردیف نهایی
-    
-    wp_reset_postdata(); 
-endif; 
-?>
-      
+    <?php endif; ?>
 
-    </div>
+</section>
 
-    <!-- news-blog-posts -->
+
+<!-- news-blog-posts -->
 
     <div class="news-blog-sect"></div>
 
     <!-- brand-section -->
 
-<div class="brand-section">
-    <h3>برند های بلبرینگ وارداتی</h3>
-    
-    <?php
-    // دریافت تمام برندها
-    $brands = get_terms([
+<?php
+$brands = get_terms(
+    array(
         'taxonomy'   => 'product_brand',
         'hide_empty' => false,
-    ]);
+        'orderby'    => 'name',
+        'order'      => 'ASC',
 
-    if (!empty($brands) && !is_wp_error($brands)) :
-        $counter = 0;
-        
-        // باز کردن ردیف اول
-        echo '<div class="brand-groups">';
-        
-        foreach ($brands as $brand) :
-            // ووکامرس آیدی تصویر دسته بندی/تاکسونومی را در متای thumbnail_id ذخیره می‌کند
-            $image_id = get_term_meta($brand->term_id, 'thumbnail_id', true);
-            $image_url = $image_id ? wp_get_attachment_url($image_id) : '';
-            
-            // اگر برند تصویر نداشت، آن را رد کن
-            if (empty($image_url)) {
-                continue;
-            }
-            
-            $counter++;
-            
-            // مدیریت ساختار ردیف‌های ۴ تایی مطابق CSS شما
-            if ($counter > 1 && ($counter - 1) % 4 == 0) {
-                echo '</div>'; // بستن ردیف قبلی
-                echo '<div class="brand-groups">'; // باز کردن ردیف جدید
-            }
-            ?>
-            
-            <div class="brand-frame">
-                <!-- نمایش لوگوی برند -->
-                <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($brand->name); ?>" title="<?php echo esc_attr($brand->name); ?>" />
+        'meta_query' => array(
+            array(
+                'key'     => '_hsb_show_on_homepage',
+                'value'   => '1',
+                'compare' => '=',
+            ),
+        ),
+    )
+);
+
+$visible_brands = array();
+
+if (
+    !is_wp_error($brands) &&
+    !empty($brands)
+) {
+    foreach ($brands as $brand) {
+        $image_id =
+            absint(
+                get_term_meta(
+                    $brand->term_id,
+                    'thumbnail_id',
+                    true
+                )
+            );
+
+        $image_url =
+            $image_id
+                ? wp_get_attachment_image_url(
+                    $image_id,
+                    'medium'
+                )
+                : '';
+
+        if (!$image_url) {
+            continue;
+        }
+
+        $visible_brands[] = array(
+            'term'      => $brand,
+            'image_url' => $image_url,
+        );
+    }
+}
+?>
+
+<?php if (!empty($visible_brands)) : ?>
+
+<section
+    class="hsb-home-brands"
+    aria-labelledby="hsb-home-brands-title"
+>
+    <h3
+        class="hsb-home-brands__title"
+        id="hsb-home-brands-title"
+    >
+        برندهای بلبرینگ وارداتی
+    </h3>
+
+    <div class="hsb-home-brands__list">
+
+        <?php foreach ($visible_brands as $brand_item) : ?>
+
+            <div class="hsb-home-brands__item">
+                <img
+                    src="<?php echo esc_url(
+                        $brand_item['image_url']
+                    ); ?>"
+                    alt="<?php echo esc_attr(
+                        $brand_item['term']->name
+                    ); ?>"
+                    title="<?php echo esc_attr(
+                        $brand_item['term']->name
+                    ); ?>"
+                    loading="lazy"
+                >
             </div>
-            
-        <?php 
-        endforeach;
-        
-        echo '</div>'; // بستن آخرین ردیف
-    else:
-        echo '<p style="text-align:center;">هنوز برندی ثبت نشده است.</p>';
-    endif;
-    ?>
-</div>
 
-    <!-- new-post-cards-section -->
+        <?php endforeach; ?>
 
-<div class="card-boxes">
-  <div class="name-and-controll-section">
-    <div>
-      <button class="handle-frame-section" id="scrollRightBtn" type="button" aria-label="قبلی">
-        <i class="fa-solid fa-angle-right"></i>
-      </button>
     </div>
-    <div><h3>آخرین به روز رسانی وبلاگ</h3></div>
-    <div>
-      <button class="handle-frame-section" id="scrollLeftBtn" type="button" aria-label="بعدی">
-        <i class="fa-solid fa-angle-left"></i>
-      </button>
-    </div>
+</section>
+
+<?php endif; ?>
+
+
+<!-- new-post-cards-section -->
+
+<section class="hsb-home-blog" aria-labelledby="hsb-home-blog-title">
+
+  <div class="hsb-home-blog__header">
+
+    <button
+      class="hsb-home-blog__control"
+      id="hsbHomeBlogPrev"
+      type="button"
+      aria-label="مقاله قبلی"
+    >
+      <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
+    </button>
+
+    <h3
+      class="hsb-home-blog__title"
+      id="hsb-home-blog-title"
+    >
+      آخرین به‌روزرسانی وبلاگ
+    </h3>
+
+    <button
+      class="hsb-home-blog__control"
+      id="hsbHomeBlogNext"
+      type="button"
+      aria-label="مقاله بعدی"
+    >
+      <i class="fa-solid fa-angle-left" aria-hidden="true"></i>
+    </button>
+
   </div>
-  
-  <div class="cards-sectoins" id="blogScroll">
+
+  <div
+    class="hsb-home-blog__track"
+    id="hsbHomeBlogTrack"
+  >
     <?php
-    // تنظیمات کوئری برای گرفتن ۶ پست آخر
     $blog_args = array(
         'post_type'      => 'post',
         'posts_per_page' => 6,
-        'post_status'    => 'publish'
+        'post_status'    => 'publish',
     );
+
     $blog_query = new WP_Query($blog_args);
 
     if ($blog_query->have_posts()) :
-        while ($blog_query->have_posts()) : $blog_query->the_post();
+        while ($blog_query->have_posts()) :
+            $blog_query->the_post();
     ?>
-    <div class="blog-card">
-      <div class="blog-card-img-frame">
-        <?php if (has_post_thumbnail()) : ?>
-            <img src="<?php the_post_thumbnail_url('medium'); ?>" alt="<?php the_title_attribute(); ?>" />
-        <?php else : ?>
-            <!-- تصویر پیش‌فرض در صورت نداشتن تصویر شاخص -->
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/default-blog.webp" alt="وبلاگ" />
-        <?php endif; ?>
-      </div>
-      <div class="blog-card-title">
-        <h6><?php the_title(); ?></h6>
-      </div>
-      <div class="blog-card-description">
-        <!-- نمایش خلاصه متن (20 کلمه) -->
-        <p><?php echo wp_trim_words(get_the_excerpt(), 20, ' ...'); ?></p>
-      </div>
-      <div class="blog-card-detailes">
-        <div class="blog-detail-sect">
-          <div class="time-frame">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/calendar 3.svg" alt="تاریخ" />
-            <p><?php echo get_the_date('j F'); ?></p>
+
+      <article class="hsb-home-blog__card">
+
+        <a
+          class="hsb-home-blog__image"
+          href="<?php the_permalink(); ?>"
+          aria-label="<?php the_title_attribute(); ?>"
+        >
+          <?php if (has_post_thumbnail()) : ?>
+
+            <img
+              src="<?php the_post_thumbnail_url('medium'); ?>"
+              alt="<?php the_title_attribute(); ?>"
+              loading="lazy"
+            />
+
+          <?php else : ?>
+
+            <img
+              src="<?php echo esc_url(
+                  get_template_directory_uri() .
+                  '/assets/images/default-blog.webp'
+              ); ?>"
+              alt="<?php the_title_attribute(); ?>"
+              loading="lazy"
+            />
+
+          <?php endif; ?>
+        </a>
+
+        <h4 class="hsb-home-blog__card-title">
+          <a href="<?php the_permalink(); ?>">
+            <?php the_title(); ?>
+          </a>
+        </h4>
+
+        <p class="hsb-home-blog__excerpt">
+          <?php
+          echo esc_html(
+              wp_trim_words(
+                  get_the_excerpt(),
+                  20,
+                  ' ...'
+              )
+          );
+          ?>
+        </p>
+
+        <div class="hsb-home-blog__footer">
+
+          <div class="hsb-home-blog__meta">
+
+            <div class="hsb-home-blog__meta-row">
+              <img
+                src="<?php echo esc_url(
+                    get_template_directory_uri() .
+                    '/assets/images/calendar 3.svg'
+                ); ?>"
+                alt=""
+                aria-hidden="true"
+              />
+
+              <span>
+                <?php
+                echo esc_html(
+                    strtr(
+                        get_the_date('j F'),
+                        array(
+                            '0' => '۰',
+                            '1' => '۱',
+                            '2' => '۲',
+                            '3' => '۳',
+                            '4' => '۴',
+                            '5' => '۵',
+                            '6' => '۶',
+                            '7' => '۷',
+                            '8' => '۸',
+                            '9' => '۹',
+                        )
+                    )
+                );
+                ?>
+              </span>
+            </div>
+
+            <div class="hsb-home-blog__meta-row">
+              <img
+                src="<?php echo esc_url(
+                    get_template_directory_uri() .
+                    '/assets/images/user.svg'
+                ); ?>"
+                alt=""
+                aria-hidden="true"
+              />
+
+              <span
+                class="hsb-home-blog__author"
+                title="<?php echo esc_attr(get_the_author()); ?>"
+              >
+                <?php echo esc_html(get_the_author()); ?>
+              </span>
+            </div>
+
           </div>
-          <div class="auther-frame">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/user.svg" alt="نویسنده" />
-            <p><?php the_author(); ?></p>
-          </div>
+
+          <a
+            class="hsb-home-blog__read-more"
+            href="<?php the_permalink(); ?>"
+          >
+            مطالعه
+          </a>
+
         </div>
-        <div class="rea-more-frame">
-          <a href="<?php the_permalink(); ?>" class="read-more-btn"><button class="read-more-btn">مطالعه</button>
-</a>
-        </div>
-      </div>
-    </div>
+
+      </article>
+
     <?php
         endwhile;
-        wp_reset_postdata(); // ریست کردن کوئری
+
+        wp_reset_postdata();
+
     else :
-        echo '<p>مقاله‌ای یافت نشد.</p>';
-    endif;
     ?>
+
+      <p class="hsb-home-blog__empty">
+        مقاله‌ای یافت نشد.
+      </p>
+
+    <?php endif; ?>
+
   </div>
-</div>
+
+</section>
 
 
-    <?php get_footer(); ?>
+<?php get_footer(); ?>
