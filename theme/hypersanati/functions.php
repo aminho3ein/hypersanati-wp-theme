@@ -1597,6 +1597,13 @@ function hsb_load_single_product_sections() {
         )
         : array();
 
+    if (empty($related_ids) && function_exists('wc_get_related_products')) {
+        $related_ids = wc_get_related_products(
+            $product_id,
+            12
+        );
+    }
+
 
     $similar_ids = function_exists(
         'hsb_get_indexed_equivalent_product_ids'
