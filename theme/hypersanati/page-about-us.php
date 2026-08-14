@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-    
+
 <section class="about-hero-section">
   <div class="container">
     <div class="row justify-content-center">
@@ -46,7 +46,7 @@
 <!-- Mission Section -->
 <section class="about-mission-section">
   <div class="container">
-      <div class="col-12 col-lg-10">
+      <div class="col-12 col-lg-10 mx-auto">
         <div class="about-mission-content">
           <h2 class="about-mission-title">ماموریت ما</h2>
 
@@ -61,8 +61,8 @@
 
 <section class="about-why-section">
   <div class="container">
-      <div class="col-12 col-lg-10">
-        
+      <div class="col-12 col-lg-10 mx-auto">
+
         <div class="about-why-header">
           <h2 class="about-why-title">چرا ما؟</h2>
         </div>

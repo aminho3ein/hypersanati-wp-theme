@@ -1651,3 +1651,37 @@ document.addEventListener(
       });
   }
 );
+
+/* HSB Description Question Link -> QA Tab */
+document.addEventListener("click", function (event) {
+  const questionLink = event.target.closest(
+    ".pd-quick-question-link"
+  );
+
+  if (!questionLink) {
+    return;
+  }
+
+  const qaTabButton = document.querySelector(
+    '.product-meta-nav button[data-tab="qa"]'
+  );
+
+  if (!qaTabButton) {
+    return;
+  }
+
+  event.preventDefault();
+
+  qaTabButton.click();
+
+  const metaTabs = document.querySelector(
+    ".product-meta-tabs"
+  );
+
+  if (metaTabs) {
+    metaTabs.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+});
