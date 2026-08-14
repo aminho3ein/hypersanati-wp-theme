@@ -1,48 +1,65 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const wrapper = document.querySelector(".posts-wrapper");
+  const pagination = document.querySelector(".article-pagination");
+  const section = document.querySelector(".article-category-section");
 
-    const postsWrapper = document.querySelector(".posts-wrapper");
-    const paginationBox = document.querySelector(".article-pagination");
+  if (!wrapper || !section) {
+    return;
+  }
 
-    if (!postsWrapper) return;
+  document.addEventListener("click", function (event) {
+    const button = event.target.closest(".article-pagination-btn");
 
-    document.addEventListener("click", function (e) {
+    if (!button) {
+      return;
+    }
 
-        const btn = e.target.closest(".article-pagination-btn");
-        if (!btn) return;
+    event.preventDefault();
 
-        e.preventDefault();
+    const page = parseInt(button.dataset.page || "0", 10);
 
-        const page =
-            btn.dataset.page ||
-            btn.getAttribute("data-page") ||
-            btn.textContent;
+    if (!page) {
+      return;
+    }
 
-        const pageNumber = parseInt(page);
-
-        if (!pageNumber) return;
-
-        fetch(`/wp-admin/admin-ajax.php?action=load_posts&paged=${pageNumber}`)
-            .then(res => res.json())
-            .then(data => {
-
-                if (!data.posts) return;
-
-                // 🔥 POSTS
-                postsWrapper.innerHTML = data.posts;
-
-                // 🔥 PAGINATION
-                if (paginationBox && data.pagination) {
-                    paginationBox.innerHTML = data.pagination;
-                }
-
-                // smooth scroll
-                postsWrapper.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-
-            });
-
+    const params = new URLSearchParams({
+      action: "load_posts",
+      paged: String(page),
+      category_id: section.dataset.categoryId || "0"
     });
 
+    const ajaxUrl =
+      section.dataset.ajaxUrl ||
+      "/wp-admin/admin-ajax.php";
+
+    fetch(ajaxUrl + "?" + params.toString(), {
+      credentials: "same-origin"
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+
+        return response.json();
+      })
+      .then(function (data) {
+        if (!data.posts) {
+          return;
+        }
+
+        wrapper.innerHTML = data.posts;
+
+        if (pagination && data.pagination) {
+          pagination.innerHTML = data.pagination;
+        }
+
+        wrapper.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      })
+      .catch(function (error) {
+        console.error("Article pagination failed:", error);
+      });
+  });
 });

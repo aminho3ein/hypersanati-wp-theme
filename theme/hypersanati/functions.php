@@ -367,7 +367,14 @@ function hypersanati_enqueue_assets() {
        ARTICLE CATEGORY / TAG / ARCHIVE PAGE
     ========================================================= */
 
-    if (is_category() || is_tag() || is_date() || is_author()) {
+    if (
+        is_category() ||
+        is_tag() ||
+        is_date() ||
+        is_author() ||
+        is_page('magazine') ||
+        is_page_template('page-magazine.php')
+    ) {
 
         hypersanati_enqueue_theme_style(
             'hypersanati-category',
@@ -715,13 +722,26 @@ add_action('wp_ajax_nopriv_load_posts', 'load_posts_ajax');
 
 function load_posts_ajax() {
 
-    $paged = isset($_GET['paged']) ? intval($_GET['paged']) : 1;
+    $paged = isset($_GET['paged'])
+        ? max(1, absint($_GET['paged']))
+        : 1;
 
-    $query = new WP_Query([
-        'post_type' => 'post',
+    $category_id = isset($_GET['category_id'])
+        ? absint($_GET['category_id'])
+        : 0;
+
+    $query_args = [
+        'post_type'      => 'post',
+        'post_status'    => 'publish',
         'posts_per_page' => 8,
-        'paged' => $paged
-    ]);
+        'paged'          => $paged,
+    ];
+
+    if ($category_id > 0) {
+        $query_args['cat'] = $category_id;
+    }
+
+    $query = new WP_Query($query_args);
 
     ob_start();
 
@@ -6648,3 +6668,10 @@ function hsb_get_preinvoice_items() {
         ? $items
         : array();
 }
+
+/* =========================================================
+   HSB HOMEPAGE HERO BOOTSTRAP
+   ========================================================= */
+
+require_once get_template_directory()
+    . '/inc/homepage-hero.php';

@@ -1,5 +1,12 @@
 <?php get_header(); ?>
 
+<?php if (is_front_page() || is_home()) : ?>
+    <!-- HSB HOMEPAGE PRIMARY H1 -->
+    <h1 class="hsb-homepage-primary-title">
+        <?php echo esc_html(get_bloginfo('name')); ?>
+    </h1>
+<?php endif; ?>
+
 <?php
 $home_dimension_ranges =
     hypersanati_get_dimension_ranges();
@@ -21,22 +28,33 @@ $home_height_max =
 ?>
 
 
+<?php
+/* HSB HOMEPAGE HERO RENDER */
+if (
+    function_exists(
+        'hsb_render_homepage_hero_section'
+    )
+) {
+    hsb_render_homepage_hero_section();
+}
+?>
+
     <!-- search-feat -->
-    <div class="search-area">
+    <div id="hsb-home-search" class="search-area">
       <form class="search-input" method="get" action="<?php echo esc_url( home_url('/') ); ?>">
         <div class="search-input">
           <h5>عنوان محصول</h5>
           <div class="big-input-division" style="position: relative; display: flex; align-items: center;">
-            
-            <input 
-              type="search" 
+
+            <input
+              type="search"
               id="index-search-term"
-              name="s" 
+              name="s"
               placeholder="مثلا بلبرینگ تماس زاویه ای"
-              value="<?php echo get_search_query(); ?>" 
+              value="<?php echo get_search_query(); ?>"
               autocomplete="off"
             />
-            
+
             <input type="hidden" name="post_type" value="product" />
 
             <!-- دکمه ضربدر برای پاک کردن سریع متن ورودی در صفحه اصلی -->
@@ -54,7 +72,7 @@ $home_height_max =
 
 
 <div class="new-search-container new-compact new-wide-mode">
-    
+
     <!-- بخش اول: جستجوی دقیق -->
     <section class="new-search-section">
         <h2 class="new-section-title">جستجوی دقیق بر اساس اندازه (میلی‌متر)</h2>
@@ -81,7 +99,7 @@ $home_height_max =
     <section class="new-search-section">
         <h2 class="new-section-title">جستجوی تقریبی (بازه اندازه)</h2>
         <div class="new-range-grid">
-            
+
             <!-- بازه قطر داخلی -->
             <div class="new-range-card" id="range-inner">
                 <span class="new-card-title">

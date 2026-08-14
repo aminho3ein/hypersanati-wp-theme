@@ -178,7 +178,7 @@
   gap: 4rem;
   align-items: start;
   direction: ltr;
-  text-align: justify;  
+  text-align: justify;
 }
 
 /* =========================
@@ -194,7 +194,7 @@
 .sidebar-info-card {
   background-color: var(--color-card-article-cat);
   padding: 1.5rem;
-  text-align: justify; 
+  text-align: justify;
   margin-bottom: 50px;
 }
 
@@ -413,4 +413,118 @@
     max-width: 250px;
     height: auto;
   }
+}
+
+/* =========================================================
+   HSB MAGAZINE CATEGORY NAV
+   ========================================================= */
+
+.magazine-category-nav {
+  width: 100%;
+  padding: 1.5rem 0 0;
+  background: #fff;
+}
+
+.magazine-category-nav__inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  direction: rtl;
+}
+
+.magazine-category-nav__title {
+  flex: 0 0 auto;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--gray-800);
+}
+
+.magazine-category-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.magazine-category-nav__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0.55rem 1rem;
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  border-radius: 10px;
+  background: #f3f4f6;
+  color: #374151;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.5;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.magazine-category-nav__item:hover {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.magazine-category-nav__item.is-active {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: #fff;
+}
+
+@media (max-width: 767px) {
+  .magazine-category-nav {
+    padding-top: 1rem;
+  }
+
+  .magazine-category-nav__inner {
+    display: block;
+  }
+
+  .magazine-category-nav__title {
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .magazine-category-nav__list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .magazine-category-nav__item {
+    flex: 0 0 auto;
+  }
+}
+
+/* HSB MAGAZINE CATEGORY COUNTS */
+
+.magazine-category-nav__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 0.4rem;
+  margin-right: 0.35rem;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.08);
+  color: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.magazine-category-nav__item.is-active
+.magazine-category-nav__count {
+  background: rgba(255, 255, 255, 0.2);
 }
