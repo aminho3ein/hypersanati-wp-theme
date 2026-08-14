@@ -2267,73 +2267,78 @@ if (!function_exists('theme_render_smart_products_section')) {
  * a single storefront card.
  */
 $family_product_ids = function_exists(
-    'hsb_get_product_family_ids'
+    'hsb_get_indexed_family_product_ids'
 )
-    ? hsb_get_product_family_ids($product_id)
+    ? hsb_get_indexed_family_product_ids(
+        $product_id,
+        true
+    )
     : array($product_id);
 
 
-$similar_candidates =
-    theme_get_similar_product_ids(
-        $product,
-        36,
-        $family_product_ids
-    );
-
 $similar_product_ids = function_exists(
-    'hsb_dedupe_product_ids_by_part_number'
+    'hsb_get_indexed_equivalent_product_ids'
 )
-    ? hsb_dedupe_product_ids_by_part_number(
-        $similar_candidates,
-        12
-    )
-    : array_slice(
-        $similar_candidates,
+    ? array_slice(
+        hsb_get_indexed_equivalent_product_ids($product_id),
         0,
         12
-    );
+    )
+    : array();
 
-
-$related_candidates =
-    theme_get_broad_related_product_ids(
-        $product,
-        36,
-        array_merge(
-            $family_product_ids,
-            $similar_product_ids
-        )
-    );
 
 $related_product_ids = function_exists(
-    'hsb_dedupe_product_ids_by_part_number'
+    'hsb_get_indexed_related_product_ids'
 )
-    ? hsb_dedupe_product_ids_by_part_number(
-        $related_candidates,
-        12
-    )
-    : array_slice(
-        $related_candidates,
+    ? array_slice(
+        hsb_get_indexed_related_product_ids($product_id),
         0,
         12
-    );
+    )
+    : array();
 ?>
 
 <div class="smart-product-sections">
-    <?php
-    theme_render_smart_products_section(
-        'محصولات مرتبط',
-        'پیشنهادهای مکمل و هم‌خانواده',
-        $related_product_ids,
-        'sp-related-products'
-    );
 
-    theme_render_smart_products_section(
-        'محصولات مشابه',
-        'محصولات نزدیک به انتخاب شما',
-        $similar_product_ids,
-        'sp-similar-products'
-    );
-    ?>
+    <section
+        class="sp-products-section sp-related-products"
+        data-hsb-lazy-section="related"
+        data-product-id="<?php echo esc_attr($product_id); ?>"
+    >
+        <div class="sp-section-head">
+            <div class="sp-section-title">
+                <span>پیشنهادهای مکمل و هم‌خانواده</span>
+                <h3>محصولات مرتبط</h3>
+            </div>
+        </div>
+
+        <div class="sp-products-row">
+            <div class="sp-loading-state">
+                در حال بررسی محصولات مرتبط...
+            </div>
+        </div>
+    </section>
+
+
+    <section
+        class="sp-products-section sp-similar-products"
+        data-hsb-lazy-section="similar"
+        data-product-id="<?php echo esc_attr($product_id); ?>"
+    >
+        <div class="sp-section-head">
+            <div class="sp-section-title">
+                <span>محصولات نزدیک به انتخاب شما</span>
+                <h3>محصولات مشابه</h3>
+            </div>
+        </div>
+
+        <div class="sp-products-row">
+            <div class="sp-loading-state">
+                در حال بررسی محصولات مشابه...
+            </div>
+        </div>
+    </section>
+
 </div>
 <?php theme_render_product_benefits_area('single_product_benefits_strong', 'soft'); ?>
 <!-- <?php theme_render_product_benefits_area('single_product_benefits_strong', 'strong'); ?> -->

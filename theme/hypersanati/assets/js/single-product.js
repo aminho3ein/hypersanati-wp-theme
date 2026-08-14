@@ -1685,3 +1685,155 @@ document.addEventListener("click", function (event) {
     });
   }
 });
+
+
+/* ============================================================
+   HSB SINGLE PRODUCT LAZY RELATED / SIMILAR PRODUCTS
+============================================================ */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+
+    const sections =
+      document.querySelectorAll(
+        "[data-hsb-lazy-section]"
+      );
+
+    if (!sections.length) {
+      return;
+    }
+
+    if (
+      typeof hsbSingleProduct === "undefined"
+    ) {
+      return;
+    }
+
+
+    const loaded = new Set();
+
+
+    function loadSection(section) {
+
+      const type =
+        section.dataset.hsbLazySection;
+
+      const productId =
+        section.dataset.productId;
+
+
+      if (
+        loaded.has(type) ||
+        !productId
+      ) {
+        return;
+      }
+
+      loaded.add(type);
+
+
+      const body =
+        new FormData();
+
+      body.append(
+        "action",
+        "hsb_load_single_product_sections"
+      );
+
+      body.append(
+        "nonce",
+        hsbSingleProduct.nonce
+      );
+
+      body.append(
+        "product_id",
+        productId
+      );
+
+
+      fetch(
+        hsbSingleProduct.ajax_url,
+        {
+          method: "POST",
+          body: body
+        }
+      )
+      .then(
+        response => response.json()
+      )
+      .then(
+        result => {
+
+          if (
+            !result.success
+          ) {
+            return;
+          }
+
+
+          const row =
+            section.querySelector(
+              ".sp-products-row"
+            );
+
+          if (!row) {
+            return;
+          }
+
+
+          row.innerHTML =
+            type === "related"
+              ? result.data.related_html
+              : result.data.similar_html;
+
+        }
+      )
+      .catch(
+        function () {
+          loaded.delete(type);
+        }
+      );
+
+    }
+
+
+    const observer =
+      new IntersectionObserver(
+        function (entries) {
+
+          entries.forEach(
+            function (entry) {
+
+              if (
+                entry.isIntersecting
+              ) {
+
+                loadSection(
+                  entry.target
+                );
+
+                observer.unobserve(
+                  entry.target
+                );
+
+              }
+
+            }
+          );
+
+        },
+        {
+          rootMargin: "300px"
+        }
+      );
+
+
+    sections.forEach(
+      function (section) {
+        observer.observe(section);
+      }
+    );
+
+  }
+);

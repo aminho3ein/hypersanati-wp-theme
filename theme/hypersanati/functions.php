@@ -525,12 +525,26 @@ function hypersanati_enqueue_assets() {
             $page_css_deps
         );
 
-        hypersanati_enqueue_theme_script(
-            'single-product-js',
-            '/assets/js/single-product.js',
-            array('jquery'),
-            true
-        );
+        $single_product_js_loaded =
+            hypersanati_enqueue_theme_script(
+                'single-product-js',
+                '/assets/js/single-product.js',
+                array('jquery'),
+                true
+            );
+
+        if ($single_product_js_loaded) {
+            wp_localize_script(
+                'single-product-js',
+                'hsbSingleProduct',
+                array(
+                    'ajax_url' => admin_url('admin-ajax.php'),
+                    'nonce'    => wp_create_nonce(
+                        'hsb_single_product_nonce'
+                    ),
+                )
+            );
+        }
     }
 }
 
@@ -1534,6 +1548,91 @@ function hypersanati_render_product_card(
     </a>
 
     <?php
+}
+
+
+/* ============================================================
+   HSB SINGLE PRODUCT LAZY RELATED PRODUCTS AJAX
+============================================================ */
+
+add_action(
+    'wp_ajax_hsb_load_single_product_sections',
+    'hsb_load_single_product_sections'
+);
+
+add_action(
+    'wp_ajax_nopriv_hsb_load_single_product_sections',
+    'hsb_load_single_product_sections'
+);
+
+
+function hsb_load_single_product_sections() {
+
+    check_ajax_referer(
+        'hsb_single_product_nonce',
+        'nonce'
+    );
+
+    $product_id = isset($_POST['product_id'])
+        ? absint($_POST['product_id'])
+        : 0;
+
+    if (!$product_id) {
+        wp_send_json_error(
+            array(
+                'message' => 'Invalid product'
+            ),
+            400
+        );
+    }
+
+
+    $related_ids = function_exists(
+        'hsb_get_indexed_related_product_ids'
+    )
+        ? array_slice(
+            hsb_get_indexed_related_product_ids($product_id),
+            0,
+            12
+        )
+        : array();
+
+
+    $similar_ids = function_exists(
+        'hsb_get_indexed_equivalent_product_ids'
+    )
+        ? array_slice(
+            hsb_get_indexed_equivalent_product_ids($product_id),
+            0,
+            12
+        )
+        : array();
+
+
+    ob_start();
+
+    foreach ($related_ids as $id) {
+        hypersanati_render_product_card($id);
+    }
+
+    $related_html = ob_get_clean();
+
+
+    ob_start();
+
+    foreach ($similar_ids as $id) {
+        hypersanati_render_product_card($id);
+    }
+
+    $similar_html = ob_get_clean();
+
+
+    wp_send_json_success(
+        array(
+            'related_html' => $related_html,
+            'similar_html' => $similar_html,
+        )
+    );
 }
 
 
@@ -5168,40 +5267,40 @@ function hsb_get_product_brand_data($product_id) {
  */
 function hsb_get_same_part_number_products($product_id, $limit = 30) {
     $product_id = absint($product_id);
-    $part_number = trim(
-        (string) get_post_meta($product_id, '_mpn_part_number', true)
+    $limit      = max(1, absint($limit));
+
+    if ($product_id < 1) {
+        return array();
+    }
+
+    /*
+     * Never perform a catalog-wide Part Number query during
+     * a storefront request.
+     *
+     * Family relations are prebuilt by the relationship index.
+     * If the index has not been generated yet, returning an
+     * empty sibling list keeps the product page fast and safe.
+     */
+    if (
+        !function_exists(
+            'hsb_get_indexed_family_product_ids'
+        )
+    ) {
+        return array();
+    }
+
+    $ids = hsb_get_indexed_family_product_ids(
+        $product_id,
+        false
     );
 
-    if ($product_id < 1 || $part_number === '') {
-        return array();
-    }
-
-    $ids = get_posts(array(
-        'post_type'              => 'product',
-        'post_status'            => 'publish',
-        'posts_per_page'         => absint($limit),
-        'post__not_in'           => array($product_id),
-        'fields'                 => 'ids',
-        'orderby'                => 'ID',
-        'order'                  => 'ASC',
-        'no_found_rows'          => true,
-        'update_post_meta_cache' => true,
-        'update_post_term_cache' => true,
-        'meta_query'             => array(
-            array(
-                'key'     => '_mpn_part_number',
-                'value'   => $part_number,
-                'compare' => '=',
-            ),
-        ),
-    ));
-
-    if (!is_array($ids)) {
-        return array();
-    }
-
-    return array_values(array_map('absint', $ids));
+    return array_slice(
+        $ids,
+        0,
+        $limit
+    );
 }
+
 
 /**
  * Build usable data for same-code product choices.
@@ -5231,16 +5330,6 @@ function hsb_get_product_alternatives($product_id) {
         $country = trim(
             (string) get_post_meta($id, '_country_origin', true)
         );
-
-        $live_brand_data =
-        function_exists('hsb_get_product_brand_data')
-            ? hsb_get_product_brand_data($id)
-            : array();
-
-    $live_country_flag =
-        function_exists('hsb_get_country_flag_data')
-            ? hsb_get_country_flag_data($country)
-            : array();
 
     $items[] = array(
             'product_id'  => $id,
@@ -6668,6 +6757,14 @@ function hsb_get_preinvoice_items() {
         ? $items
         : array();
 }
+
+/* =========================================================
+   HSB PRODUCT RELATIONSHIP INDEX
+   ========================================================= */
+
+require_once get_template_directory()
+    . '/inc/product-relationship-index.php';
+
 
 /* =========================================================
    HSB HOMEPAGE HERO BOOTSTRAP
