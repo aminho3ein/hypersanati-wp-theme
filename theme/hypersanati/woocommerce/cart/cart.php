@@ -49,7 +49,11 @@ if (
         }
 
         wp_safe_redirect(
-            wc_get_page_permalink('myaccount')
+            add_query_arg(
+                'redirect_to',
+                wc_get_cart_url(),
+                wc_get_page_permalink('myaccount')
+            )
         );
         exit;
     }

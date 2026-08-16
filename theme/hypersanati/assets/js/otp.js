@@ -205,6 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                 window.location.href =
+                    hsb_auth_data.redirect_url ||
                     '/my-account/';
 
 

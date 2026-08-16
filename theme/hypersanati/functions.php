@@ -3324,6 +3324,9 @@ function hypersanati_enqueue_otp_assets()
                 'wp_rest'
             ),
             'is_logged_in' => is_user_logged_in(),
+            'redirect_url' => isset($_GET['redirect_to'])
+                ? esc_url_raw(wp_unslash($_GET['redirect_to']))
+                : '',
         ]);
     }
 
