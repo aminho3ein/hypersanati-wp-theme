@@ -4972,6 +4972,25 @@ function hsb_get_country_flag_data($country_name) {
         (string) $country_name
     );
 
+    $country_map = array(
+        'چین' => 'china',
+        'هند' => 'india',
+        'ژاپن' => 'japan',
+        'آلمان' => 'germany',
+        'فرانسه' => 'france',
+        'ایتالیا' => 'italy',
+        'رومانی' => 'romania',
+        'روسیه' => 'rusha',
+        'سنگاپور' => 'singapur',
+        'اسپانیا' => 'spanish',
+        'تایلند' => 'thailand',
+        'آمریکا' => 'american',
+    );
+
+    if (isset($country_map[$country_name])) {
+        $country_name = $country_map[$country_name];
+    }
+
     if ('' === $country_name) {
         return array(
             'id'        => 0,
