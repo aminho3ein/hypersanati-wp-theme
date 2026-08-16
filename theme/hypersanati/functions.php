@@ -3285,10 +3285,10 @@ if (!function_exists('theme_render_product_benefits_area')) {
 */
 if (!defined('ABSPATH')) exit;
 
-define('HYPERSANATI_OTP_LENGTH', 5);        // تعداد ارقام کد تایید (۴ یا ۵)
-define('HYPERSANATI_OTP_TTL', 300);         // مدت اعتبار کد به ثانیه (۵ دقیقه)
-define('HYPERSANATI_OTP_RESEND_WAIT', 60);  // حداقل فاصله بین دو درخواست کد (ثانیه)
-
+/* -------------------------------------------------------------
+   HSB Auth OTP Integration
+   Backend handled by HSB Auth plugin.
+------------------------------------------------------------- */
 
 /* -------------------------------------------------------------
    ۱. Enqueue استایل و اسکریپت
@@ -3316,12 +3316,14 @@ function hypersanati_enqueue_otp_assets()
     if (file_exists($otp_js_path)) {
         wp_enqueue_script('hypersanati-otp', $js_url . '/otp.js', [], filemtime($otp_js_path), true);
 
-        wp_localize_script('hypersanati-otp', 'otp_data', [
-            'ajax_url'    => admin_url('admin-ajax.php'),
-            'nonce'       => wp_create_nonce('hypersanati_otp_action'),
-            'code_length' => HYPERSANATI_OTP_LENGTH,
-            'resend_wait' => HYPERSANATI_OTP_RESEND_WAIT,
-            'is_logged_in'=> is_user_logged_in(),
+        wp_localize_script('hypersanati-otp', 'hsb_auth_data', [
+            'rest_url' => rest_url(
+                'hsb-auth/v1/'
+            ),
+            'nonce' => wp_create_nonce(
+                'wp_rest'
+            ),
+            'is_logged_in' => is_user_logged_in(),
         ]);
     }
 
@@ -3369,132 +3371,6 @@ function hypersanati_use_custom_dashboard_template($template)
     }
     return $template;
 }
-
-
-/* -------------------------------------------------------------
-   ۴. AJAX: ارسال کد تایید
-------------------------------------------------------------- */
-add_action('wp_ajax_ui_send_otp', 'hypersanati_ajax_send_otp');
-add_action('wp_ajax_nopriv_ui_send_otp', 'hypersanati_ajax_send_otp');
-
-function hypersanati_ajax_send_otp()
-{
-    check_ajax_referer('hypersanati_otp_action', 'nonce');
-
-    $phone = isset($_POST['phone']) ? sanitize_text_field(wp_unslash($_POST['phone'])) : '';
-
-    if (!preg_match('/^09\d{9}$/', $phone)) {
-        wp_send_json_error(['message' => 'شماره موبایل معتبر نیست. مثال صحیح: 09123456789']);
-    }
-
-    // جلوگیری از ارسال مکرر/اسپم
-    $wait_key = 'hs_otp_wait_' . $phone;
-    if (get_transient($wait_key)) {
-        wp_send_json_error(['message' => 'لطفاً کمی صبر کنید و دوباره تلاش کنید.']);
-    }
-
-    try {
-        $min  = (int) pow(10, HYPERSANATI_OTP_LENGTH - 1);
-        $max  = (int) pow(10, HYPERSANATI_OTP_LENGTH) - 1;
-        $code = (string) random_int($min, $max);
-    } catch (Exception $e) {
-        wp_send_json_error(['message' => 'خطا در تولید کد تایید.']);
-    }
-
-    set_transient('hs_otp_code_' . $phone, $code, HYPERSANATI_OTP_TTL);
-    set_transient($wait_key, 1, HYPERSANATI_OTP_RESEND_WAIT);
-
-    // TODO: اتصال به وب‌سرویس پیامک واقعی
-    // hypersanati_send_sms($phone, $code);
-
-    wp_send_json_success([
-        'message'     => 'کد تایید ارسال شد.',
-        'resend_wait' => HYPERSANATI_OTP_RESEND_WAIT,
-    ]);
-}
-
-
-/* -------------------------------------------------------------
-   ۵. AJAX: تایید کد و ورود / ثبت‌نام خودکار کاربر
-------------------------------------------------------------- */
-add_action('wp_ajax_ui_verify_otp', 'hypersanati_ajax_verify_otp');
-add_action('wp_ajax_nopriv_ui_verify_otp', 'hypersanati_ajax_verify_otp');
-
-function hypersanati_ajax_verify_otp()
-{
-    check_ajax_referer('hypersanati_otp_action', 'nonce');
-
-    $phone = isset($_POST['phone']) ? sanitize_text_field(wp_unslash($_POST['phone'])) : '';
-    $code  = isset($_POST['code'])  ? sanitize_text_field(wp_unslash($_POST['code']))  : '';
-
-    if (!preg_match('/^09\d{9}$/', $phone)) {
-        wp_send_json_error(['message' => 'شماره موبایل نامعتبر است.']);
-    }
-
-    $pattern = '/^\d{' . HYPERSANATI_OTP_LENGTH . '}$/';
-    if (!preg_match($pattern, $code)) {
-        wp_send_json_error(['message' => 'کد تایید باید ' . HYPERSANATI_OTP_LENGTH . ' رقمی باشد.']);
-    }
-
-    $saved_code = get_transient('hs_otp_code_' . $phone);
-
-    if ($saved_code === false) {
-        wp_send_json_error(['message' => 'کد منقضی شده است. لطفاً دوباره درخواست دهید.']);
-    }
-
-    if (!hash_equals((string) $saved_code, $code)) {
-        wp_send_json_error(['message' => 'کد وارد شده نادرست است.']);
-    }
-
-    // پیدا کردن کاربر یا ساخت خودکار (ثبت‌نام یکپارچه با ورود)
-    $user = get_user_by('login', $phone);
-
-    if (!$user) {
-        if (!function_exists('wc_create_new_customer')) {
-            wp_send_json_error(['message' => 'ووکامرس در دسترس نیست.']);
-        }
-
-        $user_id = wc_create_new_customer(
-            $phone . '@hypersanati.com',
-            $phone,
-            wp_generate_password(20, true, true)
-        );
-
-        if (is_wp_error($user_id)) {
-            wp_send_json_error(['message' => $user_id->get_error_message()]);
-        }
-
-        $user = get_user_by('id', $user_id);
-
-        if (!$user) {
-            wp_send_json_error(['message' => 'کاربر ساخته شد اما بارگذاری نشد.']);
-        }
-
-        update_user_meta($user->ID, 'billing_phone', $phone);
-    }
-
-    // پاک‌سازی کد استفاده‌شده
-    delete_transient('hs_otp_code_' . $phone);
-    delete_transient('hs_otp_wait_' . $phone);
-
-    // ورود رسمی کاربر با توابع آماده‌ی وردپرس/ووکامرس
-    wp_set_current_user($user->ID);
-    wp_set_auth_cookie($user->ID, true);
-
-    if (function_exists('wc_set_customer_auth_cookie')) {
-        wc_set_customer_auth_cookie($user->ID);
-    }
-
-    do_action('wp_login', $user->user_login, $user);
-
-    wp_send_json_success([
-        'message'  => 'ورود با موفقیت انجام شد.',
-        'redirect' => function_exists('wc_get_page_permalink') ? wc_get_page_permalink('myaccount') : home_url('/my-account/'),
-    ]);
-}
-
-
-
 
 
 // START TAMAS BA MA --------------------------------------------------

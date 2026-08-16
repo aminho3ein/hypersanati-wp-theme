@@ -1,98 +1,226 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const modal    = document.getElementById('ui-otp-modal');
-    const openBtn  = document.getElementById('ui-open-otp');
-    const phoneEl  = document.getElementById('otp-phone');
-    const codeEl   = document.getElementById('otp-code');
-    const btn      = document.getElementById('otp-submit');
+
+    const modal = document.getElementById('ui-otp-modal');
+    const openBtn = document.getElementById('ui-open-otp');
+
+    const phoneEl = document.getElementById('otp-phone');
+    const boxesEl = document.getElementById('otp-boxes');
+
+    const sendBtn = document.getElementById('otp-send-btn');
+    const verifyBtn = document.getElementById('otp-verify-btn');
+
+    const phoneStep = document.querySelector('[data-step="phone"]');
+    const codeStep = document.querySelector('[data-step="code"]');
+
+    const phoneDisplay = document.getElementById('otp-phone-display');
     const statusEl = document.getElementById('otp-status');
 
-    // ------------------------------------------
-    // باز کردن مودال با کلیک روی دکمه‌ی "حساب کاربری"
-    // ------------------------------------------
+    let mobile = '';
+
+
+    const OTP_LENGTH = 6;
+
+    if (boxesEl) {
+
+        for (let i = 0; i < OTP_LENGTH; i++) {
+
+            const input = document.createElement('input');
+
+            input.type = 'tel';
+            input.inputMode = 'numeric';
+            input.maxLength = 1;
+            input.className = 'ui-otp-input';
+
+            input.addEventListener('input', () => {
+
+                if (input.value && input.nextElementSibling) {
+                    input.nextElementSibling.focus();
+                }
+
+
+                const code = [...document.querySelectorAll('.ui-otp-input')]
+                    .map(el => el.value)
+                    .join('');
+
+
+                if (verifyBtn) {
+
+                    verifyBtn.disabled = code.length !== OTP_LENGTH;
+
+                }
+
+            });
+
+            boxesEl.appendChild(input);
+
+        }
+
+    }
+
+
+    const api = hsb_auth_data.rest_url;
+
+
     if (openBtn && modal) {
+
         openBtn.addEventListener('click', (e) => {
+
             e.preventDefault();
+
             modal.classList.add('is-open');
             modal.setAttribute('aria-hidden', 'false');
+
         });
+
     }
 
-    // ------------------------------------------
-    // بستن مودال (بک‌دراپ یا دکمه‌ی ضربدر)
-    // ------------------------------------------
+
     if (modal) {
+
         modal.querySelectorAll('[data-close-modal]').forEach((el) => {
+
             el.addEventListener('click', () => {
+
                 modal.classList.remove('is-open');
                 modal.setAttribute('aria-hidden', 'true');
+
             });
+
         });
 
-        // بستن با کلید Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('is-open')) {
-                modal.classList.remove('is-open');
-                modal.setAttribute('aria-hidden', 'true');
-            }
-        });
     }
 
-    // ------------------------------------------
-    // فعال/غیرفعال کردن دکمه بر اساس اعتبار شماره موبایل
-    // ------------------------------------------
-    if (phoneEl && btn) {
+
+    if (phoneEl && sendBtn) {
+
         phoneEl.addEventListener('input', () => {
-            if (btn.dataset.mode === 'send') {
-                btn.disabled = !/^09\d{9}$/.test(phoneEl.value);
-            }
+
+            sendBtn.disabled = !/^09\d{9}$/.test(
+                phoneEl.value
+            );
+
         });
+
     }
 
-    if (!btn) return;
 
-    // ------------------------------------------
-    // ارسال / تایید کد OTP
-    // ------------------------------------------
-    btn.addEventListener('click', async () => {
-        const phone = phoneEl ? phoneEl.value : '';
-        const code  = codeEl ? codeEl.value : '';
-        const mode  = btn.dataset.mode; // 'send' یا 'verify'
+    if (sendBtn) {
 
-        btn.disabled = true;
-        if (statusEl) statusEl.textContent = 'در حال ارسال...';
+        sendBtn.addEventListener('click', async () => {
 
-        try {
-            const response = await fetch(otp_data.ajax_url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    action: mode === 'send' ? 'ui_send_otp' : 'ui_verify_otp',
-                    nonce: otp_data.nonce,
-                    phone,
-                    code,
-                }),
-            });
+
+            mobile = phoneEl.value;
+
+
+            statusEl.textContent = 'در حال ارسال...';
+
+
+            const response = await fetch(
+                api + 'request-otp',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-WP-Nonce': hsb_auth_data.nonce
+                    },
+                    body: JSON.stringify({
+                        mobile
+                    })
+                }
+            );
+
 
             const result = await response.json();
 
-            if (!result.success) {
-                if (statusEl) statusEl.textContent = result.data.message || 'خطایی رخ داد.';
-                btn.disabled = false;
-                return;
+
+            if (result.status === 'ready') {
+
+
+                phoneStep.classList.add('is-hidden');
+
+                codeStep.classList.remove('is-hidden');
+
+
+                phoneDisplay.textContent = result.mobile;
+
+
+                statusEl.textContent =
+                    'کد تایید ارسال شد';
+
+
+            } else {
+
+                statusEl.textContent =
+                    result.message || 'خطا در ارسال کد';
+
+                sendBtn.disabled = false;
+
             }
 
-            if (mode === 'send') {
-                btn.dataset.mode = 'verify';
-                btn.textContent = 'تایید و ورود';
-                btn.disabled = false;
-                if (statusEl) statusEl.textContent = result.data.message || 'کد ارسال شد.';
+
+        });
+
+    }
+
+
+
+    if (verifyBtn) {
+
+        verifyBtn.addEventListener('click', async () => {
+
+
+            const code = [...document.querySelectorAll('.ui-otp-input')]
+                .map(el => el.value)
+                .join('');
+
+
+            statusEl.textContent =
+                'در حال بررسی...';
+
+
+            const response = await fetch(
+                api + 'verify-otp',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-WP-Nonce': hsb_auth_data.nonce
+                    },
+                    body: JSON.stringify({
+                        mobile,
+                        code
+                    })
+                }
+            );
+
+
+            const result = await response.json();
+
+
+            if (result.status === 'success') {
+
+
+                statusEl.textContent =
+                    'ورود موفق';
+
+
+                window.location.href =
+                    '/my-account/';
+
+
             } else {
-                if (statusEl) statusEl.textContent = result.data.message || 'در حال انتقال...';
-                window.location.href = result.data.redirect;
+
+
+                statusEl.textContent =
+                    result.message || 'کد اشتباه است';
+
+
             }
-        } catch (err) {
-            if (statusEl) statusEl.textContent = 'خطا در ارتباط با سرور.';
-            btn.disabled = false;
-        }
-    });
+
+
+        });
+
+    }
+
+
 });

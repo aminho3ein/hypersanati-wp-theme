@@ -129,9 +129,11 @@
   justify-content: center;
 }
 
-.ui-otp-box {
-  width: 48px;
-  height: 56px;
+.ui-otp-box,
+.ui-otp-input {
+  width: 42px;
+  height: 52px;
+  flex: 0 0 42px;
   text-align: center;
   font-size: 22px;
   font-weight: 700;
@@ -142,12 +144,14 @@
   transition: border-color .2s, box-shadow .2s;
 }
 
-.ui-otp-box:focus {
+.ui-otp-box:focus,
+.ui-otp-input:focus {
   border-color: var(--accent-primary, #9f8561);
   box-shadow: 0 0 0 3px rgba(159, 133, 97, .18);
 }
 
-.ui-otp-box.is-filled {
+.ui-otp-box.is-filled,
+.ui-otp-input.is-filled {
   border-color: var(--accent-primary, #9f8561);
 }
 
