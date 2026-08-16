@@ -4099,3 +4099,14 @@ html {
     0 2px 8px rgba(0,0,0,0.18);
 }
 
+
+/* HSB HERO MOBILE/TABLET IMAGE POSITION */
+
+@media (max-width: 900px) {
+
+  .hsb-home-hero__image {
+    object-position: right center;
+  }
+
+}
+

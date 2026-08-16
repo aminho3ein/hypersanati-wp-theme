@@ -6627,6 +6627,14 @@ function hsb_preinvoice_add_item() {
         WC()->initialize_session();
     }
 
+    if (
+        WC()->session &&
+        method_exists(WC()->session, 'has_session') &&
+        !WC()->session->has_session()
+    ) {
+        WC()->session->set_customer_session_cookie(true);
+    }
+
     if (null === WC()->session) {
         wp_send_json_error(array(
             'message' => 'امکان ایجاد پیش‌فاکتور وجود ندارد.'
@@ -6718,6 +6726,10 @@ function hsb_preinvoice_add_item() {
     }
 
     WC()->session->set('hsb_preinvoice_items', $items);
+
+    if (WC()->session) {
+        WC()->session->save_data();
+    }
 
     $total_quantity = 0;
 
