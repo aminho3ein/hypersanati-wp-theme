@@ -6128,10 +6128,24 @@ function hsb_create_preinvoice_order_from_session() {
         );
     }
 
-    if (!is_user_logged_in()) {
+    if (
+        class_exists('HSB_Auth_API') &&
+        !HSB_Auth_API::is_logged_in()
+    ) {
         return new WP_Error(
             'login_required',
             'برای ارسال پیش‌فاکتور ابتدا وارد حساب کاربری شوید.'
+        );
+    }
+
+
+    if (
+        class_exists('HSB_Auth_API') &&
+        !HSB_Auth_API::is_verified()
+    ) {
+        return new WP_Error(
+            'mobile_not_verified',
+            'برای ارسال پیش‌فاکتور ابتدا شماره موبایل خود را تایید کنید.'
         );
     }
 
