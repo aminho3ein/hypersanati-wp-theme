@@ -15,6 +15,10 @@ hamburgerBtn.addEventListener("click", () => {
 function openMobileMenu() {
   mobileMenu.classList.add("open");
   mobileOverlay.classList.add("open");
+
+  document.body.classList.add(
+    "hsb-mobile-menu-open"
+  );
   hamburgerBtn.classList.add("active");
   hamburgerBtn.setAttribute("aria-expanded", "true");
   document.body.style.overflow = "hidden";
@@ -23,6 +27,10 @@ function openMobileMenu() {
 function closeMobileMenu() {
   mobileMenu.classList.remove("open");
   mobileOverlay.classList.remove("open");
+
+  document.body.classList.remove(
+    "hsb-mobile-menu-open"
+  );
   hamburgerBtn.classList.remove("active");
   hamburgerBtn.setAttribute("aria-expanded", "false");
   document.body.style.overflow = "";
@@ -245,3 +253,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+
+// Close mobile drawer with Escape.
+document.addEventListener(
+  "keydown",
+  function (event) {
+
+    if (
+      event.key === "Escape" &&
+      mobileMenu.classList.contains("open")
+    ) {
+      closeMobileMenu();
+
+      hamburgerBtn.focus();
+    }
+  }
+);

@@ -651,106 +651,556 @@ ul li a:hover {
   top: 21px;
 }
 
-/* ==========================
-   Drawer Menu
-   ========================== */
+/* ============================================================
+   HSB MOBILE DRAWER — UI KIT REDESIGN
+   ============================================================ */
 
 .mobile-menu {
-  position: fixed;
+    position: fixed;
 
-  top: 0;
-  right: -320px;
+    top: 0;
+    right: 0;
 
-  width: 280px;
-  height: 100vh;
+    width: min(86vw, 360px);
+    height: 100dvh;
 
-  background-color: var(--color-white);
+    display: flex;
+    flex-direction: column;
 
-  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.12);
+    padding: 0;
 
-  transition: right 0.35s ease;
+    background:
+        var(--color-white);
 
-  z-index: 1100;
+    border: 0 !important;
 
-  overflow-y: auto;
+    box-shadow:
+        -18px 0 50px
+        rgba(20, 27, 32, 0.16);
 
-  padding-top: 70px;
+    z-index: 1300;
+
+    overflow: hidden;
+
+    transform:
+        translateX(105%);
+
+    visibility: hidden;
+
+    transition:
+        transform 0.28s ease,
+        visibility 0.28s ease;
 }
+
 
 .mobile-menu.open {
-  right: 0;
-}
-.menu-and-cart {
-  display: flex;
-}
-.nav-actions {
-  display: none;
+    transform:
+        translateX(0);
+
+    visibility: visible;
 }
 
-/* ==========================
-   Mobile Links
-   ========================== */
+
+/* ------------------------------------------------------------
+   Drawer header / logo
+   ------------------------------------------------------------ */
+
+.hsb-mobile-menu__header {
+    flex: 0 0 auto;
+
+    min-height: 84px;
+
+    padding:
+        14px 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--color-gray-navs) 72%,
+            #fff
+        );
+
+    border-bottom:
+        1px solid
+        rgba(30, 37, 43, 0.08);
+}
+
+
+.hsb-mobile-menu__brand {
+    min-width: 0;
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+
+    flex: 1 1 auto;
+}
+
+
+.hsb-mobile-menu__brand
+.custom-logo-link {
+    display: flex;
+    align-items: center;
+
+    width: auto !important;
+    height: 100% !important;
+
+    margin: 0;
+    padding: 0 !important;
+
+    border: 0 !important;
+
+    background: transparent !important;
+}
+
+
+.hsb-mobile-menu__brand
+.custom-logo {
+    display: block;
+
+    width: auto !important;
+    height: 100% !important;
+
+    max-width: 190px;
+    max-height: 100%;
+
+    object-fit: contain;
+    object-position: right center;
+}
+
+
+.hsb-mobile-menu__brand-fallback {
+    width: auto !important;
+    height: auto !important;
+
+    padding: 0 !important;
+
+    border: 0 !important;
+
+    color:
+        var(--color-secondary);
+
+    font-size: 1rem;
+    font-weight: 800;
+
+    text-decoration: none;
+}
+
+
+/* ------------------------------------------------------------
+   Drawer close button
+   ------------------------------------------------------------ */
+
+.hsb-mobile-menu__close {
+    flex: 0 0 42px;
+
+    width: 42px;
+    height: 42px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border:
+        1px solid
+        rgba(30, 37, 43, 0.10);
+
+    border-radius: 11px;
+
+    background: #fff;
+
+    color:
+        var(--color-dark);
+
+    box-shadow:
+        0 4px 14px
+        rgba(20, 27, 32, 0.06);
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease;
+}
+
+
+.hsb-mobile-menu__close i {
+    font-size: 19px;
+    line-height: 1;
+}
+
+
+.hsb-mobile-menu__close:hover {
+    background:
+        var(--color-secondary);
+
+    border-color:
+        var(--color-secondary);
+
+    color: #fff;
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* ------------------------------------------------------------
+   Drawer body
+   ------------------------------------------------------------ */
+
+.hsb-mobile-menu__body {
+    flex: 1 1 auto;
+
+    min-height: 0;
+
+    padding:
+        16px 14px 24px;
+
+    overflow-y: auto;
+
+    overscroll-behavior: contain;
+}
+
+
+/* ------------------------------------------------------------
+   Navigation list
+   ------------------------------------------------------------ */
 
 .mobile-nav-links {
-  display: flex;
-  flex-direction: column;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
 }
 
-.mobile-nav-links li {
-  width: 100%;
+
+.mobile-nav-links > li {
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0 !important;
 }
 
-.mobile-nav-links li a {
-  display: flex;
-  align-items: center;
 
-  width: 100%;
-  height: 58px;
+/*
+ * Override the old global:
+ * ul li a { width / height / left-right borders }
+ */
+.mobile-nav-links > li > a {
+    position: relative;
 
-  padding: 0 1.5rem;
+    width: 100% !important;
+    min-height: 54px;
+    height: auto !important;
 
-  color: var(--color-dark);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 
-  font-size: 0.95rem;
-  font-weight: 500;
+    padding:
+        10px 15px !important;
 
-  border-bottom: 1px solid var(--gray-200);
+    margin: 0;
 
-  transition: all 0.25s ease;
+    border: 0 !important;
+    border-radius: 11px;
+
+    background:
+        transparent;
+
+    color:
+        var(--color-dark);
+
+    font-size: 0.94rem;
+    font-weight: 650;
+    line-height: 1.6;
+
+    text-align: right;
+    text-decoration: none;
+
+    box-shadow: none;
+
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
 }
 
-.mobile-nav-links li a:hover {
-  background-color: rgba(159, 133, 97, 0.12);
-  color: var(--color-secondary);
-  padding-right: 2rem;
+
+/* Hover / keyboard focus */
+
+.mobile-nav-links > li > a:hover,
+.mobile-nav-links > li > a:focus-visible {
+    padding-right:
+        15px !important;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--color-secondary) 9%,
+            #fff
+        );
+
+    color:
+        var(--color-secondary);
+
+    box-shadow:
+        inset 0 0 0 1px
+        color-mix(
+            in srgb,
+            var(--color-secondary) 18%,
+            transparent
+        );
+
+    transform:
+        translateX(-2px);
+
+    outline: none;
 }
 
-.mobile-nav-links li:last-child a {
-  border-bottom: none;
+
+/* ------------------------------------------------------------
+   Current / active page
+   ------------------------------------------------------------ */
+
+.mobile-nav-links
+> li.current-menu-item
+> a,
+
+.mobile-nav-links
+> li.current_page_item
+> a,
+
+.mobile-nav-links
+> li.current-menu-ancestor
+> a,
+
+.mobile-nav-links
+> li.current_page_ancestor
+> a {
+    background:
+        color-mix(
+            in srgb,
+            var(--color-secondary) 14%,
+            #fff
+        );
+
+    color:
+        var(--color-secondary);
+
+    font-weight: 800;
+
+    box-shadow:
+        inset 0 0 0 1px
+        color-mix(
+            in srgb,
+            var(--color-secondary) 26%,
+            transparent
+        );
 }
 
-/* ==========================
+
+/* Active item marker — no side border */
+
+.mobile-nav-links
+> li.current-menu-item
+> a::before,
+
+.mobile-nav-links
+> li.current_page_item
+> a::before,
+
+.mobile-nav-links
+> li.current-menu-ancestor
+> a::before,
+
+.mobile-nav-links
+> li.current_page_ancestor
+> a::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    flex: 0 0 7px;
+
+    margin-left: 9px;
+
+    border-radius: 50%;
+
+    background:
+        var(--color-secondary);
+
+    box-shadow:
+        0 0 0 4px
+        color-mix(
+            in srgb,
+            var(--color-secondary) 12%,
+            transparent
+        );
+}
+
+
+/* Explicitly remove every old menu divider. */
+
+.mobile-nav-links > li,
+.mobile-nav-links > li > a,
+.mobile-nav-links > li:last-child > a {
+    border-right: 0 !important;
+    border-left: 0 !important;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+}
+
+
+/* ------------------------------------------------------------
+   Existing responsive controls
+   ------------------------------------------------------------ */
+
+.menu-and-cart {
+    display: flex;
+}
+
+.nav-actions {
+    display: none;
+}
+
+
+/* ------------------------------------------------------------
    Overlay
-   ========================== */
+   ------------------------------------------------------------ */
 
 .mobile-overlay {
-  position: fixed;
-  inset: 0;
+    position: fixed;
 
-  background: rgba(0, 0, 0, 0.45);
+    inset: 0;
 
-  opacity: 0;
-  visibility: hidden;
+    z-index: 1250;
 
-  transition: all 0.3s ease;
+    background:
+        rgba(20, 27, 32, 0.46);
 
-  z-index: 1050;
+    -webkit-backdrop-filter:
+        blur(2px);
+
+    backdrop-filter:
+        blur(2px);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
 }
+
 
 .mobile-overlay.open {
-  opacity: 1;
-  visibility: visible;
+    opacity: 1;
+    visibility: visible;
 }
+
+
+body.hsb-mobile-menu-open {
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
+
+/* WordPress admin bar */
+
+body.admin-bar
+.mobile-menu {
+    top: 32px;
+
+    height:
+        calc(100dvh - 32px);
+}
+
+
+@media (max-width: 782px) {
+
+    body.admin-bar
+    .mobile-menu {
+        top: 46px;
+
+        height:
+            calc(100dvh - 46px);
+    }
+}
+
+
+/* Small phones */
+
+@media (max-width: 480px) {
+
+    .mobile-menu {
+        width:
+            min(88vw, 340px);
+    }
+
+    .hsb-mobile-menu__header {
+        min-height: 78px;
+
+        padding:
+            12px 14px;
+    }
+
+    .hsb-mobile-menu__brand {
+        height: 48px;
+    }
+
+    .hsb-mobile-menu__body {
+        padding:
+            13px 11px 20px;
+    }
+
+    .mobile-nav-links
+    > li
+    > a {
+        min-height: 52px;
+
+        padding:
+            9px 13px !important;
+
+        border-radius: 10px;
+
+        font-size: 0.91rem;
+    }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    .mobile-menu,
+    .mobile-overlay,
+    .mobile-nav-links > li > a,
+    .hsb-mobile-menu__close {
+        transition: none;
+    }
+}
+
+
 /* ==========================================================================
    Search Area
    ========================================================================== */
@@ -2439,6 +2889,68 @@ button.handle-frame-section:disabled {
     gap: 20rem;
   }
 }
+/* ============================================================
+   HSB RESPONSIVE NAVBAR LOGO
+   Logo height follows navbar height.
+   Width always follows the original image aspect ratio.
+   ============================================================ */
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    height: 100%;
+
+    padding: 0;
+    margin: 0;
+
+    flex: 0 0 auto;
+
+    line-height: 1;
+}
+
+.navbar-brand .custom-logo-link,
+.navbar-brand .hsb-navbar-brand-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    height: calc(100% - 10px);
+    width: auto;
+
+    padding: 0;
+    margin: 0;
+
+    border: 0;
+    background: transparent;
+
+    text-decoration: none;
+}
+
+.navbar-brand .custom-logo {
+    display: block;
+
+    height: 100% !important;
+    width: auto !important;
+
+    max-height: 100%;
+    max-width: none;
+
+    object-fit: contain;
+    object-position: center;
+
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-brand .hsb-navbar-brand-fallback {
+    color: var(--color-secondary);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+
 /* HSB PREINVOICE HEADER BADGE */
 .preinvoice-cart {
     position: relative;
@@ -2660,6 +3172,400 @@ button.handle-frame-section:disabled {
 
     color: #a53131;
 }
+/* ============================================================
+   HSB HEADER / NAVBAR LAYOUT
+   ============================================================ */
+
+/*
+ * Background bars remain full viewport width.
+ * Their actual content follows the site's 1200px content grid.
+ */
+
+.top-of-nav {
+    width: 100%;
+}
+
+.hsb-top-nav-inner {
+    width: calc(100% - 32px);
+    max-width: 1200px;
+    height: 100%;
+
+    margin-inline: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1.5rem;
+}
+
+
+/* ------------------------------------------------------------
+   Sticky navbar
+   ------------------------------------------------------------ */
+
+/*
+ * The navbar lives inside the short .header wrapper.
+ * CSS position:sticky would therefore be constrained by
+ * the header height. JavaScript switches it to fixed only
+ * after its original position has passed the viewport top.
+ */
+
+.my-navbar {
+    width: 100% !important;
+
+    padding: 0 !important;
+
+    justify-content: center !important;
+
+    position: relative !important;
+
+    top: auto;
+
+    z-index: 1020;
+}
+
+
+.my-navbar.hsb-navbar-is-sticky {
+    position: fixed !important;
+
+    top: 0 !important;
+    right: 0;
+    left: 0;
+
+    width: 100% !important;
+
+    z-index: 1030;
+
+    box-shadow:
+        0 4px 18px
+        rgba(0, 0, 0, 0.10);
+}
+
+
+/*
+ * When navbar becomes fixed it leaves the document flow.
+ * This padding preserves its original space and prevents
+ * the page content from jumping upward.
+ */
+.header.hsb-navbar-sticky-active {
+    padding-bottom:
+        var(
+            --hsb-sticky-navbar-height,
+            0px
+        );
+}
+
+
+/* Keep fixed navbar below WordPress admin bar. */
+body.admin-bar
+.my-navbar.hsb-navbar-is-sticky {
+    top: 32px !important;
+}
+
+
+/* ------------------------------------------------------------
+   Inner navbar content grid
+   ------------------------------------------------------------ */
+
+.hsb-navbar-inner {
+    width: calc(100% - 32px);
+    max-width: 1200px;
+    height: 100%;
+
+    margin-inline: auto;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    min-width: 0;
+}
+
+
+/* ------------------------------------------------------------
+   Logo
+   ------------------------------------------------------------ */
+
+.hsb-navbar-inner .navbar-brand {
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+
+    flex: 0 0 auto;
+}
+
+.hsb-navbar-inner
+.navbar-brand
+.custom-logo-link {
+    height: calc(100% - 10px);
+
+    width: auto;
+
+    display: flex;
+    align-items: center;
+
+    border: 0 !important;
+
+    padding: 0 !important;
+}
+
+.hsb-navbar-inner
+.navbar-brand
+.custom-logo {
+    display: block;
+
+    height: 100% !important;
+    width: auto !important;
+
+    max-height: 100%;
+    max-width: none;
+
+    object-fit: contain;
+}
+
+
+/* ------------------------------------------------------------
+   Desktop navigation
+   ------------------------------------------------------------ */
+
+.hsb-navbar-inner .nav-links {
+    flex: 1 1 auto;
+
+    min-width: 0;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    align-items: stretch;
+}
+
+.hsb-navbar-inner
+.nav-links > li {
+    height: 100%;
+
+    display: flex;
+    align-items: stretch;
+}
+
+.hsb-navbar-inner
+.nav-links > li > a {
+    width: auto !important;
+    min-width: 0;
+
+    height: 100% !important;
+
+    padding-inline: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    white-space: nowrap;
+}
+
+
+/* ------------------------------------------------------------
+   Desktop actions
+   ------------------------------------------------------------ */
+
+.hsb-navbar-inner .nav-actions {
+    flex: 0 0 auto;
+
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+.hsb-navbar-inner
+.nav-actions > li {
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+}
+
+.hsb-navbar-inner
+.nav-actions
+.preinvoice-cart {
+    height: 100%;
+
+    margin: 0 !important;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+}
+
+
+/*
+ * Account and preinvoice buttons intentionally use
+ * exactly the same geometry and visual language.
+ */
+
+.hsb-navbar-inner
+.nav-actions
+.preinvoice-cart-link,
+.hsb-navbar-inner
+.nav-actions
+.hsb-account-icon {
+    width: 44px !important;
+    min-width: 44px !important;
+
+    height: 44px !important;
+    min-height: 44px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+
+    border: 0 !important;
+    border-radius: 10px !important;
+
+    background:
+        var(--color-secondary)
+        !important;
+
+    color: #fff !important;
+
+    box-shadow: none !important;
+
+    line-height: 1;
+
+    text-decoration: none !important;
+}
+
+.hsb-navbar-inner
+.nav-actions
+.preinvoice-cart-link i,
+.hsb-navbar-inner
+.nav-actions
+.hsb-account-icon i {
+    margin: 0;
+
+    color: inherit;
+
+    font-size: 20px;
+    line-height: 1;
+}
+
+.hsb-navbar-inner
+.nav-actions
+.preinvoice-cart-link:hover,
+.hsb-navbar-inner
+.nav-actions
+.hsb-account-icon:hover,
+.hsb-navbar-inner
+.nav-actions
+.hsb-account-menu:focus-within
+.hsb-account-icon {
+    background:
+        color-mix(
+            in srgb,
+            var(--color-secondary) 86%,
+            #000
+        )
+        !important;
+
+    color: #fff !important;
+}
+
+
+/* Badge stays attached to the button, not to navbar geometry. */
+.hsb-navbar-inner
+.nav-actions
+.preinvoice-count-badge {
+    top: -5px;
+    right: -5px;
+}
+
+
+/* ------------------------------------------------------------
+   Mobile / tablet action buttons
+   ------------------------------------------------------------ */
+
+.mobile-nav-actions
+.preinvoice-cart {
+    margin: 0 !important;
+}
+
+.mobile-nav-actions
+.preinvoice-cart-link,
+.mobile-nav-actions
+.hsb-account-icon {
+    width: 44px !important;
+    min-width: 44px !important;
+
+    height: 44px !important;
+    min-height: 44px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: 0 !important;
+    border-radius: 10px !important;
+
+    background:
+        var(--color-secondary)
+        !important;
+
+    color: #fff !important;
+}
+
+.mobile-nav-actions
+.preinvoice-cart-link i,
+.mobile-nav-actions
+.hsb-account-icon i {
+    color: inherit;
+}
+
+
+/* ------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------ */
+
+@media (max-width: 782px) {
+
+    body.admin-bar
+    .my-navbar.hsb-navbar-is-sticky {
+        top: 46px !important;
+    }
+}
+
+@media (max-width: 767px) {
+
+    .hsb-navbar-inner,
+    .hsb-top-nav-inner {
+        width: calc(100% - 24px);
+    }
+
+    .hsb-navbar-inner {
+        gap: 8px;
+    }
+
+    .hsb-navbar-inner
+    .navbar-brand
+    .custom-logo-link {
+        height: calc(100% - 10px);
+    }
+}
+
+
 /* ==========================================================================
    Footer Service Strip — Problem Width Fix
    ========================================================================== */
@@ -4110,3 +5016,104 @@ html {
 
 }
 
+
+
+/* ============================================================
+   HSB HEADER ACTION VISIBILITY FIX
+   Prevent duplicate account / preinvoice actions
+   ============================================================ */
+
+/* Mobile + Tablet: use only mobile actions */
+@media (max-width: 991.98px) {
+
+    .hsb-navbar-inner > .nav-actions {
+        display: none !important;
+    }
+
+    .hsb-navbar-inner > .menu-and-cart {
+        display: flex !important;
+        align-items: center;
+        gap: 8px;
+        margin-inline-start: auto;
+    }
+
+    .mobile-nav-actions {
+        display: flex !important;
+        align-items: center;
+        gap: 8px;
+
+        margin: 0;
+        padding: 0;
+    }
+
+    .mobile-nav-actions > li,
+    .mobile-nav-actions > .preinvoice-cart {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+
+/* Laptop + Desktop: use only desktop actions */
+@media (min-width: 992px) {
+
+    .hsb-navbar-inner > .nav-actions {
+        display: flex !important;
+    }
+
+    .hsb-navbar-inner > .menu-and-cart {
+        display: none !important;
+    }
+}
+
+
+/* ============================================================
+   HSB MOBILE NAVBAR FINAL ALIGNMENT
+   Logo + hamburger on right / actions on left
+   ============================================================ */
+
+@media (max-width: 991.98px) {
+
+    .hsb-navbar-inner {
+        direction: rtl;
+    }
+
+    .hsb-navbar-inner > .navbar-brand {
+        flex: 0 0 auto;
+    }
+
+    .hsb-navbar-inner > .menu-and-cart {
+        flex: 1 1 auto;
+        min-width: 0;
+
+        margin: 0 !important;
+
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+
+        /*
+         * Physical LTR layout inside this wrapper:
+         * mobile actions = left edge
+         * hamburger     = right edge beside logo
+         */
+        direction: ltr;
+    }
+
+    .hsb-navbar-inner
+    .mobile-nav-actions {
+        flex: 0 0 auto;
+
+        margin: 0 !important;
+        padding: 0;
+
+        direction: rtl;
+    }
+
+    .hsb-navbar-inner
+    .hamburger {
+        flex: 0 0 44px;
+
+        margin: 0 !important;
+    }
+}

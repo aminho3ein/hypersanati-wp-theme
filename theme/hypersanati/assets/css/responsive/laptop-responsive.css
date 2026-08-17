@@ -4,7 +4,6 @@
    Desktop Override
    ========================================================================== */
 .hamburger,
-.navbar-brand,
 .ham-line,
 .mobile-menu,
 .mobile-overlay {
@@ -289,7 +288,7 @@ ul li a {
   font-size: 22px;
 }
 .cart {
-  margin: 15px 10px 0 10px;
+  margin: 0;
 }
 .cart i {
   font-size: 22px;

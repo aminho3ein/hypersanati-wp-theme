@@ -23,7 +23,7 @@ document.querySelectorAll('.new-range-card').forEach(card => {
 
         if (minVal < MIN_VAL) minVal = MIN_VAL;
         if (maxVal > MAX_VAL) maxVal = MAX_VAL;
-        
+
         // کنترل تداخل نداشتن از و تا
         if (minVal > maxVal) {
             minVal = maxVal;
@@ -60,7 +60,7 @@ document.querySelectorAll('.new-range-card').forEach(card => {
         window.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
             const rect = slider.getBoundingClientRect();
-            let offset = rect.right - e.clientX; 
+            let offset = rect.right - e.clientX;
             let pct = (offset / rect.width) * 100;
             pct = Math.max(0, Math.min(100, pct));
 
@@ -151,14 +151,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const scrollNext = () => {
         const scrollAmount = getScrollAmount();
         const maxScroll = blogScroll.scrollWidth - blogScroll.clientWidth;
-        
+
         // در مرورگرها برای RTL، مقدار scrollLeft معمولا منفی است
         // اگر به انتهای اسکرول رسیدیم، به نقطه صفر (ابتدا) برگرد
-        if (Math.abs(blogScroll.scrollLeft) >= maxScroll - 10) { 
+        if (Math.abs(blogScroll.scrollLeft) >= maxScroll - 10) {
             blogScroll.scrollTo({ left: 0, behavior: 'smooth' });
         } else {
             // اسکرول به سمت چپ (آیتم‌های بعدی در RTL)
-            blogScroll.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); 
+            blogScroll.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
         }
     };
 
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
     cardBoxes.addEventListener('mouseenter', () => {
         clearInterval(autoScrollTimer);
     });
-    
+
     // اجرای مجدد اسکرول خودکار با برداشتن موس از روی مقالات
     cardBoxes.addEventListener('mouseleave', () => {
         autoScrollTimer = setInterval(scrollNext, 7000);
@@ -472,3 +472,145 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateState();
 });
+
+
+/* ============================================================
+   HSB REAL STICKY NAVBAR
+   ============================================================ */
+
+(function () {
+
+    function initHsbStickyNavbar() {
+
+        const navbar =
+            document.querySelector(
+                '.my-navbar'
+            );
+
+        const header =
+            document.querySelector(
+                '.header'
+            );
+
+        if (
+            !navbar ||
+            !header ||
+            navbar.dataset.hsbStickyReady === '1'
+        ) {
+            return;
+        }
+
+        navbar.dataset.hsbStickyReady = '1';
+
+        let stickyStart = 0;
+        let ticking = false;
+
+
+        function setNavbarHeight() {
+
+            header.style.setProperty(
+                '--hsb-sticky-navbar-height',
+                navbar.offsetHeight + 'px'
+            );
+        }
+
+
+        function updateStickyState() {
+
+            const shouldStick =
+                window.scrollY >= stickyStart;
+
+            navbar.classList.toggle(
+                'hsb-navbar-is-sticky',
+                shouldStick
+            );
+
+            header.classList.toggle(
+                'hsb-navbar-sticky-active',
+                shouldStick
+            );
+        }
+
+
+        function measureNavbar() {
+
+            /*
+             * Temporarily return navbar to normal flow so its
+             * original document position can be measured.
+             */
+            navbar.classList.remove(
+                'hsb-navbar-is-sticky'
+            );
+
+            header.classList.remove(
+                'hsb-navbar-sticky-active'
+            );
+
+            stickyStart =
+                navbar.getBoundingClientRect().top +
+                window.scrollY;
+
+            setNavbarHeight();
+
+            updateStickyState();
+        }
+
+
+        function requestStickyUpdate() {
+
+            if (ticking) {
+                return;
+            }
+
+            ticking = true;
+
+            window.requestAnimationFrame(
+                function () {
+
+                    updateStickyState();
+
+                    ticking = false;
+                }
+            );
+        }
+
+
+        window.addEventListener(
+            'scroll',
+            requestStickyUpdate,
+            {
+                passive: true
+            }
+        );
+
+
+        window.addEventListener(
+            'resize',
+            function () {
+
+                window.requestAnimationFrame(
+                    measureNavbar
+                );
+            }
+        );
+
+
+        measureNavbar();
+    }
+
+
+    if (
+        document.readyState === 'loading'
+    ) {
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            initHsbStickyNavbar
+        );
+
+    } else {
+
+        initHsbStickyNavbar();
+    }
+
+})();
