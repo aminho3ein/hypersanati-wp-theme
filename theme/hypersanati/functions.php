@@ -563,6 +563,29 @@ add_action('after_setup_theme', 'hypersanati_register_menus');
 
 
 /* =========================================================
+   THEME LOGO SUPPORT
+========================================================= */
+function hypersanati_register_logo_support() {
+
+    add_theme_support(
+        'custom-logo',
+        array(
+            'height'      => 100,
+            'width'       => 320,
+            'flex-height' => true,
+            'flex-width'  => true,
+        )
+    );
+}
+
+add_action(
+    'after_setup_theme',
+    'hypersanati_register_logo_support',
+    20
+);
+
+
+/* =========================================================
    MENU CLASSES
 ========================================================= */
 function hypersanati_nav_link_classes($atts, $item, $args, $depth) {
