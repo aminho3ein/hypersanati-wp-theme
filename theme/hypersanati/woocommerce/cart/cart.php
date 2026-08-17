@@ -36,7 +36,10 @@ if (
         'hsb_preinvoice_nonce'
     );
 
-    if (!is_user_logged_in()) {
+    if (
+        class_exists('HSB_Auth_API') &&
+        !HSB_Auth_API::is_logged_in()
+    ) {
 
         if (WC()->session) {
             WC()->session->set(
@@ -46,7 +49,11 @@ if (
         }
 
         wp_safe_redirect(
-            wc_get_page_permalink('myaccount')
+            add_query_arg(
+                'redirect_to',
+                wc_get_cart_url(),
+                wc_get_page_permalink('myaccount')
+            )
         );
         exit;
     }
@@ -177,6 +184,19 @@ foreach ($items as $item) {
 
 <section class="cart-page-items preinvoice-page">
     <div class="container">
+
+        <?php if (!empty($_GET['preinvoice_error'])) : ?>
+            <div class="woocommerce-error preinvoice-error-message">
+                <?php
+                echo esc_html(
+                    rawurldecode(
+                        wp_unslash($_GET['preinvoice_error'])
+                    )
+                );
+                ?>
+            </div>
+        <?php endif; ?>
+
 
         <div class="cart-page-items__header">
             <h1 class="cart-page-items__title">

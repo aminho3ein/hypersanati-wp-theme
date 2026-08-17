@@ -1681,6 +1681,10 @@ function load_shop_categories() {
     $offset = isset($_GET['index']) ? intval($_GET['index']) : 0;
     $selected_cat_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
 
+    $subcategory_index = isset($_GET['subcategory_index'])
+        ? max(0, intval($_GET['subcategory_index']))
+        : 0;
+
     // دریافت کلمه کلیدی جستجو از آژاکس
     $search_keyword = isset($_GET['search_keyword']) ? sanitize_text_field($_GET['search_keyword']) : '';
 
@@ -1732,81 +1736,121 @@ function load_shop_categories() {
     }
 
     /*
-     * In progressive mode the first request only renders
-     * subcategory shells/sentinels. Actual products arrive
-     * through hsb_load_shop_family_batch(), so existence of
-     * subcategories is enough to return the structure.
+     * Sequential Shop rendering:
+     * return only one subcategory shell at a time.
+     *
+     * The next subcategory shell is requested only after
+     * product-family loading for the current one finishes
+     * and the customer reaches the next sentinel.
      */
-    $has_product = !empty($subcats);
+    $subcats = array_values($subcats);
+
+    if (!isset($subcats[$subcategory_index])) {
+        wp_die();
+    }
+
+    $sub = $subcats[$subcategory_index];
+
+    $has_more_subcategories =
+        isset($subcats[$subcategory_index + 1]);
 
     ob_start();
+
+    if (0 === $subcategory_index) :
+        ?>
+        <div
+            class="category"
+            data-id="<?php echo esc_attr($cat->term_id); ?>"
+            data-category-index="<?php echo esc_attr($offset); ?>">
+
+            <div class="category-name">
+                <h5>
+                    <?php echo esc_html($cat->name); ?>
+                </h5>
+            </div>
+
+            <div class="sub-category">
+        <?php
+    endif;
     ?>
-    <div class="category" data-id="<?php echo esc_attr($cat->term_id); ?>">
-        <div class="category-name">
-            <h5><?php echo esc_html($cat->name); ?></h5>
-        </div>
-        <div class="sub-category">
-            <?php foreach ($subcats as $sub) : ?>
 
-                <section
-                    class="hsb-shop-lazy-subcategory"
-                    data-subcategory-id="<?php echo esc_attr(
-                        $sub->term_id
-                    ); ?>">
+        <section
+            class="hsb-shop-lazy-subcategory"
+            data-subcategory-id="<?php echo esc_attr(
+                $sub->term_id
+            ); ?>">
 
-                    <div class="sub-category-name">
+            <div class="sub-category-name">
 
-                        <p class="sub-cat-name">
-                            <?php
-                            echo esc_html(
-                                $sub->name
-                            );
-                            ?>
-                        </p>
+                <p class="sub-cat-name">
+                    <?php echo esc_html($sub->name); ?>
+                </p>
 
-                    </div>
+            </div>
 
 
-                    <div
-                        class="child-category hsb-shop-lazy-grid"
-                        data-subcategory-id="<?php echo esc_attr(
-                            $sub->term_id
-                        ); ?>">
-                    </div>
+            <div
+                class="child-category hsb-shop-lazy-grid"
+                data-subcategory-id="<?php echo esc_attr(
+                    $sub->term_id
+                ); ?>">
+            </div>
 
 
-                    <div
-                        class="hsb-shop-lazy-sentinel"
-                        data-subcategory-id="<?php echo esc_attr(
-                            $sub->term_id
-                        ); ?>"
-                        data-page="0"
-                        data-loading="0"
-                        data-complete="0">
+            <div
+                class="hsb-shop-lazy-sentinel"
+                data-subcategory-id="<?php echo esc_attr(
+                    $sub->term_id
+                ); ?>"
+                data-page="0"
+                data-loading="0"
+                data-complete="0">
 
-                        <span class="hsb-shop-lazy-status">
-                            <i
-                                class="fa-solid fa-circle-notch fa-spin">
-                            </i>
+                <span class="hsb-shop-lazy-status">
+                    <i
+                        class="fa-solid fa-circle-notch fa-spin">
+                    </i>
 
-                            <span>
-                                در حال آماده‌سازی محصولات...
-                            </span>
-                        </span>
+                    <span>
+                        در حال آماده‌سازی محصولات...
+                    </span>
+                </span>
 
-                    </div>
+            </div>
 
-                </section>
+        </section>
 
-            <?php endforeach; ?>
-        </div>
-    </div>
-    <hr class="sub-section-hr" />
+
+        <?php if ($has_more_subcategories) : ?>
+
+            <div
+                class="hsb-shop-next-subcategory-sentinel"
+                data-category-index="<?php echo esc_attr(
+                    $offset
+                ); ?>"
+                data-subcategory-index="<?php echo esc_attr(
+                    $subcategory_index + 1
+                ); ?>"
+                data-loading="0"
+                data-complete="0"
+                aria-hidden="true">
+            </div>
+
+        <?php endif; ?>
+
+
     <?php
-    $html = ob_get_clean();
-    if ($has_product) {
-        echo $html;
-    }
+    if (0 === $subcategory_index) :
+        ?>
+            </div>
+        </div>
+
+        <hr class="sub-section-hr" />
+        <?php
+    endif;
+
+    echo ob_get_clean();
+
     wp_die();
 }
 
@@ -3324,6 +3368,9 @@ function hypersanati_enqueue_otp_assets()
                 'wp_rest'
             ),
             'is_logged_in' => is_user_logged_in(),
+            'redirect_url' => isset($_GET['redirect_to'])
+                ? esc_url_raw(wp_unslash($_GET['redirect_to']))
+                : '',
         ]);
     }
 
@@ -4969,6 +5016,25 @@ function hsb_get_country_flag_data($country_name) {
         (string) $country_name
     );
 
+    $country_map = array(
+        'چین' => 'china',
+        'هند' => 'india',
+        'ژاپن' => 'japan',
+        'آلمان' => 'germany',
+        'فرانسه' => 'france',
+        'ایتالیا' => 'italy',
+        'رومانی' => 'romania',
+        'روسیه' => 'rusha',
+        'سنگاپور' => 'singapur',
+        'اسپانیا' => 'spanish',
+        'تایلند' => 'thailand',
+        'آمریکا' => 'american',
+    );
+
+    if (isset($country_map[$country_name])) {
+        $country_name = $country_map[$country_name];
+    }
+
     if ('' === $country_name) {
         return array(
             'id'        => 0,
@@ -6128,10 +6194,24 @@ function hsb_create_preinvoice_order_from_session() {
         );
     }
 
-    if (!is_user_logged_in()) {
+    if (
+        class_exists('HSB_Auth_API') &&
+        !HSB_Auth_API::is_logged_in()
+    ) {
         return new WP_Error(
             'login_required',
             'برای ارسال پیش‌فاکتور ابتدا وارد حساب کاربری شوید.'
+        );
+    }
+
+
+    if (
+        class_exists('HSB_Auth_API') &&
+        !HSB_Auth_API::is_verified()
+    ) {
+        return new WP_Error(
+            'mobile_not_verified',
+            'برای ارسال پیش‌فاکتور ابتدا شماره موبایل خود را تایید کنید.'
         );
     }
 

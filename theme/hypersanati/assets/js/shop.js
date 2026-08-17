@@ -69,6 +69,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    function getNextShopSubcategorySentinel() {
+        if (!container) {
+            return null;
+        }
+
+        return container.querySelector(
+            '.hsb-shop-next-subcategory-sentinel[data-complete="0"]'
+        );
+    }
+
+
     function activateNextShopFamilySentinel() {
 
         disconnectShopFamilyObserver();
@@ -76,9 +87,52 @@ document.addEventListener("DOMContentLoaded", function () {
         const sentinel =
             getNextShopFamilySentinel();
 
-        if (!sentinel) {
+        if (sentinel) {
+
+            shopFamilyObserver =
+                new IntersectionObserver(
+                    function (entries) {
+
+                        entries.forEach(
+                            function (entry) {
+
+                                if (!entry.isIntersecting) {
+                                    return;
+                                }
+
+                                shopFamilyObserver.unobserve(
+                                    sentinel
+                                );
+
+                                loadShopFamilyBatch(
+                                    sentinel
+                                );
+                            }
+                        );
+                    },
+                    {
+                        root: null,
+                        rootMargin:
+                            '180px 0px 180px 0px',
+                        threshold: 0.01
+                    }
+                );
+
+            shopFamilyObserver.observe(
+                sentinel
+            );
+
             return;
         }
+
+
+        const subcategorySentinel =
+            getNextShopSubcategorySentinel();
+
+        if (!subcategorySentinel) {
+            return;
+        }
+
 
         shopFamilyObserver =
             new IntersectionObserver(
@@ -92,32 +146,137 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
 
                             shopFamilyObserver.unobserve(
-                                sentinel
+                                subcategorySentinel
                             );
 
-                            loadShopFamilyBatch(
-                                sentinel
+                            loadNextShopSubcategory(
+                                subcategorySentinel
                             );
                         }
                     );
                 },
                 {
                     root: null,
-
-                    /*
-                     * Begin shortly before the loader enters
-                     * the viewport, not several screens early.
-                     */
                     rootMargin:
                         '180px 0px 180px 0px',
-
                     threshold: 0.01
                 }
             );
 
         shopFamilyObserver.observe(
-            sentinel
+            subcategorySentinel
         );
+    }
+
+
+    function loadNextShopSubcategory(sentinel) {
+
+        if (
+            !sentinel ||
+            sentinel.dataset.loading === '1' ||
+            sentinel.dataset.complete === '1'
+        ) {
+            return;
+        }
+
+        const categoryIndex =
+            parseInt(
+                sentinel.dataset.categoryIndex || '0',
+                10
+            );
+
+        const subcategoryIndex =
+            parseInt(
+                sentinel.dataset.subcategoryIndex || '0',
+                10
+            );
+
+        sentinel.dataset.loading = '1';
+
+        const params =
+            new URLSearchParams({
+                action:
+                    'load_shop_categories',
+
+                index:
+                    String(categoryIndex),
+
+                category_id:
+                    String(currentSelectedCategory),
+
+                subcategory_index:
+                    String(subcategoryIndex),
+
+                search_keyword:
+                    searchQuery
+            });
+
+        fetch(
+            '/wp-admin/admin-ajax.php?' +
+            params.toString(),
+            {
+                credentials: 'same-origin'
+            }
+        )
+            .then(function (response) {
+
+                if (!response.ok) {
+                    throw new Error(
+                        'خطا در دریافت زیر‌دسته'
+                    );
+                }
+
+                return response.text();
+            })
+            .then(function (html) {
+
+                if (!html || !html.trim()) {
+
+                    sentinel.dataset.complete = '1';
+                    sentinel.remove();
+
+                    activateNextShopFamilySentinel();
+
+                    return;
+                }
+
+                /*
+                 * Insert the new subcategory immediately
+                 * before the old queue sentinel.
+                 *
+                 * The response may contain a replacement
+                 * sentinel for the following subcategory.
+                 */
+                sentinel.insertAdjacentHTML(
+                    'beforebegin',
+                    html
+                );
+
+                sentinel.dataset.complete = '1';
+                sentinel.remove();
+
+                requestAnimationFrame(
+                    function () {
+                        activateNextShopFamilySentinel();
+                    }
+                );
+            })
+            .catch(function (error) {
+
+                console.error(
+                    'HSB sequential subcategory load:',
+                    error
+                );
+
+                sentinel.dataset.loading = '0';
+
+                setTimeout(
+                    function () {
+                        activateNextShopFamilySentinel();
+                    },
+                    1200
+                );
+            });
     }
 
 
@@ -676,12 +835,90 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    function initShopBackToTop() {
+
+        if (
+            document.getElementById(
+                'hsb-shop-back-to-top'
+            )
+        ) {
+            return;
+        }
+
+        const button =
+            document.createElement(
+                'button'
+            );
+
+        button.type = 'button';
+        button.id = 'hsb-shop-back-to-top';
+        button.className =
+            'hsb-shop-back-to-top';
+
+        button.setAttribute(
+            'aria-label',
+            'بازگشت به بالای صفحه'
+        );
+
+        button.setAttribute(
+            'title',
+            'بازگشت به بالا'
+        );
+
+        button.innerHTML =
+            '<i class="fa-solid fa-arrow-up" aria-hidden="true"></i>';
+
+        document.body.appendChild(
+            button
+        );
+
+
+        function updateBackToTopVisibility() {
+
+            if (window.scrollY >= 600) {
+                button.classList.add(
+                    'is-visible'
+                );
+            } else {
+                button.classList.remove(
+                    'is-visible'
+                );
+            }
+        }
+
+
+        button.addEventListener(
+            'click',
+            function () {
+
+                window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            }
+        );
+
+
+        window.addEventListener(
+            'scroll',
+            updateBackToTopVisibility,
+            {
+                passive: true
+            }
+        );
+
+        updateBackToTopVisibility();
+    }
+
+
     loadSidebarCategories();
     loadProducts();
     handleSearchFiltering();
     handleIndexSearch();
     handleShopDimensionSearch();
     handleDimensionSearchReset();
+    initShopBackToTop();
 
     window.addEventListener("scroll", function () {
 
@@ -697,14 +934,15 @@ document.addEventListener("DOMContentLoaded", function () {
          * Finish progressive batches in the current category
          * before adding another top-level category below it.
          */
-        const pendingFamilyBatch =
+        const pendingProgressiveLoad =
             container
                 ? container.querySelector(
-                    '.hsb-shop-lazy-sentinel[data-complete="0"]'
+                    '.hsb-shop-lazy-sentinel[data-complete="0"], ' +
+                    '.hsb-shop-next-subcategory-sentinel[data-complete="0"]'
                 )
                 : null;
 
-        if (pendingFamilyBatch) {
+        if (pendingProgressiveLoad) {
             return;
         }
 
