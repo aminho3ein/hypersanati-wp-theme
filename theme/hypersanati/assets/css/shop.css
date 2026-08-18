@@ -2295,3 +2295,131 @@
         transition: none;
     }
 }
+
+
+/* ============================================================
+   HSB DIRECT SHOP SEARCH
+   ============================================================ */
+
+/*
+ * This loader animation is rendered entirely by the browser.
+ * It does not create any additional server request.
+ */
+.shop-loader {
+    display: none;
+
+    width: 100%;
+
+    padding: 28px 12px;
+
+    color:
+        var(--color-secondary);
+
+    text-align: center;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+.shop-loader::before {
+    content: "";
+
+    display: inline-block;
+
+    width: 18px;
+    height: 18px;
+
+    margin-left: 8px;
+
+    vertical-align: middle;
+
+    border:
+        2px solid
+        color-mix(
+            in srgb,
+            var(--color-secondary) 18%,
+            transparent
+        );
+
+    border-top-color:
+        var(--color-secondary);
+
+    border-radius: 50%;
+
+    animation:
+        hsbShopDirectSpinner
+        0.7s linear infinite;
+}
+
+
+@keyframes hsbShopDirectSpinner {
+
+    to {
+        transform:
+            rotate(360deg);
+    }
+}
+
+
+.hsb-shop-direct-search {
+    margin: 0;
+}
+
+
+.hsb-shop-direct-search
+.sub-category {
+    margin: 0;
+}
+
+
+.hsb-shop-direct-search-grid {
+    animation:
+        hsbShopDirectResultsReveal
+        0.22s ease both;
+}
+
+
+@keyframes hsbShopDirectResultsReveal {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0);
+    }
+}
+
+
+.hsb-shop-search-empty {
+    width: 100%;
+
+    padding: 34px 16px;
+
+    text-align: center;
+
+    color:
+        var(--color-secondary);
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.hsb-shop-search-empty.is-error {
+    color: #b3261e;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    .shop-loader::before,
+    .hsb-shop-direct-search-grid {
+        animation: none;
+    }
+}

@@ -1991,6 +1991,212 @@ function hypersanati_search_products_by_dimensions() {
 
 
 
+
+/* ============================================================
+ * HSB DIRECT SHOP TEXT SEARCH
+ * ============================================================ */
+
+/*
+ * Text searches must not walk through the Shop category /
+ * subcategory progressive-loading queue.
+ *
+ * A search is resolved in one catalog query and returned in
+ * one AJAX response. Normal Shop browsing keeps using the
+ * progressive category/family loader.
+ */
+add_action(
+    'wp_ajax_hsb_search_shop_products_direct',
+    'hsb_search_shop_products_direct'
+);
+
+add_action(
+    'wp_ajax_nopriv_hsb_search_shop_products_direct',
+    'hsb_search_shop_products_direct'
+);
+
+function hsb_search_shop_products_direct() {
+
+    $search_keyword = isset(
+        $_GET['search_keyword']
+    )
+        ? trim(
+            sanitize_text_field(
+                wp_unslash(
+                    $_GET['search_keyword']
+                )
+            )
+        )
+        : '';
+
+    $selected_cat_id = isset(
+        $_GET['category_id']
+    )
+        ? absint(
+            $_GET['category_id']
+        )
+        : 0;
+
+
+    if ('' === $search_keyword) {
+
+        wp_send_json_success(
+            array(
+                'html'  => '',
+                'count' => 0,
+            )
+        );
+    }
+
+
+    /*
+     * Only IDs are loaded here.
+     *
+     * The catalog is currently small enough for a direct
+     * title search while avoiding the much slower sequential
+     * category traversal previously used by Shop search.
+     */
+    $args = array(
+        'post_type'              => 'product',
+        'post_status'            => 'publish',
+        'posts_per_page'         => -1,
+        'fields'                 => 'ids',
+
+        's'                      => $search_keyword,
+
+        'orderby'                => 'title',
+        'order'                  => 'ASC',
+
+        'no_found_rows'          => true,
+
+        'update_post_meta_cache' => true,
+        'update_post_term_cache' => true,
+    );
+
+
+    /*
+     * If the customer selected a Shop category, search inside
+     * that category. WooCommerce product categories are
+     * hierarchical, so descendants remain included.
+     */
+    if ($selected_cat_id > 0) {
+
+        $args['tax_query'] = array(
+            array(
+                'taxonomy'         => 'product_cat',
+                'field'            => 'term_id',
+                'terms'            => array(
+                    $selected_cat_id,
+                ),
+                'include_children' => true,
+            ),
+        );
+    }
+
+
+    $product_ids = get_posts(
+        $args
+    );
+
+
+    if (empty($product_ids)) {
+
+        wp_send_json_success(
+            array(
+                'html'  => '',
+                'count' => 0,
+            )
+        );
+    }
+
+
+    /*
+     * Collapse matched country / brand variants to the same
+     * family card so search results use the exact same Shop
+     * card system as normal catalog browsing.
+     */
+    $groups = function_exists(
+        'hsb_group_product_ids_by_part_number'
+    )
+        ? hsb_group_product_ids_by_part_number(
+            $product_ids
+        )
+        : array();
+
+
+    ob_start();
+    ?>
+
+    <div class="category hsb-shop-direct-search">
+
+        <div class="sub-category">
+
+            <div
+                class="child-category hsb-shop-direct-search-grid"
+            >
+
+                <?php
+
+                if (!empty($groups)) {
+
+                    foreach ($groups as $family_group) {
+
+                        $representative_id =
+                            absint(
+                                $family_group[
+                                    'representative_id'
+                                ] ?? 0
+                            );
+
+                        if (!$representative_id) {
+                            continue;
+                        }
+
+                        /*
+                         * Do not pass the partial search group
+                         * here. The card renderer can resolve
+                         * the complete family itself so family
+                         * badges/options stay accurate.
+                         */
+                        hypersanati_render_product_card(
+                            $representative_id
+                        );
+                    }
+
+                } else {
+
+                    foreach ($product_ids as $product_id) {
+
+                        hypersanati_render_product_card(
+                            $product_id
+                        );
+                    }
+                }
+
+                ?>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <?php
+
+    $html = ob_get_clean();
+
+    wp_send_json_success(
+        array(
+            'html' => $html,
+
+            'count' =>
+                !empty($groups)
+                    ? count($groups)
+                    : count($product_ids),
+        )
+    );
+}
+
+
 /* ============================================================
  * HSB PROGRESSIVE SHOP FAMILY LOADING
  * ============================================================ */

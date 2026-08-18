@@ -610,6 +610,149 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
+    /* ========================================================
+       Direct text search
+       ======================================================== */
+
+    function loadDirectSearch(reset = false) {
+
+        if (!container) {
+            return;
+        }
+
+
+        if (reset) {
+
+            disconnectShopFamilyObserver();
+
+            index = 0;
+            finished = false;
+            loading = false;
+
+            container.innerHTML = "";
+
+            if (loader) {
+                loader.style.display = "block";
+                loader.innerText =
+                    "در حال جستجوی محصولات...";
+            }
+        }
+
+
+        if (
+            loading ||
+            finished ||
+            searchQuery === ""
+        ) {
+            return;
+        }
+
+
+        loading = true;
+
+        if (loader) {
+            loader.style.display = "block";
+            loader.innerText =
+                "در حال جستجوی محصولات...";
+        }
+
+
+        const params =
+            new URLSearchParams({
+                action:
+                    'hsb_search_shop_products_direct',
+
+                search_keyword:
+                    searchQuery,
+
+                category_id:
+                    String(
+                        currentSelectedCategory
+                    )
+            });
+
+
+        fetch(
+            '/wp-admin/admin-ajax.php?' +
+            params.toString(),
+            {
+                credentials:
+                    'same-origin'
+            }
+        )
+            .then(function (response) {
+
+                if (!response.ok) {
+                    throw new Error(
+                        'خطا در جستجوی محصولات'
+                    );
+                }
+
+                return response.json();
+            })
+            .then(function (response) {
+
+                loading = false;
+                finished = true;
+
+                if (loader) {
+                    loader.style.display =
+                        "none";
+                }
+
+
+                if (
+                    !response ||
+                    !response.success ||
+                    !response.data
+                ) {
+
+                    throw new Error(
+                        'پاسخ نامعتبر سرور'
+                    );
+                }
+
+
+                const html =
+                    response.data.html || '';
+
+
+                if (!html.trim()) {
+
+                    container.innerHTML =
+                        "<div class='hsb-shop-search-empty'>" +
+                        "محصولی با این عبارت یافت نشد." +
+                        "</div>";
+
+                    return;
+                }
+
+
+                container.innerHTML = html;
+            })
+            .catch(function (error) {
+
+                console.error(
+                    'HSB direct Shop search:',
+                    error
+                );
+
+                loading = false;
+                finished = true;
+
+                if (loader) {
+                    loader.style.display =
+                        "none";
+                }
+
+                container.innerHTML =
+                    "<div class='hsb-shop-search-empty is-error'>" +
+                    "جستجو انجام نشد. دوباره تلاش کنید." +
+                    "</div>";
+            });
+    }
+
+
     function loadDimensionSearch(reset = false) {
         if (!container) return;
 
@@ -654,11 +797,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function loadProducts(reset = false) {
+
         if (dimensionSearch) {
+
             loadDimensionSearch(reset);
-        } else {
-            loadCategory(reset);
+
+            return;
         }
+
+
+        if (searchQuery !== "") {
+
+            loadDirectSearch(reset);
+
+            return;
+        }
+
+
+        loadCategory(reset);
     }
 
     function listenToSidebarChanges() {
@@ -921,6 +1077,17 @@ document.addEventListener("DOMContentLoaded", function () {
     initShopBackToTop();
 
     window.addEventListener("scroll", function () {
+
+        /*
+         * Direct text search is a one-request result set.
+         * Never restart category loading at page bottom.
+         */
+        if (
+            searchQuery !== "" &&
+            !dimensionSearch
+        ) {
+            return;
+        }
 
         if (
             window.innerHeight +
