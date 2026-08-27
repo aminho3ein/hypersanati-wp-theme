@@ -300,7 +300,7 @@ get_header();
                 <?php endif; ?>
             </button>
 
-            <a href="<?php echo esc_url(wc_logout_url()); ?>" class="dashboard-nav-btn logout-btn">
+            <a href="<?php echo esc_url(wc_logout_url(home_url('/'))); ?>" class="dashboard-nav-btn logout-btn">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>خروج از حساب</span>
             </a>

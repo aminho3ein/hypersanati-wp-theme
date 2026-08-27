@@ -3,6 +3,24 @@ $footer_settings = function_exists('hypersanati_get_footer_settings')
     ? hypersanati_get_footer_settings()
     : array();
 
+$footer_logo_id = absint(
+    $footer_settings['footer_logo_id'] ?? 0
+);
+
+$footer_logo_url = $footer_logo_id
+    ? wp_get_attachment_image_url(
+        $footer_logo_id,
+        'full'
+    )
+    : '';
+
+if (empty($footer_logo_url)) {
+    $footer_logo_url =
+        get_template_directory_uri()
+        . '/assets/images/main-logo/logo.jpg';
+}
+
+
 $footer_url = static function ($url) {
     $url = trim((string) $url);
 
@@ -129,7 +147,7 @@ $footer_links = array(
           <div class="site-footer__brand-head">
             <a class="site-footer__logo-box" href="<?php echo esc_url(home_url('/')); ?>">
               <img
-                src="<?php echo esc_url(get_template_directory_uri() . '/assets/images/main-logo/logo.jpg'); ?>"
+                src="<?php echo esc_url($footer_logo_url); ?>"
                 alt="<?php echo esc_attr($footer_settings['intro_title'] ?? 'هایپر صنعتی الفت'); ?>"
               >
             </a>

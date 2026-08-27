@@ -141,8 +141,8 @@ if (!$hsb_order_tracking_url) {
     $logout_url = function_exists(
         'wc_logout_url'
     )
-        ? wc_logout_url($account_url)
-        : wp_logout_url($account_url);
+        ? wc_logout_url(home_url('/'))
+        : wp_logout_url(home_url('/'));
     ?>
 
     <!-- Desktop nav actions -->

@@ -20,6 +20,90 @@ function hypersanati_register_footer_settings_page() {
     );
 }
 
+add_action('admin_enqueue_scripts', 'hypersanati_footer_admin_assets');
+
+function hypersanati_footer_admin_assets($hook) {
+    if ('toplevel_page_hypersanati-footer-settings' !== $hook) {
+        return;
+    }
+
+    wp_enqueue_media();
+    wp_enqueue_script('jquery');
+
+    $script = <<<'JS'
+jQuery(function ($) {
+    let footerLogoFrame = null;
+
+    $(document).on('click', '.hs-footer-logo-select', function (event) {
+        event.preventDefault();
+
+        if (footerLogoFrame) {
+            footerLogoFrame.open();
+            return;
+        }
+
+        footerLogoFrame = wp.media({
+            title: 'انتخاب لوگوی فوتر',
+            button: {
+                text: 'استفاده از این تصویر'
+            },
+            library: {
+                type: 'image'
+            },
+            multiple: false
+        });
+
+        footerLogoFrame.on('select', function () {
+            const attachment =
+                footerLogoFrame
+                    .state()
+                    .get('selection')
+                    .first()
+                    .toJSON();
+
+            const previewUrl =
+                attachment.sizes &&
+                attachment.sizes.medium
+                    ? attachment.sizes.medium.url
+                    : attachment.url;
+
+            $('#hs-footer-logo-id')
+                .val(attachment.id);
+
+            $('#hs-footer-logo-preview')
+                .attr('src', previewUrl)
+                .show();
+
+            $('#hs-footer-logo-empty')
+                .hide();
+        });
+
+        footerLogoFrame.open();
+    });
+
+    $(document).on('click', '.hs-footer-logo-remove', function (event) {
+        event.preventDefault();
+
+        $('#hs-footer-logo-id')
+            .val('');
+
+        $('#hs-footer-logo-preview')
+            .attr('src', '')
+            .hide();
+
+        $('#hs-footer-logo-empty')
+            .show();
+    });
+});
+JS;
+
+    wp_add_inline_script(
+        'jquery',
+        $script
+    );
+}
+
+
 add_action('admin_init', 'hypersanati_register_footer_settings');
 
 function hypersanati_register_footer_settings() {
@@ -36,6 +120,7 @@ function hypersanati_register_footer_settings() {
 
 function hypersanati_get_footer_settings_defaults() {
     return array(
+        'footer_logo_id'   => 0,
         'intro_title'      => 'هایپر صنعتی الفت',
         'intro_text'       => 'تأمین تخصصی بلبرینگ، رولبرینگ و قطعات صنعتی با امکان استعلام قیمت، موجودی و دریافت پیش‌فاکتور.',
 
@@ -123,6 +208,12 @@ function hypersanati_sanitize_footer_settings($input) {
     foreach ($defaults as $key => $default_value) {
         $value = isset($input[$key]) ? $input[$key] : $default_value;
 
+        if ('footer_logo_id' === $key) {
+            $output[$key] = absint($value);
+            continue;
+        }
+
+
         if (in_array($key, $textarea_fields, true)) {
             $output[$key] = sanitize_textarea_field($value);
             continue;
@@ -173,6 +264,14 @@ function hypersanati_render_footer_settings_page() {
     }
 
     $settings = hypersanati_get_footer_settings();
+
+    $footer_logo_preview = !empty($settings['footer_logo_id'])
+        ? wp_get_attachment_image_url(
+            absint($settings['footer_logo_id']),
+            'medium'
+        )
+        : '';
+
     ?>
     <div class="wrap">
         <h1>مدیریت فوتر سایت</h1>
@@ -187,6 +286,57 @@ function hypersanati_render_footer_settings_page() {
             <h2>معرفی مجموعه</h2>
 
             <table class="form-table" role="presentation">
+                <tr>
+                    <th scope="row">
+                        لوگوی فوتر
+                    </th>
+
+                    <td>
+                        <input
+                            id="hs-footer-logo-id"
+                            type="hidden"
+                            name="hypersanati_footer_settings[footer_logo_id]"
+                            value="<?php echo esc_attr(
+                                absint($settings['footer_logo_id'])
+                            ); ?>"
+                        >
+
+                        <div
+                            style="display:flex;align-items:center;gap:14px;margin-bottom:12px;"
+                        >
+                            <img
+                                id="hs-footer-logo-preview"
+                                src="<?php echo esc_url(
+                                    $footer_logo_preview
+                                ); ?>"
+                                alt=""
+                                style="width:110px;height:70px;object-fit:contain;border:1px solid #dcdcde;border-radius:8px;background:#fff;<?php echo $footer_logo_preview ? '' : 'display:none;'; ?>"
+                            >
+
+                            <span
+                                id="hs-footer-logo-empty"
+                                style="<?php echo $footer_logo_preview ? 'display:none;' : ''; ?>"
+                            >
+                                لوگوی اختصاصی انتخاب نشده؛ لوگوی پیش‌فرض قالب نمایش داده می‌شود.
+                            </span>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="button hs-footer-logo-select"
+                        >
+                            انتخاب / تغییر لوگو
+                        </button>
+
+                        <button
+                            type="button"
+                            class="button hs-footer-logo-remove"
+                        >
+                            حذف لوگوی انتخابی
+                        </button>
+                    </td>
+                </tr>
+
                 <tr>
                     <th scope="row">
                         <label for="hs-footer-intro-title">عنوان معرفی</label>

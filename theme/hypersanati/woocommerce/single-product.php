@@ -1924,7 +1924,7 @@ if (!function_exists('theme_fa_digits')) {
                             'class_submit'         => 'submit review-form-submit',
                             'comment_notes_before' => '<p class="comment-notes">نشانی ایمیل شما منتشر نمی‌شود.</p>',
                             'comment_notes_after'  => '',
-                            'logged_in_as'         => '<p class="logged-in-as">با حساب <strong>' . esc_html(wp_get_current_user()->display_name) . '</strong> وارد شده‌اید. <a href="' . esc_url(wp_logout_url(get_permalink($product_id))) . '">خروج</a></p>',
+                            'logged_in_as'         => '<p class="logged-in-as">با حساب <strong>' . esc_html(wp_get_current_user()->display_name) . '</strong> وارد شده‌اید. <a href="' . esc_url(wp_logout_url(home_url('/'))) . '">خروج</a></p>',
                             'must_log_in'          => '<p class="must-log-in">برای ثبت نظر باید وارد حساب کاربری خود شوید. <a href="' . esc_url(wp_login_url(get_permalink($product_id))) . '">ورود به حساب</a></p>',
                             'fields'               => array(
                                 'author' => '
