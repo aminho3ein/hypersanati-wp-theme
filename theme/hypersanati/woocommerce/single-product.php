@@ -316,6 +316,40 @@ $hero_country_flag_url = trim(
         </div>
 
 
+        <!-- Product text search -->
+        <form
+            class="hsb-sp-search"
+            method="get"
+            action="<?php echo esc_url(
+                function_exists('hypersanati_get_shop_url')
+                    ? hypersanati_get_shop_url()
+                    : home_url('/shop/')
+            ); ?>">
+
+            <label
+                class="hsb-sp-search__label"
+                for="hsb-sp-search-term">
+                جستجوی محصول
+            </label>
+
+            <div class="hsb-sp-search__field">
+                <input
+                    type="search"
+                    id="hsb-sp-search-term"
+                    name="s"
+                    placeholder="نام، کد یا عبارت محصول را جستجو کنید"
+                    autocomplete="off">
+
+                <button
+                    type="submit"
+                    class="hsb-sp-search__button"
+                    aria-label="جستجوی محصول">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>جستجو</span>
+                </button>
+            </div>
+        </form>
+
         <!-- Main industrial product hero -->
         <section class="hsb-sp-hero">
 
@@ -1017,6 +1051,12 @@ $hero_country_flag_url = trim(
                                 data-index="<?php echo esc_attr(
                                     $index
                                 ); ?>"
+                                data-full-src="<?php echo esc_url(
+                                    wp_get_attachment_image_url(
+                                        $attachment_id,
+                                        'large'
+                                    )
+                                ); ?>"
                                 aria-label="نمایش تصویر <?php echo esc_attr(
                                     $index + 1
                                 ); ?>">
@@ -1203,6 +1243,59 @@ $hero_country_flag_url = trim(
                     </div>
 
                 </form>
+
+
+                  <!-- Mobile floating preinvoice -->
+                  <div
+                      class="hsb-sp-mobile-preinvoice"
+                      data-hsb-mobile-preinvoice
+                      hidden>
+
+                      <div class="hsb-sp-mobile-preinvoice__inner">
+
+                          <div
+                              class="product-quantity-control hsb-sp-qty hsb-sp-mobile-qty">
+
+                              <button
+                                  type="button"
+                                  class="product-quantity-btn qty-minus"
+                                  aria-label="کاهش تعداد">
+                                  <i class="fa-solid fa-minus"></i>
+                              </button>
+
+                              <input
+                                  type="number"
+                                  class="product-quantity-input hsb-sp-mobile-quantity"
+                                  value="1"
+                                  min="1"
+                                  step="1"
+                                  inputmode="numeric"
+                                  aria-label="تعداد موردنیاز">
+
+                              <button
+                                  type="button"
+                                  class="product-quantity-btn qty-plus"
+                                  aria-label="افزایش تعداد">
+                                  <i class="fa-solid fa-plus"></i>
+                              </button>
+
+                          </div>
+
+                          <button
+                              type="button"
+                              class="hsb-sp-mobile-add">
+                              <i class="fa-solid fa-plus"></i>
+                              <span>افزودن به پیش‌فاکتور</span>
+                          </button>
+
+                      </div>
+
+                      <div
+                          class="hsb-sp-mobile-preinvoice__message"
+                          aria-live="polite">
+                      </div>
+
+                  </div>
 
 
                 <div class="hsb-sp-inquiry__footer">
@@ -1831,7 +1924,7 @@ if (!function_exists('theme_fa_digits')) {
                             'class_submit'         => 'submit review-form-submit',
                             'comment_notes_before' => '<p class="comment-notes">نشانی ایمیل شما منتشر نمی‌شود.</p>',
                             'comment_notes_after'  => '',
-                            'logged_in_as'         => '<p class="logged-in-as">با حساب <strong>' . esc_html(wp_get_current_user()->display_name) . '</strong> وارد شده‌اید. <a href="' . esc_url(wp_logout_url(get_permalink($product_id))) . '">خروج</a></p>',
+                            'logged_in_as'         => '<p class="logged-in-as">با حساب <strong>' . esc_html(wp_get_current_user()->display_name) . '</strong> وارد شده‌اید. <a href="' . esc_url(wp_logout_url(home_url('/'))) . '">خروج</a></p>',
                             'must_log_in'          => '<p class="must-log-in">برای ثبت نظر باید وارد حساب کاربری خود شوید. <a href="' . esc_url(wp_login_url(get_permalink($product_id))) . '">ورود به حساب</a></p>',
                             'fields'               => array(
                                 'author' => '

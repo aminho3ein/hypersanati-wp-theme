@@ -2587,6 +2587,85 @@ button.handle-frame-section:disabled {
 }
 
 
+/* ---------- Mobile / Tablet navigation ---------- */
+
+@media (max-width: 899px) {
+
+  .site-footer__navigation {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
+  }
+
+  .site-footer__navigation-head {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .site-footer__navigation ul {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  .site-footer__navigation a {
+    min-width: 0;
+    min-height: 44px;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.4rem;
+  }
+
+  .site-footer__link-text {
+    overflow: hidden;
+    font-size: 0.76rem;
+    line-height: 1.3;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .site-footer__link-icon {
+    width: 21px;
+    height: 21px;
+    flex: 0 0 21px;
+    font-size: 0.72rem;
+  }
+
+}
+
+
+@media (max-width: 520px) {
+
+  .site-footer__navigation {
+    padding: 0.75rem;
+  }
+
+  .site-footer__navigation h3 {
+    font-size: 1rem;
+  }
+
+  .site-footer__navigation ul {
+    gap: 0.35rem;
+  }
+
+  .site-footer__navigation a {
+    min-height: 42px;
+    padding: 0.45rem 0.25rem;
+  }
+
+  .site-footer__link-text {
+    font-size: 0.68rem;
+  }
+
+  .site-footer__link-icon {
+    display: inline-flex;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    font-size: 0.62rem;
+  }
+
+}
+
+
 /* ---------- Desktop ---------- */
 
 @media (min-width: 900px) {
@@ -5117,3 +5196,959 @@ html {
         margin: 0 !important;
     }
 }
+
+
+/* ============================================================
+   HSB HERO BRAND LOGO FINAL
+   ============================================================ */
+
+.hsb-home-hero__title {
+  max-width: none;
+  font-size: clamp(1.9rem, 2.25vw, 2.85rem);
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+}
+
+.hsb-home-hero__description {
+  width: auto;
+  max-width: 1050px;
+  margin-top: 20px;
+  padding: 12px 18px;
+  font-size: clamp(0.8rem, 0.88vw, 0.94rem);
+  line-height: 1.95;
+}
+
+.hsb-home-hero__brand-logo {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: clamp(30px, 5vw, 90px);
+
+  width: clamp(260px, 22vw, 390px);
+  aspect-ratio: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.2);
+
+  background: rgba(255,255,255,0.08);
+
+  box-shadow:
+    0 24px 60px rgba(0,0,0,0.24);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  transform: translateY(-50%);
+}
+
+.hsb-home-hero__brand-logo-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hsb-home-hero.has-brand-logo
+.hsb-home-hero__content {
+  box-sizing: border-box;
+  padding-left: clamp(330px, 27vw, 470px);
+}
+
+
+@media (min-width: 1200px) {
+
+  .hsb-home-hero__title {
+    white-space: nowrap;
+  }
+
+}
+
+
+@media (max-width: 1100px) {
+
+  .hsb-home-hero__title {
+    font-size: clamp(1.75rem, 3.2vw, 2.4rem);
+  }
+
+  .hsb-home-hero__brand-logo {
+    width: clamp(180px, 20vw, 225px);
+    left: 22px;
+  }
+
+  .hsb-home-hero.has-brand-logo
+  .hsb-home-hero__content {
+    padding-left: clamp(220px, 24vw, 270px);
+  }
+
+}
+
+
+@media (max-width: 900px) {
+
+  .hsb-home-hero__title {
+    white-space: normal;
+    font-size: clamp(1.6rem, 5.5vw, 2.2rem);
+    line-height: 1.3;
+  }
+
+  .hsb-home-hero__description {
+    width: 100%;
+    max-width: none;
+    padding: 11px 14px;
+    font-size: 0.81rem;
+    line-height: 1.85;
+  }
+
+  .hsb-home-hero.has-brand-logo
+  .hsb-home-hero__content {
+    padding-left: 0;
+    padding-bottom: 105px;
+  }
+
+  .hsb-home-hero__brand-logo {
+    top: auto;
+    left: 18px;
+    bottom: 18px;
+
+    width: 92px;
+    padding: 7px;
+
+    border-radius: 15px;
+
+    transform: none;
+  }
+
+}
+
+
+@media (max-width: 520px) {
+
+  .hsb-home-hero__title {
+    font-size: clamp(1.48rem, 6.7vw, 1.9rem);
+  }
+
+  .hsb-home-hero__description {
+    font-size: 0.75rem;
+    line-height: 1.8;
+  }
+
+  .hsb-home-hero__brand-logo {
+    width: 76px;
+    left: 14px;
+    bottom: 14px;
+  }
+
+}
+
+/* ============================================================
+   HSB HERO LOGO / CONTENT EDGE ALIGNMENT
+   ============================================================ */
+
+@media (min-width: 901px) {
+
+  .hsb-home-hero {
+    --hsb-hero-side-edge:
+      max(
+        60px,
+        calc((100vw - 1400px) / 2)
+      );
+
+    --hsb-hero-logo-size:
+      clamp(260px, 22vw, 390px);
+  }
+
+  .hsb-home-hero__brand-logo {
+    left: var(--hsb-hero-side-edge);
+    width: var(--hsb-hero-logo-size);
+  }
+
+  .hsb-home-hero.has-brand-logo
+  .hsb-home-hero__content {
+    padding-left:
+      calc(
+        var(--hsb-hero-logo-size) + 22px
+      );
+  }
+
+}
+
+
+@media (min-width: 901px) and (max-width: 1100px) {
+
+  .hsb-home-hero {
+    --hsb-hero-side-edge: 60px;
+    --hsb-hero-logo-size:
+      clamp(180px, 20vw, 225px);
+  }
+
+  .hsb-home-hero.has-brand-logo
+  .hsb-home-hero__content {
+    padding-left:
+      calc(
+        var(--hsb-hero-logo-size) + 18px
+      );
+  }
+
+}
+
+/* ============================================================
+   HSB HOME SEARCH — RESPONSIVE CONTAINER FINAL
+   ============================================================ */
+
+#hsb-home-search,
+#hsb-home-search *,
+#hsb-home-search *::before,
+#hsb-home-search *::after {
+  box-sizing: border-box;
+}
+
+
+/* Main search container */
+
+#hsb-home-search.search-area {
+  width: min(1400px, calc(100% - 32px));
+  max-width: 1400px;
+  min-width: 0;
+
+  margin:
+    1.5rem auto 0;
+
+  padding: 0;
+
+  gap: 1.25rem;
+
+  overflow: visible;
+}
+
+
+/* ============================================================
+   Product title search
+   ============================================================ */
+
+#hsb-home-search > form.search-input,
+#hsb-home-search > form.search-input > .search-input,
+#hsb-home-search .big-input-division {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+#hsb-home-search
+.big-input-division input {
+  min-width: 0;
+}
+
+
+/* ============================================================
+   Dimensional search main box
+   ============================================================ */
+
+#hsb-home-search
+.new-search-container.new-compact.new-wide-mode {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  margin:
+    var(--spacing-sm) 0;
+
+  overflow: visible;
+}
+
+#hsb-home-search .new-search-section,
+#hsb-home-search .new-exact-grid,
+#hsb-home-search .new-range-grid,
+#hsb-home-search .new-range-card,
+#hsb-home-search .new-input-group,
+#hsb-home-search .new-slider-wrapper,
+#hsb-home-search .new-dual-slider {
+  max-width: 100%;
+  min-width: 0;
+}
+
+
+/* ============================================================
+   Exact dimensional search
+   Keep all 3 dimension inputs side-by-side
+   ============================================================ */
+
+#hsb-home-search .new-exact-grid {
+  width: 100%;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr))
+    minmax(110px, 140px);
+
+  gap: 0.65rem;
+
+  align-items: stretch;
+}
+
+#hsb-home-search .new-input-group {
+  width: 100%;
+  min-width: 0;
+
+  align-items: center;
+}
+
+#hsb-home-search
+.new-input-group label {
+  flex: 0 0 auto;
+
+  margin: 0;
+  padding-left: 0.65rem;
+
+  white-space: nowrap;
+}
+
+#hsb-home-search
+.new-input-group input {
+  flex: 1 1 auto;
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  height: 41px;
+}
+
+#hsb-home-search
+.new-exact-grid
+.new-btn-search {
+  width: 100%;
+  min-width: 0;
+}
+
+
+/* ============================================================
+   Approximate dimensional search
+   ============================================================ */
+
+#hsb-home-search .new-range-grid {
+  width: 100%;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 0.65rem;
+}
+
+#hsb-home-search .new-range-card {
+  width: 100%;
+  min-width: 0;
+
+  overflow: visible;
+}
+
+#hsb-home-search .new-card-title {
+  width: 100%;
+  max-width: 100%;
+
+  line-height: 1.7;
+
+  overflow-wrap: anywhere;
+}
+
+
+/*
+ * Keep Min / Max handles and balloons
+ * safely inside each range card.
+ *
+ * The track itself is inset from both edges,
+ * instead of allowing the endpoint bubbles
+ * to sit directly on the card boundary.
+ */
+
+#hsb-home-search .new-slider-wrapper {
+  width: 100%;
+
+  padding:
+    45px
+    10px
+    12px;
+
+  overflow: visible;
+}
+
+#hsb-home-search .new-dual-slider {
+  width: 100%;
+  min-width: 0;
+}
+
+#hsb-home-search .new-tooltip-bubble {
+  max-width: 72px;
+
+  gap: 2px;
+
+  padding:
+    3px 5px;
+}
+
+#hsb-home-search .new-handle-input {
+  width: 30px;
+  min-width: 30px;
+
+  font-size: 0.78rem;
+  line-height: 1;
+}
+
+
+/*
+ * Smart magnetic tooltip positioning.
+ *
+ * Default = exactly above its own handle.
+ * JS changes only --hsb-tooltip-shift when a tooltip
+ * approaches a card edge or the opposite tooltip.
+ */
+
+#hsb-home-search .new-tooltip-bubble {
+  --hsb-tooltip-shift: 0px;
+
+  margin: 0;
+
+  transform:
+    translateX(
+      calc(
+        -50% +
+        var(--hsb-tooltip-shift)
+      )
+    );
+
+  transition:
+    transform 90ms ease-out;
+
+  will-change: transform;
+}
+
+/*
+ * As the bubble moves, keep its triangle
+ * pointing to the actual slider handle.
+ */
+
+#hsb-home-search
+.new-tooltip-bubble::after {
+  left:
+    calc(
+      50% -
+      var(--hsb-tooltip-shift)
+    );
+
+  transition:
+    left 90ms ease-out;
+}
+
+
+/* ============================================================
+   HSB RANGE TOOLTIP DRAG GRIP
+   ============================================================ */
+
+/*
+ * When handles get very close, the active one must always
+ * remain reachable above the neighbouring handle.
+ */
+
+#hsb-home-search .new-slider-handle:hover,
+#hsb-home-search .new-slider-handle:focus-within,
+#hsb-home-search .new-slider-handle.is-dragging {
+  z-index: 8;
+}
+
+#hsb-home-search .new-tooltip-bubble {
+  pointer-events: auto;
+}
+
+
+/*
+ * "از" / "تا" are explicit drag grips.
+ * Number itself remains a normal editable input.
+ */
+
+#hsb-home-search .new-tooltip-label {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 16px;
+  min-height: 20px;
+
+  margin:
+    -2px 0;
+
+  padding:
+    2px;
+
+  border-radius: 5px;
+
+  font-size: 0.7rem;
+  line-height: 1;
+
+  cursor: grab;
+
+  user-select: none;
+  -webkit-user-select: none;
+
+  touch-action: none;
+}
+
+/*
+ * Invisible touch / mouse grip.
+ * ظاهر کوچک می‌ماند ولی گرفتن «از / تا» راحت است.
+ */
+#hsb-home-search .new-tooltip-label::before {
+  content: "";
+
+  position: absolute;
+  inset: -5px;
+
+  border-radius: 8px;
+}
+
+#hsb-home-search
+.new-slider-handle.is-dragging
+.new-tooltip-label {
+  cursor: grabbing;
+
+  background:
+    rgba(255,255,255,0.1);
+}
+
+#hsb-home-search .new-handle-input {
+  cursor: text;
+
+  user-select: text;
+  -webkit-user-select: text;
+
+  touch-action: manipulation;
+}
+
+
+/* ============================================================
+   Tablet
+   ============================================================ */
+
+@media (max-width: 992px) {
+
+  #hsb-home-search.search-area {
+    width:
+      min(
+        100% - 28px,
+        1400px
+      );
+  }
+
+  /*
+   * Still keep the 3 dimensional fields
+   * on one horizontal row.
+   */
+
+  #hsb-home-search .new-exact-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+  #hsb-home-search
+  .new-exact-grid
+  .new-btn-search {
+    grid-column:
+      1 / -1;
+
+    width: 100%;
+  }
+
+  #hsb-home-search .new-range-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* ============================================================
+   Mobile
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+  #hsb-home-search.search-area {
+    width:
+      calc(100% - 24px);
+
+    margin-top: 1rem;
+  }
+
+  #hsb-home-search
+  .new-search-container.new-compact.new-wide-mode {
+    padding:
+      0.75rem;
+  }
+
+
+  /*
+   * IMPORTANT:
+   * Inner / Outer / Height remain beside each other.
+   * Labels move above their own inputs so the row
+   * stays compact even on narrow screens.
+   */
+
+  #hsb-home-search .new-exact-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    gap: 0.4rem;
+  }
+
+  #hsb-home-search .new-input-group {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+
+    gap: 0.3rem;
+
+    padding:
+      0.45rem;
+  }
+
+  #hsb-home-search
+  .new-input-group label {
+    width: 100%;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 0.76rem;
+    line-height: 1.4;
+
+    text-align: center;
+
+    white-space: nowrap;
+  }
+
+  #hsb-home-search
+  .new-input-group input {
+    width: 100%;
+    min-width: 0;
+
+    height: 36px;
+
+    padding:
+      3px 5px;
+
+    font-size: 0.85rem;
+
+    text-align: center;
+  }
+
+  #hsb-home-search
+  .new-exact-grid
+  .new-btn-search {
+    grid-column:
+      1 / -1;
+
+    min-height: 42px;
+  }
+
+
+  /* Approximate search becomes one card per row */
+
+  #hsb-home-search .new-range-grid {
+    grid-template-columns:
+      minmax(0, 1fr);
+
+    gap: 0.65rem;
+  }
+
+  #hsb-home-search .new-range-card {
+    padding:
+      0.75rem;
+  }
+
+  #hsb-home-search .new-slider-wrapper {
+    padding:
+      45px
+      10px
+      12px;
+  }
+
+}
+
+
+/* ============================================================
+   Small mobile
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+  #hsb-home-search.search-area {
+    width:
+      calc(100% - 20px);
+  }
+
+  #hsb-home-search
+  .new-search-container.new-compact.new-wide-mode {
+    padding:
+      0.6rem;
+  }
+
+  #hsb-home-search .new-exact-grid {
+    gap: 0.3rem;
+  }
+
+  #hsb-home-search .new-input-group {
+    padding:
+      0.35rem;
+  }
+
+  #hsb-home-search
+  .new-input-group label {
+    font-size:
+      0.7rem;
+  }
+
+  #hsb-home-search
+  .new-input-group input {
+    height: 34px;
+
+    font-size:
+      0.78rem;
+  }
+
+  #hsb-home-search .new-slider-wrapper {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+}
+
+
+/* HSB SEARCH HELP POPOVER CSS */
+
+.hsb-search-heading {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  gap: 7px;
+}
+
+.hsb-search-help-trigger {
+  width: 26px;
+  height: 26px;
+
+  flex:
+    0 0 26px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background:
+    rgba(242, 189, 0, 0.14);
+
+  color: #8a6700;
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.hsb-search-help-trigger:hover,
+.hsb-search-help-trigger:focus-visible,
+.hsb-search-help-trigger.is-active {
+  background: #f6c900;
+  color: #151515;
+
+  transform:
+    scale(1.08);
+
+  outline: none;
+}
+
+
+/*
+ * Yellow comment-style explanation
+ */
+
+.hsb-search-help-popover[hidden] {
+  display: none !important;
+}
+
+.hsb-search-help-popover {
+  position: fixed;
+
+  z-index: 100000;
+
+  max-width:
+    calc(100vw - 24px);
+
+  padding:
+    17px 18px 15px;
+
+  direction: rtl;
+  text-align: right;
+
+  border:
+    1px solid
+    #d6a900;
+
+  border-radius: 14px;
+
+  background:
+    #ffd94a;
+
+  color: #171717;
+
+  box-shadow:
+    0 12px 32px
+    rgba(0, 0, 0, 0.22);
+
+  font-size: 12px;
+
+  line-height: 1.9;
+}
+
+
+/* comment tail */
+
+.hsb-search-help-popover::before {
+  content: "";
+
+  position: absolute;
+
+  top: -8px;
+  left: 50%;
+
+  width: 15px;
+  height: 15px;
+
+  background: #ffd94a;
+
+  border-top:
+    1px solid #d6a900;
+
+  border-left:
+    1px solid #d6a900;
+
+  transform:
+    translateX(-50%)
+    rotate(45deg);
+}
+
+.hsb-search-help-popover.is-above::before {
+  top: auto;
+  bottom: -8px;
+
+  border-top: 0;
+  border-left: 0;
+
+  border-right:
+    1px solid #d6a900;
+
+  border-bottom:
+    1px solid #d6a900;
+}
+
+
+.hsb-search-help-popover__close {
+  position: absolute;
+
+  top: 7px;
+  left: 8px;
+
+  width: 25px;
+  height: 25px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background:
+    rgba(0, 0, 0, 0.1);
+
+  color: #171717;
+
+  font-size: 18px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.hsb-search-help-popover__title {
+  display: block;
+
+  padding-left: 26px;
+
+  margin-bottom: 9px;
+
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.hsb-search-help-popover__item {
+  margin-top: 6px;
+}
+
+.hsb-search-help-popover__item b {
+  font-weight: 900;
+}
+
+.hsb-search-help-popover__tip {
+  margin-top: 10px;
+
+  padding:
+    7px 9px;
+
+  border-radius: 8px;
+
+  background:
+    rgba(255,255,255,0.42);
+
+  font-weight: 700;
+}
+
+
+@media (max-width: 520px) {
+
+  .hsb-search-help-trigger {
+    width: 24px;
+    height: 24px;
+
+    flex-basis: 24px;
+
+    font-size: 12px;
+  }
+
+  .hsb-search-help-popover {
+    padding:
+      15px 15px 13px;
+
+    font-size: 11px;
+
+    line-height: 1.85;
+  }
+
+}
+
+/* END HSB SEARCH HELP POPOVER CSS */

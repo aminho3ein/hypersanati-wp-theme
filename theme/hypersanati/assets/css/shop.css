@@ -2423,3 +2423,225 @@
         animation: none;
     }
 }
+
+
+/* ============================================================
+   HSB SHOP SMART RANGE TOOLTIP
+   Same behaviour as Homepage range search
+   ============================================================ */
+
+.shop-dim-search,
+.shop-dim-search *,
+.shop-dim-search *::before,
+.shop-dim-search *::after {
+  box-sizing: border-box;
+}
+
+.shop-dim-search {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  overflow: visible;
+}
+
+.shop-dim-search .new-range-grid,
+.shop-dim-search .new-range-card,
+.shop-dim-search .new-slider-wrapper,
+.shop-dim-search .new-dual-slider {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.shop-dim-search .new-range-grid {
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 0.65rem;
+}
+
+.shop-dim-search .new-range-card {
+  width: 100%;
+  min-width: 0;
+
+  overflow: visible;
+}
+
+.shop-dim-search .new-slider-wrapper {
+  width: 100%;
+
+  padding:
+    45px
+    10px
+    12px;
+
+  overflow: visible;
+}
+
+.shop-dim-search .new-dual-slider {
+  width: 100%;
+  min-width: 0;
+}
+
+
+/* Compact tooltip */
+
+.shop-dim-search .new-tooltip-bubble {
+  --hsb-tooltip-shift: 0px;
+
+  max-width: 72px;
+
+  gap: 2px;
+
+  margin: 0;
+
+  padding:
+    3px 5px;
+
+  pointer-events: auto;
+
+  transform:
+    translateX(
+      calc(
+        -50% +
+        var(--hsb-tooltip-shift)
+      )
+    );
+
+  transition:
+    transform 90ms ease-out;
+
+  will-change: transform;
+}
+
+.shop-dim-search
+.new-tooltip-bubble::after {
+  left:
+    calc(
+      50% -
+      var(--hsb-tooltip-shift)
+    );
+
+  transition:
+    left 90ms ease-out;
+}
+
+
+/* Number remains editable */
+
+.shop-dim-search .new-handle-input {
+  width: 30px;
+  min-width: 30px;
+
+  font-size: 0.78rem;
+  line-height: 1;
+
+  cursor: text;
+
+  user-select: text;
+  -webkit-user-select: text;
+
+  touch-action: manipulation;
+}
+
+
+/* "از / تا" remain compact visually but easy to drag */
+
+.shop-dim-search .new-tooltip-label {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 16px;
+  min-height: 20px;
+
+  margin:
+    -2px 0;
+
+  padding: 2px;
+
+  border-radius: 5px;
+
+  font-size: 0.7rem;
+  line-height: 1;
+
+  cursor: grab;
+
+  user-select: none;
+  -webkit-user-select: none;
+
+  touch-action: none;
+}
+
+.shop-dim-search
+.new-tooltip-label::before {
+  content: "";
+
+  position: absolute;
+  inset: -5px;
+
+  border-radius: 8px;
+}
+
+
+/* Active handle always stays controllable */
+
+.shop-dim-search .new-slider-handle:hover,
+.shop-dim-search .new-slider-handle:focus-within,
+.shop-dim-search .new-slider-handle.is-dragging {
+  z-index: 8;
+}
+
+.shop-dim-search
+.new-slider-handle.is-dragging
+.new-tooltip-label {
+  cursor: grabbing;
+
+  background:
+    rgba(255,255,255,0.1);
+}
+
+
+/* Tablet */
+
+@media (max-width: 992px) {
+
+  .shop-dim-search .new-range-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+  .shop-dim-search .new-range-grid {
+    grid-template-columns:
+      minmax(0, 1fr);
+  }
+
+  .shop-dim-search .new-slider-wrapper {
+    padding:
+      45px
+      10px
+      12px;
+  }
+
+}
+
+
+/* Small mobile */
+
+@media (max-width: 480px) {
+
+  .shop-dim-search .new-slider-wrapper {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+}
