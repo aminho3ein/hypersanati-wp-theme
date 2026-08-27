@@ -9,21 +9,19 @@ if (!defined('ABSPATH')) {
 add_action('admin_menu', 'hypersanati_register_footer_settings_page');
 
 function hypersanati_register_footer_settings_page() {
-    add_menu_page(
+    add_theme_page(
         'مدیریت فوتر',
         'مدیریت فوتر',
         'manage_options',
         'hypersanati-footer-settings',
-        'hypersanati_render_footer_settings_page',
-        'dashicons-layout',
-        61
+        'hypersanati_render_footer_settings_page'
     );
 }
 
 add_action('admin_enqueue_scripts', 'hypersanati_footer_admin_assets');
 
 function hypersanati_footer_admin_assets($hook) {
-    if ('toplevel_page_hypersanati-footer-settings' !== $hook) {
+    if ('appearance_page_hypersanati-footer-settings' !== $hook) {
         return;
     }
 

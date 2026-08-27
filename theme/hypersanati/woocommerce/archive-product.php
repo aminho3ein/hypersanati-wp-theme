@@ -22,8 +22,31 @@ $shop_height_bound_max =
 
     <!-- search-feat -->
 
+<?php
+if (
+    function_exists(
+        'hypersanati_render_search_help_modal'
+    )
+) {
+    hypersanati_render_search_help_modal();
+}
+?>
+
 <form class="search-input" id="ajax-search-form" onsubmit="return false;">
-    <h5>عنوان محصول</h5>
+    <h5 class="hsb-search-heading">
+        <span>عنوان محصول</span>
+
+        <button
+            type="button"
+            class="hsb-search-help-trigger"
+            aria-label="نمایش راهنمای جستجو"
+        >
+            <i
+                class="fa-solid fa-eye"
+                aria-hidden="true"
+            ></i>
+        </button>
+    </h5>
     <div class="big-input-division" style="position: relative; display: flex; align-items: center;">
 
         <input
@@ -90,10 +113,25 @@ $shop_height_max =
   <div class="new-search-container new-compact new-wide-mode shop-dim-search">
 
       <section class="new-search-section">
-          <h2 class="new-section-title">
-              <!-- <i class="fa-solid fa-ruler-combined"></i> -->
-              جستجوی تقریبی (بازه اندازه)
-          </h2>
+          <h2
+            class="new-section-title hsb-search-heading"
+            id="hsb-shop-approx-help"
+        >
+            <span>
+                جستجوی تقریبی (بازه اندازه)
+            </span>
+
+            <button
+                type="button"
+                class="hsb-search-help-trigger"
+                aria-label="نمایش راهنمای جستجو"
+            >
+                <i
+                    class="fa-solid fa-eye"
+                    aria-hidden="true"
+                ></i>
+            </button>
+        </h2>
 
           <div class="new-range-grid">
 

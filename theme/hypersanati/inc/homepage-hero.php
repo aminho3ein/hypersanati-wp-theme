@@ -16,6 +16,8 @@ function hsb_get_homepage_hero_defaults() {
         'button_text'   => 'جستجوی محصول',
         'button_target' => '#hsb-home-search',
         'image_id'      => 0,
+        'logo_image_id' => 0,
+        'logo_target'   => '/shop/',
     );
 }
 
@@ -119,7 +121,12 @@ function hsb_sanitize_homepage_hero_options(
             ? absint($input['image_id'])
             : 0;
 
-    $output['eyebrow'] =
+        $output['logo_image_id'] =
+        isset($input['logo_image_id'])
+            ? absint($input['logo_image_id'])
+            : 0;
+
+$output['eyebrow'] =
         isset($input['eyebrow'])
             ? sanitize_text_field(
                 wp_unslash(
@@ -183,6 +190,20 @@ function hsb_sanitize_homepage_hero_options(
         $output['button_target'] =
             '#hsb-home-search';
     }
+
+    $logo_target =
+        isset($input['logo_target'])
+            ? trim(
+                wp_unslash(
+                    $input['logo_target']
+                )
+            )
+            : $defaults['logo_target'];
+
+    $output['logo_target'] =
+        '' !== $logo_target
+            ? esc_url_raw($logo_target)
+            : '/shop/';
 
     return $output;
 }
@@ -250,6 +271,16 @@ function hsb_render_homepage_hero_admin_page() {
             wp_get_attachment_image_url(
                 absint($options['image_id']),
                 'large'
+            );
+    }
+
+    $logo_image_url = '';
+
+    if (!empty($options['logo_image_id'])) {
+        $logo_image_url =
+            wp_get_attachment_image_url(
+                absint($options['logo_image_id']),
+                'medium'
             );
     }
 
@@ -465,6 +496,95 @@ function hsb_render_homepage_hero_admin_page() {
                     </td>
                 </tr>
 
+                  <tr>
+                      <th scope="row">
+                          لوگوی مربعی Hero
+                      </th>
+
+                      <td>
+                          <input
+                              type="hidden"
+                              id="hsb-homepage-hero-logo-image-id"
+                              name="hsb_homepage_hero_options[logo_image_id]"
+                              value="<?php echo esc_attr($options['logo_image_id']); ?>"
+                          >
+
+                          <div
+                              id="hsb-homepage-hero-logo-preview"
+                              style="
+                                  width:280px;
+                                  max-width:100%;
+                                  aspect-ratio:1;
+                                  margin-bottom:14px;
+                                  display:flex;
+                                  align-items:center;
+                                  justify-content:center;
+                                  overflow:hidden;
+                                  border:1px solid #dcdcde;
+                                  border-radius:14px;
+                                  background:#fff;
+                              "
+                          >
+                              <?php if ($logo_image_url) : ?>
+                                  <img
+                                      src="<?php echo esc_url($logo_image_url); ?>"
+                                      alt=""
+                                      style="
+                                          display:block;
+                                          width:100%;
+                                          height:100%;
+                                          object-fit:contain;
+                                      "
+                                  >
+                              <?php else : ?>
+                                  <span style="color:#646970;text-align:center;padding:20px;">
+                                      لوگویی انتخاب نشده است
+                                  </span>
+                              <?php endif; ?>
+                          </div>
+
+                          <button
+                              type="button"
+                              class="button button-secondary"
+                              id="hsb-homepage-hero-logo-select"
+                          >
+                              انتخاب / تغییر لوگو
+                          </button>
+
+                          <button
+                              type="button"
+                              class="button"
+                              id="hsb-homepage-hero-logo-remove"
+                          >
+                              حذف لوگو
+                          </button>
+
+                          <p class="description">
+                              ترجیحاً PNG مربعی و باکیفیت انتخاب کنید.
+                              اگر لوگویی انتخاب نشود، این بخش در Hero نمایش داده نمی‌شود.
+                          </p>
+
+                          <p style="margin:16px 0 6px;">
+                              <strong>لینک لوگو</strong>
+                          </p>
+
+                          <input
+                              type="text"
+                              class="regular-text code"
+                              dir="ltr"
+                              name="hsb_homepage_hero_options[logo_target]"
+                              value="<?php echo esc_attr($options['logo_target']); ?>"
+                              placeholder="/shop/"
+                          >
+
+                          <p class="description">
+                              مثال:
+                              <code>/shop/</code>
+                              یا آدرس کامل صفحه مقصد.
+                          </p>
+                      </td>
+                  </tr>
+
                 <tr>
                     <th scope="row">
                         تصویر بزرگ Hero
@@ -659,6 +779,122 @@ function hsb_render_homepage_hero_admin_page() {
         }
     );
     </script>
+
+      <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          const select =
+              document.getElementById(
+                  "hsb-homepage-hero-logo-select"
+              );
+
+          const remove =
+              document.getElementById(
+                  "hsb-homepage-hero-logo-remove"
+              );
+
+          const input =
+              document.getElementById(
+                  "hsb-homepage-hero-logo-image-id"
+              );
+
+          const preview =
+              document.getElementById(
+                  "hsb-homepage-hero-logo-preview"
+              );
+
+          if (
+              !select ||
+              !remove ||
+              !input ||
+              !preview ||
+              typeof wp === "undefined" ||
+              !wp.media
+          ) {
+              return;
+          }
+
+          let frame = null;
+
+          select.addEventListener(
+              "click",
+              function (event) {
+                  event.preventDefault();
+
+                  if (frame) {
+                      frame.open();
+                      return;
+                  }
+
+                  frame = wp.media({
+                      title: "انتخاب لوگوی Hero",
+                      button: {
+                          text: "استفاده از این لوگو"
+                      },
+                      library: {
+                          type: "image"
+                      },
+                      multiple: false
+                  });
+
+                  frame.on("select", function () {
+                      const attachment =
+                          frame
+                              .state()
+                              .get("selection")
+                              .first()
+                              .toJSON();
+
+                      input.value =
+                          attachment.id;
+
+                      let url =
+                          attachment.url;
+
+                      if (
+                          attachment.sizes &&
+                          attachment.sizes.medium
+                      ) {
+                          url =
+                              attachment
+                                  .sizes
+                                  .medium
+                                  .url;
+                      }
+
+                      preview.innerHTML =
+                          '<img src="' +
+                          url +
+                          '" alt="" style="' +
+                          'display:block;' +
+                          'width:100%;' +
+                          'height:100%;' +
+                          'object-fit:contain;' +
+                          '">';
+                  });
+
+                  frame.open();
+              }
+          );
+
+          remove.addEventListener(
+              "click",
+              function (event) {
+                  event.preventDefault();
+
+                  input.value = "";
+
+                  preview.innerHTML =
+                      '<span style="' +
+                      'color:#646970;' +
+                      'text-align:center;' +
+                      'padding:20px;' +
+                      '">' +
+                      'لوگویی انتخاب نشده است' +
+                      '</span>';
+              }
+          );
+      });
+      </script>
     <?php
 }
 
@@ -702,10 +938,32 @@ function hsb_render_homepage_hero_section() {
         !empty($options['image_id'])
             ? absint($options['image_id'])
             : 0;
-    ?>
+        $logo_image_id =
+        !empty($options['logo_image_id'])
+            ? absint($options['logo_image_id'])
+            : 0;
+
+    $logo_target =
+        !empty($options['logo_target'])
+            ? trim($options['logo_target'])
+            : '/shop/';
+
+    if (
+        $logo_target &&
+        str_starts_with($logo_target, '/')
+    ) {
+        $logo_target =
+            home_url($logo_target);
+    }
+
+?>
 
     <section
-        class="hsb-home-hero"
+        class="hsb-home-hero<?php
+        echo $logo_image_id
+            ? ' has-brand-logo'
+            : '';
+        ?>"
         aria-labelledby="hsb-home-hero-title"
     >
         <div class="hsb-home-hero__content">
@@ -811,6 +1069,30 @@ function hsb_render_homepage_hero_section() {
             <?php endif; ?>
 
         </div>
+
+        <?php if ($logo_image_id) : ?>
+            <a
+                class="hsb-home-hero__brand-logo"
+                href="<?php echo esc_url($logo_target); ?>"
+                aria-label="مشاهده فروشگاه"
+            >
+                <?php
+                echo wp_get_attachment_image(
+                    $logo_image_id,
+                    'full',
+                    false,
+                    array(
+                        'class' =>
+                            'hsb-home-hero__brand-logo-image',
+                        'loading' =>
+                            'eager',
+                        'decoding' =>
+                            'async',
+                    )
+                );
+                ?>
+            </a>
+        <?php endif; ?>
 
         <?php if ($image_id) : ?>
             <div class="hsb-home-hero__media">

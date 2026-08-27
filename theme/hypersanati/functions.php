@@ -6976,3 +6976,64 @@ require_once get_template_directory()
 
 require_once get_template_directory()
     . '/inc/homepage-hero.php';
+
+/* ============================================================
+   HSB SEARCH HELP POPOVER
+   ============================================================ */
+
+function hypersanati_render_search_help_modal() {
+
+    static $rendered = false;
+
+    if ($rendered) {
+        return;
+    }
+
+    $rendered = true;
+    ?>
+
+    <aside
+        id="hsb-search-help-popover"
+        class="hsb-search-help-popover"
+        hidden
+        aria-hidden="true"
+        role="note"
+    >
+        <button
+            type="button"
+            class="hsb-search-help-popover__close"
+            aria-label="بستن راهنما"
+        >
+            ×
+        </button>
+
+        <strong class="hsb-search-help-popover__title">
+            راهنمای جستجوی محصول
+        </strong>
+
+        <div class="hsb-search-help-popover__item">
+            <b>۱. عنوان محصول:</b>
+            نام، برند یا پارت‌نامبر محصول را وارد کنید.
+        </div>
+
+        <div class="hsb-search-help-popover__item">
+            <b>۲. جستجوی دقیق:</b>
+            اگر قطر داخلی، قطر خارجی و ارتفاع دقیق را
+            می‌دانید، هر سه عدد را به میلی‌متر وارد کنید.
+        </div>
+
+        <div class="hsb-search-help-popover__item">
+            <b>۳. جستجوی تقریبی:</b>
+            اگر اندازه دقیق را نمی‌دانید، برای هر بُعد
+            بازه «از / تا» تعیین کنید. عدد را می‌توانید
+            تایپ کنید یا دستگیره را بکشید.
+        </div>
+
+        <div class="hsb-search-help-popover__tip">
+            نکته: روی «از» و «تا» نیز می‌توانید
+            کلیک یا لمس کرده و همان دستگیره را جابه‌جا کنید.
+        </div>
+    </aside>
+
+    <?php
+}
