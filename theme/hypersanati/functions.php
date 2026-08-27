@@ -3573,6 +3573,17 @@ add_action('wp_enqueue_scripts', 'hypersanati_enqueue_otp_assets', 20);
 
 function hypersanati_enqueue_otp_assets()
 {
+    if (
+        !class_exists('HSB_Auth_API') ||
+        !method_exists(
+            'HSB_Auth_API',
+            'mobile_verification_enabled'
+        ) ||
+        !HSB_Auth_API::mobile_verification_enabled()
+    ) {
+        return;
+    }
+
     $css_dir = get_template_directory() . '/assets/css';
     $js_dir  = get_template_directory() . '/assets/js';
     $css_url = get_template_directory_uri() . '/assets/css';
@@ -3625,6 +3636,17 @@ function hypersanati_render_otp_modal()
         return;
     }
 
+    if (
+        !class_exists('HSB_Auth_API') ||
+        !method_exists(
+            'HSB_Auth_API',
+            'mobile_verification_enabled'
+        ) ||
+        !HSB_Auth_API::mobile_verification_enabled()
+    ) {
+        return;
+    }
+
     $modal_path = get_template_directory() . '/woocommerce/myaccount/form-otp-login.php';
     if (file_exists($modal_path)) {
         include $modal_path;
@@ -3639,7 +3661,12 @@ add_filter('template_include', 'hypersanati_use_custom_dashboard_template');
 
 function hypersanati_use_custom_dashboard_template($template)
 {
-    if (is_page() && function_exists('is_account_page') && is_account_page()) {
+    if (
+        is_user_logged_in() &&
+        is_page() &&
+        function_exists('is_account_page') &&
+        is_account_page()
+    ) {
         $custom_dashboard = get_template_directory() . '/woocommerce/myaccount/dashboard.php';
         if (file_exists($custom_dashboard)) {
             return $custom_dashboard;
@@ -6436,6 +6463,11 @@ function hsb_create_preinvoice_order_from_session() {
 
     if (
         class_exists('HSB_Auth_API') &&
+        method_exists(
+            'HSB_Auth_API',
+            'mobile_verification_enabled'
+        ) &&
+        HSB_Auth_API::mobile_verification_enabled() &&
         !HSB_Auth_API::is_verified()
     ) {
         return new WP_Error(

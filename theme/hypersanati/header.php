@@ -206,15 +206,14 @@ if (!$hsb_order_tracking_url) {
 
         <?php else : ?>
 
-          <button
+          <a
             class="ui-btn ui-btn-account hsb-account-icon"
-            type="button"
-            id="ui-open-otp"
+            href="<?php echo esc_url(wp_login_url()); ?>"
             aria-label="ورود به حساب کاربری"
             title="ورود به حساب کاربری"
           >
             <i class="fa-solid fa-user"></i>
-          </button>
+          </a>
 
         <?php endif; ?>
       </li>
