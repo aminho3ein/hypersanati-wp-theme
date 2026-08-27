@@ -325,6 +325,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!button) return;
 
+    /*
+     * Mobile floating quantity has its own handler.
+     * Prevent double +/- processing.
+     */
+    if (
+      button.closest(
+        "[data-hsb-mobile-preinvoice]"
+      )
+    ) {
+      return;
+    }
+
     const wrapper = button.closest(".product-quantity-control");
     if (!wrapper) return;
 
@@ -504,6 +516,519 @@ document.addEventListener("DOMContentLoaded", function () {
         button.textContent = oldText;
       });
   });
+});
+
+/* HSB MOBILE FLOATING PREINVOICE */
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+
+    const bar =
+      document.querySelector(
+        "[data-hsb-mobile-preinvoice]"
+      );
+
+    const form =
+      document.querySelector(
+        ".hsb-sp-preinvoice-form"
+      );
+
+    if (!bar || !form) {
+      return;
+    }
+
+    const sourceButton =
+      form.querySelector(
+        ".preinvoice-add-button"
+      );
+
+    const sourceQuantity =
+      form.querySelector(
+        ".product-quantity-input"
+      );
+
+    const sourceMessage =
+      form.querySelector(
+        ".preinvoice-add-message"
+      );
+
+    const mobileQuantity =
+      bar.querySelector(
+        ".hsb-sp-mobile-quantity"
+      );
+
+    const mobileButton =
+      bar.querySelector(
+        ".hsb-sp-mobile-add"
+      );
+
+    const mobileMessage =
+      bar.querySelector(
+        ".hsb-sp-mobile-preinvoice__message"
+      );
+
+    const footer =
+      document.querySelector(
+        ".site-footer"
+      );
+
+    const mobileMedia =
+      window.matchMedia(
+        "(max-width: 820px)"
+      );
+
+    if (
+      !sourceButton ||
+      !sourceQuantity ||
+      !mobileQuantity ||
+      !mobileButton
+    ) {
+      return;
+    }
+
+
+    /*
+     * Initial HTML uses hidden to prevent a flash.
+     * From this point visibility is animated by CSS.
+     */
+    bar.hidden = false;
+
+
+    function cleanQuantity(value) {
+
+      const min =
+        parseInt(
+          sourceQuantity.min || "1",
+          10
+        ) || 1;
+
+      let quantity =
+        parseInt(value || min, 10);
+
+      if (
+        Number.isNaN(quantity) ||
+        quantity < min
+      ) {
+        quantity = min;
+      }
+
+      return quantity;
+    }
+
+
+    function syncMobileQuantity() {
+
+      mobileQuantity.value =
+        cleanQuantity(
+          sourceQuantity.value
+        );
+    }
+
+
+    function syncSourceQuantity() {
+
+      sourceQuantity.value =
+        cleanQuantity(
+          mobileQuantity.value
+        );
+    }
+
+
+    /*
+     * Floating +/- buttons own one shared quantity value.
+     * No delayed copy and no second stepper handler.
+     */
+    bar.addEventListener(
+      "click",
+      function (event) {
+
+        const quantityButton =
+          event.target.closest(
+            ".product-quantity-btn"
+          );
+
+        if (!quantityButton) {
+          return;
+        }
+
+        const min =
+          parseInt(
+            sourceQuantity.min || "1",
+            10
+          ) || 1;
+
+        const step =
+          parseInt(
+            sourceQuantity.step || "1",
+            10
+          ) || 1;
+
+        let value =
+          cleanQuantity(
+            sourceQuantity.value
+          );
+
+        if (
+          quantityButton.classList.contains(
+            "qty-plus"
+          )
+        ) {
+          value += step;
+        }
+
+        if (
+          quantityButton.classList.contains(
+            "qty-minus"
+          )
+        ) {
+          value -= step;
+        }
+
+        if (value < min) {
+          value = min;
+        }
+
+        sourceQuantity.value =
+          value;
+
+        mobileQuantity.value =
+          value;
+      }
+    );
+
+
+    /*
+     * Original +/- buttons are still handled by
+     * the existing product stepper. Copy their
+     * final value after that handler completes.
+     */
+    document.addEventListener(
+      "click",
+      function (event) {
+
+        const sourceQuantityButton =
+          event.target.closest(
+            ".hsb-sp-preinvoice-form " +
+            ".product-quantity-btn"
+          );
+
+        if (!sourceQuantityButton) {
+          return;
+        }
+
+        window.setTimeout(
+          syncMobileQuantity,
+          0
+        );
+      }
+    );
+
+
+    function syncQuantityInput(event) {
+
+      if (
+        event.target !== sourceQuantity &&
+        event.target !== mobileQuantity
+      ) {
+        return;
+      }
+
+      const value =
+        cleanQuantity(
+          event.target.value
+        );
+
+      sourceQuantity.value =
+        value;
+
+      mobileQuantity.value =
+        value;
+    }
+
+
+    document.addEventListener(
+      "input",
+      syncQuantityInput
+    );
+
+    document.addEventListener(
+      "change",
+      syncQuantityInput
+    );
+
+
+    mobileButton.addEventListener(
+      "click",
+      function () {
+
+        syncSourceQuantity();
+
+        if (sourceButton.disabled) {
+          return;
+        }
+
+        if (
+          typeof form.requestSubmit ===
+          "function"
+        ) {
+          form.requestSubmit(
+            sourceButton
+          );
+        } else {
+          sourceButton.click();
+        }
+      }
+    );
+
+
+    function syncButtonState() {
+
+      const loading =
+        sourceButton.disabled ||
+        sourceButton.classList.contains(
+          "loading"
+        );
+
+      mobileButton.disabled =
+        loading;
+
+      const label =
+        mobileButton.querySelector(
+          "span"
+        );
+
+      if (label) {
+        label.textContent =
+          loading
+            ? "در حال افزودن..."
+            : "افزودن به پیش‌فاکتور";
+      }
+    }
+
+
+    new MutationObserver(
+      syncButtonState
+    ).observe(
+      sourceButton,
+      {
+        attributes: true,
+        attributeFilter: [
+          "disabled",
+          "class"
+        ]
+      }
+    );
+
+
+    if (
+      sourceMessage &&
+      mobileMessage
+    ) {
+
+      function syncMessage() {
+
+        mobileMessage.textContent =
+          sourceMessage.textContent || "";
+
+        mobileMessage.classList.toggle(
+          "is-success",
+          sourceMessage.classList.contains(
+            "is-success"
+          )
+        );
+
+        mobileMessage.classList.toggle(
+          "is-error",
+          sourceMessage.classList.contains(
+            "is-error"
+          )
+        );
+      }
+
+
+      new MutationObserver(
+        syncMessage
+      ).observe(
+        sourceMessage,
+        {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: [
+            "class"
+          ]
+        }
+      );
+    }
+
+
+    function updateMobileBar() {
+
+      if (!mobileMedia.matches) {
+
+        bar.classList.remove(
+          "is-visible"
+        );
+
+        bar.style.removeProperty(
+          "--hsb-mobile-preinvoice-bottom"
+        );
+
+        return;
+      }
+
+
+      const sourceRect =
+        sourceButton.getBoundingClientRect();
+
+
+      /*
+       * Show as soon as the original CTA starts
+       * leaving the top of the viewport.
+       *
+       * This prevents a visual gap between the
+       * original CTA and the floating CTA.
+       */
+      /*
+       * Reveal when the original CTA reaches
+       * roughly the middle of the viewport.
+       * This is about half a screen earlier.
+       */
+      const revealLine =
+        window.innerHeight * 0.5;
+
+      if (
+        sourceRect.top >
+        revealLine
+      ) {
+
+        bar.classList.remove(
+          "is-visible"
+        );
+
+        bar.style.removeProperty(
+          "--hsb-mobile-preinvoice-bottom"
+        );
+
+        return;
+      }
+
+
+      /*
+       * Refresh the floating value from the
+       * original form every time it appears.
+       */
+      syncMobileQuantity();
+
+      bar.classList.add(
+        "is-visible"
+      );
+
+      let bottom = 10;
+
+
+      /*
+       * Never overlap the footer.
+       */
+      if (footer) {
+
+        const footerRect =
+          footer.getBoundingClientRect();
+
+        if (
+          footerRect.top <
+          window.innerHeight
+        ) {
+
+          bottom =
+            Math.max(
+              10,
+              window.innerHeight -
+                footerRect.top +
+                10
+            );
+        }
+      }
+
+
+      bar.style.setProperty(
+        "--hsb-mobile-preinvoice-bottom",
+        bottom + "px"
+      );
+    }
+
+
+    syncMobileQuantity();
+    syncButtonState();
+    updateMobileBar();
+
+
+    window.addEventListener(
+      "scroll",
+      updateMobileBar,
+      {
+        passive: true
+      }
+    );
+
+    window.addEventListener(
+      "resize",
+      updateMobileBar
+    );
+
+    if (
+      typeof mobileMedia.addEventListener ===
+      "function"
+    ) {
+      mobileMedia.addEventListener(
+        "change",
+        updateMobileBar
+      );
+    }
+
+  }
+);
+
+
+/* HSB QUANTITY PERSIAN MIRROR REFRESH */
+document.addEventListener("click", function (event) {
+
+  if (!event.target.closest(
+    ".product-quantity-btn"
+  )) {
+    return;
+  }
+
+  /*
+   * Quantity values are already synchronized.
+   * Persian Digits uses separate visual mirrors,
+   * so refresh those mirrors after click handlers
+   * and delayed quantity sync have completed.
+   */
+  window.setTimeout(function () {
+
+    document
+      .querySelectorAll(".product-quantity-input")
+      .forEach(function (input) {
+
+        input.dispatchEvent(
+          new Event("input", {
+            bubbles: true
+          })
+        );
+
+      });
+
+    if (
+      window.WPPersianDigits &&
+      typeof window.WPPersianDigits.refresh ===
+        "function"
+    ) {
+      window.WPPersianDigits.refresh();
+    }
+
+  }, 0);
+
 });
 
 /* HSB PRODUCT FAMILY SWITCHER */
