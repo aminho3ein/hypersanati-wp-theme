@@ -29,3 +29,45 @@ Text Domain: hypersanati
 This theme is a custom development project and follows WordPress theme development standards.
 
 */
+
+.customer-account-section {
+    padding: 80px 0;
+}
+
+.customer-account-box {
+    max-width: 650px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 40px;
+    border-radius: 16px;
+}
+
+.customer-account-title {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.customer-account-login,
+.customer-account-register {
+    margin-bottom: 40px;
+}
+
+.customer-account-register {
+    padding-top: 30px;
+    border-top: 1px solid #eee;
+}
+
+.hsb-auth-register input,
+.hsb-auth-login input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 15px;
+}
+
+.hsb-auth-register button,
+.hsb-auth-login button {
+    width: 100%;
+    padding: 14px;
+    cursor: pointer;
+}
+
