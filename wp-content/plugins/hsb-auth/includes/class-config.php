@@ -15,9 +15,13 @@ class HSB_Auth_Config {
                 ? HSB_SMS_PROVIDER
                 : $default,
 
-            'kavenegar_api_key' => defined('HSB_KAVENEGAR_API_KEY')
-                ? HSB_KAVENEGAR_API_KEY
-                : $default,
+            'kavenegar_api_key' => defined('KAVENEGAR_API_KEY')
+                ? KAVENEGAR_API_KEY
+                : (
+                    defined('HSB_KAVENEGAR_API_KEY')
+                        ? HSB_KAVENEGAR_API_KEY
+                        : $default
+                ),
 
             'kavenegar_sender' => defined('HSB_KAVENEGAR_SENDER')
                 ? HSB_KAVENEGAR_SENDER

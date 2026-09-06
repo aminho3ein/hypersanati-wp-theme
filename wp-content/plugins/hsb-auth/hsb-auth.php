@@ -44,6 +44,7 @@ require_once HSB_AUTH_PATH . 'includes/class-rest-profile.php';
 require_once HSB_AUTH_PATH . 'includes/class-rest-api.php';
 require_once HSB_AUTH_PATH . 'includes/class-api.php';
 require_once HSB_AUTH_PATH . 'includes/class-hooks.php';
+require_once HSB_AUTH_PATH . 'includes/class-woocommerce-account.php';
 
 function hsb_auth_init() {
 
@@ -56,6 +57,7 @@ function hsb_auth_init() {
     new HSB_REST_Profile();
     new HSB_Shortcodes();
     new HSB_Auth_Assets();
+    new HSB_WooCommerce_Account();
 
 }
 
