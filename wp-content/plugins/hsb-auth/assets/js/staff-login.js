@@ -43,6 +43,20 @@
             "[data-hsb-staff-message]"
         );
 
+
+    let pendingUserId = 0;
+    let pendingMobileMasked = "";
+
+    const otpWrapper =
+        root.querySelector(
+            "[data-hsb-staff-otp-wrapper]"
+        );
+
+    const otpInput =
+        root.querySelector(
+            "[data-hsb-staff-otp]"
+        );
+
     if (
         !form ||
         !username ||
@@ -72,6 +86,73 @@
         "submit",
         async (event) => {
             event.preventDefault();
+
+            if (
+                pendingUserId &&
+                otpInput &&
+                otpInput.value.trim()
+            ) {
+
+                const otpBody =
+                    new FormData();
+
+                otpBody.append(
+                    "action",
+                    "hsb_staff_verify_otp"
+                );
+
+                otpBody.append(
+                    "nonce",
+                    HSBStaffAuth.nonce
+                );
+
+                otpBody.append(
+                    "user_id",
+                    pendingUserId
+                );
+
+                otpBody.append(
+                    "code",
+                    otpInput.value.trim()
+                );
+
+                const otpResponse =
+                    await fetch(
+                        HSBStaffAuth.ajaxUrl,
+                        {
+                            method: "POST",
+                            credentials: "same-origin",
+                            body: otpBody,
+                        }
+                    );
+
+                const otpResult =
+                    await otpResponse.json();
+
+                if (
+                    !otpResult ||
+                    !otpResult.success
+                ) {
+                    throw new Error(
+                        otpResult &&
+                        otpResult.data &&
+                        otpResult.data.message
+                            ? otpResult.data.message
+                            : "کد تایید صحیح نیست."
+                    );
+                }
+
+                showMessage(
+                    "ورود موفق بود. در حال انتقال…",
+                    "success"
+                );
+
+                window.location.assign(
+                    otpResult.data.redirect
+                );
+
+                return;
+            }
 
             const login =
                 username.value.trim();
@@ -154,13 +235,30 @@
                     );
                 }
 
+                if (otpWrapper) {
+                    otpWrapper.hidden = false;
+                }
+
+                pendingUserId =
+                    result.data.user_id || 0;
+
+                pendingMobileMasked =
+                    result.data.mobile_masked || "";
+
+                if (otpInput) {
+                    otpInput.focus();
+                }
+
                 showMessage(
-                    "ورود موفق بود. در حال انتقال…",
+                    pendingMobileMasked
+                        ? `کد تایید به شماره ${pendingMobileMasked} ارسال شد.`
+                        : "کد تایید ارسال شد.",
                     "success"
                 );
 
-                window.location.assign(
-                    result.data.redirect
+                button.disabled = false;
+                button.classList.remove(
+                    "is-loading"
                 );
             } catch (error) {
                 showMessage(

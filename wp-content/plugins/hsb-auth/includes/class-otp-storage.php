@@ -7,13 +7,13 @@ if (!defined('ABSPATH')) {
 class HSB_OTP_Storage {
 
 
-    public static function save($mobile, $code, $expire = 300) {
+    public static function save($mobile, $code, $expire = 120) {
 
         $key = self::key($mobile);
 
         return set_transient(
             $key,
-            $code,
+            wp_hash_password((string) $code),
             $expire
         );
 
@@ -40,7 +40,15 @@ class HSB_OTP_Storage {
 
     private static function key($mobile) {
 
-        return 'hsb_otp_' . md5($mobile);
+        return 'hsb_otp_' . substr(
+            hash_hmac(
+                'sha256',
+                $mobile,
+                wp_salt('auth')
+            ),
+            0,
+            40
+        );
 
     }
 

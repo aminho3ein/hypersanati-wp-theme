@@ -36,6 +36,17 @@ class HSB_REST_API {
 
         register_rest_route(
             'hsb-auth/v1',
+            '/check-mobile',
+            [
+                'methods'  => 'POST',
+                'callback' => [$this, 'check_mobile'],
+                'permission_callback' => '__return_true',
+            ]
+        );
+
+
+        register_rest_route(
+            'hsb-auth/v1',
             '/request-otp',
             [
                 'methods'  => 'POST',
@@ -85,6 +96,21 @@ class HSB_REST_API {
     }
 
 
+
+
+
+    public function check_mobile($request) {
+
+        $mobile = $request->get_param('mobile');
+
+        $exists = HSB_User_Profile::find_by_mobile($mobile);
+
+
+        return [
+            'exists' => (bool) $exists,
+        ];
+
+    }
 
     public function request_otp($request) {
 
@@ -147,6 +173,16 @@ class HSB_REST_API {
         );
 
 
+        if (is_wp_error($user_id)) {
+
+            return [
+                'status'  => 'error',
+                'message' => $user_id->get_error_message(),
+            ];
+
+        }
+
+
         if (!$user_id) {
             return [
                 'status' => 'error',
@@ -170,6 +206,16 @@ class HSB_REST_API {
         $user_id = HSB_Register_Controller::register(
             $data
         );
+
+        if (is_wp_error($user_id)) {
+
+            return [
+                'status'  => 'error',
+                'message' => $user_id->get_error_message(),
+            ];
+
+        }
+
 
         if (!$user_id) {
             return [

@@ -19,7 +19,7 @@ class HSB_OTP {
 
     public function send_code($mobile) {
 
-        $code = wp_rand(100000, 999999);
+        $code = random_int(100000, 999999);
 
         HSB_OTP_Storage::save(
             $mobile,
@@ -28,7 +28,7 @@ class HSB_OTP {
 
         return $this->provider->send(
             $mobile,
-            "Your verification code is: " . $code
+            $code
         );
 
     }
@@ -43,7 +43,7 @@ class HSB_OTP {
         }
 
 
-        if ((string) $stored !== (string) $code) {
+        if (!wp_check_password((string) $code, $stored)) {
             return false;
         }
 

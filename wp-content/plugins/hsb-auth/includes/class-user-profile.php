@@ -42,7 +42,10 @@ class HSB_User_Profile {
 
 
         if ($existing) {
-            return $existing;
+            return new WP_Error(
+                'hsb_mobile_exists',
+                'این شماره موبایل قبلاً در سایت ثبت شده است.'
+            );
         }
 
 
@@ -90,7 +93,10 @@ class HSB_User_Profile {
         $existing = self::find_by_mobile($mobile);
 
         if ($existing) {
-            return $existing;
+            return new WP_Error(
+                'hsb_mobile_exists',
+                'این شماره موبایل قبلاً در سایت ثبت شده است.'
+            );
         }
 
         $user_id = wp_insert_user([

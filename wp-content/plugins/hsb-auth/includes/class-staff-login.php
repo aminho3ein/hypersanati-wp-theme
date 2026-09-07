@@ -77,6 +77,11 @@ final class HSB_Staff_Login {
         );
 
         add_action(
+            'wp_ajax_nopriv_hsb_staff_verify_otp',
+            [self::class, 'verify_otp']
+        );
+
+        add_action(
             'admin_notices',
             [self::class, 'render_admin_notice']
         );
@@ -261,17 +266,7 @@ final class HSB_Staff_Login {
             return true;
         }
 
-        $public_roles = [
-            'customer',
-            'subscriber',
-        ];
-
-        return !empty(
-            array_diff(
-                (array) $user->roles,
-                $public_roles
-            )
-        );
+        return false;
     }
 
 
@@ -664,27 +659,140 @@ final class HSB_Staff_Login {
             $login
         );
 
+        $mobile =
+            get_user_meta(
+                $user->ID,
+                'billing_phone',
+                true
+            );
+
+        if (empty($mobile)) {
+            wp_send_json_error(
+                [
+                    'message' =>
+                        'شماره موبایل برای این حساب ثبت نشده است.',
+                ],
+                422
+            );
+        }
+
+        $otp =
+            HSB_Login_Controller::request_otp(
+                $mobile
+            );
+
+        if (is_wp_error($otp) || false === $otp) {
+            wp_send_json_error(
+                [
+                    'message' =>
+                        'ارسال کد تایید انجام نشد.',
+                ],
+                500
+            );
+        }
+
+        set_transient(
+            'hsb_staff_pending_' . $user->ID,
+            [
+                'user_id' => $user->ID,
+                'mobile'  => $mobile,
+                'remember'=> $remember,
+            ],
+            10 * MINUTE_IN_SECONDS
+        );
+
+        wp_send_json_success(
+            [
+                'message' =>
+                    'کد تایید ارسال شد.',
+                'user_id' =>
+                    $user->ID,
+                'mobile_masked' =>
+                    "‎" .
+                    substr($mobile, 0, 3) .
+                    '******' .
+                    substr($mobile, -2) .
+                    "‎",
+            ]
+        );
+    }
+
+
+
+    public static function verify_otp() {
+
+        check_ajax_referer(
+            self::NONCE_ACTION,
+            'nonce'
+        );
+
+        $user_id =
+            absint(
+                $_POST['user_id'] ?? 0
+            );
+
+        $code =
+            sanitize_text_field(
+                wp_unslash(
+                    $_POST['code'] ?? ''
+                )
+            );
+
+        $pending =
+            get_transient(
+                'hsb_staff_pending_' . $user_id
+            );
+
+        if (
+            empty($pending) ||
+            empty($pending['mobile'])
+        ) {
+            wp_send_json_error(
+                [
+                    'message' =>
+                        'درخواست ورود منقضی شده است.',
+                ],
+                422
+            );
+        }
+
+        if (
+            !HSB_Login_Controller::verify_otp_code(
+                $pending['mobile'],
+                $code
+            )
+        ) {
+            wp_send_json_error(
+                [
+                    'message' =>
+                        'کد تایید صحیح نیست.',
+                ],
+                401
+            );
+        }
+
         wp_set_current_user(
-            $user->ID
+            $pending['user_id']
         );
 
         wp_set_auth_cookie(
-            $user->ID,
-            $remember,
+            $pending['user_id'],
+            !empty($pending['remember']),
             is_ssl()
         );
 
-        do_action(
-            'wp_login',
-            $user->user_login,
-            $user
+        delete_transient(
+            'hsb_staff_pending_' . $user_id
         );
 
         wp_send_json_success(
             [
                 'redirect' =>
                     self::redirect_for_user(
-                        $user
+                        get_user_by(
+                            'id',
+                            $pending['user_id']
+                        )
                     ),
             ]
         );

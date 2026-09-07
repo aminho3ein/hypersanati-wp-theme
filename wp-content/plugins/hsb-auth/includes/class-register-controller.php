@@ -30,6 +30,11 @@ class HSB_Register_Controller {
         $user_id = HSB_User_Profile::create_customer_account($data);
 
 
+        if (is_wp_error($user_id)) {
+            return $user_id;
+        }
+
+
         if (!$user_id) {
             return false;
         }

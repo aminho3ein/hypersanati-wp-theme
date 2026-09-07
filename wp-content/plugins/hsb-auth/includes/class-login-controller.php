@@ -125,4 +125,33 @@ class HSB_Login_Controller {
     }
 
 
+
+    public static function verify_otp_code($mobile, $code) {
+
+        $mobile = HSB_Validator::mobile($mobile);
+
+        if (!$mobile) {
+            return false;
+        }
+
+        if (!HSB_Verify_Rate_Limit::can_attempt($mobile)) {
+            return false;
+        }
+
+        $provider = HSB_SMS_Factory::create();
+
+        $otp = new HSB_OTP(
+            $provider
+        );
+
+        $service = new HSB_OTP_Service(
+            $otp
+        );
+
+        return $service->verify(
+            $mobile,
+            $code
+        );
+    }
+
 }

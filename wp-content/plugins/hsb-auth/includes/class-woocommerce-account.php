@@ -6,22 +6,9 @@ if (!defined('ABSPATH')) {
 
 class HSB_WooCommerce_Account {
 
-
     public function __construct() {
-
-        add_action(
-            'woocommerce_before_customer_login_form',
-            [$this, 'render_login'],
-            5
-        );
-
-    }
-
-
-    public function render_login() {
-
-        echo do_shortcode('[hsb_auth_login]');
-
+        // WooCommerce login form is overridden by theme template:
+        // theme/hypersanati/woocommerce/myaccount/form-login.php
     }
 
 }

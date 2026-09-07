@@ -134,6 +134,26 @@ if ('' === $logo_url) {
                 data-hsb-staff-password
             >
 
+            <div
+                class="hsb-staff-auth__otp"
+                data-hsb-staff-otp-wrapper
+                hidden
+            >
+
+                <label for="hsb-staff-otp">
+                    کد تایید
+                </label>
+
+                <input
+                    id="hsb-staff-otp"
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    data-hsb-staff-otp
+                >
+
+            </div>
+
             <label class="hsb-staff-auth__remember">
 
                 <input
