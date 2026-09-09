@@ -22,8 +22,6 @@ wp-content/upgrade/
 wp-content/cache/
 wp-content/languages/
 wp-content/plugins/*
-!wp-content/plugins/hsb-auth/
-!wp-content/plugins/hsb-auth/**
 
 
 # --- Environment & Sensitive Data ---
@@ -51,8 +49,6 @@ vendor/
 
 # --- Plugins (keep out of GitHub) ---
 wp-content/plugins/*
-!wp-content/plugins/hsb-auth/
-!wp-content/plugins/hsb-auth/**
 
 # --- VS Code ---
 .vscode/

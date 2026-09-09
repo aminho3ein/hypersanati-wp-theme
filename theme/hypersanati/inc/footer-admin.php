@@ -160,7 +160,7 @@ function hypersanati_get_footer_settings_defaults() {
         'contact_address'   => 'تهران، خیابان سعدی جنوبی، خیابان اکباتان، کوچه ناظم الاطبا شمالی، پاساژ امام حسین، زیر همکف، پلاک 32 بلبرینگ همگام صنعت برتر',
         'contact_phone_1'   => '02133989930',
         'contact_phone_2'   => '02133989940',
-        'contact_email'     => 'info@hamgamsanatbartar.com',
+        'contact_email'     => 'info@olfatbearing.com',
 
         'terms_title'       => 'قوانین و مقررات',
         'terms_url'         => '',

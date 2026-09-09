@@ -325,10 +325,14 @@
   display: none;
   height: 100%;
   overflow-y: auto;
+  padding-bottom: 2rem;
+  box-sizing: border-box;
 }
 
 .product-meta-content > .tab-panel.active {
   display: flex;
+  min-height: 0;
+  box-sizing: border-box;
 }
 #qa.active {
   flex-direction: column;
@@ -7191,3 +7195,75 @@ body.single-product
     }
 
 }
+
+
+/* FIX: product meta tabs internal scrolling */
+
+body.single-product .product-meta-content > .tab-panel.active {
+    display: flex;
+    height: 100%;
+    min-height: 0 !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+body.single-product #qa.product-qa-panel,
+body.single-product #reviews.reviews-section {
+    min-height: 0 !important;
+    height: 100% !important;
+    overflow: visible;
+}
+
+body.single-product .product-qa-form-card,
+body.single-product .review-form-card {
+    margin-bottom: 2rem;
+}
+
+/* FINAL FIX: QA / Reviews inside fixed meta container */
+
+body.single-product .product-meta-content > .tab-panel.active {
+    display: flex;
+    flex-direction: column;
+    min-height: 0 !important;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+body.single-product #qa.product-qa-panel.active,
+body.single-product #reviews.reviews-section.active {
+    display: grid !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+body.single-product #qa.product-qa-panel .question-and-answer-sec,
+body.single-product #reviews.reviews-section .product-reviews {
+    min-height: 0;
+}
+
+body.single-product .product-qa-form-card,
+body.single-product .review-form-card {
+    padding-bottom: 2rem;
+}
+
+
+/* Increase product meta tabs viewport on desktop */
+@media (min-width: 1025px) {
+    body.single-product .product-meta-content {
+        height: 520px !important;
+    }
+}
+
+
+/* Desktop product meta height override */
+@media (min-width: 1025px) {
+    body.single-product .product-meta-content {
+        height: 620px !important;
+        min-height: 620px !important;
+    }
+}
+

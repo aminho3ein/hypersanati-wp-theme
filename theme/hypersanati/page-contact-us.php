@@ -8,7 +8,7 @@ get_header();
 $contact_address   = get_theme_mod( 'hypersanati_contact_address', 'تهران، خیابان سعدی جنوبی، خیابان اکباتان، کوچه ناظم الاطبا شمالی، پاساژ امام حسین، زیر همکف، پلاک 32 بلبرینگ همگام صنعت برتر' );
 $contact_phone     = get_theme_mod( 'hypersanati_contact_phone', '۰۲۱-۳۳۹۸۹۹۳۰ - ۰۲۱-۳۳۹۸۹۹۴۰' );
 $contact_fax       = get_theme_mod( 'hypersanati_contact_fax', '۰۲۱-۳۳۹۸۹۹۴۰' );
-$contact_email     = get_theme_mod( 'hypersanati_contact_email', 'info@hamgamsanatbartar.com' );
+$contact_email     = get_theme_mod( 'hypersanati_contact_email', 'info@olfatbearing.com' );
 $contact_terms_url = get_theme_mod( 'hypersanati_contact_terms_url', '#' );
 
 $contact_status = isset( $_GET['contact_status'] ) ? sanitize_key( wp_unslash( $_GET['contact_status'] ) ) : '';

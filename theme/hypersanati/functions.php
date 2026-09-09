@@ -2962,7 +2962,7 @@ if (!function_exists('theme_render_product_qa_list')) {
 
                             <div class="qa-meta">
                                 <span class="qa-name">
-                                    <?php echo esc_html(get_comment_author($question)); ?>
+                                    <?php echo esc_html(hsb_get_public_comment_author_name($question)); ?>
                                 </span>
 
                                 <?php if ($is_buyer) : ?>
@@ -3082,6 +3082,7 @@ function theme_enqueue_product_qa_ajax_script() {
 
     wp_localize_script('theme-product-qa-ajax', 'themeProductQa', array(
         'ajaxUrl' => admin_url('admin-ajax.php'),
+        'is_logged_in' => is_user_logged_in(),
     ));
 }
 
@@ -3745,7 +3746,7 @@ function hypersanati_contact_customizer_settings( $wp_customize ) {
     $wp_customize->add_setting(
         'hypersanati_contact_email',
         array(
-            'default'           => 'info@hamgamsanatbartar.com',
+            'default'           => 'info@olfatbearing.com',
             'sanitize_callback' => 'sanitize_email',
         )
     );
@@ -7069,3 +7070,43 @@ function hypersanati_render_search_help_modal() {
 
     <?php
 }
+
+
+/* ============================================================
+   WORDPRESS 6.4+ EMOJI COMPATIBILITY
+   ============================================================ */
+
+if (
+    function_exists('wp_enqueue_emoji_styles') &&
+    function_exists('print_emoji_styles')
+) {
+    remove_action(
+        'wp_print_styles',
+        'print_emoji_styles'
+    );
+
+    add_action(
+        'wp_enqueue_scripts',
+        'wp_enqueue_emoji_styles'
+    );
+}
+
+function hsb_get_public_comment_author_name($comment) {
+
+    $user = get_user_by('id', $comment->user_id);
+
+    if ($user) {
+
+        $first = get_user_meta($user->ID, 'first_name', true);
+        $last  = get_user_meta($user->ID, 'last_name', true);
+
+        $full_name = trim($first . ' ' . $last);
+
+        if (!empty($full_name)) {
+            return $full_name;
+        }
+    }
+
+    return 'کاربر سایت';
+}
+
