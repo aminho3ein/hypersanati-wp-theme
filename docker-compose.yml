@@ -16,12 +16,14 @@ services:
     depends_on:
       - db
     ports:
-      - "8080:80"
+      - "8084:80"
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: wp
       WORDPRESS_DB_PASSWORD: wp
       WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: "1"
+      WORDPRESS_DEBUG_LOG: "1"
     volumes:
       - ./theme/hypersanati:/var/www/html/wp-content/themes/hypersanati
       - ./wp-content/plugins:/var/www/html/wp-content/plugins

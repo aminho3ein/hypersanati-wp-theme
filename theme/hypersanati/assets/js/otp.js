@@ -16,6 +16,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusEl = document.getElementById('otp-status');
 
     let mobile = '';
+    let otpCallback = null;
+    let otpMode = 'login';
+
+
+    window.openHSBOTPModal = function(callback, mode = 'login'){
+
+        otpMode = mode;
+
+        otpCallback = callback || null;
+
+        if (modal) {
+
+            modal.classList.add('is-open');
+            modal.setAttribute(
+                'aria-hidden',
+                'false'
+            );
+
+        }
+
+    };
 
 
     const OTP_LENGTH = 6;
@@ -67,8 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             e.preventDefault();
 
-            modal.classList.add('is-open');
-            modal.setAttribute('aria-hidden', 'false');
+            window.openHSBOTPModal();
 
         });
 
@@ -179,7 +199,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             const response = await fetch(
-                api + 'verify-otp',
+                api + (
+                    otpMode === 'interaction'
+                        ? 'interaction-verify-otp'
+                        : 'verify-otp'
+                ),
                 {
                     method: 'POST',
                     headers: {
@@ -202,6 +226,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 statusEl.textContent =
                     'ورود موفق';
+
+
+                if (otpCallback) {
+
+                    const callback = otpCallback;
+
+                    otpCallback = null;
+
+                    callback(result);
+
+                    return;
+
+                }
 
 
                 window.location.href =

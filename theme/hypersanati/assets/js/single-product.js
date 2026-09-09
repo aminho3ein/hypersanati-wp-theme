@@ -2369,3 +2369,45 @@ document.addEventListener(
 
   }
 );
+
+
+/* HSB Review OTP Guard */
+document.addEventListener("DOMContentLoaded", function () {
+
+  let hsbReviewVerified = false;
+
+  document.addEventListener("submit", function (event) {
+
+    const form = event.target.closest(".product-review-form");
+
+    if (!form) {
+      return;
+    }
+
+    if (hsbReviewVerified) {
+      return;
+    }
+
+    if (document.body.classList.contains("logged-in")) {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (typeof window.openHSBOTPModal === "function") {
+
+      window.openHSBOTPModal(function () {
+
+        hsbReviewVerified = true;
+
+        setTimeout(function () {
+          form.requestSubmit();
+        }, 500);
+
+      }, "interaction");
+
+    }
+
+  });
+
+});

@@ -1736,12 +1736,7 @@ if (!function_exists('theme_fa_digits')) {
             'order'   => 'DESC',
         ));
 
-        $requires_verified_owner = 'yes' === get_option('woocommerce_review_rating_verification_required');
-        $user_can_review = true;
-
-        if ($requires_verified_owner) {
-            $user_can_review = is_user_logged_in() && wc_customer_bought_product('', get_current_user_id(), $product_id);
-        }
+        $user_can_review = is_user_logged_in();
 
         $average_rating_display = $average_rating > 0
             ? theme_fa_digits(number_format_i18n($average_rating, 1))
@@ -1786,7 +1781,7 @@ if (!function_exists('theme_fa_digits')) {
 
                 <p class="review-discount-text">با ثبت نظر در خرید بعدی تخفیف بگیر.</p>
 
-                <?php if (comments_open($product_id) && $user_can_review) : ?>
+                <?php if (comments_open($product_id)) : ?>
                     <a href="#review-form-box" class="review-submit-btn">
                         ثبت نظر
                     </a>
@@ -1830,7 +1825,7 @@ if (!function_exists('theme_fa_digits')) {
 
                                             <div class="user-meta">
                                                 <span class="user-name">
-                                                    <?php echo esc_html(get_comment_author($review)); ?>
+                                                    <?php echo esc_html(hsb_get_public_comment_author_name($review)); ?>
                                                 </span>
 
                                                 <div class="user-badges">
@@ -1876,13 +1871,6 @@ if (!function_exists('theme_fa_digits')) {
                         <div class="review-form-message">
                             <h3>ثبت نظر غیرفعال است</h3>
                             <p>در حال حاضر امکان ثبت نظر برای این محصول وجود ندارد.</p>
-                        </div>
-
-                    <?php elseif (!$user_can_review) : ?>
-
-                        <div class="review-form-message">
-                            <h3>ثبت نظر فقط برای خریداران محصول فعال است</h3>
-                            <p>برای ثبت نظر، باید این محصول را قبلاً از فروشگاه خریداری کرده باشید.</p>
                         </div>
 
                     <?php else : ?>
