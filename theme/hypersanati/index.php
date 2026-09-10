@@ -72,7 +72,7 @@ if (
 
             <input
               type="search"
-              id="index-search-term"
+              id="index-search-term" aria-label="جستجوی عنوان محصول"
               name="s"
               placeholder="مثلا بلبرینگ تماس زاویه ای"
               value="<?php echo get_search_query(); ?>"
@@ -82,12 +82,12 @@ if (
             <input type="hidden" name="post_type" value="product" />
 
             <!-- دکمه ضربدر برای پاک کردن سریع متن ورودی در صفحه اصلی -->
-            <button type="button" id="index-reset-search" style="<?php echo is_search() ? 'display: block;' : 'display: none;'; ?> position: absolute; left: 50px; background: none; border: none; cursor: pointer; color: #999;">
-              <i class="fa-solid fa-xmark"></i>
+            <button type="button" id="index-reset-search" aria-label="پاک کردن جستجو" style="<?php echo is_search() ? 'display: block;' : 'display: none;'; ?> position: absolute; left: 50px; background: none; border: none; cursor: pointer; color: #999;">
+              <i class="fa-solid fa-xmark" aria-hidden="true"></i>
             </button>
 
-            <button class="btn" type="submit">
-              <i class="fa-solid fa-magnifying-glass"></i>
+            <button class="btn" type="submit" aria-label="جستجو">
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -129,7 +129,7 @@ if (
                 <label for="new-height">ارتفاع</label>
                 <input type="number" id="new-height" placeholder="مثلاً ۲۰">
             </div>
-            <button type="button" id="exact-search-btn" class="new-btn-search">جستجو</button>
+            <button type="button" id="exact-search-btn" class="new-btn-search" aria-label="جستجوی دقیق بر اساس اندازه">جستجو</button>
         </div>
     </section>
 
@@ -251,7 +251,7 @@ if (
         </div>
 
         <div class="new-range-actions">
-            <button type="button" id="approximate-search-btn" class="new-btn-search">جستجو</button>
+            <button type="button" id="approximate-search-btn" class="new-btn-search" aria-label="جستجوی تقریبی بر اساس بازه اندازه">جستجو</button>
         </div>
     </section>
 

@@ -255,6 +255,7 @@ if (!$hsb_order_tracking_url) {
       </ul>
 
       <button
+        type="button"
         class="hamburger"
         id="hamburgerBtn"
         aria-label="منو"
