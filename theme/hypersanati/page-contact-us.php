@@ -5,7 +5,7 @@ Template Name: صفحه تماس با ما
 
 get_header();
 
-$contact_address   = get_theme_mod( 'hypersanati_contact_address', 'تهران، خیابان سعدی جنوبی، خیابان اکباتان، کوچه ناظم الاطبا شمالی، پاساژ امام حسین، زیر همکف، پلاک 32 بلبرینگ همگام صنعت برتر' );
+$contact_address   = get_theme_mod( 'hypersanati_contact_address', 'تهران، خیابان سعدی جنوبی، خیابان اکباتان، کوچه ناظم الاطبا شمالی، پاساژ امام حسین، زیر همکف، پلاک 32 بلبرینگ ' . get_bloginfo('name') . '' );
 $contact_phone     = get_theme_mod( 'hypersanati_contact_phone', '۰۲۱-۳۳۹۸۹۹۳۰ - ۰۲۱-۳۳۹۸۹۹۴۰' );
 $contact_fax       = get_theme_mod( 'hypersanati_contact_fax', '۰۲۱-۳۳۹۸۹۹۴۰' );
 $contact_email     = get_theme_mod( 'hypersanati_contact_email', 'info@olfatbearing.com' );

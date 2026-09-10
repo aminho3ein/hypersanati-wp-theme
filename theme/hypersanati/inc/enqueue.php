@@ -54,12 +54,12 @@
 //         ]);
 //     }
 
-//     // ------------------------------------------
-//     // profile.css: فقط در خود صفحه‌ی حساب کاربری لازم است
-//     // ------------------------------------------
-//     if (function_exists('is_account_page') && is_account_page()) {
-//         $enqueue_style('hypersanati-profile', 'css/profile.css', ['hypersanati-otp']);
-//     }
+    // ------------------------------------------
+    // profile.css: فقط در خود صفحه‌ی حساب کاربری لازم است
+    // ------------------------------------------
+    if (function_exists('is_account_page') && is_account_page()) {
+        $enqueue_style('hypersanati-profile', 'css/profile.css');
+    }
 // }
 
 // // ------------------------------------------

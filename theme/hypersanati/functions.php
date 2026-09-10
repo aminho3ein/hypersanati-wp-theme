@@ -3620,7 +3620,7 @@ function hypersanati_contact_customizer_settings( $wp_customize ) {
     $wp_customize->add_setting(
         'hypersanati_contact_address',
         array(
-            'default'           => 'تهران، خیابان سعدی جنوبی، خیابان اکباتان، کوچه ناظم الاطبا شمالی، پاساژ امام حسین، زیر همکف، پلاک 32 بلبرینگ همگام صنعت برتر',
+            'default'           => 'تهران، خیابان سعدی جنوبی، خیابان اکباتان، کوچه ناظم الاطبا شمالی، پاساژ امام حسین، زیر همکف، پلاک 32 بلبرینگ ' . get_bloginfo('name') . '',
             'sanitize_callback' => 'sanitize_textarea_field',
         )
     );

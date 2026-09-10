@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="" />
 
-    <title>همگام صنعت برتر</title>
+    <title><?php echo esc_html(get_bloginfo('name')); ?></title>
 
     <?php wp_head(); ?>
 

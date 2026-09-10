@@ -157,7 +157,7 @@ function hypersanati_get_footer_settings_defaults() {
         'quick_5_title'     => 'پیش‌فاکتور',
         'quick_5_url'       => '/cart/',
 
-        'contact_address'   => 'تهران، خیابان سعدی جنوبی، خیابان اکباتان، کوچه ناظم الاطبا شمالی، پاساژ امام حسین، زیر همکف، پلاک 32 بلبرینگ همگام صنعت برتر',
+        'contact_address'   => 'تهران، خیابان سعدی جنوبی، خیابان اکباتان، کوچه ناظم الاطبا شمالی، پاساژ امام حسین، زیر همکف، پلاک 32 بلبرینگ ' . get_bloginfo('name') . '',
         'contact_phone_1'   => '02133989930',
         'contact_phone_2'   => '02133989940',
         'contact_email'     => 'info@olfatbearing.com',

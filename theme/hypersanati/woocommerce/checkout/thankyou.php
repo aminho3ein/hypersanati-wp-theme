@@ -160,7 +160,9 @@ $invoice_filename = 'invoice-' . $order_number . '.pdf';
                     <div class="sales-invoice__brand-logo">H</div>
 
                     <div class="sales-invoice__brand-text">
-                        <h1>همگام صنعت برتر</h1>
+                        <a href="<?php echo esc_url(home_url('/')); ?>">
+                            <h1><?php echo esc_html(get_bloginfo('name')); ?></h1>
+                        </a>
                         <p>تأمین و فروش تخصصی محصولات صنعتی</p>
                     </div>
                 </div>
