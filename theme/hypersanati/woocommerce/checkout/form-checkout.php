@@ -61,6 +61,7 @@ $base_country = WC()->countries ? WC()->countries->get_base_country() : 'IR';
 
             <form class="checkout-discount-code__form checkout_coupon woocommerce-form-coupon" method="post">
                 <div class="checkout-discount-code__field">
+                    <label for="coupon_code">کد تخفیف</label>
                     <input
                         type="text"
                         class="checkout-discount-code__input"
@@ -194,13 +195,13 @@ $base_country = WC()->countries ? WC()->countries->get_base_country() : 'IR';
                         ?>
 
                         <label class="checkout-personal-info__radio">
-                            <input type="radio" name="billing_gender" value="male" <?php checked($gender_value, 'male'); ?> />
+                            <input type="radio" id="gender-male" name="billing_gender" value="male" <?php checked($gender_value, 'male'); ?> />
                             <span class="checkout-personal-info__radio-box"></span>
                             <span class="checkout-personal-info__radio-text">آقا</span>
                         </label>
 
                         <label class="checkout-personal-info__radio">
-                            <input type="radio" name="billing_gender" value="female" <?php checked($gender_value, 'female'); ?> />
+                            <input type="radio" id="gender-female" name="billing_gender" value="female" <?php checked($gender_value, 'female'); ?> />
                             <span class="checkout-personal-info__radio-box"></span>
                             <span class="checkout-personal-info__radio-text">خانم</span>
                         </label>
@@ -328,6 +329,10 @@ $base_country = WC()->countries ? WC()->countries->get_base_country() : 'IR';
 
                                 <div class="checkout-personal-info__password-col">
                                     <div class="checkout-personal-info__password-wrap">
+                                        <label class="checkout-address__label" for="confirm-password">
+                                            تکرار رمز عبور
+                                        </label>
+
                                         <input
                                             class="checkout-personal-info__input checkout-personal-info__input--password"
                                             type="password"

@@ -135,7 +135,8 @@ $contact_status = isset( $_GET['contact_status'] ) ? sanitize_key( wp_unslash( $
                   required
                 >
 
-                <select name="country_code" class="contact-select country-code-select">
+                <label for="country-code" class="contact-label">پیش‌شماره کشور</label>
+                <select id="country-code" name="country_code" class="contact-select country-code-select">
                   <option value="+98">+98</option>
                   <option value="+971">+971</option>
                   <option value="+90">+90</option>
@@ -186,7 +187,7 @@ $contact_status = isset( $_GET['contact_status'] ) ? sanitize_key( wp_unslash( $
 
           <div class="contact-form-agreement">
             <label class="agreement-label">
-              <input type="checkbox" name="terms" class="agreement-checkbox" required>
+              <input type="checkbox" id="terms" name="terms" class="agreement-checkbox" required>
               <span class="agreement-custom-check"></span>
               <span class="agreement-text">
                 قوانین و مقررات را مطالعه نموده و می‌پذیرم.

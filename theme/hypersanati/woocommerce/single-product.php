@@ -1265,7 +1265,7 @@ $hero_country_flag_url = trim(
 
                               <input
                                   type="number"
-                                  class="product-quantity-input hsb-sp-mobile-quantity"
+                                  id="mobile-product-quantity" class="product-quantity-input hsb-sp-mobile-quantity"
                                   value="1"
                                   min="1"
                                   step="1"

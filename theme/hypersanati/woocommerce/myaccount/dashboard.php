@@ -252,12 +252,12 @@ get_header();
         </div>
 
         <nav class="dashboard-nav">
-            <button class="dashboard-nav-btn<?php echo 'account' === $requested_dashboard_tab ? ' active' : ''; ?>" data-tab="account">
+            <button type="button" role="tab" aria-selected="<?php echo 'account' === $requested_dashboard_tab ? 'true' : 'false'; ?>" id="tab-btn-account" aria-controls="tab-account" class="dashboard-nav-btn<?php echo 'account' === $requested_dashboard_tab ? ' active' : ''; ?>" data-tab="account">
                 <i class="fa-solid fa-user"></i>
                 <span>حساب کاربری</span>
             </button>
 
-            <button class="dashboard-nav-btn<?php echo 'orders' === $requested_dashboard_tab ? ' active' : ''; ?>" data-tab="orders">
+            <button type="button" role="tab" aria-selected="<?php echo 'orders' === $requested_dashboard_tab ? 'true' : 'false'; ?>" id="tab-btn-orders" aria-controls="tab-orders" class="dashboard-nav-btn<?php echo 'orders' === $requested_dashboard_tab ? ' active' : ''; ?>" data-tab="orders">
                 <i class="fa-solid fa-shopping-bag"></i>
                 <span>سفارش‌های من</span>
                 <?php if (count($customer_orders) > 0) : ?>
@@ -265,7 +265,7 @@ get_header();
                 <?php endif; ?>
             </button>
 
-            <button class="dashboard-nav-btn<?php echo 'preinvoices' === $requested_dashboard_tab ? ' active' : ''; ?>" data-tab="preinvoices">
+            <button type="button" role="tab" aria-selected="<?php echo 'preinvoices' === $requested_dashboard_tab ? 'true' : 'false'; ?>" id="tab-btn-preinvoices" aria-controls="tab-preinvoices" class="dashboard-nav-btn<?php echo 'preinvoices' === $requested_dashboard_tab ? ' active' : ''; ?>" data-tab="preinvoices">
                 <i class="fa-solid fa-file-invoice-dollar"></i>
                 <span>پیش‌فاکتورهای من</span>
                 <?php if (count($preinvoice_orders) > 0) : ?>
@@ -273,12 +273,12 @@ get_header();
                 <?php endif; ?>
             </button>
 
-            <button class="dashboard-nav-btn" data-tab="addresses">
+            <button type="button" role="tab" aria-selected="false" id="tab-btn-addresses" aria-controls="tab-addresses" class="dashboard-nav-btn" data-tab="addresses">
                 <i class="fa-solid fa-location-dot"></i>
                 <span>آدرس‌های من</span>
             </button>
 
-            <button class="dashboard-nav-btn" data-tab="support">
+            <button type="button" role="tab" aria-selected="false" id="tab-btn-support" aria-controls="tab-support" class="dashboard-nav-btn" data-tab="support">
                 <i class="fa-solid fa-headset"></i>
                 <span>تیکت‌های پشتیبانی</span>
                 <?php
@@ -311,7 +311,7 @@ get_header();
     <main class="dashboard-content">
 
         <!-- Tab: حساب کاربری -->
-        <section class="dashboard-tab<?php echo 'account' === $requested_dashboard_tab ? ' active' : ''; ?>" id="tab-account">
+        <section class="dashboard-tab<?php echo 'account' === $requested_dashboard_tab ? ' active' : ''; ?>" id="tab-account" role="tabpanel" aria-labelledby="tab-btn-account">
             <div class="dashboard-header">
                 <h2>حساب کاربری من</h2>
                 <p class="dashboard-subtitle">مدیریت اطلاعات شخصی</p>
@@ -325,37 +325,37 @@ get_header();
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>نام</label>
-                            <input type="text" name="first_name" value="<?php echo esc_attr($customer->get_first_name()); ?>" required>
+                            <label for="first-name">نام</label>
+                            <input id="first-name" type="text" name="first_name" value="<?php echo esc_attr($customer->get_first_name()); ?>" required>
                         </div>
 
                         <div class="form-group">
-                            <label>نام خانوادگی</label>
-                            <input type="text" name="last_name" value="<?php echo esc_attr($customer->get_last_name()); ?>" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>شماره موبایل</label>
-                            <input type="tel" name="billing_phone" value="<?php echo esc_attr($customer->get_billing_phone()); ?>" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>ایمیل</label>
-                            <input type="email" name="billing_email" value="<?php echo esc_attr($customer->get_billing_email()); ?>">
+                            <label for="last-name">نام خانوادگی</label>
+                            <input id="last-name" type="text" name="last_name" value="<?php echo esc_attr($customer->get_last_name()); ?>" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>کد ملی</label>
-                            <input type="text" name="billing_national_code" value="<?php echo esc_attr(get_user_meta($customer_id, '_billing_national_code', true)); ?>">
+                            <label for="billing-phone">شماره موبایل</label>
+                            <input id="billing-phone" type="tel" name="billing_phone" value="<?php echo esc_attr($customer->get_billing_phone()); ?>" required>
                         </div>
 
                         <div class="form-group">
-                            <label>نام فروشگاه/کارگاه (اختیاری)</label>
-                            <input type="text" name="billing_company" value="<?php echo esc_attr($customer->get_billing_company()); ?>">
+                            <label for="billing-email">ایمیل</label>
+                            <input id="billing-email" type="email" name="billing_email" value="<?php echo esc_attr($customer->get_billing_email()); ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="national-code">کد ملی</label>
+                            <input id="national-code" type="text" name="billing_national_code" value="<?php echo esc_attr(get_user_meta($customer_id, '_billing_national_code', true)); ?>">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="billing-company">نام فروشگاه/کارگاه (اختیاری)</label>
+                            <input id="billing-company" type="text" name="billing_company" value="<?php echo esc_attr($customer->get_billing_company()); ?>">
                         </div>
                     </div>
 
@@ -373,18 +373,18 @@ get_header();
                     <?php wp_nonce_field('change_user_password', 'password_nonce'); ?>
 
                     <div class="form-group">
-                        <label>رمز عبور فعلی</label>
-                        <input type="password" name="current_password" required>
+                        <label for="current-password">رمز عبور فعلی</label>
+                        <input id="current-password" type="password" name="current_password" required>
                     </div>
 
                     <div class="form-group">
-                        <label>رمز عبور جدید</label>
-                        <input type="password" name="new_password" required>
+                        <label for="new-password">رمز عبور جدید</label>
+                        <input id="new-password" type="password" name="new_password" required>
                     </div>
 
                     <div class="form-group">
-                        <label>تکرار رمز عبور جدید</label>
-                        <input type="password" name="confirm_password" required>
+                        <label for="confirm-password">تکرار رمز عبور جدید</label>
+                        <input id="confirm-password" type="password" name="confirm_password" required>
                     </div>
 
                     <button type="submit" name="change_password" class="btn-primary">
@@ -396,7 +396,7 @@ get_header();
         </section>
 
         <!-- Tab: سفارش‌های من -->
-        <section class="dashboard-tab<?php echo 'orders' === $requested_dashboard_tab ? ' active' : ''; ?>" id="tab-orders">
+        <section class="dashboard-tab<?php echo 'orders' === $requested_dashboard_tab ? ' active' : ''; ?>" id="tab-orders" role="tabpanel" aria-labelledby="tab-btn-orders">
             <div class="dashboard-header">
                 <h2>سفارش‌های من</h2>
                 <p class="dashboard-subtitle">مشاهده و پیگیری سفارشات</p>
@@ -502,7 +502,7 @@ get_header();
         </section>
 
         <!-- Tab: پیش‌فاکتورهای من -->
-        <section class="dashboard-tab<?php echo 'preinvoices' === $requested_dashboard_tab ? ' active' : ''; ?>" id="tab-preinvoices">
+        <section class="dashboard-tab<?php echo 'preinvoices' === $requested_dashboard_tab ? ' active' : ''; ?>" id="tab-preinvoices" role="tabpanel" aria-labelledby="tab-btn-preinvoices">
 
             <div class="dashboard-header">
                 <h2>پیش‌فاکتورهای من</h2>
@@ -750,7 +750,7 @@ get_header();
 
 
         <!-- Tab: آدرس‌ها -->
-        <section class="dashboard-tab<?php echo 'addresses' === $requested_dashboard_tab ? ' active' : ''; ?>" id="tab-addresses">
+        <section class="dashboard-tab<?php echo 'addresses' === $requested_dashboard_tab ? ' active' : ''; ?>" id="tab-addresses" role="tabpanel" aria-labelledby="tab-btn-addresses">
             <div class="dashboard-header">
                 <h2>آدرس‌های من</h2>
                 <p class="dashboard-subtitle">مدیریت آدرس‌های ارسال</p>

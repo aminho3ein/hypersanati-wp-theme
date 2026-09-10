@@ -98,8 +98,8 @@ $closed_tickets = array_filter($user_tickets, function($ticket) {
             
             <div class="form-row">
                 <div class="form-group">
-                    <label>دسته‌بندی تیکت <span class="required">*</span></label>
-                    <select name="ticket_category" required>
+                    <label for="ticket-category">دسته‌بندی تیکت <span class="required">*</span></label>
+                    <select id="ticket-category" name="ticket_category" required>
                         <option value="">انتخاب کنید...</option>
                         <option value="order">مشکل در سفارش</option>
                         <option value="product">سوال درباره محصول</option>
@@ -112,20 +112,20 @@ $closed_tickets = array_filter($user_tickets, function($ticket) {
                 </div>
 
                 <div class="form-group">
-                    <label>شماره سفارش (اختیاری)</label>
-                    <input type="text" name="ticket_order_id" placeholder="مثلاً: 12345">
+                    <label for="ticket-order-id">شماره سفارش (اختیاری)</label>
+                    <input id="ticket-order-id" type="text" name="ticket_order_id" placeholder="مثلاً: 12345">
                     <small class="form-hint">اگر تیکت مربوط به سفارش خاصی است</small>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>عنوان تیکت <span class="required">*</span></label>
-                <input type="text" name="ticket_subject" required placeholder="عنوان کوتاه برای مشکل خود">
+                <label for="ticket-subject">عنوان تیکت <span class="required">*</span></label>
+                <input id="ticket-subject" type="text" name="ticket_subject" required placeholder="عنوان کوتاه برای مشکل خود">
             </div>
 
             <div class="form-group">
-                <label>شرح کامل مشکل <span class="required">*</span></label>
-                <textarea name="ticket_message" rows="6" required placeholder="لطفاً مشکل خود را به صورت کامل توضیح دهید..."></textarea>
+                <label for="ticket-message">شرح کامل مشکل <span class="required">*</span></label>
+                <textarea id="ticket-message" name="ticket_message" rows="6" required placeholder="لطفاً مشکل خود را به صورت کامل توضیح دهید..."></textarea>
             </div>
 
             <button type="submit" name="create_ticket" class="btn-primary">
@@ -248,8 +248,8 @@ $closed_tickets = array_filter($user_tickets, function($ticket) {
                                     <input type="hidden" name="ticket_id" value="<?php echo esc_attr($ticket_id); ?>">
                                     
                                     <div class="form-group">
-                                        <label>پاسخ شما</label>
-                                        <textarea name="reply_message" rows="4" required placeholder="پاسخ خود را بنویسید..."></textarea>
+                                        <label for="reply-message">پاسخ شما</label>
+                                        <textarea id="reply-message" name="reply_message" rows="4" required placeholder="پاسخ خود را بنویسید..."></textarea>
                                     </div>
                                     
                                     <div class="reply-actions">
