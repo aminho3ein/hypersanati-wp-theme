@@ -3570,89 +3570,14 @@ if (!defined('ABSPATH')) exit;
    داخل header.php و روی همه‌ی صفحات سایت است.
    profile.css فقط در خودِ صفحه‌ی حساب کاربری لازم است.
 ------------------------------------------------------------- */
-add_action('wp_enqueue_scripts', 'hypersanati_enqueue_otp_assets', 20);
-
-function hypersanati_enqueue_otp_assets()
-{
-    if (
-        !class_exists('HSB_Auth_API') ||
-        !method_exists(
-            'HSB_Auth_API',
-            'mobile_verification_enabled'
-        ) ||
-        !HSB_Auth_API::mobile_verification_enabled()
-    ) {
-        return;
-    }
-
-    $css_dir = get_template_directory() . '/assets/css';
-    $js_dir  = get_template_directory() . '/assets/js';
-    $css_url = get_template_directory_uri() . '/assets/css';
-    $js_url  = get_template_directory_uri() . '/assets/js';
-
-    // otp.css (سراسری)
-    $otp_css_path = $css_dir . '/otp.css';
-    if (file_exists($otp_css_path)) {
-        wp_enqueue_style('hypersanati-otp', $css_url . '/otp.css', [], filemtime($otp_css_path));
-    }
-
-    // otp.js (سراسری)
-    $otp_js_path = $js_dir . '/otp.js';
-    if (file_exists($otp_js_path)) {
-        wp_enqueue_script('hypersanati-otp', $js_url . '/otp.js', [], filemtime($otp_js_path), true);
-
-        wp_localize_script('hypersanati-otp', 'hsb_auth_data', [
-            'rest_url' => rest_url(
-                'hsb-auth/v1/'
-            ),
-            'nonce' => wp_create_nonce(
-                'wp_rest'
-            ),
-            'is_logged_in' => is_user_logged_in(),
-            'redirect_url' => isset($_GET['redirect_to'])
-                ? esc_url_raw(wp_unslash($_GET['redirect_to']))
-                : '',
-        ]);
-    }
-
-    // profile.css (فقط در my-account)
-    if (function_exists('is_account_page') && is_account_page()) {
-        $profile_css_path = $css_dir . '/profile.css';
-        if (file_exists($profile_css_path)) {
-            wp_enqueue_style('hypersanati-profile', $css_url . '/profile.css', ['hypersanati-otp'], filemtime($profile_css_path));
-        }
-    }
-}
+/* OTP assets moved to HSB Auth plugin */
 
 
  /*-------------------------------------------------------------
    ۲. تزریق مودال OTP قبل از </body>
    فقط برای کاربران مهمان (کاربر لاگین‌شده نیازی به این فرم ندارد)
 ------------------------------------------------------------- */
-add_action('wp_footer', 'hypersanati_render_otp_modal');
-
-function hypersanati_render_otp_modal()
-{
-    if (is_user_logged_in()) {
-        return;
-    }
-
-    if (
-        !class_exists('HSB_Auth_API') ||
-        !method_exists(
-            'HSB_Auth_API',
-            'mobile_verification_enabled'
-        ) ||
-        !HSB_Auth_API::mobile_verification_enabled()
-    ) {
-        return;
-    }
-
-    $modal_path = get_template_directory() . '/woocommerce/myaccount/form-otp-login.php';
-    if (file_exists($modal_path)) {
-        include $modal_path;
-    }
-}
+/* OTP modal moved to HSB Auth plugin */
 
 
 /* -------------------------------------------------------------

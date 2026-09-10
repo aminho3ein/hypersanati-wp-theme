@@ -2378,13 +2378,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.addEventListener("submit", function (event) {
 
-    const form = event.target.closest(".product-review-form");
+    const form = event.target.closest(
+      ".product-review-form, .product-question-form"
+    );
 
     if (!form) {
       return;
     }
 
-    if (hsbReviewVerified) {
+    if (
+      hsbReviewVerified ||
+      form.dataset.otpVerified === "1"
+    ) {
       return;
     }
 
@@ -2399,6 +2404,25 @@ document.addEventListener("DOMContentLoaded", function () {
       window.openHSBOTPModal(function () {
 
         hsbReviewVerified = true;
+
+        if (form.classList.contains("product-question-form")) {
+
+          form.dataset.otpVerified = "1";
+
+          setTimeout(function () {
+
+            form.dispatchEvent(
+              new Event("submit", {
+                bubbles: true,
+                cancelable: true
+              })
+            );
+
+          }, 1000);
+
+          return;
+
+        }
 
         setTimeout(function () {
           form.requestSubmit();
