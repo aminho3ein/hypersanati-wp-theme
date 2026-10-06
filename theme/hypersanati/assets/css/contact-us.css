@@ -185,7 +185,7 @@
    ========================= */
 .phone-field-group {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 130px;
+  grid-template-columns: minmax(0, 1fr) 96px;
   direction: rtl;
   border-radius: 14px;
 }
@@ -495,4 +495,36 @@
   .hs-contact-toast-content p {
     font-size: 13px;
   }
+}
+
+/* =========================================================
+   HSB CONTACT COUNTRY CODE FIX
+   ========================================================= */
+
+.country-code-select {
+  min-width: 0;
+  width: 100%;
+  padding-right: 0.55rem;
+  padding-left: 0.55rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+
+
+/* =========================================================
+   HSB CONTACT SCREEN READER ONLY
+   Visible to assistive technologies, hidden visually.
+   ========================================================= */
+
+.contact-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }

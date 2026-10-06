@@ -353,18 +353,26 @@ $footer_links = array(
 
               <?php if (!empty($contact_mobiles)) : ?>
 
-                <div class="site-footer__contact-row">
+              <div class="site-footer__contact-row">
 
-                  <span class="site-footer__contact-label">
-                    موبایل
-                  </span>
+                <span class="site-footer__contact-label">
+                  موبایل
+                </span>
 
-                  <div
-                    class="
-                      site-footer__contact-value
-                      site-footer__mobiles
-                    "
-                  >
+                <div class="site-footer__contact-value site-footer__mobiles">
+
+<span class="site-footer__phone-icon site-footer__contact-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M7.5 4.5H5.8C5.14 4.5 4.57 4.96 4.44 5.61C3.91 8.31 4.41 11.11 5.86 13.5C7.19 15.71 9.09 17.61 11.3 18.94C13.69 20.39 16.49 20.89 19.19 20.36C19.84 20.23 20.3 19.66 20.3 19V17.3C20.3 16.8 19.96 16.37 19.48 16.25L15.9 15.36C15.48 15.26 15.04 15.37 14.72 15.66L13.4 16.86C10.94 15.65 9.15 13.86 7.94 11.4L9.14 10.08C9.43 9.76 9.54 9.32 9.44 8.9L8.55 5.32C8.43 4.84 8 4.5 7.5 4.5Z"
+                          stroke="currentColor"
+                          stroke-width="1.7"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                  <div class="site-footer__mobile-list">
 
                     <?php foreach ($contact_mobiles as $mobile) : ?>
 
@@ -378,7 +386,6 @@ $footer_links = array(
 
                         <?php endif; ?>
 
-
                         <a
                           class="site-footer__mobile-number"
                           dir="ltr"
@@ -390,11 +397,7 @@ $footer_links = array(
                             );
                           ?>"
                         >
-                          <?php
-                            echo esc_html(
-                                $mobile['number']
-                            );
-                          ?>
+                          <?php echo esc_html($mobile['number']); ?>
                         </a>
 
                       </div>
@@ -405,40 +408,93 @@ $footer_links = array(
 
                 </div>
 
-              <?php endif; ?>
+              </div>
+
+            <?php endif; ?>
 
 
             <?php if ('' !== $contact_email) : ?>
+
               <div class="site-footer__contact-row">
 
                 <span class="site-footer__contact-label">
                   ایمیل
                 </span>
 
-                <a
-                  class="site-footer__contact-value"
-                  dir="ltr"
-                  href="mailto:<?php echo esc_attr($contact_email); ?>"
-                >
-                  <?php echo esc_html($contact_email); ?>
-                </a>
+                <div class="site-footer__contact-value site-footer__contact-with-icon site-footer__contact-email">
+
+<span class="site-footer__phone-icon site-footer__contact-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <rect
+                          x="3.5"
+                          y="5.5"
+                          width="17"
+                          height="13"
+                          rx="2"
+                          stroke="currentColor"
+                          stroke-width="1.7"
+                        />
+                        <path
+                          d="M4.5 7L12 12.5L19.5 7"
+                          stroke="currentColor"
+                          stroke-width="1.7"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                  <a
+                    dir="ltr"
+                    href="mailto:<?php echo esc_attr($contact_email); ?>"
+                  >
+                    <?php echo esc_html($contact_email); ?>
+                  </a>
+
+                </div>
 
               </div>
+
             <?php endif; ?>
 
 
             <?php if ('' !== $contact_address) : ?>
+
               <div class="site-footer__contact-row site-footer__contact-row--address">
 
                 <span class="site-footer__contact-label">
                   آدرس
                 </span>
 
-                <p class="site-footer__contact-value">
-                  <?php echo esc_html($contact_address); ?>
-                </p>
+                <div class="site-footer__contact-value site-footer__contact-with-icon site-footer__contact-address">
+
+<span class="site-footer__phone-icon site-footer__contact-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M12 21C12 21 19 15.2 19 9.5C19 5.63 15.87 2.5 12 2.5C8.13 2.5 5 5.63 5 9.5C5 15.2 12 21 12 21Z"
+                          stroke="currentColor"
+                          stroke-width="1.7"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <circle
+                          cx="12"
+                          cy="9.5"
+                          r="2.5"
+                          stroke="currentColor"
+                          stroke-width="1.7"
+                        />
+                      </svg>
+                    </span>
+
+                  <p>
+                    <?php echo esc_html($contact_address); ?>
+                  </p>
+
+                </div>
 
               </div>
+
             <?php endif; ?>
 
           </div>

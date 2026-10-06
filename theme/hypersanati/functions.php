@@ -3664,24 +3664,7 @@ function hypersanati_contact_customizer_settings( $wp_customize ) {
         )
     );
 
-    $wp_customize->add_setting(
-        'hypersanati_contact_fax',
-        array(
-            'default'           => '۰۲۱-۳۳۹۸۹۹۴۰',
-            'sanitize_callback' => 'sanitize_text_field',
-        )
-    );
-
-    $wp_customize->add_control(
-        'hypersanati_contact_fax',
-        array(
-            'label'   => 'فکس',
-            'section' => 'hypersanati_contact_info_section',
-            'type'    => 'text',
-        )
-    );
-
-    $wp_customize->add_setting(
+$wp_customize->add_setting(
         'hypersanati_contact_email',
         array(
             'default'           => 'info@olfatbearing.com',

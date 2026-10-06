@@ -7,7 +7,6 @@ get_header();
 
 $contact_address   = get_theme_mod( 'hypersanati_contact_address', 'تهران، خیابان سعدی جنوبی، خیابان اکباتان، کوچه ناظم الاطبا شمالی، پاساژ امام حسین، زیر همکف، پلاک 32 بلبرینگ ' . get_bloginfo('name') . '' );
 $contact_phone     = get_theme_mod( 'hypersanati_contact_phone', '۰۲۱-۳۳۹۸۹۹۳۰ - ۰۲۱-۳۳۹۸۹۹۴۰' );
-$contact_fax       = get_theme_mod( 'hypersanati_contact_fax', '۰۲۱-۳۳۹۸۹۹۴۰' );
 $contact_email     = get_theme_mod( 'hypersanati_contact_email', 'info@olfatbearing.com' );
 $contact_terms_url = get_theme_mod( 'hypersanati_contact_terms_url', '#' );
 
@@ -47,25 +46,6 @@ $contact_status = isset( $_GET['contact_status'] ) ? sanitize_key( wp_unslash( $
             <h3 class="contact-info-title">شماره تماس</h3>
             <p class="contact-info-text">
               <?php echo esc_html( $contact_phone ); ?>
-            </p>
-          </div>
-        </div>
-
-        <div class="contact-info-divider"></div>
-
-        <div class="contact-info-item">
-          <div class="contact-info-icon" aria-hidden="true">
-            <svg class="contact-info-icon-svg" viewBox="0 0 24 24" fill="none">
-              <path d="M7 8V4H17V8" stroke="currentColor" stroke-width="1.7"/>
-              <path d="M6 18H18V12H6V18Z" stroke="currentColor" stroke-width="1.7"/>
-              <path d="M4 8H20V14H18" stroke="currentColor" stroke-width="1.7"/>
-              <path d="M9 15H15" stroke="currentColor" stroke-width="1.7"/>
-            </svg>
-          </div>
-          <div class="contact-info-content">
-            <h3 class="contact-info-title">فکس</h3>
-            <p class="contact-info-text">
-              <?php echo esc_html( $contact_fax ); ?>
             </p>
           </div>
         </div>
@@ -135,7 +115,7 @@ $contact_status = isset( $_GET['contact_status'] ) ? sanitize_key( wp_unslash( $
                   required
                 >
 
-                <label for="country-code" class="contact-label">پیش‌شماره کشور</label>
+                <label for="country-code" class="contact-sr-only">پیش‌شماره کشور</label>
                 <select id="country-code" name="country_code" class="contact-select country-code-select">
                   <option value="+98">+98</option>
                   <option value="+971">+971</option>
