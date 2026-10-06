@@ -160,6 +160,18 @@ function hypersanati_get_footer_settings_defaults() {
         'contact_address'   => 'تهران، خیابان سعدی جنوبی، خیابان اکباتان، کوچه ناظم الاطبا شمالی، پاساژ امام حسین، زیر همکف، پلاک 32 بلبرینگ ' . get_bloginfo('name') . '',
         'contact_phone_1'   => '02133989930',
         'contact_phone_2'   => '02133989940',
+        'contact_mobile_1_name' => '',
+        'contact_mobile_1'      => '',
+        'contact_mobile_2_name' => '',
+        'contact_mobile_2'      => '',
+        'contact_mobile_3_name' => '',
+        'contact_mobile_3'      => '',
+
+        'enamad_url' =>
+            'https://trustseal.enamad.ir/?id=7637452&Code=nxOA49f5DeMd9GQHPBS9lt1DAW1dxvGF',
+
+        'enamad_image_url' =>
+            'https://trustseal.enamad.ir/logo.aspx?id=7637452&Code=nxOA49f5DeMd9GQHPBS9lt1DAW1dxvGF',
         'contact_email'     => 'info@olfatbearing.com',
 
         'terms_title'       => 'قوانین و مقررات',
@@ -506,6 +518,190 @@ function hypersanati_render_footer_settings_page() {
                     </td>
                 </tr>
 
+                    <!-- HSB FOOTER MOBILE CONTACTS -->
+
+                    <tr>
+                        <th scope="row">
+                            <label for="contact_mobile_1">
+                                موبایل ۱
+                            </label>
+                        </th>
+
+                        <td>
+                            <div class="hsb-footer-mobile-admin-row">
+
+                                <input
+                                    type="text"
+                                    id="contact_mobile_1"
+                                    class="regular-text"
+                                    name="hypersanati_footer_settings[contact_mobile_1]"
+                                    value="<?php
+                                        echo esc_attr(
+                                            $settings['contact_mobile_1'] ?? ''
+                                        );
+                                    ?>"
+                                    placeholder="مثلاً 09121234567"
+                                >
+
+                                <input
+                                    type="text"
+                                    class="regular-text"
+                                    name="hypersanati_footer_settings[contact_mobile_1_name]"
+                                    value="<?php
+                                        echo esc_attr(
+                                            $settings['contact_mobile_1_name'] ?? ''
+                                        );
+                                    ?>"
+                                    placeholder="نام شخص - اختیاری"
+                                >
+
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <th scope="row">
+                            <label for="contact_mobile_2">
+                                موبایل ۲
+                            </label>
+                        </th>
+
+                        <td>
+                            <div class="hsb-footer-mobile-admin-row">
+
+                                <input
+                                    type="text"
+                                    id="contact_mobile_2"
+                                    class="regular-text"
+                                    name="hypersanati_footer_settings[contact_mobile_2]"
+                                    value="<?php
+                                        echo esc_attr(
+                                            $settings['contact_mobile_2'] ?? ''
+                                        );
+                                    ?>"
+                                    placeholder="مثلاً 09121234567"
+                                >
+
+                                <input
+                                    type="text"
+                                    class="regular-text"
+                                    name="hypersanati_footer_settings[contact_mobile_2_name]"
+                                    value="<?php
+                                        echo esc_attr(
+                                            $settings['contact_mobile_2_name'] ?? ''
+                                        );
+                                    ?>"
+                                    placeholder="نام شخص - اختیاری"
+                                >
+
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <th scope="row">
+                            <label for="contact_mobile_3">
+                                موبایل ۳
+                            </label>
+                        </th>
+
+                        <td>
+                            <div class="hsb-footer-mobile-admin-row">
+
+                                <input
+                                    type="text"
+                                    id="contact_mobile_3"
+                                    class="regular-text"
+                                    name="hypersanati_footer_settings[contact_mobile_3]"
+                                    value="<?php
+                                        echo esc_attr(
+                                            $settings['contact_mobile_3'] ?? ''
+                                        );
+                                    ?>"
+                                    placeholder="مثلاً 09121234567"
+                                >
+
+                                <input
+                                    type="text"
+                                    class="regular-text"
+                                    name="hypersanati_footer_settings[contact_mobile_3_name]"
+                                    value="<?php
+                                        echo esc_attr(
+                                            $settings['contact_mobile_3_name'] ?? ''
+                                        );
+                                    ?>"
+                                    placeholder="نام شخص - اختیاری"
+                                >
+
+                            </div>
+
+                            <p class="description">
+                                اگر شماره موبایل خالی باشد،
+                                آن مورد در فوتر نمایش داده نمی‌شود.
+                                وارد کردن نام شخص اختیاری است.
+                            </p>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <th scope="row">
+                            <label for="enamad_url">
+                                لینک ای‌نماد
+                            </label>
+                        </th>
+
+                        <td>
+                            <input
+                                type="url"
+                                id="enamad_url"
+                                class="large-text"
+                                name="hypersanati_footer_settings[enamad_url]"
+                                value="<?php
+                                    echo esc_attr(
+                                        $settings['enamad_url'] ?? ''
+                                    );
+                                ?>"
+                            >
+
+                            <p class="description">
+                                لینک صفحه اعتبارسنجی ای‌نماد.
+                            </p>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <th scope="row">
+                            <label for="enamad_image_url">
+                                آدرس تصویر ای‌نماد
+                            </label>
+                        </th>
+
+                        <td>
+                            <input
+                                type="url"
+                                id="enamad_image_url"
+                                class="large-text"
+                                name="hypersanati_footer_settings[enamad_image_url]"
+                                value="<?php
+                                    echo esc_attr(
+                                        $settings['enamad_image_url'] ?? ''
+                                    );
+                                ?>"
+                            >
+
+                            <p class="description">
+                                اگر لینک یا تصویر خالی باشد،
+                                ای‌نماد در فوتر نمایش داده نمی‌شود.
+                            </p>
+                        </td>
+                    </tr>
+
+
+
                 <tr>
                     <th scope="row">ایمیل</th>
                     <td>
@@ -622,3 +818,71 @@ function hypersanati_render_footer_settings_page() {
     </div>
     <?php
 }
+
+
+/* =========================================================
+   HSB FOOTER EXTRA SETTINGS SAVE
+   ========================================================= */
+
+add_filter(
+    'pre_update_option_hypersanati_footer_settings',
+    function ($value, $old_value, $option) {
+
+        if (
+            empty($_POST['option_page']) ||
+            'hypersanati_footer_settings_group'
+            !== sanitize_key(
+                wp_unslash($_POST['option_page'])
+            )
+        ) {
+            return $value;
+        }
+
+        $raw = (
+            isset($_POST['hypersanati_footer_settings']) &&
+            is_array($_POST['hypersanati_footer_settings'])
+        )
+            ? wp_unslash(
+                $_POST['hypersanati_footer_settings']
+            )
+            : array();
+
+        if (!is_array($value)) {
+            $value = array();
+        }
+
+        $text_fields = array(
+            'contact_mobile_1',
+            'contact_mobile_1_name',
+            'contact_mobile_2',
+            'contact_mobile_2_name',
+            'contact_mobile_3',
+            'contact_mobile_3_name',
+        );
+
+        foreach ($text_fields as $key) {
+
+            $value[$key] =
+                isset($raw[$key])
+                    ? sanitize_text_field($raw[$key])
+                    : '';
+        }
+
+        $url_fields = array(
+            'enamad_url',
+            'enamad_image_url',
+        );
+
+        foreach ($url_fields as $key) {
+
+            $value[$key] =
+                isset($raw[$key])
+                    ? esc_url_raw($raw[$key])
+                    : '';
+        }
+
+        return $value;
+    },
+    20,
+    3
+);

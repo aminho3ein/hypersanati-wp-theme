@@ -1500,7 +1500,7 @@ if (!function_exists('theme_fa_digits')) {
                 </div>
 
                 <button type="button" class="desc-read-more" aria-expanded="false">
-                    مشاهده بیشتر
+                    ادامه توضیحات
                 </button>
             <?php else : ?>
                 <div class="desc-empty-state">

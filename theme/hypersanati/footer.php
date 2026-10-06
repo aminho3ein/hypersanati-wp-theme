@@ -44,6 +44,54 @@ $contact_phone_1 = trim((string) ($footer_settings['contact_phone_1'] ?? ''));
 $contact_phone_2 = trim((string) ($footer_settings['contact_phone_2'] ?? ''));
 $contact_email   = trim((string) ($footer_settings['contact_email'] ?? ''));
 
+
+$contact_mobiles = array();
+
+for ($i = 1; $i <= 3; $i++) {
+
+    $mobile_number = trim(
+        (string) (
+            $footer_settings[
+                'contact_mobile_' . $i
+            ] ?? ''
+        )
+    );
+
+    $mobile_name = trim(
+        (string) (
+            $footer_settings[
+                'contact_mobile_' . $i . '_name'
+            ] ?? ''
+        )
+    );
+
+    /*
+     * Name alone must never create
+     * an empty footer contact.
+     */
+    if ('' === $mobile_number) {
+        continue;
+    }
+
+    $contact_mobiles[] = array(
+        'number' => $mobile_number,
+        'name'   => $mobile_name,
+    );
+}
+
+$enamad_url = trim(
+    (string) (
+        $footer_settings['enamad_url'] ?? ''
+    )
+);
+
+$enamad_image_url = trim(
+    (string) (
+        $footer_settings['enamad_image_url'] ?? ''
+    )
+);
+
+
 $terms_url = $footer_url($footer_settings['terms_url'] ?? '');
 $privacy_url = $footer_url($footer_settings['privacy_url'] ?? '');
 $developer_url = $footer_url($footer_settings['developer_url'] ?? '');
@@ -144,33 +192,87 @@ $footer_links = array(
 
         <section class="site-footer__brand">
 
-          <div class="site-footer__brand-head">
-            <a class="site-footer__logo-box" href="<?php echo esc_url(home_url('/')); ?>">
-              <img
-                src="<?php echo esc_url($footer_logo_url); ?>"
-                alt="<?php echo esc_attr($footer_settings['intro_title'] ?? 'هایپر صنعتی الفت'); ?>"
-              >
-            </a>
+          <!-- HSB FOOTER IDENTITY CARD -->
 
-            <div>
-              <h2>
-                <?php echo esc_html($footer_settings['intro_title'] ?? 'هایپر صنعتی الفت'); ?>
-              </h2>
+            <div class="site-footer__identity-card">
 
-              <span class="site-footer__brand-label">
-                تأمین تخصصی قطعات صنعتی
-              </span>
+              <div class="site-footer__identity-main">
+
+                <a
+                  class="site-footer__logo-box"
+                  href="<?php echo esc_url(home_url('/')); ?>"
+                >
+                  <img
+                    src="<?php echo esc_url($footer_logo_url); ?>"
+                    alt="<?php
+                      echo esc_attr(
+                        $footer_settings['intro_title']
+                        ?? 'هایپر صنعتی الفت'
+                      );
+                    ?>"
+                  >
+                </a>
+
+
+                <div class="site-footer__identity-copy">
+
+                  <h2>
+                    <?php
+                      echo esc_html(
+                        $footer_settings['intro_title']
+                        ?? 'هایپر صنعتی الفت'
+                      );
+                    ?>
+                  </h2>
+
+                  <span class="site-footer__brand-label">
+                    تأمین تخصصی قطعات صنعتی
+                  </span>
+
+                  <p class="site-footer__description">
+                    <?php
+                      echo esc_html(
+                        $footer_settings['intro_text']
+                        ?? 'تأمین تخصصی بلبرینگ، رولبرینگ و قطعات صنعتی با امکان استعلام قیمت، موجودی و دریافت پیش‌فاکتور.'
+                      );
+                    ?>
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <?php if (
+                  '' !== $enamad_url &&
+                  '' !== $enamad_image_url
+              ) : ?>
+
+                <div class="site-footer__enamad">
+
+                  <a
+                    class="site-footer__enamad-link"
+                    referrerpolicy="origin"
+                    target="_blank"
+                    href="<?php echo esc_url($enamad_url); ?>"
+                  >
+                    <img
+                      referrerpolicy="origin"
+                      src="<?php echo esc_url($enamad_image_url); ?>"
+                      alt=""
+                      style="cursor:pointer"
+                      code="nxOA49f5DeMd9GQHPBS9lt1DAW1dxvGF"
+                    >
+                  </a>
+
+                </div>
+
+              <?php endif; ?>
+
             </div>
-          </div>
 
-          <p class="site-footer__description">
-            <?php echo esc_html(
-                $footer_settings['intro_text']
-                ?? 'تأمین تخصصی بلبرینگ، رولبرینگ و قطعات صنعتی با امکان استعلام قیمت و دریافت پیش‌فاکتور.'
-            ); ?>
-          </p>
 
-          <div class="site-footer__cta">
+            <div class="site-footer__cta">
             <div>
               <strong>استعلام قیمت و موجودی</strong>
 
@@ -184,6 +286,9 @@ $footer_links = array(
               مشاهده پیش‌فاکتور
             </a>
           </div>
+
+
+
 
         </section>
 
@@ -242,6 +347,65 @@ $footer_links = array(
                 </div>
               </div>
             <?php endif; ?>
+
+
+
+
+              <?php if (!empty($contact_mobiles)) : ?>
+
+                <div class="site-footer__contact-row">
+
+                  <span class="site-footer__contact-label">
+                    موبایل
+                  </span>
+
+                  <div
+                    class="
+                      site-footer__contact-value
+                      site-footer__mobiles
+                    "
+                  >
+
+                    <?php foreach ($contact_mobiles as $mobile) : ?>
+
+                      <div class="site-footer__mobile-item">
+
+                        <?php if ('' !== $mobile['name']) : ?>
+
+                          <span class="site-footer__mobile-name">
+                            <?php echo esc_html($mobile['name']); ?>
+                          </span>
+
+                        <?php endif; ?>
+
+
+                        <a
+                          class="site-footer__mobile-number"
+                          dir="ltr"
+                          href="tel:<?php
+                            echo esc_attr(
+                                $footer_phone_href(
+                                    $mobile['number']
+                                )
+                            );
+                          ?>"
+                        >
+                          <?php
+                            echo esc_html(
+                                $mobile['number']
+                            );
+                          ?>
+                        </a>
+
+                      </div>
+
+                    <?php endforeach; ?>
+
+                  </div>
+
+                </div>
+
+              <?php endif; ?>
 
 
             <?php if ('' !== $contact_email) : ?>

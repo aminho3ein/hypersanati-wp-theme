@@ -68,3 +68,36 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("scroll", updateStickyProgress, { passive: true });
   window.addEventListener("resize", updateStickyProgress);
 });
+
+/* HSB ARTICLE BACK TO TOP */
+document.addEventListener('DOMContentLoaded', function () {
+  const button = document.getElementById('articleBackToTop');
+  const articleTop = document.querySelector('.single-article-hero');
+
+  if (!button || !articleTop) return;
+
+  function toggleBackToTop() {
+    if (window.scrollY > 500) {
+      button.classList.add('is-visible');
+    } else {
+      button.classList.remove('is-visible');
+    }
+  }
+
+  button.addEventListener('click', function () {
+    const top =
+      articleTop.getBoundingClientRect().top +
+      window.pageYOffset;
+
+    window.scrollTo({
+      top: top,
+      behavior: 'smooth'
+    });
+  });
+
+  window.addEventListener('scroll', toggleBackToTop, {
+    passive: true
+  });
+
+  toggleBackToTop();
+});

@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       content.classList.toggle("is-collapsed", !isExpanded);
       button.setAttribute("aria-expanded", isExpanded ? "true" : "false");
-      button.textContent = isExpanded ? "نمایش کمتر" : "مشاهده بیشتر";
+      button.textContent = isExpanded ? "بستن توضیحات" : "ادامه توضیحات";
     });
   });
 });
@@ -2435,3 +2435,719 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
+
+
+/* HSB PERSIAN REVIEW FORM VALIDATION */
+document.addEventListener("DOMContentLoaded", function () {
+
+  const form = document.querySelector(".product-review-form");
+
+  if (!form) {
+    return;
+  }
+
+  const commentField =
+    form.querySelector('textarea[name="comment"]');
+
+  const ratingFields =
+    form.querySelectorAll(
+      '.product-review-radio-stars input[type="radio"]'
+    );
+
+
+  /* -----------------------------------------
+     Review text
+  ----------------------------------------- */
+
+  if (commentField) {
+
+    commentField.addEventListener(
+      "invalid",
+      function () {
+
+        if (commentField.validity.valueMissing) {
+          commentField.setCustomValidity(
+            "لطفاً نظر خود را بنویسید."
+          );
+        } else {
+          commentField.setCustomValidity(
+            "لطفاً متن نظر خود را بررسی کنید."
+          );
+        }
+
+      }
+    );
+
+    commentField.addEventListener(
+      "input",
+      function () {
+        commentField.setCustomValidity("");
+      }
+    );
+
+  }
+
+
+  /* -----------------------------------------
+     Product rating
+  ----------------------------------------- */
+
+  if (ratingFields.length) {
+
+    const firstRating = ratingFields[0];
+
+    /*
+     * Make the rating group required.
+     * One required radio is enough for native
+     * validation of the whole group.
+     */
+    firstRating.required = false;
+
+    ratingFields.forEach(function (rating) {
+
+      rating.addEventListener(
+        "invalid",
+        function () {
+
+          const selectedRating =
+            form.querySelector(
+              '.product-review-radio-stars input[type="radio"]:checked'
+            );
+
+          if (!selectedRating) {
+            firstRating.setCustomValidity(
+              "لطفاً امتیاز خود را انتخاب کنید."
+            );
+          }
+
+        }
+      );
+
+      rating.addEventListener(
+        "change",
+        function () {
+
+          ratingFields.forEach(function (item) {
+            item.setCustomValidity("");
+          });
+
+        }
+      );
+
+    });
+
+  }
+
+});
+
+
+
+/* HSB GLOBAL PERSIAN PRODUCT FORM VALIDATION */
+
+/*
+ * Delegated validation:
+ * works even when QA / Review forms are rendered later
+ * or refreshed dynamically.
+ */
+document.addEventListener(
+  "invalid",
+  function (event) {
+
+    const field = event.target;
+
+    if (!(field instanceof HTMLElement)) {
+      return;
+    }
+
+
+    /* =========================================
+       Product Question Form
+    ========================================= */
+
+    const questionForm =
+      field.closest(".product-question-form");
+
+    if (questionForm) {
+
+      if (
+        field.matches("textarea") &&
+        field.validity.valueMissing
+      ) {
+        field.setCustomValidity(
+          "لطفاً سوال خود را بنویسید."
+        );
+        return;
+      }
+
+      if (
+        field.type === "email" &&
+        field.validity.typeMismatch
+      ) {
+        field.setCustomValidity(
+          "لطفاً یک آدرس ایمیل معتبر وارد کنید."
+        );
+        return;
+      }
+
+      if (field.validity.valueMissing) {
+        field.setCustomValidity(
+          "لطفاً این فیلد را تکمیل کنید."
+        );
+        return;
+      }
+    }
+
+
+    /* =========================================
+       Product Review Form
+    ========================================= */
+
+    const reviewForm =
+      field.closest(".product-review-form");
+
+    if (reviewForm) {
+
+      if (
+        field.matches('textarea[name="comment"]') &&
+        field.validity.valueMissing
+      ) {
+        field.setCustomValidity(
+          "لطفاً نظر خود را بنویسید."
+        );
+        return;
+      }
+
+      if (
+        field.matches(
+          '.product-review-radio-stars input[type="radio"]'
+        )
+      ) {
+        field.setCustomValidity(
+          "لطفاً امتیاز خود را انتخاب کنید."
+        );
+        return;
+      }
+
+      if (
+        field.type === "email" &&
+        field.validity.typeMismatch
+      ) {
+        field.setCustomValidity(
+          "لطفاً یک آدرس ایمیل معتبر وارد کنید."
+        );
+        return;
+      }
+
+      if (field.validity.valueMissing) {
+        field.setCustomValidity(
+          "لطفاً این فیلد را تکمیل کنید."
+        );
+      }
+    }
+
+  },
+  true
+);
+
+
+/*
+ * Clear previous custom validation message
+ * immediately after user starts correcting input.
+ */
+document.addEventListener(
+  "input",
+  function (event) {
+
+    const field = event.target;
+
+    if (
+      field &&
+      typeof field.setCustomValidity === "function" &&
+      (
+        field.closest(".product-question-form") ||
+        field.closest(".product-review-form")
+      )
+    ) {
+      field.setCustomValidity("");
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "change",
+  function (event) {
+
+    const field = event.target;
+
+    if (
+      field &&
+      typeof field.setCustomValidity === "function" &&
+      (
+        field.closest(".product-question-form") ||
+        field.closest(".product-review-form")
+      )
+    ) {
+      field.setCustomValidity("");
+    }
+
+  }
+);
+
+
+/*
+ * Ensure WooCommerce review rating is required.
+ * MutationObserver covers forms rendered later.
+ */
+function hsbPrepareReviewRatingValidation() {
+
+  document
+    .querySelectorAll(".product-review-form")
+    .forEach(function (form) {
+
+      const ratings =
+        form.querySelectorAll(
+          '.product-review-radio-stars input[type="radio"]'
+        );
+
+      if (!ratings.length) {
+        return;
+      }
+
+      ratings[0].required = false;
+
+    });
+
+}
+
+
+hsbPrepareReviewRatingValidation();
+
+
+const hsbProductFormObserver =
+  new MutationObserver(function () {
+    hsbPrepareReviewRatingValidation();
+  });
+
+
+hsbProductFormObserver.observe(
+  document.body,
+  {
+    childList: true,
+    subtree: true
+  }
+);
+
+
+
+/* HSB VISIBLE REVIEW RATING VALIDATION */
+
+document.addEventListener(
+  "submit",
+  function (event) {
+
+    const form = event.target.closest(
+      ".product-review-form"
+    );
+
+    if (!form) {
+      return;
+    }
+
+    const ratingWrap =
+      form.querySelector(
+        ".product-review-radio-stars"
+      );
+
+    if (!ratingWrap) {
+      return;
+    }
+
+    const selectedRating =
+      ratingWrap.querySelector(
+        'input[type="radio"]:checked'
+      );
+
+    let errorMessage =
+      form.querySelector(
+        ".hsb-review-rating-error"
+      );
+
+
+    /* Rating selected — remove old error */
+    if (selectedRating) {
+
+      if (errorMessage) {
+        errorMessage.remove();
+      }
+
+      ratingWrap.classList.remove(
+        "has-rating-error"
+      );
+
+      return;
+    }
+
+
+    /*
+     * No rating selected:
+     * stop submit and show a visible Persian message.
+     */
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    ratingWrap.classList.add(
+      "has-rating-error"
+    );
+
+
+    if (!errorMessage) {
+
+      errorMessage =
+        document.createElement("p");
+
+      errorMessage.className =
+        "hsb-review-rating-error";
+
+      errorMessage.setAttribute(
+        "role",
+        "alert"
+      );
+
+      ratingWrap.insertAdjacentElement(
+        "afterend",
+        errorMessage
+      );
+    }
+
+
+    errorMessage.textContent =
+      "لطفاً امتیاز خود را انتخاب کنید.";
+
+
+    ratingWrap.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+
+  },
+  true
+);
+
+
+/*
+ * Remove rating error as soon as user
+ * chooses one of the stars.
+ */
+document.addEventListener(
+  "change",
+  function (event) {
+
+    const rating =
+      event.target.closest(
+        '.product-review-radio-stars input[type="radio"]'
+      );
+
+    if (!rating) {
+      return;
+    }
+
+    const form =
+      rating.closest(
+        ".product-review-form"
+      );
+
+    if (!form) {
+      return;
+    }
+
+    const ratingWrap =
+      rating.closest(
+        ".product-review-radio-stars"
+      );
+
+    const errorMessage =
+      form.querySelector(
+        ".hsb-review-rating-error"
+      );
+
+
+    ratingWrap.classList.remove(
+      "has-rating-error"
+    );
+
+    if (errorMessage) {
+      errorMessage.remove();
+    }
+
+    /*
+     * Clear native custom validity too.
+     */
+    form
+      .querySelectorAll(
+        '.product-review-radio-stars input[type="radio"]'
+      )
+      .forEach(function (item) {
+        item.setCustomValidity("");
+      });
+
+  }
+);
+
+
+
+/* HSB FINAL REVIEW RATING VALIDATION */
+
+function hsbGetReviewRatingElements(form) {
+
+  const ratingWrap = form.querySelector(
+    ".product-review-radio-stars"
+  );
+
+  if (!ratingWrap) {
+    return null;
+  }
+
+  const ratings = ratingWrap.querySelectorAll(
+    'input[type="radio"]'
+  );
+
+  /*
+   * Hidden radio buttons must NOT use native required
+   * validation because the browser cannot display the
+   * validation bubble properly for display:none controls.
+   */
+  ratings.forEach(function (rating) {
+    rating.required = false;
+    rating.setCustomValidity("");
+  });
+
+  return {
+    ratingWrap: ratingWrap,
+    ratings: ratings
+  };
+}
+
+
+function hsbClearReviewRatingError(form) {
+
+  const elements =
+    hsbGetReviewRatingElements(form);
+
+  if (!elements) {
+    return;
+  }
+
+  elements.ratingWrap.classList.remove(
+    "has-rating-error"
+  );
+
+  const error =
+    form.querySelector(
+      ".hsb-review-rating-error"
+    );
+
+  if (error) {
+    error.remove();
+  }
+}
+
+
+function hsbShowReviewRatingError(form) {
+
+  const elements =
+    hsbGetReviewRatingElements(form);
+
+  if (!elements) {
+    return true;
+  }
+
+  const selected =
+    elements.ratingWrap.querySelector(
+      'input[type="radio"]:checked'
+    );
+
+  if (selected) {
+    hsbClearReviewRatingError(form);
+    return true;
+  }
+
+  elements.ratingWrap.classList.add(
+    "has-rating-error"
+  );
+
+  let error =
+    form.querySelector(
+      ".hsb-review-rating-error"
+    );
+
+  if (!error) {
+
+    error = document.createElement("p");
+
+    error.className =
+      "hsb-review-rating-error";
+
+    error.setAttribute(
+      "role",
+      "alert"
+    );
+
+    elements.ratingWrap.insertAdjacentElement(
+      "afterend",
+      error
+    );
+  }
+
+  error.textContent =
+    "لطفاً امتیاز خود را انتخاب کنید.";
+
+  elements.ratingWrap.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+
+  return false;
+}
+
+
+/*
+ * Validate rating before clicking the review submit button.
+ *
+ * If the comment itself is empty, do nothing here and allow
+ * normal Persian textarea validation to show first.
+ */
+document.addEventListener(
+  "click",
+  function (event) {
+
+    const submitButton =
+      event.target.closest(
+        '.product-review-form input[type="submit"], ' +
+        '.product-review-form button[type="submit"], ' +
+        '.product-review-form .review-form-submit'
+      );
+
+    if (!submitButton) {
+      return;
+    }
+
+    const form =
+      submitButton.closest(
+        ".product-review-form"
+      );
+
+    if (!form) {
+      return;
+    }
+
+    const comment =
+      form.querySelector(
+        'textarea[name="comment"]'
+      );
+
+    /*
+     * Let native/custom comment validation run first.
+     */
+    if (
+      comment &&
+      !comment.checkValidity()
+    ) {
+      return;
+    }
+
+    if (!hsbShowReviewRatingError(form)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+  },
+  true
+);
+
+
+/*
+ * Also cover keyboard / programmatic submit.
+ */
+document.addEventListener(
+  "submit",
+  function (event) {
+
+    const form = event.target;
+
+    if (
+      !form.matches ||
+      !form.matches(".product-review-form")
+    ) {
+      return;
+    }
+
+    if (!hsbShowReviewRatingError(form)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+  },
+  true
+);
+
+
+/*
+ * Clear the error immediately after selecting a star.
+ */
+document.addEventListener(
+  "change",
+  function (event) {
+
+    const rating =
+      event.target.closest(
+        '.product-review-radio-stars input[type="radio"]'
+      );
+
+    if (!rating) {
+      return;
+    }
+
+    const form =
+      rating.closest(
+        ".product-review-form"
+      );
+
+    if (form) {
+      hsbClearReviewRatingError(form);
+    }
+
+  }
+);
+
+
+/*
+ * Forms may be rendered dynamically.
+ */
+function hsbDisableNativeRatingRequired() {
+
+  document
+    .querySelectorAll(
+      '.product-review-form .product-review-radio-stars input[type="radio"]'
+    )
+    .forEach(function (rating) {
+      rating.required = false;
+      rating.setCustomValidity("");
+    });
+
+}
+
+
+hsbDisableNativeRatingRequired();
+
+
+new MutationObserver(
+  hsbDisableNativeRatingRequired
+).observe(
+  document.body,
+  {
+    childList: true,
+    subtree: true
+  }
+);

@@ -34,6 +34,15 @@
         </span>
       </nav>
 
+      <?php
+      /* HSB ARTICLE READING TIME */
+      $reading_content = get_post_field('post_content', get_the_ID());
+      $reading_text = wp_strip_all_tags(strip_shortcodes($reading_content));
+      $reading_words = preg_split('/\\s+/u', trim($reading_text), -1, PREG_SPLIT_NO_EMPTY);
+      $reading_word_count = is_array($reading_words) ? count($reading_words) : 0;
+      $reading_minutes = max(1, (int) ceil($reading_word_count / 200));
+      ?>
+
       <!-- META -->
       <div class="single-article-meta">
         <span class="single-article-author">
@@ -44,6 +53,12 @@
 
         <span class="single-article-date">
           تاریخ انتشار: <?php echo get_the_date('Y/m/d'); ?>
+        </span>
+
+        <span class="single-article-separator">|</span>
+
+        <span class="single-article-reading-time">
+          زمان مطالعه: <?php echo esc_html($reading_minutes); ?> دقیقه
         </span>
       </div>
 
@@ -59,9 +74,15 @@
           $seo_summary = get_post_meta(get_the_ID(), '_seo_summary', true);
 
           if (!empty($seo_summary)) : ?>
-              <p class="single-article-excerpt">
-                  <?php echo esc_html($seo_summary); ?>
-              </p>
+              <div class="single-article-summary-box">
+                  <div class="single-article-summary-title">
+                      خلاصه مقاله
+                  </div>
+
+                  <p class="single-article-excerpt">
+                      <?php echo esc_html($seo_summary); ?>
+                  </p>
+              </div>
           <?php endif; ?>
 
 
@@ -76,6 +97,49 @@
   <div class="container">
     <div class="single-article-layout">
 
+<?php
+// HSB TOC PREPARED BEFORE SIDEBAR
+
+// ❌ مهم: RAW content بگیر، نه filtered
+$content = get_post_field('post_content', get_the_ID());
+
+// DEBUG: Show raw content length
+echo '<!-- DEBUG: Content length: ' . strlen($content) . ' -->';
+
+$toc = [];
+$index = 1;
+
+/* =========================
+   ساخت TOC + اضافه کردن ID
+========================= */
+$content = preg_replace_callback(
+    '/<h([2-6])([^>]*)>(.*?)<\/h\1>/is',
+    function ($matches) use (&$toc, &$index) {
+
+        $title = strip_tags($matches[3]);
+        $id = 'section-' . $index;
+
+        $toc[] = [
+            'id' => $id,
+            'title' => $title,
+            'level' => $matches[1]
+        ];
+
+        $index++;
+
+        return '<h' . $matches[1] . ' id="' . $id . '"' . $matches[2] . '>' . $matches[3] . '</h' . $matches[1] . '>';
+    },
+    $content
+);
+
+// DEBUG: Show TOC count
+echo '<!-- DEBUG: TOC items found: ' . count($toc) . ' -->';
+if (!empty($toc)) {
+    echo '<!-- DEBUG: First TOC item: ' . htmlspecialchars($toc[0]['title']) . ' -->';
+}
+
+?>
+
       <!-- Sidebar Product Card -->
 <?php
 $discount_products = new WP_Query([
@@ -84,9 +148,31 @@ $discount_products = new WP_Query([
     'meta_key' => '_is_discount_featured',
     'meta_value' => 'yes'
 ]);
+
+$has_discount_products = $discount_products->have_posts();
 ?>
 
-<aside class="single-article-sidebar">
+<aside class="single-article-sidebar <?php echo $has_discount_products ? 'has-discount-products' : 'toc-only'; ?>">
+
+<!-- =========================
+     TOC (حتماً بالا باشد)
+========================= -->
+<?php if (!empty($toc)) : ?>
+    <div class="article-toc-box">
+        <h2 class="article-toc-title">فهرست مطالب مقاله</h2>
+
+        <ul class="article-toc-list">
+            <?php foreach ($toc as $item) : ?>
+                <li class="toc-level-<?php echo esc_attr($item['level']); ?>">
+                    <a href="#<?php echo $item['id']; ?>">
+                        <?php echo $item['title']; ?>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>
+
         <div class="discount-slider" id="discountSlider">
 
         <?php if ($discount_products->have_posts()) : ?>
@@ -143,66 +229,9 @@ $discount_products = new WP_Query([
       <!-- Main Content -->
       <main class="single-article-main">
 
-<?php
 
-// ❌ مهم: RAW content بگیر، نه filtered
-$content = get_post_field('post_content', get_the_ID());
 
-// DEBUG: Show raw content length
-echo '<!-- DEBUG: Content length: ' . strlen($content) . ' -->';
 
-$toc = [];
-$index = 1;
-
-/* =========================
-   ساخت TOC + اضافه کردن ID
-========================= */
-$content = preg_replace_callback(
-    '/<h([2-6])([^>]*)>(.*?)<\/h\1>/is',
-    function ($matches) use (&$toc, &$index) {
-
-        $title = strip_tags($matches[3]);
-        $id = 'section-' . $index;
-
-        $toc[] = [
-            'id' => $id,
-            'title' => $title,
-            'level' => $matches[1]
-        ];
-
-        $index++;
-
-        return '<h' . $matches[1] . ' id="' . $id . '"' . $matches[2] . '>' . $matches[3] . '</h' . $matches[1] . '>';
-    },
-    $content
-);
-
-// DEBUG: Show TOC count
-echo '<!-- DEBUG: TOC items found: ' . count($toc) . ' -->';
-if (!empty($toc)) {
-    echo '<!-- DEBUG: First TOC item: ' . htmlspecialchars($toc[0]['title']) . ' -->';
-}
-
-?>
-
-<!-- =========================
-     TOC (حتماً بالا باشد)
-========================= -->
-<?php if (!empty($toc)) : ?>
-    <div class="article-toc-box">
-        <h2 class="article-toc-title">فهرست مطالب مقاله</h2>
-
-        <ul class="article-toc-list">
-            <?php foreach ($toc as $item) : ?>
-                <li>
-                    <a href="#<?php echo $item['id']; ?>">
-                        <?php echo $item['title']; ?>
-                    </a>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-<?php endif; ?>
 
 
 <!-- =========================
@@ -222,4 +251,17 @@ if (!empty($toc)) {
     </div>
   </div>
 </section>
+
+
+<!-- HSB BACK TO ARTICLE TOP -->
+<button
+  type="button"
+  class="article-back-to-top"
+  id="articleBackToTop"
+  aria-label="بازگشت به ابتدای مقاله"
+  title="بازگشت به بالا"
+>
+  ↑
+</button>
+
 <?php get_footer(); ?>
