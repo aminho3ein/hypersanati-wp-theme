@@ -443,6 +443,19 @@ function hypersanati_enqueue_assets() {
                 'hypersanatiSearch',
                 array(
                     'shopUrl' => hypersanati_get_shop_url(),
+
+                    /*
+                     * When a real WooCommerce product category URL
+                     * loads archive-product.php, preserve that category
+                     * as the initial Shop filter.
+                     */
+                    'selectedCategoryId' =>
+                        (
+                            function_exists('is_product_category') &&
+                            is_product_category()
+                        )
+                            ? absint(get_queried_object_id())
+                            : 0,
                 )
             );
         }
@@ -7034,4 +7047,48 @@ function hsb_get_public_comment_author_name($comment) {
 
     return 'کاربر سایت';
 }
+// Article Hero Section
+function add_featured_meta_box() {
+    add_meta_box(
+        'featured_post',
+        'مقاله شاخص',
+        'featured_meta_box_callback',
+        'post',
+        'side'
+    );
+}
+add_action('add_meta_boxes', 'add_featured_meta_box');
 
+function featured_meta_box_callback($post) {
+    $value = get_post_meta($post->ID, '_is_featured', true);
+    ?>
+    <label>
+        <input type="checkbox" name="is_featured" value="1" <?php checked($value, '1'); ?> />
+        نمایش در اسلایدر / Hero
+    </label>
+    <?php
+}
+
+function save_featured_meta($post_id) {
+    if (isset($_POST['is_featured'])) {
+        update_post_meta($post_id, '_is_featured', '1');
+    } else {
+        delete_post_meta($post_id, '_is_featured');
+    }
+}
+add_action('save_post', 'save_featured_meta');
+
+
+
+/* HSB ARTICLE TOC ACTIVE SCRIPT */
+add_action('wp_enqueue_scripts', function () {
+    if (is_single() && get_post_type() === 'post') {
+        wp_enqueue_script(
+            'hsb-article-toc-active',
+            get_template_directory_uri() . '/assets/js/article-toc-active.js',
+            [],
+            filemtime(get_template_directory() . '/assets/js/article-toc-active.js'),
+            true
+        );
+    }
+});

@@ -3,7 +3,16 @@ document.addEventListener("DOMContentLoaded", function () {
     let index = 0;
     let loading = false;
     let finished = false;
-    let currentSelectedCategory = 0;
+    let currentSelectedCategory =
+        (
+            typeof hypersanatiSearch !== 'undefined' &&
+            hypersanatiSearch.selectedCategoryId
+        )
+            ? parseInt(
+                hypersanatiSearch.selectedCategoryId,
+                10
+            ) || 0
+            : 0;
 
     const urlParams = new URLSearchParams(window.location.search);
     let searchQuery = urlParams.get('s') ? urlParams.get('s').trim() : "";
@@ -822,6 +831,25 @@ document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(
                 'input[name="product_category"]'
             );
+
+        /*
+         * Sidebar HTML is loaded dynamically and its default
+         * "all products" radio is checked by PHP.
+         *
+         * Re-apply the real category archive selection every
+         * time the sidebar controls are initialized.
+         */
+        radioButtons.forEach(radio => {
+            const radioCategoryId =
+                parseInt(
+                    radio.value,
+                    10
+                ) || 0;
+
+            radio.checked =
+                radioCategoryId ===
+                currentSelectedCategory;
+        });
 
         radioButtons.forEach(radio => {
 

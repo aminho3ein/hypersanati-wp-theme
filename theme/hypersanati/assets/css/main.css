@@ -6152,3 +6152,286 @@ html {
 }
 
 /* END HSB SEARCH HELP POPOVER CSS */
+
+/* =========================================================
+   FOOTER CONTAINER — SAFE GLOBAL WIDTH
+   Keeps footer content aligned on every template
+   ========================================================= */
+
+.site-footer > .site-footer__services > .container,
+.site-footer > .site-footer__main > .container,
+.site-footer > .site-footer__bottom > .container,
+.site-footer .container {
+    width: calc(100% - 32px);
+    max-width: 1200px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+@media (max-width: 520px) {
+    .site-footer > .site-footer__services > .container,
+    .site-footer > .site-footer__main > .container,
+    .site-footer > .site-footer__bottom > .container,
+    .site-footer .container {
+        width: calc(100% - 24px);
+    }
+}
+
+
+/* =========================================================
+   HSB FOOTER MOBILES AND ENAMAD
+   ========================================================= */
+
+.site-footer__mobiles {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.site-footer__mobile-item {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    direction: rtl;
+}
+
+.site-footer__mobile-name {
+    color: var(--gray-300);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    line-height: 1.6;
+}
+
+.site-footer__mobile-name::after {
+    content: " —";
+}
+
+.site-footer__mobile-number {
+    direction: ltr;
+    color: var(--gray-200);
+    font-size: var(--fs-body);
+    font-weight: 600;
+    line-height: 1.5;
+    text-decoration: none;
+}
+
+.site-footer__mobile-number:hover {
+    color: var(--color-primary-active);
+}
+
+
+/* ---------- Enamad ---------- */
+
+.site-footer__enamad {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: var(--spacing-lg);
+}
+
+.site-footer__enamad-title {
+    color: var(--gray-300);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+}
+
+.site-footer__enamad-link {
+    width: 96px;
+    height: 96px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 96px;
+
+    padding: 7px;
+
+    background: #fff;
+    border-radius: var(--radius-lg);
+
+    overflow: hidden;
+}
+
+.site-footer__enamad-link img {
+    display: block;
+
+    width: auto;
+    height: auto;
+
+    max-width: 82px;
+    max-height: 82px;
+
+    object-fit: contain;
+}
+
+
+@media (max-width: 767.98px) {
+
+    .site-footer__enamad {
+        align-items: flex-start;
+    }
+
+    .site-footer__mobile-item {
+        align-items: flex-start;
+    }
+
+}
+
+
+
+/* =========================================================
+   HSB FOOTER IDENTITY CARD
+   Logo + Site Intro + Enamad
+   ========================================================= */
+
+.site-footer__identity-card {
+    width: 100%;
+
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+
+    gap: 24px;
+
+    min-height: 132px;
+
+    padding: 18px 20px;
+
+    background: var(--gray-800);
+    border: 1px solid var(--gray-700);
+    border-radius: var(--radius-lg);
+}
+
+
+/* ---------- Site identity ---------- */
+
+.site-footer__identity-main {
+    min-width: 0;
+    flex: 1 1 auto;
+
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+}
+
+.site-footer__identity-card .site-footer__logo-box {
+    flex: 0 0 auto;
+}
+
+.site-footer__identity-copy {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.site-footer__identity-copy h2 {
+    margin: 0 0 8px;
+
+    color: var(--color-white);
+
+    font-size: var(--fs-h4);
+    font-weight: 800;
+    line-height: 1.5;
+}
+
+.site-footer__identity-copy .site-footer__description {
+    max-width: 680px;
+
+    margin: 0;
+
+    color: var(--gray-300);
+
+    font-size: var(--fs-sm);
+    line-height: 2;
+}
+
+
+/* ---------- Enamad opposite site logo ---------- */
+
+.site-footer__identity-card .site-footer__enamad {
+    flex: 0 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+}
+
+.site-footer__identity-card .site-footer__enamad-link {
+    width: 100px;
+    min-width: 100px;
+
+    height: 100px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 7px;
+
+    background: #fff;
+    border-radius: var(--radius-lg);
+
+    overflow: hidden;
+}
+
+.site-footer__identity-card .site-footer__enamad-link img {
+    display: block;
+
+    width: auto;
+    height: auto;
+
+    max-width: 86px;
+    max-height: 86px;
+
+    object-fit: contain;
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 767.98px) {
+
+    .site-footer__identity-card {
+        flex-direction: column;
+        align-items: stretch;
+
+        gap: 18px;
+
+        min-height: 0;
+
+        padding: 16px;
+    }
+
+    .site-footer__identity-main {
+        align-items: flex-start;
+    }
+
+    .site-footer__identity-card .site-footer__enamad {
+        justify-content: flex-start;
+    }
+
+}
+
+
+@media (max-width: 520px) {
+
+    .site-footer__identity-main {
+        gap: 12px;
+    }
+
+    .site-footer__identity-copy h2 {
+        font-size: var(--fs-h5);
+    }
+
+    .site-footer__identity-copy .site-footer__description {
+        line-height: 1.9;
+    }
+
+}
