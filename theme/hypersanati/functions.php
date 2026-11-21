@@ -1,4 +1,10 @@
 <?php
+/* HSB EDITORIAL V3 */
+require_once __DIR__ . '/inc/hsb-editorial-v3.php';
+
+/* HSB UNIFIED POPUP FINAL MODULE V1 */
+require_once __DIR__ . '/inc/hsb-unified-popup-module.php';
+
 if (!defined('ABSPATH')) exit;
 
 require_once get_template_directory() . '/inc/footer-admin.php';
@@ -1557,12 +1563,20 @@ function hypersanati_render_product_card(
 
 
             <div class="hsb-family-card-price-note">
-                <i class="fa-solid fa-file-invoice"></i>
-
-                <span>
-                    قیمت پس از بررسی واحد فروش
-                </span>
-            </div>
+    <?php if (
+        !$is_family &&
+        function_exists('hsb_dual_is_direct') &&
+        hsb_dual_is_direct($card_product)
+    ) : ?>
+        <strong class="hsb-card-price-actual">
+            <?php echo wp_kses_post($card_product->get_price_html()); ?>
+        </strong>
+    <?php elseif ($is_family) : ?>
+        <span><span class="hsb-price-inquiry">قیمت نیازمند استعلام</span></span>
+    <?php else : ?>
+        <span><span class="hsb-price-inquiry">قیمت نیازمند استعلام</span></span>
+    <?php endif; ?>
+</div>
 
 
             <div class="hsb-family-card-action">
@@ -1575,12 +1589,84 @@ function hypersanati_render_product_card(
                     ?>
                 </span>
 
-                <i class="fa-solid fa-arrow-left"></i>
+                <?php
+$hsb_stock = $card_product->get_stock_quantity();
+
+if (
+    !$is_family &&
+    function_exists('hsb_dual_is_direct') &&
+    hsb_dual_is_direct($card_product) &&
+    $card_product->managing_stock() &&
+    $hsb_stock !== null
+) :
+?>
+    <span class="hsb-card-stock-count">
+        موجودی:
+        <?php echo esc_html(number_format_i18n($hsb_stock)); ?>
+        عدد
+    </span>
+<?php endif; ?>
+
+<i class="fa-solid fa-arrow-left"></i>
 
             </div>
 
         </div>
 
+    <div class="hsb-quick-card-controls">
+        <?php if ($is_family) : ?>
+            <span class="hsb-quick-card-btn hsb-quick-card-btn--select">بررسی گزینه‌ها</span>
+        <?php elseif ($card_product instanceof WC_Product
+            && '' !== $card_product->get_price()
+            && !$card_product->is_in_stock()) : ?>
+            <span class="hsb-quick-card-btn hsb-stock-unavailable"
+                  role="status" aria-disabled="true">
+                اتمام موجودی
+            </span>
+
+        <?php elseif (hsb_dual_is_direct($card_product)) : ?>
+            <?php
+            $hsb_cart_qty = 0;
+
+            if (WC()->cart) {
+                foreach (WC()->cart->get_cart() as $hsb_cart_item) {
+                    if (absint($hsb_cart_item['product_id'] ?? 0) === absint($product_id)) {
+                        $hsb_cart_qty += absint($hsb_cart_item['quantity'] ?? 0);
+                    }
+                }
+            }
+
+            $hsb_limited = $card_product->managing_stock()
+                && !$card_product->backorders_allowed();
+
+            $hsb_available = $hsb_limited
+                ? max(0, (int) $card_product->get_stock_quantity() - $hsb_cart_qty)
+                : null;
+
+            $hsb_exhausted = $hsb_limited && $hsb_available < 1;
+            ?>
+
+            <span class="hsb-quick-card-btn<?php echo $hsb_exhausted ? ' hsb-stock-unavailable' : ''; ?>"
+                  <?php if (!$hsb_exhausted) : ?>
+                      role="button"
+                      tabindex="0"
+                      data-hsb-direct-id="<?php echo esc_attr($product_id); ?>"
+                  <?php else : ?>
+                      role="status"
+                      aria-disabled="true"
+                  <?php endif; ?>>
+                <?php echo $hsb_exhausted
+                    ? 'سقف موجودی در سبد'
+                    : 'افزودن به سبد خرید'; ?>
+            </span>
+        <?php else : ?>
+            <span class="hsb-quick-card-btn hsb-quick-card-btn--quote"
+      role="button" tabindex="0"
+      data-hsb-quote-id="<?php echo esc_attr($product_id); ?>">
+    افزودن به پیش‌فاکتور
+</span>
+        <?php endif; ?>
+    </div>
     </a>
 
     <?php
@@ -1734,6 +1820,14 @@ function load_shop_categories() {
 
     $uncategorized = get_term_by('slug', 'uncategorized', 'product_cat');
     $exclude_ids = $uncategorized ? array($uncategorized->term_id) : array();
+
+    /* Keep online sales above ordinary lazy-loaded categories. */
+    if (function_exists('hsb_online_sale_category_id')) {
+        $hsb_sale_id = hsb_online_sale_category_id(false);
+        if ($hsb_sale_id) {
+            $exclude_ids[] = $hsb_sale_id;
+        }
+    }
 
     $args = [
         'taxonomy'   => 'product_cat',
@@ -2275,6 +2369,67 @@ add_action(
  * The expensive grouping work is cached, while presentation
  * remains paginated in small batches.
  */
+
+/* HSB SHOP FAMILY PRIORITY V3 */
+function hsb_shop_prioritize_families_v3($groups) {
+    if (!is_array($groups) || count($groups) < 2) {
+        return $groups;
+    }
+
+    $ranked = array();
+
+    foreach (array_values($groups) as $index => $group) {
+        $ids = !empty($group['ids'])
+            ? (array) $group['ids']
+            : array($group['representative_id'] ?? 0);
+
+        $priority = 2;
+
+        foreach ($ids as $id) {
+            $id = absint($id);
+            if (!$id) {
+                continue;
+            }
+
+            $price = get_post_meta($id, '_price', true);
+
+            if ($price === '' || (float) $price <= 0) {
+                continue;
+            }
+
+            /* A family containing a priced SKU ranks at least second. */
+            $priority = min($priority, 1);
+
+            /*
+             * Load the WooCommerce product only when it has a price.
+             * Do not load every inquiry-only SKU as a product object.
+             */
+            $product = wc_get_product($id);
+
+            if (
+                $product &&
+                function_exists('hsb_dual_is_direct') &&
+                hsb_dual_is_direct($product)
+            ) {
+                $priority = 0;
+                break;
+            }
+        }
+
+        $ranked[] = array(
+            'priority' => $priority,
+            'index'    => $index,
+            'group'    => $group,
+        );
+    }
+
+    usort($ranked, static function ($a, $b) {
+        return ($a['priority'] <=> $b['priority'])
+            ?: ($a['index'] <=> $b['index']);
+    });
+
+    return array_column($ranked, 'group');
+}
 function hsb_get_shop_subcategory_family_groups(
     $subcategory_id,
     $search_keyword = ''
@@ -2345,6 +2500,9 @@ function hsb_get_shop_subcategory_family_groups(
      * Ten minutes is enough to make repeated browsing fast
      * without leaving catalog changes stale for long.
      */
+    /* Sort all families before AJAX pagination. */
+    $groups = hsb_shop_prioritize_families_v3($groups);
+
     set_transient(
         $cache_key,
         $groups,
@@ -4036,7 +4194,7 @@ function hypersanati_contact_message_column_content( $column, $post_id ) {
 // Start -- AJAX - EZAFE KARDANE MAHSUL BA DOKME AFZODAN BE SABADE KHARID ------------------------->
 add_action('wp_enqueue_scripts', 'hsb_enqueue_cart_ajax_popup_assets');
 function hsb_enqueue_cart_ajax_popup_assets() {
-    if (!function_exists('is_product') || !is_product()) {
+    if (!(is_product() || is_shop() || is_product_category() || is_product_tag() || is_front_page())) {
         return;
     }
 
@@ -4067,7 +4225,7 @@ function hsb_enqueue_cart_ajax_popup_assets() {
 // مرحله ۳: پاپ‌آپ را با wp_footer چاپ کن
 add_action('wp_footer', 'hsb_render_cart_ajax_popup');
 function hsb_render_cart_ajax_popup() {
-    if (!function_exists('is_product') || !is_product()) {
+    if (!(is_product() || is_shop() || is_product_category() || is_product_tag() || is_front_page())) {
         return;
     }
 
@@ -7075,3 +7233,6 @@ add_action('wp_enqueue_scripts', function () {
         );
     }
 });
+
+/* HSB DUAL SALES FLOW */
+require_once get_template_directory() . '/inc/dual-sales-flow.php';

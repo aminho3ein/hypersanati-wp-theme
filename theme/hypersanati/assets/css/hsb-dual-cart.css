@@ -1,0 +1,383 @@
+/* Two independent carts - consistent navigation */
+.hsb-dual-cart-tabs {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
+    margin: 0 0 30px;
+    direction: rtl;
+}
+
+.hsb-dual-cart-tabs a {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    min-width: 175px;
+    box-sizing: border-box;
+    padding: 12px 20px;
+    border: 1px solid #d9ccbb;
+    border-radius: 14px;
+    background: #fff;
+    color: #735936;
+    text-decoration: none !important;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.5;
+    box-shadow: 0 3px 12px rgba(68, 48, 25, .05);
+    transition: background .2s, color .2s, border-color .2s;
+}
+
+.hsb-dual-cart-tabs a i {
+    display: inline-block;
+    flex: 0 0 auto;
+    width: 18px;
+    text-align: center;
+    direction: ltr;
+    font-size: 16px;
+}
+
+.hsb-dual-cart-tabs a span {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.hsb-dual-cart-tabs a.is-active,
+.hsb-dual-cart-tabs a[aria-current="page"] {
+    background: #735936;
+    border-color: #735936;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(115, 89, 54, .2);
+}
+
+.hsb-dual-cart-tabs a:not(.is-active):hover {
+    background: #f5f0e9;
+    border-color: #735936;
+}
+
+.hsb-direct-prices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 12px 0;
+}
+
+.hsb-direct-prices > div {
+    flex: 1 1 170px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 13px;
+    background: #f3f6f3;
+    border-radius: 12px;
+}
+
+.hsb-direct-prices span {
+    color: #66736b;
+    font-size: 12px;
+}
+
+.hsb-direct-prices strong,
+.hsb-direct-total strong {
+    color: #167a50;
+    font-weight: 800;
+}
+
+.hsb-direct-cart-page .cart-sidebar-card__checkout {
+    display: block;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    text-decoration: none;
+    background: #167a50;
+    color: #fff;
+}
+
+.hsb-direct-cart-page .cart-page-items__qty-input {
+    text-align: center;
+}
+
+@media (max-width: 560px) {
+    .hsb-dual-cart-tabs {
+        gap: 8px;
+    }
+    .hsb-dual-cart-tabs a {
+        min-width: 0;
+        flex: 1 1 0;
+        padding: 10px 8px;
+        font-size: 12px;
+    }
+}
+
+/* =========================================================
+   HSB DUAL CART ALIGNMENT V2
+   ========================================================= */
+
+/* Both cart pages: consistent tabs position */
+.preinvoice-page .hsb-dual-cart-tabs,
+.hsb-direct-cart-page .hsb-dual-cart-tabs {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    margin: 0 0 32px !important;
+    padding: 0 !important;
+
+    gap: 12px !important;
+    direction: rtl !important;
+}
+
+/* Both tabs: identical sizes and icon positions */
+.preinvoice-page .hsb-dual-cart-tabs a,
+.hsb-direct-cart-page .hsb-dual-cart-tabs a {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 175px !important;
+    min-width: 175px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+
+    padding: 0 14px !important;
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
+    gap: 9px !important;
+
+    border-radius: 12px !important;
+    text-align: center !important;
+    line-height: 1 !important;
+    white-space: nowrap;
+}
+
+/* Icon positioning */
+.hsb-dual-cart-tabs a i {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+
+    width: 18px !important;
+    height: 18px !important;
+
+    flex-shrink: 0;
+    font-size: 16px !important;
+    line-height: 1 !important;
+}
+
+/* Text positioning */
+.hsb-dual-cart-tabs a span {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.5 !important;
+}
+
+/* Active tab */
+.hsb-dual-cart-tabs a.is-active {
+    background: #735936 !important;
+    color: #fff !important;
+    border-color: #735936 !important;
+}
+
+/* Inactive tab */
+.hsb-dual-cart-tabs a:not(.is-active) {
+    background: #fff !important;
+    color: #735936 !important;
+    border: 1px solid #e5d9ca !important;
+}
+
+/* Checkout button: exact vertical/horizontal centering */
+.hsb-direct-cart-page .cart-sidebar-card__checkout,
+.hsb-direct-cart-page .hsb-direct-checkout {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 100% !important;
+    min-height: 55px !important;
+
+    box-sizing: border-box !important;
+    padding: 12px 15px !important;
+    margin: 0 !important;
+
+    line-height: 1.6 !important;
+    text-align: center !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+
+    background: #168052 !important;
+    color: #fff !important;
+    border-radius: 9px !important;
+    text-decoration: none !important;
+}
+
+/* Mobile */
+@media (max-width: 560px) {
+
+    .preinvoice-page .hsb-dual-cart-tabs,
+    .hsb-direct-cart-page .hsb-dual-cart-tabs {
+        gap: 8px !important;
+    }
+
+    .preinvoice-page .hsb-dual-cart-tabs a,
+    .hsb-direct-cart-page .hsb-dual-cart-tabs a {
+        width: auto !important;
+        min-width: 0 !important;
+        flex: 1 1 0 !important;
+        padding: 0 8px !important;
+        font-size: 12px !important;
+    }
+}
+
+
+/* HSB UNIFIED CART TABS V3 */
+
+section.cart-page-items .hsb-dual-tabs-unified {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    gap: 12px !important;
+
+    position: static !important;
+    float: none !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    margin: 0 0 34px !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    direction: rtl !important;
+}
+
+section.cart-page-items .hsb-dual-tabs-unified a {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: row !important;
+
+    flex: 0 0 180px !important;
+    width: 180px !important;
+    min-width: 180px !important;
+    height: 50px !important;
+
+    margin: 0 !important;
+    padding: 0 12px !important;
+
+    gap: 10px !important;
+    box-sizing: border-box !important;
+
+    border-radius: 13px !important;
+    border: 1px solid #d9ccbb !important;
+    background: #fff !important;
+    color: #735936 !important;
+
+    text-decoration: none !important;
+    white-space: nowrap;
+    line-height: 1.5 !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+}
+
+section.cart-page-items .hsb-dual-tabs-unified a.is-active {
+    background: #735936 !important;
+    color: #fff !important;
+    border-color: #735936 !important;
+    box-shadow: 0 5px 15px rgba(115, 89, 54, .2);
+}
+
+section.cart-page-items .hsb-dual-tabs-unified a i {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+}
+
+section.cart-page-items .hsb-dual-tabs-unified a span {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1.5 !important;
+}
+
+section.cart-page-items .hsb-dual-tabs-unified a:not(.is-active):hover {
+    background: #f6f1e9 !important;
+}
+
+@media (max-width: 560px) {
+    section.cart-page-items .hsb-dual-tabs-unified {
+        gap: 8px !important;
+    }
+
+    section.cart-page-items .hsb-dual-tabs-unified a {
+        flex: 1 1 0 !important;
+        width: auto !important;
+        min-width: 0 !important;
+        font-size: 12px !important;
+        padding: 0 6px !important;
+        gap: 6px !important;
+    }
+}
+
+/* HSB EMPTY CART TABS POSITION V4 */
+
+/* Identical placement above headings on both cart pages */
+section.cart-page-items > .container > .hsb-dual-tabs-unified,
+section.cart-page-items .hsb-dual-tabs-unified {
+    position: relative !important;
+    inset: auto !important;
+    float: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    direction: rtl !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin: 0 0 32px !important;
+    padding: 0 !important;
+}
+
+section.cart-page-items .hsb-dual-tabs-unified a {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 9px !important;
+    height: 50px !important;
+    min-width: 175px !important;
+    box-sizing: border-box !important;
+    text-decoration: none !important;
+}
+
+section.cart-page-items .hsb-dual-tabs-unified a.is-active {
+    color: #fff !important;
+    background: #735936 !important;
+    border-color: #735936 !important;
+}
+
+section.cart-page-items .hsb-dual-tabs-unified a:not(.is-active) {
+    color: #735936 !important;
+    background: #fff !important;
+}
+
+@media (max-width: 560px) {
+    section.cart-page-items .hsb-dual-tabs-unified a {
+        min-width: 0 !important;
+        flex: 1 1 0 !important;
+        padding: 0 8px !important;
+    }
+}

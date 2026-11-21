@@ -5,6 +5,11 @@
 
 defined('ABSPATH') || exit;
 
+if (isset($_GET["hsb_view"]) && "direct" === sanitize_key(wp_unslash($_GET["hsb_view"]))) {
+    include get_template_directory() . "/inc/direct-cart.php";
+    return;
+}
+
 if (!function_exists('WC')) {
     return;
 }
@@ -182,8 +187,15 @@ foreach ($items as $item) {
 }
 ?>
 
+<?php /* HSB_QUOTE_EMPTY_ROUTING */
+if (empty($items)) {
+    include get_template_directory() . "/woocommerce/cart/cart-empty.php";
+    return;
+}
+?>
 <section class="cart-page-items preinvoice-page">
-    <div class="container">
+<div class="container">
+<?php get_template_part("inc/cart-switcher"); ?>
 
         <?php if (!empty($_GET['preinvoice_error'])) : ?>
             <div class="woocommerce-error preinvoice-error-message">

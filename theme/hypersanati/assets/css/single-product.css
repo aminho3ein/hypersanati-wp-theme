@@ -7651,3 +7651,352 @@ body.single-product .review-form-card {
 
 }
 
+
+/* ====================================================
+   HSB UNIFIED DIRECT PURCHASE CARD V1
+   Matches the visual structure of the inquiry card
+   ==================================================== */
+
+.hsb-sp-direct--unified {
+    display: block;
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__price {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 16px 0;
+    padding: 15px;
+    border: 1px solid #eae7e1;
+    border-radius: 12px;
+    background: #f7f7f6;
+    text-align: right;
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__price > span {
+    color: #806e58;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__price strong {
+    color: #168052;
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1.7;
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 0;
+}
+
+.hsb-sp-direct--unified .hsb-sp-qty-field {
+    width: 100%;
+}
+
+.hsb-sp-direct--unified .hsb-sp-qty {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.hsb-sp-direct--unified .hsb-sp-qty input {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 11px;
+    background: #168052;
+    color: #fff;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__submit:hover:not(:disabled) {
+    background: #106a43;
+    transform: translateY(-1px);
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__submit:disabled {
+    background: #b4b4b4;
+    cursor: not-allowed;
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+    color: #8e8171;
+    font-size: 12px;
+    text-align: center;
+}
+
+
+
+/* HSB preinvoice button icon */
+.hsb-preinvoice-btn-icon {
+    font-size: 1.05em;
+    margin-inline-start: 0;
+    margin-inline-end: 10px;
+    vertical-align: middle;
+}
+
+.hsb-sp-preinvoice-form button[type="submit"],
+.hsb-sp-inquiry .single_add_to_cart_button,
+.hsb-sp-inquiry .add-to-cart,
+.hsb-sp-inquiry button[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.hsb-sp-preinvoice-form button[type="submit"] span {
+    line-height: 1;
+}
+
+/* =====================================================
+   HSB PERSISTENT PREINVOICE ICON V1
+   Icon survives JavaScript textContent changes.
+   ===================================================== */
+
+.hsb-sp-preinvoice-form
+.preinvoice-add-button.hsb-sp-add-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+}
+
+
+
+
+/* HSB PREINVOICE BUTTON TYPOGRAPHY MATCH V1 */
+
+/* Match direct-purchase button typography */
+.hsb-sp-inquiry .preinvoice-add-button.hsb-sp-add-button {
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: normal;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Match icon size and alignment */
+.hsb-sp-inquiry .preinvoice-add-button.hsb-sp-add-button > i {
+    font-size: 1.125em;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+/* HSB PRODUCT INTRO HEADINGS V2 */
+
+body.single-product #desc .desc-main-card .desc-content :is(h1,h2,h3,h4,h5,h6) {
+clear: both;
+    text-align: right;
+    letter-spacing: normal;
+    scroll-margin-top: 110px;
+    overflow-wrap: anywhere;
+}
+
+body.single-product #desc .desc-main-card .desc-content h1 {
+font-size: clamp(27px,2.5vw,36px);
+    font-weight: 900;
+    line-height: 1.7;
+    color: #252b30;
+    margin: 40px 0 22px;
+    padding: 0 0 15px;
+    border-bottom: 3px solid #806139;
+}
+
+body.single-product #desc .desc-main-card .desc-content h2 {
+font-size: clamp(25px,2.2vw,34px);
+    font-weight: 900;
+    line-height: 1.8;
+    color: #6f4b29;
+    margin: 42px 0 22px;
+    padding: 16px 22px 16px 18px;
+    border-right: 5px solid #c49a62;
+    border-radius: 14px;
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(232,221,205,0.42) 58%,
+        rgba(218,203,182,0.82) 100%
+    );
+    box-shadow: inset 0 0 0 1px rgba(196,154,98,0.18);
+}
+
+body.single-product #desc .desc-main-card .desc-content h3 {
+font-size: clamp(20px,1.7vw,24px);
+    font-weight: 800;
+    line-height: 1.9;
+    color: #76512f;
+    margin: 30px 0 17px;
+    padding: 4px 16px 4px 0;
+    border-right: 4px solid #c09a68;
+    border-bottom: 0;
+    background: transparent;
+}
+
+body.single-product #desc .desc-main-card .desc-content h4 {
+font-size: 19px;
+    font-weight: 800;
+    line-height: 1.8;
+    color: #554432;
+    margin: 26px 0 14px;
+    padding-right: 12px;
+    border-right: 3px solid #bb9b70;
+}
+
+body.single-product #desc .desc-main-card .desc-content h5 {
+font-size: 17px;
+    font-weight: 750;
+    line-height: 1.85;
+    color: #765a3c;
+    margin: 22px 0 12px;
+}
+
+body.single-product #desc .desc-main-card .desc-content h6 {
+font-size: 15px;
+    font-weight: 750;
+    line-height: 1.9;
+    color: #626b72;
+    margin: 19px 0 11px;
+    text-decoration: underline;
+    text-decoration-color: #d7bd9b;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 7px;
+}
+
+body.single-product #desc .desc-main-card .desc-content h5::before {
+content: "◆";
+    color: #c4a57e;
+    font-size: 10px;
+    margin-left: 9px;
+}
+
+
+/* Long-description paragraphs only */
+body.single-product #desc .desc-main-card .desc-content p {
+    line-height: 2.15;
+    overflow-wrap: anywhere;
+}
+
+/* Avoid accidentally styling the product's main title. */
+body.single-product #desc .desc-section-head h2 {
+    background: none;
+}
+
+/* Responsive tables inside product descriptions */
+body.single-product #desc .desc-main-card .desc-content
+:is(.obt-container, .wp-block-table, .hsb-product-table-scroll) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e5d9cb;
+    border-radius: 12px;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.single-product #desc .desc-main-card .desc-content table {
+    width: 100%;
+    min-width: 480px;
+    table-layout: auto;
+    border-collapse: collapse;
+    direction: rtl;
+}
+
+body.single-product #desc .desc-main-card .desc-content table th {
+    padding: 14px;
+    background: #806139;
+    color: #fff;
+    font-weight: 800;
+    text-align: right;
+}
+
+body.single-product #desc .desc-main-card .desc-content table td {
+    padding: 14px;
+    line-height: 2;
+    border-bottom: 1px solid #e9e5df;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+body.single-product #desc .desc-main-card .desc-content
+table tbody tr:nth-child(odd) > * {
+    background: #fff;
+}
+
+body.single-product #desc .desc-main-card .desc-content
+table tbody tr:nth-child(even) > * {
+    background: #f3f4f4;
+}
+
+body.single-product #desc .desc-main-card .desc-content
+table tbody tr:hover > * {
+    background: #f1e6d5;
+}
+
+/* Mobile headings */
+@media (max-width: 700px) {
+    body.single-product #desc .desc-main-card .desc-content h2 {
+        font-size: 22px !important;
+    }
+
+    body.single-product #desc .desc-main-card .desc-content h3 {
+        font-size: 19px !important;
+    }
+
+    body.single-product #desc .desc-main-card .desc-content h4 {
+        font-size: 17px !important;
+    }
+}
+
+
+/* H3: side line, no old decorative square */
+body.single-product #desc .desc-main-card .desc-content h3::before {
+    content: none !important;
+    display: none !important;
+}
+
+
+/* HSB PRODUCT INTRO H2 SIZE FIX */
+
+body.single-product #desc .desc-main-card .desc-content h2 {
+    font-size: 22px !important;
+    line-height: 1.75 !important;
+    font-weight: 800 !important;
+    padding: 10px 18px !important;
+    margin: 28px 0 16px !important;
+}
+
+@media (max-width: 700px) {
+    body.single-product #desc .desc-main-card .desc-content h2 {
+        font-size: 19px !important;
+        padding: 9px 13px !important;
+        margin: 24px 0 14px !important;
+    }
+}
+

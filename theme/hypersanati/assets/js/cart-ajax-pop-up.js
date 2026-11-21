@@ -61,7 +61,36 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // HSB UNIFIED POPUP V1
+  // Restore the direct-sale state after a quote popup.
+  function resetDirectPopup() {
+    section.classList.remove("hsb-inquiry-popup");
+
+    const prices = popup.querySelector(".cart-ajax-popup__prices");
+    if (prices) prices.style.removeProperty("display");
+
+    const subtitle = popup.querySelector(
+      ".cart-ajax-popup__notice-subtitle"
+    );
+    if (subtitle) {
+      subtitle.textContent = "را به سبد خرید خود اضافه کردید.";
+    }
+
+    if (cartUrl) {
+      cartUrl.textContent = "ویرایش سبد خرید";
+    }
+
+    if (checkoutUrl) {
+      checkoutUrl.hidden = false;
+      checkoutUrl.style.removeProperty("display");
+    }
+
+    const oldQuantity = popup.querySelector(".hsb-quote-popup-qty");
+    if (oldQuantity) oldQuantity.remove();
+  }
+
   function fillPopup(data) {
+    resetDirectPopup();
     const productTitle = data.product_title || "این محصول";
 
     if (summaryTitle) {
@@ -89,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (cartUrl && data.cart_url) {
-      cartUrl.href = data.cart_url;
+      cartUrl.href = new URL(data.cart_url, window.location.href).toString().replace(/\?.*$/, "") + "?hsb_view=direct";
     }
 
     if (checkoutUrl && data.checkout_url) {
@@ -147,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
       formData.append("product_id", submitButton.value);
     }
 
-    const oldButtonText = submitButton.textContent;
+    const oldButtonHTML = submitButton.innerHTML;
 
     submitButton.classList.add("loading");
     submitButton.disabled = true;
@@ -171,6 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         fillPopup(response.data);
+        document.dispatchEvent(new Event("hsb_direct_cart_updated"));
         updateFragments(response.data.fragments);
         openPopup();
       })
@@ -180,7 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .finally(function () {
         submitButton.classList.remove("loading");
         submitButton.disabled = false;
-        submitButton.textContent = oldButtonText;
+        submitButton.innerHTML = oldButtonHTML;
       });
   });
 });

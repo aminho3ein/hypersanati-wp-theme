@@ -1,0 +1,295 @@
+/* Header: independent WooCommerce cart icon */
+.hsb-direct-header-cart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.hsb-direct-header-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hsb-direct-header-badge {
+    position: absolute;
+    top: -9px;
+    right: -12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 4px;
+    border-radius: 20px;
+    background: #168052;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    box-sizing: border-box;
+    direction: ltr;
+}
+
+.hsb-direct-header-badge.is-empty {
+    background: #888;
+}
+
+/* Cart navigation: quantity above each button */
+.hsb-dual-cart-tabs a {
+    position: relative !important;
+}
+
+.hsb-dual-cart-tabs .hsb-tab-count {
+    position: absolute !important;
+    top: -11px !important;
+    right: 10px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 24px !important;
+    height: 24px !important;
+    padding: 0 6px !important;
+    border: 2px solid #fff !important;
+    border-radius: 30px !important;
+    background: #168052 !important;
+    color: #fff !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    box-sizing: border-box !important;
+    line-height: 1 !important;
+    white-space: nowrap;
+    z-index: 2;
+}
+
+.hsb-dual-cart-tabs a:not(.is-active) .hsb-tab-count {
+    background: #735936 !important;
+}
+
+.hsb-dual-cart-tabs {
+    padding-top: 12px !important;
+}
+
+/* =====================================================
+   HSB UNIFIED COUNTER BADGES V2
+   ===================================================== */
+
+/* Header icon alignment */
+.hsb-direct-header-link,
+.preinvoice-cart-link {
+    position: relative;
+}
+
+.hsb-direct-header-link > i,
+.preinvoice-cart-link > i {
+    font-size: 20px;
+    line-height: 1;
+}
+
+/* Direct cart badge: match existing red header badge */
+.hsb-direct-header-link .hsb-direct-header-badge {
+    position: absolute !important;
+    top: -9px !important;
+    right: -11px !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-width: 23px !important;
+    height: 23px !important;
+    padding: 0 4px !important;
+
+    box-sizing: border-box !important;
+    border: 3px solid #fff !important;
+    border-radius: 50px !important;
+
+    background: #168052 !important;
+    color: #fff !important;
+
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+
+    text-align: center !important;
+    white-space: nowrap;
+    z-index: 5;
+}
+
+/* Both cart-switcher badges: same round shape and dimensions */
+.hsb-dual-cart-tabs .hsb-tab-count {
+    position: absolute !important;
+    top: -12px !important;
+    right: 10px !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-width: 26px !important;
+    height: 26px !important;
+    padding: 0 5px !important;
+
+    box-sizing: border-box !important;
+    border: 3px solid #fff !important;
+    border-radius: 50px !important;
+
+    color: #fff !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+
+    text-align: center !important;
+    white-space: nowrap;
+    z-index: 5;
+}
+
+/* Direct purchase = green */
+.hsb-dual-cart-tabs [data-hsb-count="direct"] {
+    background: #168052 !important;
+}
+
+/* Quote = red */
+.hsb-dual-cart-tabs [data-hsb-count="quote"] {
+    background: #e53935 !important;
+}
+
+/* Maintain badges above the button edges */
+.hsb-dual-cart-tabs a {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+.hsb-dual-cart-tabs {
+    overflow: visible !important;
+}
+
+
+/* =====================================================
+   HSB BADGE ALIGNMENT V3
+   ===================================================== */
+
+/* ---------- HEADER BADGES: same vertical alignment ---------- */
+
+.preinvoice-cart-link,
+.hsb-direct-header-link {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: visible !important;
+}
+
+.preinvoice-cart-link .preinvoice-count-badge,
+.hsb-direct-header-link .hsb-direct-header-badge {
+    position: absolute !important;
+    top: -10px !important;
+    right: -11px !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-width: 23px !important;
+    height: 23px !important;
+    padding: 0 4px !important;
+
+    border: 3px solid #fff !important;
+    border-radius: 999px !important;
+    box-sizing: border-box !important;
+
+    color: #fff !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    z-index: 9 !important;
+}
+
+/* Header colors fixed */
+.preinvoice-cart-link .preinvoice-count-badge {
+    background: #e53935 !important;
+}
+
+.hsb-direct-header-link .hsb-direct-header-badge {
+    background: #168052 !important;
+}
+
+/* ---------- CART PAGE BUTTON BADGES: same position ---------- */
+
+.hsb-dual-cart-tabs a {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+.hsb-dual-cart-tabs .hsb-tab-count {
+    position: absolute !important;
+    top: -11px !important;
+    right: 10px !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-width: 25px !important;
+    height: 25px !important;
+    padding: 0 5px !important;
+
+    border: 3px solid #fff !important;
+    border-radius: 999px !important;
+    box-sizing: border-box !important;
+
+    color: #fff !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    z-index: 5 !important;
+}
+
+/* Fixed colors regardless of active state */
+.hsb-dual-cart-tabs [data-hsb-count="direct"] {
+    background: #168052 !important;
+}
+
+.hsb-dual-cart-tabs [data-hsb-count="quote"] {
+    background: #e53935 !important;
+}
+
+/* Even when tab is active, badge color must remain its own color */
+.hsb-dual-cart-tabs a.is-active [data-hsb-count="direct"],
+.hsb-dual-cart-tabs a[aria-current="page"] [data-hsb-count="direct"] {
+    background: #168052 !important;
+    color: #fff !important;
+}
+
+.hsb-dual-cart-tabs a.is-active [data-hsb-count="quote"],
+.hsb-dual-cart-tabs a[aria-current="page"] [data-hsb-count="quote"] {
+    background: #e53935 !important;
+    color: #fff !important;
+}
+
+
+/* =====================================================
+   HSB HEADER CART ORDER V1
+   Purchase cart on right, quote cart on left
+   ===================================================== */
+
+/* Only the header cart controls */
+header .hsb-direct-header-cart {
+    order: -1 !important;
+}
+
+header .cart.preinvoice-cart {
+    order: 0 !important;
+}
+
+/* Preserve the original styling of both header icons */
+header .hsb-direct-header-cart,
+header .cart.preinvoice-cart {
+    flex-shrink: 0;
+}
+

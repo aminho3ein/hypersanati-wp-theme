@@ -1,0 +1,11 @@
+/* Stock-aware Shop cards; no changes to the original card layout. */
+
+.hsb-quick-card-controls .hsb-stock-unavailable {
+    background: #ece8e3 !important;
+    color: #817971 !important;
+    border-color: #ddd6ce !important;
+    box-shadow: none !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    opacity: 1 !important;
+}

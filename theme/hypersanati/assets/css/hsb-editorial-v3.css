@@ -1,0 +1,445 @@
+/* HSB EDITORIAL V3 - SCOPED TO ARTICLE BODY */
+
+body.single-post .hsb-editorial-body {
+    direction: rtl;
+    min-width: 0;
+    overflow-wrap: break-word;
+}
+
+/* Six distinct heading levels */
+body.single-post .hsb-editorial-body :is(h1,h2,h3,h4,h5,h6) {
+    clear: both;
+    text-align: right;
+    letter-spacing: normal;
+    scroll-margin-top: 110px;
+    overflow-wrap: anywhere;
+}
+
+body.single-post .hsb-editorial-body h1 {
+    font-size: clamp(27px,2.5vw,36px);
+    font-weight: 900;
+    line-height: 1.7;
+    color: #252b30;
+    margin: 40px 0 22px;
+    padding: 0 0 15px;
+    border-bottom: 3px solid #806139;
+}
+
+body.single-post .hsb-editorial-body h2 {
+    font-size: clamp(25px,2.2vw,34px);
+    font-weight: 900;
+    line-height: 1.8;
+    color: #6f4b29;
+    margin: 42px 0 22px;
+    padding: 16px 22px 16px 18px;
+    border-right: 5px solid #c49a62;
+    border-radius: 14px;
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(232,221,205,0.42) 58%,
+        rgba(218,203,182,0.82) 100%
+    );
+    box-shadow: inset 0 0 0 1px rgba(196,154,98,0.18);
+}
+
+body.single-post .hsb-editorial-body h3 {
+    font-size: clamp(20px,1.7vw,24px);
+    font-weight: 800;
+    line-height: 1.9;
+    color: #76512f;
+    margin: 30px 0 17px;
+    padding: 4px 16px 4px 0;
+    border-right: 4px solid #c09a68;
+    border-bottom: 0;
+    background: transparent;
+}
+
+body.single-post .hsb-editorial-body h4 {
+    font-size: 19px;
+    font-weight: 800;
+    line-height: 1.8;
+    color: #554432;
+    margin: 26px 0 14px;
+    padding-right: 12px;
+    border-right: 3px solid #bb9b70;
+}
+
+body.single-post .hsb-editorial-body h5 {
+    font-size: 17px;
+    font-weight: 750;
+    line-height: 1.85;
+    color: #765a3c;
+    margin: 22px 0 12px;
+}
+
+body.single-post .hsb-editorial-body h5::before {
+    content: "◆";
+    color: #c4a57e;
+    font-size: 10px;
+    margin-left: 9px;
+}
+
+body.single-post .hsb-editorial-body h6 {
+    font-size: 15px;
+    font-weight: 750;
+    line-height: 1.9;
+    color: #626b72;
+    margin: 19px 0 11px;
+    text-decoration: underline;
+    text-decoration-color: #d7bd9b;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 7px;
+}
+
+/* Responsive striped tables */
+body.single-post .hsb-editorial-body
+:is(.olfat-brand-table,.wp-block-table,.hsb-table-scroll) {
+    max-width: 100%;
+    margin-block: 24px;
+}
+
+body.single-post .hsb-editorial-body
+:is(.obt-container,.wp-block-table,.hsb-table-scroll) {
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e5d9cb;
+    border-radius: 13px;
+    box-shadow: 0 5px 20px rgba(50,40,30,.045);
+    -webkit-overflow-scrolling: touch;
+}
+
+body.single-post .hsb-editorial-body
+:is(.olfat-brand-table,.wp-block-table,.hsb-table-scroll) table {
+    width: 100%;
+    min-width: 540px;
+    table-layout: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    direction: rtl;
+    margin: 0;
+}
+
+body.single-post .hsb-editorial-body
+:is(.olfat-brand-table,.wp-block-table,.hsb-table-scroll) thead th {
+    background: #806139;
+    color: white;
+    padding: 14px 16px;
+    border: 0;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.9;
+    text-align: right;
+}
+
+body.single-post .hsb-editorial-body
+:is(.olfat-brand-table,.wp-block-table,.hsb-table-scroll)
+tbody tr:nth-child(odd) > * {
+    background: #fff;
+}
+
+body.single-post .hsb-editorial-body
+:is(.olfat-brand-table,.wp-block-table,.hsb-table-scroll)
+tbody tr:nth-child(even) > * {
+    background: #f3f4f4;
+}
+
+body.single-post .hsb-editorial-body
+:is(.olfat-brand-table,.wp-block-table,.hsb-table-scroll)
+tbody tr:hover > * {
+    background: #f1e6d5;
+}
+
+body.single-post .hsb-editorial-body
+:is(.olfat-brand-table,.wp-block-table,.hsb-table-scroll)
+tbody td {
+    padding: 14px 16px;
+    border: 0;
+    border-bottom: 1px solid #e9e5df;
+    text-align: right;
+    vertical-align: middle;
+    line-height: 2;
+    font-size: 14px;
+    color: #3a4146;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    transition: background-color .2s ease;
+}
+
+body.single-post .hsb-editorial-body .obt-brand {
+    color: #674626;
+    font-weight: 800;
+}
+
+/* Automatically styled notes */
+body.single-post .hsb-editorial-body p.hsb-editorial-note {
+    position: relative;
+    margin: 25px 0;
+    padding: 18px 65px 18px 20px;
+    border: 1px solid #e7d4b9;
+    border-right: 4px solid #a47b48;
+    border-radius: 12px;
+    background: #f6eee3;
+    color: #5b4731;
+    line-height: 2.1;
+}
+
+body.single-post .hsb-editorial-body p.hsb-editorial-note::before {
+    content: "!";
+    position: absolute;
+    right: 17px;
+    top: 18px;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #a47b48;
+    color: #fff;
+    font-weight: 900;
+    font-size: 19px;
+}
+
+/* TOC: actual theme selectors, outside article body */
+body.single-post .article-toc-box .article-toc-list,
+body.single-post .article-toc-box .article-toc-list li {
+    list-style: none !important;
+    list-style-type: none !important;
+}
+
+body.single-post .article-toc-box .article-toc-list {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+body.single-post .article-toc-box .article-toc-list li {
+    padding-right: 0 !important;
+    background-image: none !important;
+}
+
+body.single-post .article-toc-box .article-toc-list li::before,
+body.single-post .article-toc-box .article-toc-list li::after,
+body.single-post .article-toc-box .article-toc-list li::marker {
+    content: none !important;
+    display: none !important;
+}
+
+body.single-post .article-toc-box .article-toc-list a {
+    display: block;
+    line-height: 1.9;
+    text-decoration: none;
+}
+
+/* Yoast FAQ accordion */
+body.single-post .hsb-editorial-body
+.schema-faq.wp-block-yoast-faq-block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 28px 0;
+}
+
+body.single-post .hsb-editorial-body .schema-faq-section {
+    overflow: hidden;
+    background: white;
+    border: 1px solid #e6ddd2;
+    border-radius: 13px;
+    box-shadow: 0 4px 17px rgba(35,35,35,.045);
+    transition: border-color .25s, box-shadow .25s;
+}
+
+body.single-post .hsb-editorial-body
+.schema-faq-section.hsb-faq-open {
+    border-color: #b89972;
+    box-shadow: 0 8px 25px rgba(91,65,35,.09);
+}
+
+body.single-post .hsb-editorial-body .schema-faq-question {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-height: 65px;
+    margin: 0;
+    padding: 16px 57px 16px 49px;
+    background: transparent;
+    color: #30363a;
+    direction: rtl;
+    text-align: right;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.9;
+    cursor: pointer;
+}
+
+body.single-post .hsb-editorial-body
+.schema-faq-question:hover,
+body.single-post .hsb-editorial-body
+.hsb-faq-open .schema-faq-question {
+    background: #faf5ee;
+}
+
+body.single-post .hsb-editorial-body
+.schema-faq-question::before {
+    content: "؟";
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    width: 29px;
+    height: 29px;
+    border-radius: 9px;
+    background: #efe1cf;
+    color: #855f36;
+    font-size: 18px;
+}
+
+body.single-post .hsb-editorial-body
+.schema-faq-question::after {
+    content: "+";
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    width: 29px;
+    height: 29px;
+    border-radius: 50%;
+    background: #f0e8dd;
+    color: #806139;
+    font-size: 22px;
+}
+
+body.single-post .hsb-editorial-body
+.hsb-faq-open .schema-faq-question::after {
+    content: "−";
+    background: #806139;
+    color: white;
+}
+
+body.single-post .hsb-editorial-body
+.schema-faq-question:focus-visible {
+    outline: 3px solid #ad895c;
+    outline-offset: -3px;
+}
+
+body.single-post .hsb-editorial-body
+.hsb-faq-enhanced .schema-faq-answer {
+    display: block;
+    box-sizing: border-box;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    margin: 0;
+    padding: 0 22px;
+    color: #626970;
+    font-size: 14px;
+    line-height: 2.1;
+    transition:
+        max-height .38s ease,
+        opacity .28s ease,
+        padding .38s ease,
+        visibility 0s linear .38s;
+}
+
+body.single-post .hsb-editorial-body
+.hsb-faq-enhanced.hsb-faq-open .schema-faq-answer {
+    visibility: visible;
+    opacity: 1;
+    padding: 5px 22px 20px;
+    transition:
+        max-height .38s ease,
+        opacity .28s ease,
+        padding .38s ease,
+        visibility 0s;
+}
+
+/* Numbered references */
+body.single-post .hsb-editorial-body ol.wp-block-footnotes {
+    counter-reset: hsb-ref;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 28px 0;
+    padding: 0;
+    list-style: none;
+}
+
+body.single-post .hsb-editorial-body
+.wp-block-footnotes > li {
+    position: relative;
+    counter-increment: hsb-ref;
+    margin: 0;
+    padding: 15px 58px 15px 20px;
+    list-style: none;
+    border: 1px solid #e6d9c8;
+    border-radius: 11px;
+    background: #fcf9f5;
+    color: #535960;
+    line-height: 2;
+    overflow-wrap: anywhere;
+}
+
+body.single-post .hsb-editorial-body
+.wp-block-footnotes > li::before {
+    content: counter(hsb-ref);
+    position: absolute;
+    right: 14px;
+    top: 15px;
+    display: grid;
+    place-items: center;
+    min-width: 29px;
+    height: 29px;
+    border-radius: 8px;
+    background: #efe2d1;
+    color: #76512d;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+body.single-post .hsb-editorial-body
+.wp-block-footnotes > li:hover {
+    background: #f4eadc;
+    border-color: #caa77d;
+}
+
+body.single-post .hsb-editorial-body
+.wp-block-footnotes a {
+    color: #79552f;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+}
+
+body.single-post .hsb-editorial-body
+.wp-block-footnotes a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width:700px) {
+    body.single-post .hsb-editorial-body h2 {
+        font-size: 22px;
+    }
+
+    body.single-post .hsb-editorial-body h3 {
+        font-size: 19px;
+    }
+
+    body.single-post .hsb-editorial-body h4 {
+        font-size: 17px;
+    }
+
+    body.single-post .hsb-editorial-body
+    p.hsb-editorial-note {
+        padding: 15px 54px 15px 14px;
+    }
+}
+
+@media (prefers-reduced-motion:reduce) {
+    body.single-post .hsb-editorial-body
+    .schema-faq-answer {
+        transition: none !important;
+    }
+}

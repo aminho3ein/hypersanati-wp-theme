@@ -1,0 +1,334 @@
+/* HSB UNIFIED POPUP FINAL V1 */
+
+/* Both sales flows use exactly the same outer layout. */
+#cartAjaxPopup {
+  direction: rtl;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+#cartAjaxPopup .cart-ajax-popup__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  direction: rtl;
+  min-height: 330px;
+  border: 0;
+  gap: 0;
+}
+
+/* Right column: selected product image. */
+#cartAjaxPopup .cart-ajax-popup__product {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 26px;
+  background: #f7f8f7;
+  border-left: 1px solid #e5e9e7;
+  min-width: 0;
+}
+
+#cartAjaxPopup .cart-ajax-popup__product-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#cartAjaxPopup .cart-ajax-popup__product-image {
+  width: min(100%, 270px);
+  height: 270px;
+  flex-shrink: 1;
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+}
+
+#cartAjaxPopup .cart-ajax-popup__product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Left column: confirmation, details, prices, actions. */
+#cartAjaxPopup .cart-ajax-popup__summary {
+  grid-column: 2;
+  grid-row: 1;
+  background: #fff;
+  border: 0;
+  padding: 25px;
+  justify-content: flex-start;
+  align-items: stretch;
+  min-width: 0;
+}
+
+#cartAjaxPopup .cart-ajax-popup__summary-box {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 15px;
+  text-align: right;
+  width: 100%;
+}
+
+#cartAjaxPopup .cart-ajax-popup__notice {
+  border-radius: 12px;
+  background: #e8f4ed;
+  border: 1px solid #cbe7d5;
+  padding: 12px;
+  margin: 0;
+}
+
+#cartAjaxPopup .cart-ajax-popup__summary-title {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.9;
+  text-align: right;
+}
+
+#cartAjaxPopup .cart-ajax-popup__summary-title::before {
+  content: "✓";
+  color: #138353;
+  font-weight: 900;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e4f5eb;
+  margin-left: 9px;
+}
+
+#cartAjaxPopup .cart-ajax-popup__product-text {
+  display: block;
+  background: #f6f7f7;
+  border: 1px solid #eceeed;
+  border-radius: 11px;
+  padding: 10px 12px;
+  line-height: 1.9;
+}
+
+#cartAjaxPopup .cart-ajax-popup__product-text p {
+  display: inline;
+  margin-left: 5px;
+  overflow-wrap: anywhere;
+}
+
+#cartAjaxPopup .cart-ajax-popup__prices {
+  margin: 0;
+  gap: 7px;
+  background: #f7f8f7;
+  border-radius: 10px;
+  padding: 13px;
+}
+
+#cartAjaxPopup .cart-ajax-popup__prices[hidden],
+#cartAjaxPopup #cartAjaxPopupCheckoutUrl[hidden],
+#cartAjaxPopup .cart-ajax-popup__bottom-title[hidden],
+#cartAjaxPopup #cartAjaxPopupSuggestions[hidden] {
+  display: none !important;
+}
+
+#cartAjaxPopup .cart-ajax-popup__actions {
+  margin-top: 4px;
+}
+
+#cartAjaxPopup .cart-ajax-popup__bottom {
+  padding: 20px 24px 24px;
+}
+
+#cartAjaxPopup .cart-ajax-popup__bottom-title {
+  margin-bottom: 15px;
+}
+
+#cartAjaxPopup .hsb-quote-popup-qty {
+  display: none !important;
+}
+
+@media (max-width: 700px) {
+  #cartAjaxPopup .cart-ajax-popup__top {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  #cartAjaxPopup .cart-ajax-popup__product {
+    grid-column: 1;
+    grid-row: 1;
+    border-left: 0;
+    border-bottom: 1px solid #e5e9e7;
+    padding: 12px;
+  }
+
+  #cartAjaxPopup .cart-ajax-popup__product-image {
+    height: 160px;
+    width: min(100%, 190px);
+  }
+
+  #cartAjaxPopup .cart-ajax-popup__summary {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 16px;
+  }
+
+  #cartAjaxPopup .cart-ajax-popup__bottom {
+    padding: 16px;
+  }
+}
+
+/* =====================================================
+   HSB COMPACT POPUP V2
+   Applies to direct purchase and preinvoice together.
+   ===================================================== */
+
+/* Prevent the popup from exceeding the viewport. */
+#cartAjaxPopup {
+    max-height: calc(100dvh - 110px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+/* Compact two-column layout. */
+#cartAjaxPopup .cart-ajax-popup__top {
+    min-height: 0;
+    grid-template-columns:
+        minmax(0, 0.85fr)
+        minmax(0, 1.15fr);
+}
+
+/* Smaller product preview on the right. */
+#cartAjaxPopup .cart-ajax-popup__product {
+    min-height: 0;
+    padding: 18px;
+}
+
+#cartAjaxPopup .cart-ajax-popup__product-image {
+    width: 140px;
+    height: 140px;
+    max-width: 100%;
+    border-radius: 12px;
+}
+
+#cartAjaxPopup .cart-ajax-popup__product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Compact left panel. */
+#cartAjaxPopup .cart-ajax-popup__summary {
+    padding: 18px;
+}
+
+#cartAjaxPopup .cart-ajax-popup__summary-box {
+    gap: 10px;
+}
+
+/* Keep cart count on one line. */
+#cartAjaxPopup .cart-ajax-popup__summary-title {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    white-space: nowrap;
+    margin: 0;
+}
+
+#cartAjaxPopup .cart-ajax-popup__summary-title::before {
+    width: 22px;
+    height: 22px;
+    font-size: 0.8rem;
+    margin-left: 5px;
+}
+
+/* Reduce the space used by notice and product details. */
+#cartAjaxPopup .cart-ajax-popup__notice {
+    padding: 10px;
+}
+
+#cartAjaxPopup .cart-ajax-popup__product-text {
+    padding: 8px 10px;
+}
+
+#cartAjaxPopup .cart-ajax-popup__prices {
+    padding: 10px;
+    gap: 5px;
+}
+
+/* Two purchase buttons in one row. */
+#cartAjaxPopup .cart-ajax-popup__actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+    margin-top: 3px;
+}
+
+#cartAjaxPopup .cart-ajax-popup__actions .cart-ajax-popup__btn {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 10px 7px;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+/* Preinvoice has one action, so use the available width. */
+#cartAjaxPopupSection.hsb-unified-quote
+.cart-ajax-popup__actions {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+/* Tighter related products area. */
+#cartAjaxPopup .cart-ajax-popup__bottom {
+    padding: 14px 18px 18px;
+}
+
+#cartAjaxPopup .cart-ajax-popup__bottom-title {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+
+/* On narrow screens, don't crop headings or buttons. */
+@media (max-width: 700px) {
+    #cartAjaxPopup {
+        max-height: calc(100dvh - 35px);
+    }
+
+    #cartAjaxPopup .cart-ajax-popup__top {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #cartAjaxPopup .cart-ajax-popup__product {
+        padding: 12px;
+    }
+
+    #cartAjaxPopup .cart-ajax-popup__product-image {
+        width: 110px;
+        height: 110px;
+    }
+
+    #cartAjaxPopup .cart-ajax-popup__summary {
+        padding: 14px;
+    }
+
+    #cartAjaxPopup .cart-ajax-popup__summary-title {
+        white-space: normal;
+    }
+
+    #cartAjaxPopup .cart-ajax-popup__actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+    }
+
+    #cartAjaxPopup .cart-ajax-popup__actions .cart-ajax-popup__btn {
+        font-size: 0.72rem;
+        white-space: normal;
+    }
+}
+

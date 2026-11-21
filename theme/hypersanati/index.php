@@ -281,35 +281,62 @@ if (
      * sharing the same technical Part Number into the same
      * storefront family exactly like Shop.
      */
-    $featured_product_ids = get_posts(
-        array(
-            'post_type'              => 'product',
-            'post_status'            => 'publish',
-            'posts_per_page'         => 64,
-            'fields'                 => 'ids',
-            'orderby'                => 'rand',
-            'no_found_rows'          => true,
-            'update_post_meta_cache' => true,
-            'update_post_term_cache' => true,
-        )
-    );
+    /*
+     * HSB HOME SALES PRIORITY V2
+     * First priced and in-stock products, then random
+     * products to fill the featured family slots.
+     */
+
+    $hsb_priced_ids = get_posts(array(
+        'post_type'      => 'product',
+        'post_status'    => 'publish',
+        'posts_per_page' => 100,
+        'fields'         => 'ids',
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+        'no_found_rows'  => true,
+        'meta_query'     => array(
+            'relation' => 'AND',
+            array(
+                'key'     => '_price',
+                'value'   => 0,
+                'compare' => '>',
+                'type'    => 'DECIMAL',
+            ),
+            array(
+                'key'     => '_stock_status',
+                'value'   => 'instock',
+                'compare' => '=',
+            ),
+        ),
+    ));
+
+    $hsb_random_ids = get_posts(array(
+        'post_type'      => 'product',
+        'post_status'    => 'publish',
+        'posts_per_page' => 64,
+        'fields'         => 'ids',
+        'orderby'        => 'rand',
+        'no_found_rows'  => true,
+    ));
+
+    $featured_product_ids = array_values(array_unique(
+        array_merge($hsb_priced_ids, $hsb_random_ids)
+    ));
 
     $featured_families = array();
 
     if (!empty($featured_product_ids)) {
-        if (
-            function_exists(
-                'hsb_group_product_ids_by_part_number'
-            )
-        ) {
+        if (function_exists('hsb_group_product_ids_by_part_number')) {
             $featured_families =
                 hsb_group_product_ids_by_part_number(
                     $featured_product_ids
                 );
         } else {
-            foreach ($featured_product_ids as $product_id) {
+            foreach ($featured_product_ids as $id) {
                 $featured_families[] = array(
-                    'representative_id' => absint($product_id),
+                    'representative_id' => absint($id),
+                    'ids'               => array(absint($id)),
                     'version_count'     => 1,
                     'brand_count'       => 0,
                     'country_count'     => 0,
@@ -318,6 +345,52 @@ if (
         }
     }
 
+    /*
+     * Stable priority: any direct-purchasable product
+     * within the family puts that family first.
+     */
+    $hsb_ranked_families = array();
+
+    foreach ($featured_families as $index => $family) {
+        $rank = 2;
+
+        foreach ((array) ($family['ids'] ?? array(
+            $family['representative_id']
+        )) as $id) {
+            $product = wc_get_product(absint($id));
+
+            if (!$product) {
+                continue;
+            }
+
+            if (function_exists('hsb_dual_is_direct')
+                && hsb_dual_is_direct($product)) {
+                $rank = 0;
+                break;
+            }
+
+            if ('' !== $product->get_price()
+                && (float) $product->get_price() > 0) {
+                $rank = min($rank, 1);
+            }
+        }
+
+        $hsb_ranked_families[] = array(
+            'rank'   => $rank,
+            'index'  => $index,
+            'family' => $family,
+        );
+    }
+
+    usort($hsb_ranked_families, static function ($a, $b) {
+        return ($a['rank'] <=> $b['rank'])
+            ?: ($a['index'] <=> $b['index']);
+    });
+
+    $featured_families = array_column(
+        $hsb_ranked_families,
+        'family'
+    );
     $featured_families = array_slice(
         $featured_families,
         0,
