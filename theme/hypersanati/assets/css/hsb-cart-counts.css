@@ -24,7 +24,7 @@
     height: 19px;
     padding: 0 4px;
     border-radius: 20px;
-    background: #168052;
+    background: var(--hsb-header-badge-direct-bg);
     color: #fff;
     font-size: 11px;
     font-weight: 800;
@@ -33,7 +33,7 @@
 }
 
 .hsb-direct-header-badge.is-empty {
-    background: #888;
+    background: var(--hsb-header-badge-empty-bg);
 }
 
 /* Cart navigation: quantity above each button */
@@ -105,7 +105,7 @@
     border: 3px solid #fff !important;
     border-radius: 50px !important;
 
-    background: #168052 !important;
+    background: var(--hsb-header-badge-direct-bg) !important;
     color: #fff !important;
 
     font-size: 11px !important;
@@ -210,11 +210,11 @@
 
 /* Header colors fixed */
 .preinvoice-cart-link .preinvoice-count-badge {
-    background: #e53935 !important;
+    background: var(--hsb-header-badge-quote-bg) !important;
 }
 
 .hsb-direct-header-link .hsb-direct-header-badge {
-    background: #168052 !important;
+    background: var(--hsb-header-badge-direct-bg) !important;
 }
 
 /* ---------- CART PAGE BUTTON BADGES: same position ---------- */

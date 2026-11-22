@@ -460,7 +460,7 @@ input[type="radio"] {
 
 .my-navbar {
   display: flex;
-  background-color: var(--color-gray-navs);
+  background-color: var(--hsb-header-main-bg);
   width: 100%;
   height: 48px;
   border-bottom: 2px solid var(--color-gray);
@@ -544,11 +544,11 @@ ul li a:hover {
   width: 100%;
   height: 40px;
   padding: 0 0.75rem;
-  background: var(--color-primary-hover);
+  background: var(--hsb-header-top-bg);
 }
 
 .top-of-nav a {
-  color: var(--color-white);
+  color: var(--hsb-header-top-text);
   font-size: 0.75rem;
   font-weight: 500;
 }
@@ -567,7 +567,7 @@ ul li a:hover {
 
   padding: 0 1rem;
 
-  background-color: var(--color-gray-navs);
+  background-color: var(--hsb-header-main-bg);
 
   border-bottom: 1px solid var(--gray-300);
 
@@ -612,7 +612,7 @@ ul li a:hover {
   width: 24px;
   height: 2px;
 
-  background-color: var(--color-dark);
+  background-color: var(--hsb-header-hamburger-color);
 
   border-radius: 999px;
 
@@ -670,7 +670,7 @@ ul li a:hover {
     padding: 0;
 
     background:
-        var(--color-white);
+        var(--hsb-mobile-drawer-bg);
 
     border: 0 !important;
 
@@ -722,7 +722,7 @@ ul li a:hover {
     background:
         color-mix(
             in srgb,
-            var(--color-gray-navs) 72%,
+            var(--hsb-mobile-drawer-header-base) 72%,
             #fff
         );
 
@@ -815,7 +815,7 @@ ul li a:hover {
 
     border-radius: 11px;
 
-    background: #fff;
+    background: var(--hsb-mobile-close-bg);
 
     color:
         var(--color-dark);
@@ -842,10 +842,10 @@ ul li a:hover {
 
 .hsb-mobile-menu__close:hover {
     background:
-        var(--color-secondary);
+        var(--hsb-mobile-close-hover-bg);
 
     border-color:
-        var(--color-secondary);
+        var(--hsb-mobile-close-hover-bg);
 
     color: #fff;
 
@@ -928,7 +928,7 @@ ul li a:hover {
         transparent;
 
     color:
-        var(--color-dark);
+        var(--hsb-mobile-nav-text);
 
     font-size: 0.94rem;
     font-weight: 650;
@@ -3169,7 +3169,7 @@ button.handle-frame-section:disabled {
 
     border-radius: 12px;
 
-    background: #fff;
+    background: var(--hsb-account-dropdown-bg);
 
     box-shadow:
         0 16px 38px
@@ -3214,7 +3214,7 @@ button.handle-frame-section:disabled {
     border: 0 !important;
     border-radius: 8px;
 
-    color: #30383e;
+    color: var(--hsb-account-dropdown-text);
 
     font-size: 12px;
     font-weight: 750;
@@ -3516,11 +3516,9 @@ body.admin-bar
     border: 0 !important;
     border-radius: 10px !important;
 
-    background:
-        var(--color-secondary)
-        !important;
+    background: var(--hsb-header-icon-bg) !important;
 
-    color: #fff !important;
+    color: var(--hsb-header-icon-text) !important;
 
     box-shadow: none !important;
 
@@ -3553,13 +3551,7 @@ body.admin-bar
 .nav-actions
 .hsb-account-menu:focus-within
 .hsb-account-icon {
-    background:
-        color-mix(
-            in srgb,
-            var(--color-secondary) 86%,
-            #000
-        )
-        !important;
+    background: var(--hsb-header-icon-hover-bg) !important;
 
     color: #fff !important;
 }
@@ -3599,11 +3591,9 @@ body.admin-bar
     border: 0 !important;
     border-radius: 10px !important;
 
-    background:
-        var(--color-secondary)
-        !important;
+    background: var(--hsb-header-icon-bg) !important;
 
-    color: #fff !important;
+    color: var(--hsb-header-icon-text) !important;
 }
 
 .mobile-nav-actions
@@ -6596,4 +6586,371 @@ html {
         width: 100%;
     }
 
+}
+
+
+/* ============================================================
+   HSB CENTRAL DESIGN TOKENS V1
+   Source of truth for future appearance controls.
+
+   IMPORTANT:
+   These are aliases only. Components will be migrated
+   incrementally after visual approval.
+   ============================================================ */
+
+:root {
+
+  /* Brand */
+  --hsb-brand-primary: var(--color-primary);
+  --hsb-brand-secondary: var(--color-secondary);
+  --hsb-brand-primary-hover: var(--color-primary-hover);
+  --hsb-brand-primary-active: var(--color-primary-active);
+
+  /* Global surfaces */
+  --hsb-page-bg: var(--color-white);
+  --hsb-surface-bg: var(--color-white);
+  --hsb-surface-muted: var(--color-light);
+  --hsb-surface-border: var(--border-color);
+
+  /* Global text */
+  --hsb-text-primary: var(--color-dark);
+  --hsb-text-secondary: var(--gray-600);
+  --hsb-text-link: var(--color-link);
+  --hsb-text-link-hover: var(--color-link-hover);
+
+  /* Header */
+  --hsb-header-top-bg: var(--color-primary-hover);
+  --hsb-header-top-text: var(--color-white);
+  --hsb-header-main-bg: var(--color-gray-navs);
+  --hsb-header-nav-text: var(--color-dark);
+  --hsb-header-nav-active: var(--color-secondary);
+  --hsb-header-icon-bg: var(--color-secondary);
+  --hsb-header-icon-text: var(--color-white);
+  --hsb-header-badge-direct-bg: #168052;
+  --hsb-header-badge-quote-bg: #e53935;
+  --hsb-header-badge-text: #ffffff;
+  --hsb-header-badge-border: #ffffff;
+  --hsb-header-badge-empty-bg: #888888;
+
+  /* HSB HEADER TOKENS PHASE 2C */
+  --hsb-header-icon-hover-bg: color-mix(
+      in srgb,
+      var(--hsb-header-icon-bg) 86%,
+      #000
+  );
+  --hsb-account-dropdown-text: #30383e;
+
+
+  /* HSB HEADER TOKENS PHASE 2B */
+
+  --hsb-mobile-drawer-bg: var(--color-white);
+  --hsb-mobile-drawer-header-base: var(--color-gray-navs);
+  --hsb-mobile-nav-text: var(--color-dark);
+
+  --hsb-mobile-close-bg: #ffffff;
+  --hsb-mobile-close-hover-bg: var(--color-secondary);
+
+  --hsb-header-hamburger-color: var(--color-dark);
+
+  --hsb-account-dropdown-bg: #ffffff;
+
+
+  /* Footer */
+  --hsb-footer-bg: var(--color-dark);
+  --hsb-footer-text: var(--color-white);
+  --hsb-footer-heading: var(--color-white);
+  --hsb-footer-link: var(--color-white);
+  --hsb-footer-box-bg: var(--gray-800);
+  --hsb-footer-box-border: var(--gray-700);
+  --hsb-footer-contact-bg: var(--gray-800);
+  --hsb-footer-contact-heading-bg: var(--color-secondary);
+
+  /* General buttons */
+  --hsb-button-primary-bg: var(--color-primary);
+  --hsb-button-primary-text: var(--color-white);
+  --hsb-button-primary-hover-bg: var(--color-primary-hover);
+  --hsb-button-primary-border: var(--color-primary);
+
+  --hsb-button-secondary-bg: var(--color-secondary);
+  --hsb-button-secondary-text: var(--color-white);
+  --hsb-button-secondary-hover-bg: var(--color-primary);
+
+  /* Forms */
+  --hsb-input-bg: var(--color-white);
+  --hsb-input-text: var(--color-dark);
+  --hsb-input-border: var(--border-color);
+  --hsb-input-focus-border: var(--color-primary);
+
+  /* Commerce */
+  --hsb-direct-purchase-bg: #168052;
+  --hsb-direct-purchase-text: #ffffff;
+  --hsb-quote-request-bg: #735936;
+  --hsb-quote-request-text: #ffffff;
+
+  --hsb-product-card-bg: var(--color-white);
+  --hsb-product-card-border: var(--border-color);
+  --hsb-product-price-text: #168052;
+  --hsb-product-breadcrumb-bg: var(--color-product-breadcrumb-background);
+
+  /* Article typography */
+  --hsb-article-h1-text: var(--color-dark);
+  --hsb-article-h2-text: #6f4b29;
+  --hsb-article-h3-text: #76512f;
+  --hsb-article-h4-text: #554432;
+  --hsb-article-h5-text: #765a3c;
+  --hsb-article-h6-text: #626b72;
+
+  --hsb-article-h2-border: #c49a62;
+  --hsb-article-h3-border: #c09a68;
+  --hsb-article-h4-border: #bb9b70;
+  --hsb-article-h2-gradient-start: #dacbb6;
+  --hsb-article-h2-gradient-end: transparent;
+
+  /* Product description typography */
+  --hsb-product-h1-text: var(--hsb-article-h1-text);
+  --hsb-product-h2-text: var(--hsb-article-h2-text);
+  --hsb-product-h3-text: var(--hsb-article-h3-text);
+  --hsb-product-h4-text: var(--hsb-article-h4-text);
+  --hsb-product-h5-text: var(--hsb-article-h5-text);
+  --hsb-product-h6-text: var(--hsb-article-h6-text);
+
+  --hsb-product-h2-border: var(--hsb-article-h2-border);
+  --hsb-product-h3-border: var(--hsb-article-h3-border);
+  --hsb-product-h4-border: var(--hsb-article-h4-border);
+
+  --hsb-product-h2-gradient-start: var(--hsb-article-h2-gradient-start);
+  --hsb-product-h2-gradient-end: var(--hsb-article-h2-gradient-end);
+
+  /* Breadcrumbs */
+  --hsb-article-breadcrumb-bg: transparent;
+  --hsb-article-breadcrumb-text: var(--gray-600);
+  --hsb-product-breadcrumb-text: var(--gray-700);
+
+  /* Table design */
+  --hsb-table-head-bg: #806139;
+  --hsb-table-head-text: #ffffff;
+  --hsb-table-row-odd-bg: #ffffff;
+  --hsb-table-row-even-bg: #f3f4f4;
+  --hsb-table-row-hover-bg: #f1e6d5;
+  --hsb-table-border: #e5d9cb;
+
+  /* Article table of contents */
+  --hsb-toc-bg: #eeeeee;
+  --hsb-toc-text: var(--color-dark);
+  --hsb-toc-active-bg: #ffffff;
+  --hsb-toc-active-text: var(--color-secondary);
+  --hsb-toc-hover-bg: #f5f2ec;
+
+  /* Article notes */
+  --hsb-note-bg: #f8f4ee;
+  --hsb-note-text: var(--color-dark);
+  --hsb-note-border: var(--color-primary);
+
+  /* FAQ */
+  --hsb-faq-question-bg: var(--color-white);
+  --hsb-faq-answer-bg: var(--color-white);
+  --hsb-faq-active-bg: #f5f2ec;
+  --hsb-faq-border: var(--border-color);
+
+  /* Back to top */
+  --hsb-back-to-top-bg: var(--color-secondary);
+  --hsb-back-to-top-icon: var(--color-white);
+  --hsb-back-to-top-hover-bg: var(--color-primary);
+
+}
+
+
+
+/* ============================================================
+   HSB MOBILE QUICK ACTIONS V1
+   Compact icon-only quick action menu
+   ============================================================ */
+
+:root {
+    --hsb-mobile-quick-bg: var(--hsb-header-icon-bg);
+    --hsb-mobile-quick-text: var(--hsb-header-icon-text);
+    --hsb-mobile-quick-panel-bg: var(--hsb-header-main-bg);
+    --hsb-mobile-quick-panel-border: var(--gray-300);
+    --hsb-mobile-quick-shadow: rgba(30, 37, 43, .16);
+}
+
+.hsb-mobile-quick-toggle {
+    display: none;
+}
+
+@media (max-width: 991.98px) {
+
+    .hsb-navbar-inner {
+        min-width: 0;
+    }
+
+    .hsb-navbar-inner > .navbar-brand {
+        min-width: 0;
+        max-width: calc(100vw - 145px);
+    }
+
+    .hsb-navbar-inner > .navbar-brand
+    .custom-logo-link {
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .hsb-navbar-inner > .navbar-brand
+    .custom-logo {
+        max-width: 100% !important;
+        width: auto !important;
+        height: auto !important;
+        max-height: 48px;
+        object-fit: contain;
+    }
+
+    .hsb-navbar-inner > .menu-and-cart {
+        position: relative;
+        flex: 1 1 auto;
+        min-width: 96px;
+        gap: 8px;
+        overflow: visible;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .hsb-navbar-inner
+    .hsb-mobile-quick-toggle {
+        display: inline-flex !important;
+        flex: 0 0 44px;
+        width: 44px;
+        min-width: 44px;
+        height: 44px;
+        min-height: 44px;
+        padding: 0;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 10px;
+        background: var(--hsb-mobile-quick-bg);
+        color: var(--hsb-mobile-quick-text);
+        font-size: 20px;
+        cursor: pointer;
+        transition:
+            background-color .2s ease,
+            transform .2s ease;
+    }
+
+    .hsb-navbar-inner
+    .hsb-mobile-quick-toggle:hover,
+    .hsb-navbar-inner
+    .hsb-mobile-quick-toggle[aria-expanded="true"] {
+        background: var(--hsb-header-icon-bg);
+    }
+
+    .hsb-navbar-inner
+    .hsb-mobile-quick-toggle[aria-expanded="true"] {
+        transform: translateY(1px);
+    }
+
+    .hsb-navbar-inner
+    .hsb-mobile-quick-toggle:focus-visible {
+        outline: 3px solid var(--hsb-brand-primary);
+        outline-offset: 3px;
+    }
+
+    /* Existing three actions become a floating panel. */
+    .hsb-navbar-inner > .menu-and-cart
+    > .mobile-nav-actions {
+        position: absolute;
+        z-index: 1200;
+        top: calc(100% + 10px);
+        left: 0;
+        right: auto;
+
+        width: max-content;
+        max-width: calc(100vw - 32px);
+        min-width: 188px;
+
+        display: flex !important;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        margin: 0 !important;
+        padding: 12px !important;
+
+        border: 1px solid var(--hsb-mobile-quick-panel-border);
+        border-radius: 15px;
+        background: var(--hsb-mobile-quick-panel-bg);
+        box-shadow:
+            0 12px 28px var(--hsb-mobile-quick-shadow);
+
+        list-style: none;
+
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(-7px);
+
+        transition:
+            opacity .2s ease,
+            visibility .2s ease,
+            transform .2s ease;
+    }
+
+    .hsb-navbar-inner > .menu-and-cart
+    > .mobile-nav-actions.is-open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .hsb-navbar-inner
+    .mobile-nav-actions > li,
+    .hsb-navbar-inner
+    .mobile-nav-actions > .cart {
+        flex: 0 0 44px;
+        width: 44px;
+        height: 44px;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none;
+    }
+
+    .hsb-navbar-inner
+    .mobile-nav-actions
+    .preinvoice-cart-link,
+    .hsb-navbar-inner
+    .mobile-nav-actions
+    .hsb-account-icon {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        margin: 0 !important;
+    }
+
+    .hsb-navbar-inner
+    .mobile-nav-actions
+    .preinvoice-count-badge,
+    .hsb-navbar-inner
+    .mobile-nav-actions
+    .hsb-direct-header-badge {
+        z-index: 3;
+    }
+}
+
+@media (max-width: 359px) {
+    .hsb-navbar-inner > .navbar-brand {
+        max-width: calc(100vw - 155px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hsb-mobile-quick-toggle,
+    .hsb-navbar-inner > .menu-and-cart
+    > .mobile-nav-actions {
+        transition: none !important;
+    }
 }

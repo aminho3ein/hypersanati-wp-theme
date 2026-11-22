@@ -239,7 +239,25 @@ if (!$hsb_order_tracking_url) {
 
     <!-- Hamburger button mobile only -->
     <div class="menu-and-cart">
-      <ul class="mobile-nav-actions">
+      <!-- HSB MOBILE QUICK ACTIONS V1 -->
+     <button
+       type="button"
+       class="hsb-mobile-quick-toggle"
+       id="hsbMobileQuickToggle"
+       aria-label="دسترسی سریع به حساب و سبدهای خرید"
+       aria-controls="hsbMobileQuickActions"
+       aria-expanded="false"
+       title="دسترسی سریع"
+     >
+       <i class="fa-solid fa-grip" aria-hidden="true"></i>
+     </button>
+
+     <ul
+       class="mobile-nav-actions"
+       id="hsbMobileQuickActions"
+       aria-hidden="true"
+       inert
+     >
 
         <div class="cart preinvoice-cart">
           <a

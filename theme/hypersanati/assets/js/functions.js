@@ -270,3 +270,116 @@ document.addEventListener(
     }
   }
 );
+
+
+
+/* ============================================================
+   HSB MOBILE QUICK ACTIONS V1
+   ============================================================ */
+(function () {
+    "use strict";
+
+    function initQuickActions() {
+        const toggle = document.getElementById(
+            "hsbMobileQuickToggle"
+        );
+
+        const panel = document.getElementById(
+            "hsbMobileQuickActions"
+        );
+
+        const hamburger = document.getElementById(
+            "hamburgerBtn"
+        );
+
+        if (!toggle || !panel || toggle.dataset.hsbReady) {
+            return;
+        }
+
+        toggle.dataset.hsbReady = "1";
+
+        const mobile = window.matchMedia(
+            "(max-width: 991.98px)"
+        );
+
+        function close() {
+            panel.classList.remove("is-open");
+
+            toggle.setAttribute(
+                "aria-expanded", "false"
+            );
+
+            panel.setAttribute(
+                "aria-hidden", "true"
+            );
+
+            panel.setAttribute("inert", "");
+        }
+
+        function open() {
+            if (!mobile.matches) return;
+
+            panel.classList.add("is-open");
+
+            toggle.setAttribute(
+                "aria-expanded", "true"
+            );
+
+            panel.setAttribute(
+                "aria-hidden", "false"
+            );
+
+            panel.removeAttribute("inert");
+        }
+
+        toggle.addEventListener("click", function (event) {
+            event.stopPropagation();
+
+            if (panel.classList.contains("is-open")) {
+                close();
+            } else {
+                open();
+            }
+        });
+
+        document.addEventListener("click", function (event) {
+            if (
+                !toggle.contains(event.target) &&
+                !panel.contains(event.target)
+            ) {
+                close();
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" &&
+                panel.classList.contains("is-open")) {
+                close();
+                toggle.focus();
+            }
+        });
+
+        if (hamburger) {
+            hamburger.addEventListener("click", close);
+        }
+
+        panel.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", close);
+        });
+
+        window.addEventListener("resize", function () {
+            if (!mobile.matches) close();
+        });
+
+        close();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener(
+            "DOMContentLoaded",
+            initQuickActions
+        );
+    } else {
+        initQuickActions();
+    }
+})();
