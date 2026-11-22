@@ -2124,7 +2124,7 @@ button.handle-frame-section:disabled {
 
 .site-footer__brand h2 {
   margin: 0 0 var(--spacing-xs);
-  color: var(--color-white);
+  color: var(--hsb-footer-heading);
   font-size: var(--fs-h4);
   font-weight: 800;
 }
@@ -2137,7 +2137,7 @@ button.handle-frame-section:disabled {
 
 .site-footer__description {
   max-width: 620px;
-  color: var(--gray-400);
+  color: var(--hsb-footer-description-text);
   font-size: var(--fs-body);
   line-height: 2;
 }
@@ -2160,14 +2160,14 @@ button.handle-frame-section:disabled {
 .site-footer__cta strong {
   display: block;
   margin-bottom: var(--spacing-xs);
-  color: var(--color-white);
+  color: var(--hsb-footer-cta-heading);
   font-size: var(--fs-body);
   font-weight: 800;
 }
 
 .site-footer__cta p {
   max-width: 520px;
-  color: var(--gray-400);
+  color: var(--hsb-footer-cta-description);
   font-size: var(--fs-sm);
   line-height: 1.8;
 }
@@ -2198,7 +2198,7 @@ button.handle-frame-section:disabled {
 .site-footer__contact-header > span {
   display: block;
   margin-bottom: 2px;
-  color: var(--color-white);
+  color: var(--hsb-footer-contact-heading-text);
   font-size: var(--fs-h5);
   font-weight: 800;
 }
@@ -2231,7 +2231,7 @@ button.handle-frame-section:disabled {
 }
 
 .site-footer__contact-label {
-  color: var(--color-primary-active);
+  color: var(--hsb-footer-contact-label);
   font-size: var(--fs-sm);
   font-weight: 700;
 }
@@ -2239,7 +2239,7 @@ button.handle-frame-section:disabled {
 .site-footer__contact-value {
   min-width: 0;
   margin: 0;
-  color: var(--gray-300);
+  color: var(--hsb-footer-contact-value-text);
   font-size: var(--fs-sm);
   line-height: 1.9;
 }
@@ -2286,13 +2286,13 @@ button.handle-frame-section:disabled {
 
 .site-footer__navigation h3 {
   margin: 0 0 2px;
-  color: var(--color-white);
+  color: var(--hsb-footer-heading);
   font-size: var(--fs-h5);
   font-weight: 800;
 }
 
 .site-footer__navigation-head p {
-  color: var(--gray-500);
+  color: var(--hsb-footer-nav-description);
   font-size: var(--fs-sm);
 }
 
@@ -2315,7 +2315,7 @@ button.handle-frame-section:disabled {
   gap: var(--spacing-sm);
   min-height: 48px;
   padding: var(--spacing-sm) var(--spacing-md);
-  color: var(--gray-300);
+  color: var(--hsb-footer-nav-link-text);
   background: var(--gray-900);
   border: var(--border-width) solid var(--gray-700);
   border-radius: var(--radius-md);
@@ -2329,7 +2329,7 @@ button.handle-frame-section:disabled {
 }
 
 .site-footer__navigation a:hover {
-  color: var(--color-white);
+  color: var(--hsb-footer-nav-link-hover-text);
   background: var(--color-secondary);
   border-color: var(--color-primary);
   transform: translateY(-2px);
@@ -2383,7 +2383,7 @@ button.handle-frame-section:disabled {
 }
 
 .site-footer__bottom a:hover {
-  color: var(--color-primary-active);
+  color: var(--hsb-footer-bottom-link-hover);
 }
 
 .site-footer__bottom-links {
@@ -6322,7 +6322,7 @@ html {
 .site-footer__identity-copy h2 {
     margin: 0 0 8px;
 
-    color: var(--color-white);
+    color: var(--hsb-footer-heading);
 
     font-size: var(--fs-h4);
     font-weight: 800;
@@ -6671,6 +6671,18 @@ html {
   --hsb-footer-cta-bg: var(--gray-800);
   --hsb-footer-navigation-bg: var(--gray-800);
   --hsb-footer-bottom-bg: var(--color-dark);
+
+  /* HSB FOOTER TEXT TOKENS V1 */
+  --hsb-footer-description-text: var(--gray-400);
+  --hsb-footer-cta-heading: var(--color-white);
+  --hsb-footer-cta-description: var(--gray-400);
+  --hsb-footer-contact-label: var(--color-primary-active);
+  --hsb-footer-contact-value-text: var(--gray-300);
+  --hsb-footer-nav-description: var(--gray-500);
+  --hsb-footer-nav-link-text: var(--gray-300);
+  --hsb-footer-nav-link-hover-text: var(--color-white);
+  --hsb-footer-bottom-link-hover: var(--color-primary-active);
+  --hsb-footer-contact-heading-text: var(--color-white);
 
   /* General buttons */
   --hsb-button-primary-bg: var(--color-primary);
