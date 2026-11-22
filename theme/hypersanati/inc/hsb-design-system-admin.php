@@ -309,30 +309,77 @@ function hsb_ds_real_preview_route() {
     exit;
 }
 
+function hsb_ds_real_card_is_single_variant($product_id) {
+    // The shop card suppresses the actual price for multi-variant families.
+    // Validate the card family, not just the WooCommerce price field.
+    if (!function_exists('hsb_get_product_family_ids') ||
+        !function_exists('hsb_group_product_ids_by_part_number')) {
+        return true;
+    }
+    $family_ids = hsb_get_product_family_ids($product_id);
+    $families = hsb_group_product_ids_by_part_number($family_ids);
+    if (!empty($families[0])) {
+        return max(1, absint($families[0]['version_count'] ?? 1)) === 1;
+    }
+    return true;
+}
+
 function hsb_ds_real_product_cards() {
     echo '<div class="hsb-ds-card-grid">';
-    if (!function_exists('wc_get_products') || !function_exists('hypersanati_render_product_card')) {
-        echo '<p class="hsb-ds-preview-empty">WooCommerce یا کامپوننت مشترک کارت محصول در دسترس نیست.</p></div>';
+    if (!function_exists('wc_get_products') ||
+        !function_exists('hypersanati_render_product_card') ||
+        !function_exists('hsb_dual_is_direct')) {
+        echo '<p class="hsb-ds-preview-empty">کامپوننت کارت یا تابع تشخیص فروش مستقیم در دسترس نیست.</p></div>';
         return;
     }
-    // Read-only small bounded lookup. Cards use the SAME renderer as the storefront.
-    $ids = wc_get_products(array('status'=>'publish', 'limit'=>80, 'orderby'=>'date', 'order'=>'DESC', 'return'=>'ids'));
-    $direct = 0; $other = 0;
-    foreach ($ids as $id) {
-        $product = wc_get_product($id);
-        if (!$product) { continue; }
-        $is_direct = function_exists('hsb_dual_is_direct') && hsb_dual_is_direct($product);
-        $can_buy = $is_direct && $product->is_purchasable() && $product->is_in_stock();
-        if ($can_buy && !$direct) { $direct = (int)$id; }
-        if (!$can_buy && !$other) { $other = (int)$id; }
-        if ($direct && $other) { break; }
+
+    $direct = 0;
+    $other = 0;
+    $scanned = 0;
+    // Search beyond the most recent 80. This runs only when the card tab's
+    // preview iframe is opened, never on ordinary storefront requests.
+    for ($page = 1; $page <= 30 && (!$direct || !$other); ++$page) {
+        $ids = wc_get_products(array(
+            'status'  => 'publish',
+            'limit'   => 100,
+            'page'    => $page,
+            'orderby' => 'ID',
+            'order'   => 'DESC',
+            'return'  => 'ids',
+        ));
+        if (empty($ids)) { break; }
+        foreach ($ids as $id) {
+            ++$scanned;
+            $product = wc_get_product($id);
+            if (!$product) { continue; }
+            if (!$direct && hsb_dual_is_direct($product) &&
+                hsb_ds_real_card_is_single_variant($id)) {
+                $direct = (int) $id;
+            }
+            if (!$other && !hsb_dual_is_direct($product)) {
+                $other = (int) $id;
+            }
+            if ($direct && $other) { break; }
+        }
+        if (count($ids) < 100) { break; }
     }
-    foreach (array(array('title'=>'محصول موجود / خرید آنلاین', 'id'=>$direct), array('title'=>'استعلامی یا ناموجود', 'id'=>$other)) as $slot) {
+
+    $slots = array(
+        array('title' => 'محصول قیمت‌دار / خرید آنلاین', 'id' => $direct),
+        array('title' => 'محصول استعلامی یا ناموجود', 'id' => $other),
+    );
+    foreach ($slots as $slot) {
         echo '<section class="hsb-ds-card-slot"><h2>' . esc_html($slot['title']) . '</h2>';
         if ($slot['id']) {
             hypersanati_render_product_card($slot['id']);
         } else {
-            echo '<div class="hsb-ds-preview-empty">محصول متناسب با این وضعیت در ۸۰ محصول اخیر پیدا نشد. نمایشی ساختگی جایگزین نشده است.</div>';
+            $hint = $slot['title'] === $slots[0]['title']
+                ? 'محصول قیمت‌دار، قابل خرید و تک‌گزینه‌ای'
+                : 'محصول استعلامی یا ناموجود';
+            echo '<div class="hsb-ds-preview-empty">' . esc_html(
+                'در ' . number_format_i18n($scanned) . ' محصول بررسی‌شده، ' .
+                $hint . ' پیدا نشد. برای حفظ صحت پیش‌نمایش، قیمت یا محصول ساختگی نمایش داده نمی‌شود.'
+            ) . '</div>';
         }
         echo '</section>';
     }
