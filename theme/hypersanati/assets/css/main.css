@@ -2111,7 +2111,7 @@ button.handle-frame-section:disabled {
   justify-content: center;
   flex: 0 0 72px;
   padding: var(--spacing-xs);
-  background: var(--color-white);
+  background: var(--hsb-footer-logo-box-bg);
   border-radius: var(--radius-lg);
 }
 
@@ -2253,12 +2253,12 @@ button.handle-frame-section:disabled {
 
 .site-footer__phones a,
 .site-footer a.site-footer__contact-value {
-  color: var(--gray-300);
+  color: var(--hsb-footer-contact-link-text);
 }
 
 .site-footer__phones a:hover,
 .site-footer a.site-footer__contact-value:hover {
-  color: var(--color-white);
+  color: var(--hsb-footer-contact-link-hover-text);
 }
 
 
@@ -2378,7 +2378,7 @@ button.handle-frame-section:disabled {
 .site-footer__bottom p,
 .site-footer__bottom a {
   margin: 0;
-  color: var(--gray-500);
+  color: var(--hsb-footer-bottom-text);
   font-size: var(--fs-sm);
 }
 
@@ -6736,6 +6736,13 @@ html {
   --hsb-footer-email-hover: var(--color-primary-active);
   --hsb-footer-link-icon-hover-text: var(--color-white);
   --hsb-footer-link-icon-hover-bg: rgba(255, 255, 255, 0.08);
+
+  /* HSB FOOTER AUDIT COMPLETION V1 */
+  --hsb-footer-logo-box-bg: var(--color-white);
+  --hsb-footer-contact-link-text: var(--gray-300);
+  --hsb-footer-contact-link-hover-text: var(--color-white);
+  --hsb-footer-bottom-text: var(--gray-500);
+
 
 
 
