@@ -7238,9 +7238,23 @@ add_action('wp_enqueue_scripts', function () {
 require_once get_template_directory() . '/inc/dual-sales-flow.php';
 
 
-/* HSB SHARED PRODUCT CARD CSS ENQUEUE V1 */
+/* HSB UNIVERSAL PRODUCT CARD CSS ENQUEUE V2
+ * One shared card stylesheet for product grids and sliders.
+ * Existing page-specific layouts remain unchanged.
+ */
 add_action('wp_enqueue_scripts', function () {
-    if (!function_exists('is_product') || !is_product()) {
+    $is_product = function_exists('is_product') && is_product();
+
+    $is_shop_context = function_exists('is_shop') && (
+        is_shop() ||
+        is_post_type_archive('product') ||
+        (function_exists('is_product_category') && is_product_category()) ||
+        (function_exists('is_product_tag') && is_product_tag())
+    );
+
+    $is_home_context = is_front_page() || is_home();
+
+    if (!$is_product && !$is_shop_context && !$is_home_context) {
         return;
     }
 
@@ -7251,9 +7265,17 @@ add_action('wp_enqueue_scripts', function () {
         return;
     }
 
+    $dependency = $is_product
+        ? 'single-product-css'
+        : 'shop-css';
+
+    if (!wp_style_is($dependency, 'enqueued')) {
+        return;
+    }
+
     hypersanati_enqueue_theme_style(
         'hsb-product-card',
         $relative,
-        array('single-product-css')
+        array($dependency)
     );
 }, 120);
