@@ -6855,6 +6855,32 @@ html {
   );
   --hsb-shop-card-family-badge-text: #ffffff;
 
+  /* HSB UNIFIED SINGLE PRODUCT CARDS V2 */
+  --hsb-card-dimension-bg: #f7f8f8;
+  --hsb-card-dimension-border: rgba(30, 37, 43, 0.065);
+  --hsb-card-dimension-label: var(--color-secondary);
+  --hsb-card-dimension-value: #293036;
+
+  --hsb-card-origin-brand: #333b41;
+  --hsb-card-origin-country: var(--color-secondary);
+
+  --hsb-card-rating-text: var(--color-secondary);
+  --hsb-card-rating-empty: #c7c9cb;
+  --hsb-card-rating-active: #e5a316;
+
+  --hsb-card-price-note-bg: rgba(49, 112, 77, 0.07);
+  --hsb-card-price-note-text: #466451;
+  --hsb-card-price-inquiry-text: #d11f1f;
+  --hsb-card-price-actual-text: #168052;
+
+  --hsb-card-action-text: var(--color-secondary);
+  --hsb-card-action-direct-bg: #168052;
+  --hsb-card-action-quote-bg: #735936;
+  --hsb-card-action-button-text: #ffffff;
+  --hsb-card-action-disabled-bg: #d7dcda;
+  --hsb-card-action-disabled-text: #49534e;
+
+
 
 
 
