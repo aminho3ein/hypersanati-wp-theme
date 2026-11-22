@@ -18,6 +18,11 @@ function hsb_get_homepage_hero_defaults() {
         'image_id'      => 0,
         'logo_image_id' => 0,
         'logo_target'   => '/shop/',
+        'slides'        => array(),
+        'slide_seconds' => 6,
+        'autoplay'      => '1',
+        'light_fx'      => '1',
+        'hero_colors'   => array(),
     );
 }
 
@@ -204,6 +209,32 @@ $output['eyebrow'] =
         '' !== $logo_target
             ? esc_url_raw($logo_target)
             : '/shop/';
+
+    $output['slide_seconds'] = isset($input['slide_seconds'])
+        ? min(15, max(3, absint($input['slide_seconds']))) : 6;
+    $output['autoplay'] = !empty($input['autoplay']) ? '1' : '0';
+    $output['light_fx'] = !empty($input['light_fx']) ? '1' : '0';
+
+    $color_defaults = hsb_home_hero_color_defaults();
+    $output['hero_colors'] = array();
+    $incoming_colors = isset($input['hero_colors']) && is_array($input['hero_colors'])
+        ? $input['hero_colors'] : array();
+    foreach ($color_defaults as $key => $default_color) {
+        $value = isset($incoming_colors[$key])
+            ? sanitize_hex_color(wp_unslash($incoming_colors[$key])) : '';
+        $output['hero_colors'][$key] = $value ?: $default_color;
+    }
+    $output['slides'] = array();
+    if (isset($input['slides']) && is_array($input['slides'])) {
+        foreach (array_slice($input['slides'], 0, 10) as $slide) {
+            if (!is_array($slide)) { continue; }
+            $id = isset($slide['image_id']) ? absint($slide['image_id']) : 0;
+            if (!$id || !wp_attachment_is_image($id)) { continue; }
+            $title = isset($slide['title'])
+                ? sanitize_text_field(wp_unslash($slide['title'])) : '';
+            $output['slides'][] = array('image_id' => $id, 'title' => $title);
+        }
+    }
 
     return $output;
 }
@@ -652,6 +683,8 @@ function hsb_render_homepage_hero_admin_page() {
                     </td>
                 </tr>
 
+                <?php hsb_home_hero_render_slider_settings($options); ?>
+
                 </tbody>
             </table>
 
@@ -929,6 +962,19 @@ function hsb_render_homepage_hero_section() {
             $options['description']
         );
 
+    $slides = hsb_home_hero_get_render_slides($options);
+    $active_title = !empty($slides[0]['title']) ? $slides[0]['title'] : $options['title'];
+    $color_values = wp_parse_args(
+        !empty($options['hero_colors']) && is_array($options['hero_colors'])
+            ? $options['hero_colors'] : array(),
+        hsb_home_hero_color_defaults()
+    );
+    $css_vars = array();
+    foreach (hsb_home_hero_color_defaults() as $key => $fallback) {
+        $color = sanitize_hex_color($color_values[$key]) ?: $fallback;
+        $css_vars[] = '--hsb-hero-' . str_replace('_', '-', $key) . ':' . $color;
+    }
+
     $button_target =
         !empty($options['button_target'])
             ? $options['button_target']
@@ -964,6 +1010,10 @@ function hsb_render_homepage_hero_section() {
             ? ' has-brand-logo'
             : '';
         ?>"
+        data-hsb-slider-interval="<?php echo esc_attr((int) $options['slide_seconds'] * 1000); ?>"
+        data-hsb-slider-auto="<?php echo esc_attr($options['autoplay']); ?>"
+        data-hsb-slider-light="<?php echo esc_attr($options['light_fx']); ?>"
+        style="<?php echo esc_attr(implode(';', $css_vars)); ?>"
         aria-labelledby="hsb-home-hero-title"
     >
         <div class="hsb-home-hero__content">
@@ -986,7 +1036,7 @@ function hsb_render_homepage_hero_section() {
             >
                 <?php
                 echo esc_html(
-                    $options['title']
+                    $active_title
                 );
                 ?>
             </h2>
@@ -1094,26 +1144,226 @@ function hsb_render_homepage_hero_section() {
             </a>
         <?php endif; ?>
 
-        <?php if ($image_id) : ?>
-            <div class="hsb-home-hero__media">
-                <?php
-                echo wp_get_attachment_image(
-                    $image_id,
-                    'full',
-                    false,
-                    array(
-                        'class'         =>
-                            'hsb-home-hero__image',
-                        'loading'       => 'eager',
-                        'fetchpriority' => 'high',
-                        'decoding'      => 'async',
-                    )
-                );
-                ?>
+        <?php if ($slides) : ?>
+            <div class="hsb-home-hero__media hsb-home-hero__slides" aria-hidden="true">
+                <?php foreach ($slides as $index => $slide) : ?>
+                    <div class="hsb-home-hero__slide<?php echo 0 === $index ? ' is-active' : ''; ?>"
+                         data-slide-title="<?php echo esc_attr($slide['title']); ?>">
+                        <?php echo wp_get_attachment_image(
+                            $slide['image_id'], 'full', false,
+                            array(
+                                'class' => 'hsb-home-hero__image',
+                                'alt' => '',
+                                'loading' => 0 === $index ? 'eager' : 'lazy',
+                                'fetchpriority' => 0 === $index ? 'high' : 'auto',
+                                'decoding' => 'async',
+                            )
+                        ); ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
+            <?php if (count($slides) > 1) : ?>
+                <nav class="hsb-home-hero__navigation" aria-label="کنترل اسلایدهای هیرو">
+                    <button type="button" class="hsb-home-hero__nav-button" data-slide-direction="prev" aria-label="اسلاید قبلی">&#10094;</button>
+                    <div class="hsb-home-hero__dots" role="group" aria-label="انتخاب اسلاید">
+                        <?php foreach ($slides as $index => $slide) : ?>
+                            <button type="button" class="hsb-home-hero__dot<?php echo 0 === $index ? ' is-active' : ''; ?>"
+                                    data-slide-index="<?php echo esc_attr($index); ?>"
+                                    aria-label="اسلاید <?php echo esc_attr($index + 1); ?>"
+                                    aria-pressed="<?php echo 0 === $index ? 'true' : 'false'; ?>"></button>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" class="hsb-home-hero__nav-button" data-slide-direction="next" aria-label="اسلاید بعدی">&#10095;</button>
+                </nav>
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php if ('1' === $options['light_fx']) : ?>
+            <div class="hsb-home-hero__subtle-light" aria-hidden="true"></div>
         <?php endif; ?>
 
     </section>
 
     <?php
 }
+
+
+/* =========================================================
+   HSB HERO SLIDER V2 — independently managed image/title pairs
+   ========================================================= */
+function hsb_home_hero_color_defaults() {
+    return array(
+        'overlay' => '#0B1B3A',
+        'title' => '#FFFFFF',
+        'eyebrow_text' => '#DBEAFE',
+        'description' => '#F1F5F9',
+        'button_bg' => '#2563EB',
+        'button_hover' => '#1D4ED8',
+        'button_text' => '#FFFFFF',
+        'light' => '#38BDF8',
+    );
+}
+
+function hsb_home_hero_get_render_slides($options) {
+    $slides = array();
+    if (!empty($options['slides']) && is_array($options['slides'])) {
+        foreach (array_slice($options['slides'], 0, 10) as $slide) {
+            if (!is_array($slide) || empty($slide['image_id'])) { continue; }
+            $id = absint($slide['image_id']);
+            if (!$id || !wp_attachment_is_image($id)) { continue; }
+            $slides[] = array(
+                'image_id' => $id,
+                'title' => !empty($slide['title']) ? $slide['title'] : $options['title'],
+            );
+        }
+    }
+    // Backward compatibility: old single-image hero remains intact until slides are configured.
+    if (!$slides && !empty($options['image_id'])) {
+        $id = absint($options['image_id']);
+        if (wp_attachment_is_image($id)) {
+            $slides[] = array('image_id' => $id, 'title' => $options['title']);
+        }
+    }
+    return $slides;
+}
+
+function hsb_home_hero_render_slider_settings($options) {
+    $slides = !empty($options['slides']) && is_array($options['slides'])
+        ? array_values($options['slides']) : array();
+    $colors = wp_parse_args(
+        !empty($options['hero_colors']) && is_array($options['hero_colors'])
+            ? $options['hero_colors'] : array(), hsb_home_hero_color_defaults()
+    );
+    $labels = array(
+        'overlay' => 'رنگ پوشش روی تصویر',
+        'title' => 'رنگ عنوان اصلی',
+        'eyebrow_text' => 'رنگ عنوان کوچک',
+        'description' => 'رنگ توضیحات',
+        'button_bg' => 'زمینه دکمه شروع جستجو',
+        'button_hover' => 'زمینه دکمه در هاور',
+        'button_text' => 'متن دکمه',
+        'light' => 'رنگ نور ملایم',
+    );
+    ?>
+    <tr><th scope="row">تنظیمات اسلایدر</th><td>
+        <label>زمان تعویض هر اسلاید (ثانیه):
+            <input type="number" min="3" max="15" step="1" name="hsb_homepage_hero_options[slide_seconds]"
+                   value="<?php echo esc_attr($options['slide_seconds']); ?>" style="width:90px">
+        </label>
+        <p><label><input type="checkbox" name="hsb_homepage_hero_options[autoplay]" value="1"
+                 <?php checked($options['autoplay'], '1'); ?>> تعویض خودکار اسلایدها</label></p>
+        <p><label><input type="checkbox" name="hsb_homepage_hero_options[light_fx]" value="1"
+                 <?php checked($options['light_fx'], '1'); ?>> درخشش ملایم روی تصویر (بدون موج و مدار نور)</label></p>
+        <p class="description">عنوان کوچک، توضیحات، لوگو، دکمه جستجو و باکس‌های آماری در تمام اسلایدها ثابت می‌مانند.</p>
+    </td></tr>
+    <tr><th scope="row">اسلایدهای هیرو</th><td>
+        <p class="description">برای هر اسلاید یک تصویر و عنوان اصلی اختصاصی انتخاب کنید. ترتیب نمایش با ترتیب کارت‌ها برابر است؛ حداکثر ۱۰ اسلاید.</p>
+        <div id="hsb-hero-admin-slides">
+        <?php foreach ($slides as $index => $slide) :
+            $src = wp_get_attachment_image_url(absint($slide['image_id']), 'medium'); ?>
+            <div class="hsb-hero-admin-slide" style="margin:12px 0;padding:14px;border:1px solid #cbd5e1;background:#fff;border-radius:10px">
+                <p><strong>اسلاید</strong> <span class="hsb-hero-slide-number"><?php echo esc_html($index + 1); ?></span></p>
+                <input type="hidden" class="hsb-hero-slide-id" name="hsb_homepage_hero_options[slides][<?php echo esc_attr($index); ?>][image_id]" value="<?php echo esc_attr($slide['image_id']); ?>">
+                <img class="hsb-hero-slide-preview" src="<?php echo esc_url($src ?: ''); ?>" alt="" style="display:<?php echo $src ? 'block' : 'none'; ?>;width:240px;max-width:100%;height:105px;object-fit:cover;border-radius:8px;margin-bottom:10px">
+                <p><button type="button" class="button hsb-hero-pick-image">انتخاب / تغییر تصویر</button></p>
+                <label>عنوان اصلی این اسلاید<br><input type="text" class="large-text hsb-hero-slide-title" name="hsb_homepage_hero_options[slides][<?php echo esc_attr($index); ?>][title]" value="<?php echo esc_attr($slide['title']); ?>"></label>
+                <p><button type="button" class="button hsb-hero-move-up">بالا</button> <button type="button" class="button hsb-hero-move-down">پایین</button> <button type="button" class="button hsb-hero-remove-slide">حذف اسلاید</button></p>
+            </div>
+        <?php endforeach; ?>
+        </div>
+        <button type="button" id="hsb-hero-add-slide" class="button button-secondary">+ افزودن اسلاید</button>
+        <p class="description">تا قبل از افزودن اسلاید، «تصویر بزرگ Hero» و «عنوان اصلی» قدیمی همچنان نمایش داده می‌شوند.</p>
+    </td></tr>
+    <tr><th scope="row">رنگ‌های هیرو</th><td>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:14px;max-width:720px">
+            <?php foreach (hsb_home_hero_color_defaults() as $key => $default_color) : ?>
+                <label style="background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:10px">
+                    <?php echo esc_html($labels[$key]); ?><br>
+                    <input type="color" name="hsb_homepage_hero_options[hero_colors][<?php echo esc_attr($key); ?>]"
+                           value="<?php echo esc_attr(sanitize_hex_color($colors[$key]) ?: $default_color); ?>">
+                    <code><?php echo esc_html($key); ?></code>
+                </label>
+            <?php endforeach; ?>
+        </div>
+    </td></tr>
+    <?php
+}
+
+add_action('wp_enqueue_scripts', function () {
+    if (!is_front_page() && !is_home()) { return; }
+    $base = get_template_directory();
+    $uri = get_template_directory_uri();
+    $css = '/assets/css/hsb-hero-slider.css';
+    $js = '/assets/js/hsb-hero-slider.js';
+    if (is_file($base . $css)) {
+        wp_enqueue_style('hsb-hero-slider', $uri . $css, array('hypersanati-style'), filemtime($base . $css));
+    }
+    if (is_file($base . $js)) {
+        wp_enqueue_script('hsb-hero-slider', $uri . $js, array(), filemtime($base . $js), true);
+    }
+}, 99);
+
+add_action('admin_footer-appearance_page_hsb-homepage-hero', function () {
+    ?>
+    <script>
+    (function () {
+      const container = document.getElementById('hsb-hero-admin-slides');
+      const add = document.getElementById('hsb-hero-add-slide');
+      if (!container || !add) return;
+      const maximum = 10;
+      function renumber() {
+        const rows = Array.from(container.querySelectorAll('.hsb-hero-admin-slide'));
+        rows.forEach((row, index) => {
+          row.querySelector('.hsb-hero-slide-number').textContent = String(index + 1);
+          row.querySelector('.hsb-hero-slide-id').name = `hsb_homepage_hero_options[slides][${index}][image_id]`;
+          row.querySelector('.hsb-hero-slide-title').name = `hsb_homepage_hero_options[slides][${index}][title]`;
+        });
+        add.disabled = rows.length >= maximum;
+      }
+      function rowMarkup() {
+        const row = document.createElement('div');
+        row.className = 'hsb-hero-admin-slide';
+        row.style.cssText = 'margin:12px 0;padding:14px;border:1px solid #cbd5e1;background:#fff;border-radius:10px';
+        row.innerHTML = `<p><strong>اسلاید</strong> <span class="hsb-hero-slide-number"></span></p>
+          <input type="hidden" class="hsb-hero-slide-id" value="">
+          <img class="hsb-hero-slide-preview" alt="" style="display:none;width:240px;max-width:100%;height:105px;object-fit:cover;border-radius:8px;margin-bottom:10px">
+          <p><button type="button" class="button hsb-hero-pick-image">انتخاب / تغییر تصویر</button></p>
+          <label>عنوان اصلی این اسلاید<br><input type="text" class="large-text hsb-hero-slide-title" value=""></label>
+          <p><button type="button" class="button hsb-hero-move-up">بالا</button> <button type="button" class="button hsb-hero-move-down">پایین</button> <button type="button" class="button hsb-hero-remove-slide">حذف اسلاید</button></p>`;
+        return row;
+      }
+      add.addEventListener('click', () => {
+        if (container.children.length >= maximum) return;
+        container.appendChild(rowMarkup());
+        renumber();
+      });
+      container.addEventListener('click', (event) => {
+        const button = event.target.closest('button');
+        if (!button) return;
+        const row = button.closest('.hsb-hero-admin-slide');
+        if (!row) return;
+        if (button.classList.contains('hsb-hero-remove-slide')) {
+          row.remove(); renumber(); return;
+        }
+        if (button.classList.contains('hsb-hero-move-up') && row.previousElementSibling) {
+          container.insertBefore(row, row.previousElementSibling); renumber(); return;
+        }
+        if (button.classList.contains('hsb-hero-move-down') && row.nextElementSibling) {
+          container.insertBefore(row.nextElementSibling, row); renumber(); return;
+        }
+        if (button.classList.contains('hsb-hero-pick-image') && window.wp && wp.media) {
+          const frame = wp.media({title:'انتخاب تصویر اسلاید',button:{text:'انتخاب تصویر'},library:{type:'image'},multiple:false});
+          frame.on('select', () => {
+            const item = frame.state().get('selection').first().toJSON();
+            row.querySelector('.hsb-hero-slide-id').value = item.id;
+            const preview = row.querySelector('.hsb-hero-slide-preview');
+            preview.src = item.sizes && item.sizes.medium ? item.sizes.medium.url : item.url;
+            preview.style.display = 'block';
+          });
+          frame.open();
+        }
+      });
+      renumber();
+    })();
+    </script>
+    <?php
+});
