@@ -237,7 +237,7 @@ $has_discount_products = $discount_products->have_posts();
 <!-- =========================
      CONTENT
 ========================= -->
-<article class="single-article-body">
+<article class="single-article-body hsb-editorial-body">
 
     <?php
     // حالا بعد از تغییر h2 ها، فیلتر وردپرس رو اعمال کن

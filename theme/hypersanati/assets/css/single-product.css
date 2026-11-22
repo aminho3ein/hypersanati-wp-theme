@@ -528,7 +528,7 @@
   border: 1px solid #eee;
   border-radius: 8px;
   padding: 12px;
-  background: #fff;
+  background: var(--hsb-review-surface);
 }
 
 .review-header {
@@ -815,7 +815,7 @@
     padding: 1rem;
     align-self: flex-start;
     align-items: initial;
-    background: #fff;
+    background: var(--hsb-review-surface);
   }
 
   .review-ctr-sec button {
@@ -1051,9 +1051,9 @@
   /* border-radius: 24px; */
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.88)),
-    var(--color-white, #fff);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+    var(--color-white, var(--hsb-sp-purchase-surface));
+  border: 1px solid var(--hsb-sp-purchase-shadow);
+  box-shadow: 0 18px 45px var(--hsb-sp-purchase-shadow);
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
@@ -1078,7 +1078,7 @@
 
 .old-price p {
   margin: 0;
-  color: #9ca3af;
+  color: var(--hsb-sp-purchase-text-subtle);
   font-size: 0.7rem;
   text-decoration: line-through;
 }
@@ -1090,22 +1090,22 @@
   padding: 0 0.75rem;
   margin: 0;
   border-radius: 999px;
-  background: var(--color-danger, #ef4444);
-  color: #fff;
+  background: var(--color-danger, var(--hsb-sp-purchase-legacy-cta));
+  color: var(--hsb-sp-purchase-surface);
   font-size: 0.8rem;
   font-weight: 700;
   color: black;
 }
 
 .price-label {
-  color: #6b7280;
+  color: var(--hsb-sp-purchase-text-muted);
   font-size: 0.85rem;
   font-weight: 600;
 }
 
 .price-sec p {
   margin: 0;
-  color: #111827;
+  color: var(--hsb-sp-purchase-text-strong);
   font-size: 1rem;
   font-weight: 900;
   line-height: 1.6;
@@ -1135,7 +1135,7 @@
 .purchase-field label {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #374151;
+  color: var(--hsb-sp-purchase-text-body);
 }
 
 .product-count-select {
@@ -1144,8 +1144,8 @@
   padding: 0 1rem;
   border-radius: 16px;
   border: 1px solid rgba(0, 0, 0, 0.12);
-  background: #fff;
-  color: #111827;
+  background: var(--hsb-sp-purchase-surface);
+  color: var(--hsb-sp-purchase-text-strong);
   font-family: inherit;
   font-size: 0.95rem;
   outline: none;
@@ -1153,8 +1153,8 @@
 }
 
 .product-count-select:focus {
-  border-color: var(--color-primary, #2563eb);
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  border-color: var(--color-primary, var(--hsb-sp-purchase-focus));
+  box-shadow: 0 0 0 4px var(--hsb-sp-purchase-focus-ring);
 }
 
 .add-to-cart {
@@ -1162,8 +1162,8 @@
   height: 54px;
   border: none;
   border-radius: 16px;
-  background: #ef4444;
-  color: #fff;
+  background: var(--hsb-sp-purchase-legacy-cta);
+  color: var(--hsb-sp-purchase-surface);
   font-family: inherit;
   font-size: 0.95rem;
   font-weight: 900;
@@ -1185,8 +1185,8 @@
   padding: 0.75rem;
   border-radius: 16px;
   background: rgba(17, 24, 39, 0.04);
-  color: #374151;
-  border: 1px solid rgba(17, 24, 39, 0.08);
+  color: var(--hsb-sp-purchase-text-body);
+  border: 1px solid var(--hsb-sp-purchase-border);
   text-align: center;
   text-decoration: none;
   font-size: 0.85rem;
@@ -1197,8 +1197,8 @@
 }
 
 .bulk-buy-link:hover {
-  background: rgba(17, 24, 39, 0.07);
-  color: #111827;
+  background: var(--hsb-sp-purchase-hover);
+  color: var(--hsb-sp-purchase-text-strong);
 }
 
 /* تصویر محصول */
@@ -1217,9 +1217,9 @@
   overflow: hidden;
   padding: clamp(0.75rem, 2vw, 1.25rem);
   /* border-radius: 28px; */
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
-  background: #fff;
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.07);
+  border: 1px solid var(--hsb-sp-gallery-border) !important;
+  background: var(--hsb-sp-gallery-surface);
+  box-shadow: 0 18px 45px var(--hsb-sp-gallery-shadow-soft);
 }
 
 .single-image-frame {
@@ -1300,8 +1300,8 @@
   padding: 0.35rem;
   border-radius: 16px;
   overflow: hidden;
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: var(--hsb-sp-gallery-surface);
+  border: 1px solid var(--hsb-sp-gallery-border);
   cursor: pointer;
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -1316,7 +1316,7 @@
 .product-image-gallery-frame.active {
   transform: translateY(-2px);
   border-color: var(--color-primary, #2563eb);
-  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 10px 24px var(--hsb-sp-gallery-shadow-active);
 }
 
 /* مشخصات فنی */
@@ -1327,9 +1327,9 @@
   align-items: stretch;
   padding: 1.25rem;
   /* border-radius: 20px; */
-  background: var(--color-white, #fff);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.06);
+  background: var(--color-white, var(--hsb-sp-specs-surface));
+  border: 1px solid var(--hsb-sp-specs-border);
+  box-shadow: 0 14px 35px var(--hsb-sp-specs-shadow);
 }
 .product-name-detail-sec-title{
   margin-bottom: 1rem;
@@ -1338,7 +1338,7 @@
   margin: 0;
   font-size: 1rem;
   font-weight: 800;
-  color: #111827;
+  color: var(--hsb-sp-specs-heading);
 }
 .product-details{
     width: 100%;
@@ -1364,7 +1364,7 @@
   align-items: center;
   gap: 1rem;
   padding: 0.8rem 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid var(--hsb-sp-specs-border);
 }
 
 .product-specs li:last-child {
@@ -1375,7 +1375,7 @@
   flex-shrink: 0;
   font-size: 0.9rem;
   font-weight: 700;
-  color: #374151;
+  color: var(--hsb-sp-specs-label);
   white-space: nowrap;
 }
 
@@ -1383,7 +1383,7 @@
   margin-inline-start: auto;
   font-size: 0.9rem;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--hsb-sp-specs-value);
   text-align: left;
   line-height: 1.8;
 }
@@ -1489,9 +1489,9 @@
   position: sticky;
   top: 1rem;
   padding: 1.5rem;
-  background: #fff;
-  border: 1px solid rgba(17, 24, 39, 0.08);
-  box-shadow: 0 18px 45px rgba(17, 24, 39, 0.08);
+  background: var(--hsb-review-surface);
+  border: 1px solid var(--hsb-review-outline);
+  box-shadow: 0 18px 45px var(--hsb-review-outline);
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -1507,7 +1507,7 @@
   gap: 0.7rem;
   align-items: center;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+  border-bottom: 1px solid var(--hsb-review-outline);
 }
 
 #reviews.reviews-section .score-number-section {
@@ -1519,7 +1519,7 @@
 
 #reviews.reviews-section .product-score-value {
   margin: 0;
-  color: #111827;
+  color: var(--hsb-review-text-strong);
   font-size: 2.7rem;
   font-weight: 900;
   line-height: 1;
@@ -1527,14 +1527,14 @@
 
 #reviews.reviews-section .score-total {
   margin: 0;
-  color: #6b7280;
+  color: var(--hsb-review-text-muted);
   font-size: 0.95rem;
   font-weight: 600;
 }
 
 .review-count-text {
   margin: 0;
-  color: #6b7280;
+  color: var(--hsb-review-text-muted);
   font-size: 0.85rem;
   line-height: 1.8;
 }
@@ -1544,7 +1544,7 @@
   display: inline-flex;
   flex-direction: row;
   gap: 0.25rem;
-  color: #d1d5db;
+  color: var(--hsb-review-border);
 }
 
 .review-rating-stars i {
@@ -1552,7 +1552,7 @@
 }
 
 .review-rating-stars i.is-active {
-  color: #f59e0b;
+  color: var(--hsb-review-star);
 }
 
 .review-average-stars i {
@@ -1575,7 +1575,7 @@
 
 .rating-label,
 .rating-count {
-  color: #6b7280;
+  color: var(--hsb-review-text-muted);
   font-size: 0.78rem;
   font-weight: 700;
   white-space: nowrap;
@@ -1594,7 +1594,7 @@
 .rating-bar span {
   display: block;
   height: 100%;
-  background: #f59e0b;
+  background: var(--hsb-review-star);
 }
 
 .review-discount-text {
@@ -1611,7 +1611,7 @@
   align-items: center;
   justify-content: center;
   background: var(--color-secondary);
-  color: #fff;
+  color: var(--hsb-review-surface);
   border: none;
   text-decoration: none;
   font-family: inherit;
@@ -1623,14 +1623,14 @@
 }
 
 .review-submit-btn:hover {
-  color: #fff;
+  color: var(--hsb-review-surface);
   transform: translateY(-2px);
   /* box-shadow: 0 16px 36px rgba(239, 68, 68, 0.34); */
   background: var(--color-primary-hover);
 }
 
 .review-submit-btn.is-disabled {
-  background: #9ca3af;
+  background: var(--hsb-review-text-subtle);
   box-shadow: none;
   cursor: not-allowed;
 }
@@ -1647,9 +1647,9 @@
 .review-form-card {
   width: 100%;
   padding: 1.5rem;
-  background: #fff;
-  border: 1px solid rgba(17, 24, 39, 0.08);
-  box-shadow: 0 18px 45px rgba(17, 24, 39, 0.07);
+  background: var(--hsb-review-surface);
+  border: 1px solid var(--hsb-review-outline);
+  box-shadow: 0 18px 45px var(--hsb-review-shadow);
 }
 
 .reviews-list-title {
@@ -1659,18 +1659,18 @@
   gap: 1rem;
   padding-bottom: 1rem;
   margin-bottom: 1rem;
-  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+  border-bottom: 1px solid var(--hsb-review-outline);
 }
 
 .reviews-list-title h3 {
   margin: 0;
-  color: #111827;
+  color: var(--hsb-review-text-strong);
   font-size: 0.8rem;
   font-weight: 900;
 }
 
 .reviews-list-title span {
-  color: #6b7280;
+  color: var(--hsb-review-text-muted);
   font-size: 0.85rem;
   font-weight: 700;
 }
@@ -1685,8 +1685,8 @@
 #reviews.reviews-section .review-item {
   width: 100%;
   padding: 1.25rem;
-  background: #fff;
-  border: 1px solid rgba(17, 24, 39, 0.08);
+  background: var(--hsb-review-surface);
+  border: 1px solid var(--hsb-review-outline);
   box-shadow: 0 12px 32px rgba(17, 24, 39, 0.055);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -1716,7 +1716,7 @@
   height: 48px;
   flex: 0 0 48px;
   background: #f3f4f6;
-  border: 1px solid rgba(17, 24, 39, 0.08);
+  border: 1px solid var(--hsb-review-outline);
   overflow: hidden;
 }
 
@@ -1734,7 +1734,7 @@
 }
 
 #reviews.reviews-section .user-name {
-  color: #111827;
+  color: var(--hsb-review-text-strong);
   font-size: 0.98rem;
   font-weight: 900;
   line-height: 1.7;
@@ -1759,7 +1759,7 @@
 
 #reviews.reviews-section .badge.buyer {
   background: rgba(34, 197, 94, 0.1);
-  color: #15803d;
+  color: var(--hsb-review-verified);
   border-color: rgba(34, 197, 94, 0.22);
 }
 
@@ -1782,7 +1782,7 @@
 }
 
 #reviews.reviews-section .review-date {
-  color: #9ca3af;
+  color: var(--hsb-review-text-subtle);
   font-size: 0.8rem;
   font-weight: 700;
   white-space: nowrap;
@@ -1792,9 +1792,9 @@
 #reviews.reviews-section .review-text {
   margin: 0;
   padding: 1rem;
-  background: #f9fafb;
-  border-right: 4px solid var(--color-primary, #2563eb);
-  color: #374151;
+  background: var(--hsb-review-surface-soft);
+  border-right: 4px solid var(--color-primary, var(--hsb-review-focus));
+  color: var(--hsb-review-text-body);
   font-size: 0.94rem;
   line-height: 2.1;
 }
@@ -1806,20 +1806,20 @@
 /* بدون نظر */
 .reviews-empty-state {
   padding: 1.25rem;
-  background: #f9fafb;
-  border-right: 4px solid var(--color-primary, #2563eb);
+  background: var(--hsb-review-surface-soft);
+  border-right: 4px solid var(--color-primary, var(--hsb-review-focus));
 }
 
 .reviews-empty-state h4 {
   margin: 0 0 0.4rem;
-  color: #111827;
+  color: var(--hsb-review-text-strong);
   font-size: 1rem;
   font-weight: 900;
 }
 
 .reviews-empty-state p {
   margin: 0;
-  color: #6b7280;
+  color: var(--hsb-review-text-muted);
   font-size: 0.9rem;
   line-height: 1.9;
 }
@@ -1833,18 +1833,18 @@
   display: block;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  color: #111827;
+  color: var(--hsb-review-text-strong);
   font-size: 1.05rem;
   font-weight: 900;
   line-height: 1.8;
-  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+  border-bottom: 1px solid var(--hsb-review-outline);
 }
 
 .review-form-card .comment-notes,
 .review-form-card .logged-in-as,
 .review-form-card .must-log-in {
   margin: 0 0 1rem;
-  color: #6b7280;
+  color: var(--hsb-review-text-muted);
   font-size: 0.88rem;
   line-height: 1.9;
 }
@@ -1870,13 +1870,13 @@
 .review-form-card label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #374151;
+  color: var(--hsb-review-text-body);
   font-size: 0.9rem;
   font-weight: 800;
 }
 
 .review-form-card .required {
-  color: var(--color-danger, #ef4444);
+  color: var(--color-danger, var(--hsb-review-error));
 }
 
 .review-form-card input[type="text"],
@@ -1885,8 +1885,8 @@
   width: 100%;
   min-height: 48px;
   padding: 0.8rem 1rem;
-  background: #f9fafb;
-  color: #111827;
+  background: var(--hsb-review-surface-soft);
+  color: var(--hsb-review-text-strong);
   border: 1px solid rgba(17, 24, 39, 0.12);
   outline: none;
   font-family: inherit;
@@ -1902,9 +1902,9 @@
 
 .review-form-card input:focus,
 .review-form-card textarea:focus {
-  background: #fff;
-  border-color: var(--color-primary, #2563eb);
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  background: var(--hsb-review-surface);
+  border-color: var(--color-primary, var(--hsb-review-focus));
+  box-shadow: 0 0 0 4px var(--hsb-review-focus-ring);
 }
 
 /* امتیازدهی فرم */
@@ -1941,8 +1941,8 @@
   width: 100%;
   min-height: 52px;
   border: none;
-  background: var(--color-danger, #ef4444);
-  color: #fff;
+  background: var(--color-danger, var(--hsb-review-error));
+  color: var(--hsb-review-surface);
   font-family: inherit;
   font-size: 0.95rem;
   font-weight: 900;
@@ -1960,20 +1960,20 @@
 /* پیام‌های فرم */
 .review-form-message {
   padding: 1.25rem;
-  background: #f9fafb;
-  border-right: 4px solid var(--color-danger, #ef4444);
+  background: var(--hsb-review-surface-soft);
+  border-right: 4px solid var(--color-danger, var(--hsb-review-error));
 }
 
 .review-form-message h3 {
   margin: 0 0 0.4rem;
-  color: #111827;
+  color: var(--hsb-review-text-strong);
   font-size: 1rem;
   font-weight: 900;
 }
 
 .review-form-message p {
   margin: 0;
-  color: #6b7280;
+  color: var(--hsb-review-text-muted);
   font-size: 0.9rem;
   line-height: 1.9;
 }
@@ -3320,10 +3320,21 @@
   direction: rtl;
 }
 
+/* Shared sizing applies to the entire section. */
 .smart-product-sections,
 .smart-product-sections * {
   box-sizing: border-box;
-  border-radius: 0 !important;
+}
+
+/*
+ * Preserve the original square-corner section layout,
+ * but do not override the shared product-card component.
+ */
+.smart-product-sections,
+.smart-product-sections *:not(
+  .hsb-family-product-card,
+  .hsb-family-product-card *
+) {
 }
 
 .sp-products-section {
@@ -4663,7 +4674,7 @@ body.single-product .sp-products-row {
 
     background: rgba(32, 38, 44, 0.74);
 
-    color: #fff;
+    color: var(--hsb-sp-gallery-surface);
 
     display: flex;
     align-items: center;
@@ -4719,7 +4730,7 @@ body.single-product .sp-products-row {
     border: 1px solid rgba(30, 37, 43, 0.11);
     border-radius: 9px;
 
-    background: #fff;
+    background: var(--hsb-sp-gallery-surface);
 
     cursor: pointer;
 
@@ -6093,304 +6104,62 @@ body.single-product .sp-products-row {
    SHARED SHOP CARDS INSIDE RELATED / SIMILAR
    ============================================================ */
 
-.sp-products-row
-.hsb-family-product-card {
-    flex: 0 0 270px;
 
-    width: 270px;
-    max-width: 270px;
 
-    display: block;
 
-    overflow: hidden;
 
-    border: 1.5px solid
-        rgba(45, 52, 58, 0.30);
 
-    border-radius: 12px;
 
-    background: #fff;
 
-    color: inherit;
-    text-decoration: none;
 
-    box-shadow:
-        0 6px 18px
-        rgba(24, 30, 35, 0.07);
 
-    transition:
-        transform 0.18s ease,
-        box-shadow 0.18s ease,
-        border-color 0.18s ease;
-}
 
-.sp-products-row
-.hsb-family-product-card:hover {
-    transform: translateY(-2px);
 
-    border-color:
-        rgba(45, 52, 58, 0.48);
 
-    box-shadow:
-        0 14px 32px
-        rgba(24, 30, 35, 0.14);
-}
 
 
-.sp-products-row
-.hsb-shop-card-media {
-    position: relative;
 
-    width: 100%;
-    aspect-ratio: 1 / 1;
 
-    padding: 0;
 
-    overflow: hidden;
 
-    background: #fff;
-}
 
-.sp-products-row
-.hsb-shop-card-media img,
-.sp-products-row
-.hsb-family-product-card:hover
-.hsb-shop-card-media img {
-    display: block;
 
-    width: 100%;
-    height: 100%;
 
-    padding: 0;
-    margin: 0;
 
-    object-fit: cover;
 
-    transform: none !important;
-}
 
 
-.sp-products-row
-.hsb-family-card-badge {
-    position: absolute;
 
-    top: 10px;
-    right: 10px;
 
-    display: inline-flex;
-    align-items: center;
 
-    gap: 5px;
 
-    padding: 5px 8px;
 
-    border-radius: 8px;
 
-    background:
-        rgba(255,255,255,0.94);
 
-    color: var(--color-secondary);
 
-    font-size: 9px;
-    font-weight: 850;
 
-    box-shadow:
-        0 3px 12px
-        rgba(20, 26, 31, 0.10);
-}
 
 
-.sp-products-row
-.hsb-family-card-body {
-    padding: 13px;
-}
 
 
-.sp-products-row
-.hsb-family-card-topline {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
 
-    gap: 8px;
-}
 
 
-.sp-products-row
-.hsb-family-card-part {
-    display: flex;
-    flex-direction: column;
 
-    gap: 2px;
-}
 
-.sp-products-row
-.hsb-family-card-part span {
-    color: var(--color-secondary);
 
-    font-size: 9px;
-    font-weight: 700;
-}
 
-.sp-products-row
-.hsb-family-card-part strong {
-    color: #20272c;
 
-    font-size: 12px;
-    font-weight: 900;
-}
 
 
-.sp-products-row
-.hsb-family-card-title {
-    min-height: 49px;
 
-    margin: 10px 0 8px;
 
-    color: #262d32;
 
-    font-size: 13px;
-    font-weight: 850;
-    line-height: 1.85;
-
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-
-    overflow: hidden;
-}
-
-
-.sp-products-row
-.hsb-card-rating {
-    display: flex;
-}
-
-
-.sp-products-row
-.hsb-family-card-dimensions {
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
-    gap: 6px;
-
-    margin-top: 8px;
-}
-
-
-.sp-products-row
-.hsb-family-card-dimension {
-    min-width: 0;
-
-    padding: 7px 4px;
-
-    border: 1px solid
-        rgba(30, 37, 43, 0.08);
-
-    border-radius: 8px;
-
-    background: #f8f8f8;
-
-    text-align: center;
-}
-
-.sp-products-row
-.hsb-family-card-dimension span,
-.sp-products-row
-.hsb-family-card-dimension small {
-    display: block;
-
-    color: var(--color-secondary);
-
-    font-size: 8px;
-}
-
-.sp-products-row
-.hsb-family-card-dimension strong {
-    display: block;
-
-    margin: 2px 0;
-
-    color: #272e33;
-
-    font-size: 10px;
-    font-weight: 900;
-}
-
-
-.sp-products-row
-.hsb-family-card-options {
-    display: flex;
-    flex-wrap: wrap;
-
-    gap: 5px;
-
-    margin-top: 9px;
-}
-
-.sp-products-row
-.hsb-family-card-options span {
-    display: inline-flex;
-    align-items: center;
-
-    gap: 4px;
-
-    color: var(--color-secondary);
-
-    font-size: 8px;
-    font-weight: 750;
-}
-
-
-.sp-products-row
-.hsb-family-card-price-note {
-    display: flex;
-    align-items: center;
-
-    gap: 6px;
-
-    margin-top: 10px;
-
-    color: var(--color-secondary);
-
-    font-size: 9px;
-    font-weight: 750;
-}
-
-
-.sp-products-row
-.hsb-family-card-action {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 8px;
-
-    margin-top: 11px;
-    padding-top: 10px;
-
-    border-top:
-        1px solid
-        rgba(30, 37, 43, 0.08);
-
-    color: var(--color-secondary);
-
-    font-size: 10px;
-    font-weight: 850;
-}
 
 
 @media (max-width: 768px) {
 
-    .sp-products-row
-    .hsb-family-product-card {
-        flex-basis: 245px;
 
-        width: 245px;
-        max-width: 245px;
-    }
 }
 
 
@@ -6728,14 +6497,14 @@ body.single-product
 
     box-sizing: border-box;
 
-    background: #fff !important;
+    background: var(--hsb-review-surface) !important;
 
     border: 1px solid
-        rgba(17, 24, 39, 0.08) !important;
+        var(--hsb-review-outline) !important;
 
     box-shadow:
         0 18px 45px
-        rgba(17, 24, 39, 0.08) !important;
+        var(--hsb-review-outline) !important;
 }
 
 
@@ -7569,7 +7338,7 @@ body.single-product .review-form-card {
   border-radius: 999px !important;
 
   background: var(--color-primary) !important;
-  color: #fff !important;
+  color: var(--hsb-review-surface) !important;
 
   font-family: inherit;
   font-size: 0.88rem !important;
@@ -7592,7 +7361,7 @@ body.single-product .review-form-card {
   background:
     var(--color-primary-hover) !important;
 
-  color: #fff !important;
+  color: var(--hsb-review-surface) !important;
 
   transform: translateY(-2px);
 
@@ -7651,3 +7420,365 @@ body.single-product .review-form-card {
 
 }
 
+
+/* ====================================================
+   HSB UNIFIED DIRECT PURCHASE CARD V1
+   Matches the visual structure of the inquiry card
+   ==================================================== */
+
+.hsb-sp-direct--unified {
+    display: block;
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__price {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 16px 0;
+    padding: 15px;
+    border: 1px solid #eae7e1;
+    border-radius: 12px;
+    background: #f7f7f6;
+    text-align: right;
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__price > span {
+    color: #806e58;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__price strong {
+    color: #168052;
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1.7;
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 0;
+}
+
+.hsb-sp-direct--unified .hsb-sp-qty-field {
+    width: 100%;
+}
+
+.hsb-sp-direct--unified .hsb-sp-qty {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.hsb-sp-direct--unified .hsb-sp-qty input {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 11px;
+    background: #168052;
+    color: #fff;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__submit:hover:not(:disabled) {
+    background: #106a43;
+    transform: translateY(-1px);
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__submit:disabled {
+    background: #b4b4b4;
+    cursor: not-allowed;
+}
+
+.hsb-sp-direct--unified .hsb-sp-direct__footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+    color: #8e8171;
+    font-size: 12px;
+    text-align: center;
+}
+
+
+
+/* HSB preinvoice button icon */
+.hsb-preinvoice-btn-icon {
+    font-size: 1.05em;
+    margin-inline-start: 0;
+    margin-inline-end: 10px;
+    vertical-align: middle;
+}
+
+.hsb-sp-preinvoice-form button[type="submit"],
+.hsb-sp-inquiry .single_add_to_cart_button,
+.hsb-sp-inquiry .add-to-cart,
+.hsb-sp-inquiry button[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.hsb-sp-preinvoice-form button[type="submit"] span {
+    line-height: 1;
+}
+
+/* =====================================================
+   HSB PERSISTENT PREINVOICE ICON V1
+   Icon survives JavaScript textContent changes.
+   ===================================================== */
+
+.hsb-sp-preinvoice-form
+.preinvoice-add-button.hsb-sp-add-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+}
+
+
+
+
+/* HSB PREINVOICE BUTTON TYPOGRAPHY MATCH V1 */
+
+/* Match direct-purchase button typography */
+.hsb-sp-inquiry .preinvoice-add-button.hsb-sp-add-button {
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: normal;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Match icon size and alignment */
+.hsb-sp-inquiry .preinvoice-add-button.hsb-sp-add-button > i {
+    font-size: 1.125em;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+/* HSB PRODUCT INTRO HEADINGS V2 */
+
+body.single-product #desc .desc-main-card .desc-content :is(h1,h2,h3,h4,h5,h6) {
+clear: both;
+    text-align: right;
+    letter-spacing: normal;
+    scroll-margin-top: 110px;
+    overflow-wrap: anywhere;
+}
+
+body.single-product #desc .desc-main-card .desc-content h1 {
+font-size: clamp(27px,2.5vw,36px);
+    font-weight: 900;
+    line-height: 1.7;
+    color: #252b30;
+    margin: 40px 0 22px;
+    padding: 0 0 15px;
+    border-bottom: 3px solid #806139;
+}
+
+body.single-product #desc .desc-main-card .desc-content h2 {
+font-size: clamp(25px,2.2vw,34px);
+    font-weight: 900;
+    line-height: 1.8;
+    color: #6f4b29;
+    margin: 42px 0 22px;
+    padding: 16px 22px 16px 18px;
+    border-right: 5px solid #c49a62;
+    border-radius: 14px;
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(232,221,205,0.42) 58%,
+        rgba(218,203,182,0.82) 100%
+    );
+    box-shadow: inset 0 0 0 1px rgba(196,154,98,0.18);
+}
+
+body.single-product #desc .desc-main-card .desc-content h3 {
+font-size: clamp(20px,1.7vw,24px);
+    font-weight: 800;
+    line-height: 1.9;
+    color: #76512f;
+    margin: 30px 0 17px;
+    padding: 4px 16px 4px 0;
+    border-right: 4px solid #c09a68;
+    border-bottom: 0;
+    background: transparent;
+}
+
+body.single-product #desc .desc-main-card .desc-content h4 {
+font-size: 19px;
+    font-weight: 800;
+    line-height: 1.8;
+    color: #554432;
+    margin: 26px 0 14px;
+    padding-right: 12px;
+    border-right: 3px solid #bb9b70;
+}
+
+body.single-product #desc .desc-main-card .desc-content h5 {
+font-size: 17px;
+    font-weight: 750;
+    line-height: 1.85;
+    color: #765a3c;
+    margin: 22px 0 12px;
+}
+
+body.single-product #desc .desc-main-card .desc-content h6 {
+font-size: 15px;
+    font-weight: 750;
+    line-height: 1.9;
+    color: #626b72;
+    margin: 19px 0 11px;
+    text-decoration: underline;
+    text-decoration-color: #d7bd9b;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 7px;
+}
+
+body.single-product #desc .desc-main-card .desc-content h5::before {
+content: "◆";
+    color: #c4a57e;
+    font-size: 10px;
+    margin-left: 9px;
+}
+
+
+/* Long-description paragraphs only */
+body.single-product #desc .desc-main-card .desc-content p {
+    line-height: 2.15;
+    overflow-wrap: anywhere;
+}
+
+/* Avoid accidentally styling the product's main title. */
+body.single-product #desc .desc-section-head h2 {
+    background: none;
+}
+
+/* Responsive tables inside product descriptions */
+body.single-product #desc .desc-main-card .desc-content
+:is(.obt-container, .wp-block-table, .hsb-product-table-scroll) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--hsb-sp-description-table-border);
+    border-radius: 12px;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.single-product #desc .desc-main-card .desc-content table {
+    width: 100%;
+    min-width: 480px;
+    table-layout: auto;
+    border-collapse: collapse;
+    direction: rtl;
+}
+
+body.single-product #desc .desc-main-card .desc-content table th {
+    padding: 14px;
+    background: #806139;
+    color: #fff;
+    font-weight: 800;
+    text-align: right;
+}
+
+body.single-product #desc .desc-main-card .desc-content table td {
+    padding: 14px;
+    line-height: 2;
+    border-bottom: 1px solid #e9e5df;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+body.single-product #desc .desc-main-card .desc-content
+table tbody tr:nth-child(odd) > * {
+    background: #fff;
+}
+
+body.single-product #desc .desc-main-card .desc-content
+table tbody tr:nth-child(even) > * {
+    background: #f3f4f4;
+}
+
+body.single-product #desc .desc-main-card .desc-content
+table tbody tr:hover > * {
+    background: #f1e6d5;
+}
+
+/* Mobile headings */
+@media (max-width: 700px) {
+    body.single-product #desc .desc-main-card .desc-content h2 {
+        font-size: 22px !important;
+    }
+
+    body.single-product #desc .desc-main-card .desc-content h3 {
+        font-size: 19px !important;
+    }
+
+    body.single-product #desc .desc-main-card .desc-content h4 {
+        font-size: 17px !important;
+    }
+}
+
+
+/* H3: side line, no old decorative square */
+body.single-product #desc .desc-main-card .desc-content h3::before {
+    content: none !important;
+    display: none !important;
+}
+
+
+/* HSB PRODUCT INTRO H2 SIZE FIX */
+
+body.single-product #desc .desc-main-card .desc-content h2 {
+    font-size: 22px !important;
+    line-height: 1.75 !important;
+    font-weight: 800 !important;
+    padding: 10px 18px !important;
+    margin: 28px 0 16px !important;
+}
+
+@media (max-width: 700px) {
+    body.single-product #desc .desc-main-card .desc-content h2 {
+        font-size: 19px !important;
+        padding: 9px 13px !important;
+        margin: 24px 0 14px !important;
+    }
+}
+
+/* HSB CARD SLIDER LAYOUT ONLY — card appearance lives in hsb-product-card.css */
+.sp-products-row > .hsb-family-product-card.product-section {
+    flex: 0 0 270px;
+    width: 270px;
+    max-width: 270px;
+}
+@media (max-width: 768px) {
+    .sp-products-row > .hsb-family-product-card.product-section {
+        flex-basis: 245px;
+        width: 245px;
+        max-width: 245px;
+    }
+}

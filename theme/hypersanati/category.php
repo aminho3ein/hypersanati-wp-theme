@@ -289,21 +289,95 @@ $discount_products = new WP_Query([
                                         ?>
                                     </div>
 
-                                    <a href="<?php the_permalink(); ?>" class="article-card">
+                                    <!-- HSB MAGAZINE CARDS V1 -->
+<a href="<?php the_permalink(); ?>"
+   class="article-card hsb-mag-card">
 
-                                        <div class="article-card-image">
-                                            <?php the_post_thumbnail('large'); ?>
-                                        </div>
+    <div class="article-card-image hsb-mag-card__image">
+        <?php if (has_post_thumbnail()) : ?>
+            <?php the_post_thumbnail(
+                'large',
+                array(
+                    'loading' => 'lazy',
+                    'decoding' => 'async',
+                )
+            ); ?>
+        <?php else : ?>
+            <div class="hsb-mag-card__placeholder">
+                <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+                <span>مجله صنعت گستران الفت</span>
+            </div>
+        <?php endif; ?>
+    </div>
 
-                                        <h4 class="article-card-title">
-                                            <?php the_title(); ?>
-                                        </h4>
+    <div class="hsb-mag-card__body">
 
-                                        <p class="article-card-text">
-                                            <?php echo wp_trim_words(get_the_excerpt(), 30); ?>
-                                        </p>
+        <?php
+        $hsb_article_content = wp_strip_all_tags(
+            strip_shortcodes(
+                get_post_field('post_content', get_the_ID())
+            )
+        );
 
-                                    </a>
+        $hsb_article_words = preg_split(
+            '/\\s+/u',
+            trim($hsb_article_content),
+            -1,
+            PREG_SPLIT_NO_EMPTY
+        );
+
+        $hsb_reading_minutes = max(
+            1,
+            (int) ceil(count($hsb_article_words ?: array()) / 200)
+        );
+        ?>
+
+        <div class="hsb-mag-card__reading">
+            <i class="fa-regular fa-clock" aria-hidden="true"></i>
+            <span>
+                <?php echo esc_html(
+                    number_format_i18n($hsb_reading_minutes)
+                ); ?>
+                دقیقه مطالعه
+            </span>
+        </div>
+
+        <h3 class="article-card-title hsb-mag-card__title">
+            <?php echo esc_html(get_the_title()); ?>
+        </h3>
+
+        <p class="article-card-text hsb-mag-card__excerpt">
+            <?php echo esc_html(
+                wp_trim_words(get_the_excerpt(), 26, '…')
+            ); ?>
+        </p>
+
+        <div class="hsb-mag-card__footer">
+
+            <span class="hsb-mag-card__author">
+                <i class="fa-regular fa-user" aria-hidden="true"></i>
+                <?php echo esc_html(get_the_author()); ?>
+            </span>
+
+            <time class="hsb-mag-card__date"
+                  datetime="<?php echo esc_attr(
+                      get_the_date('c')
+                  ); ?>">
+                <i class="fa-regular fa-calendar-days"
+                   aria-hidden="true"></i>
+                <?php echo esc_html(get_the_date()); ?>
+            </time>
+
+        </div>
+
+        <div class="hsb-mag-card__more">
+            مطالعه مقاله
+            <i class="fa-solid fa-arrow-left"
+               aria-hidden="true"></i>
+        </div>
+
+    </div>
+</a>
                                 </div>
 
                             <?php endwhile; ?>

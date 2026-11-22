@@ -396,7 +396,125 @@ $shop_height_max =
   </div>
   <hr class="sub-section-hr" />
 
-  <div id="shop-container"></div>
+  <?php
+/* HSB ONLINE SALE SHOP DISPLAY V1 */
+
+$hsb_online_groups = array();
+$hsb_online_term_id = function_exists('hsb_online_sale_category_id')
+    ? hsb_online_sale_category_id(false)
+    : 0;
+
+if ($hsb_online_term_id && empty($_GET['dimension_search'])) {
+
+    $hsb_online_ids = get_posts(array(
+        'post_type'      => 'product',
+        'post_status'    => 'publish',
+        'posts_per_page' => 120,
+        'fields'         => 'ids',
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+        'no_found_rows'  => true,
+        'tax_query'      => array(
+            array(
+                'taxonomy' => 'product_cat',
+                'field'    => 'term_id',
+                'terms'    => $hsb_online_term_id,
+            ),
+        ),
+    ));
+
+    $hsb_expanded_ids = array();
+
+    foreach ($hsb_online_ids as $hsb_id) {
+        $hsb_product = wc_get_product($hsb_id);
+
+        if (
+            !$hsb_product ||
+            !function_exists('hsb_dual_is_direct') ||
+            !hsb_dual_is_direct($hsb_product)
+        ) {
+            continue;
+        }
+
+        $hsb_family_ids = function_exists('hsb_get_product_family_ids')
+            ? hsb_get_product_family_ids($hsb_id)
+            : array($hsb_id);
+
+        $hsb_family_ids = array_map(
+            'absint',
+            (array) $hsb_family_ids
+        );
+
+        if (!in_array((int) $hsb_id, $hsb_family_ids, true)) {
+            $hsb_family_ids[] = (int) $hsb_id;
+        }
+
+        $hsb_expanded_ids = array_merge(
+            $hsb_expanded_ids,
+            $hsb_family_ids
+        );
+    }
+
+    $hsb_expanded_ids = array_values(
+        array_unique(array_filter($hsb_expanded_ids))
+    );
+
+    if (
+        $hsb_expanded_ids &&
+        function_exists('hsb_group_product_ids_by_part_number')
+    ) {
+        $hsb_online_groups = hsb_group_product_ids_by_part_number(
+            $hsb_expanded_ids
+        );
+    }
+}
+?>
+
+<?php if (!empty($hsb_online_groups)) : ?>
+
+<section class="category hsb-online-sale-section"
+         aria-labelledby="hsb-online-sale-heading">
+
+    <div class="category-name">
+        <h5 id="hsb-online-sale-heading">
+            <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+            فروش آنلاین
+        </h5>
+    </div>
+
+    <p class="hsb-online-sale-description">
+        محصولات دارای قیمت و موجودی، آماده ثبت سفارش آنلاین
+    </p>
+
+    <div class="child-category hsb-online-sale-grid">
+        <?php foreach (array_slice($hsb_online_groups, 0, 8) as $hsb_group) : ?>
+            <?php
+            hypersanati_render_product_card(
+                $hsb_group['representative_id'],
+                $hsb_group
+            );
+            ?>
+        <?php endforeach; ?>
+    </div>
+
+    <?php if (count($hsb_online_groups) > 8) : ?>
+        <div class="hsb-online-sale-more">
+            <a href="<?php echo esc_url(
+                get_term_link($hsb_online_term_id, 'product_cat')
+            ); ?>">
+                مشاهده همه محصولات فروش آنلاین
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            </a>
+        </div>
+    <?php endif; ?>
+
+</section>
+
+<hr class="sub-section-hr" />
+
+<?php endif; ?>
+
+<div id="shop-container"></div>
 
   <div class="shop-loader">در حال بارگذاری...</div>
 

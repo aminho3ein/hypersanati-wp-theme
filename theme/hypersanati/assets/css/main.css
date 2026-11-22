@@ -460,7 +460,7 @@ input[type="radio"] {
 
 .my-navbar {
   display: flex;
-  background-color: var(--color-gray-navs);
+  background-color: var(--hsb-header-main-bg);
   width: 100%;
   height: 48px;
   border-bottom: 2px solid var(--color-gray);
@@ -544,11 +544,11 @@ ul li a:hover {
   width: 100%;
   height: 40px;
   padding: 0 0.75rem;
-  background: var(--color-primary-hover);
+  background: var(--hsb-header-top-bg);
 }
 
 .top-of-nav a {
-  color: var(--color-white);
+  color: var(--hsb-header-top-text);
   font-size: 0.75rem;
   font-weight: 500;
 }
@@ -567,7 +567,7 @@ ul li a:hover {
 
   padding: 0 1rem;
 
-  background-color: var(--color-gray-navs);
+  background-color: var(--hsb-header-main-bg);
 
   border-bottom: 1px solid var(--gray-300);
 
@@ -612,7 +612,7 @@ ul li a:hover {
   width: 24px;
   height: 2px;
 
-  background-color: var(--color-dark);
+  background-color: var(--hsb-header-hamburger-color);
 
   border-radius: 999px;
 
@@ -670,7 +670,7 @@ ul li a:hover {
     padding: 0;
 
     background:
-        var(--color-white);
+        var(--hsb-mobile-drawer-bg);
 
     border: 0 !important;
 
@@ -722,7 +722,7 @@ ul li a:hover {
     background:
         color-mix(
             in srgb,
-            var(--color-gray-navs) 72%,
+            var(--hsb-mobile-drawer-header-base) 72%,
             #fff
         );
 
@@ -815,7 +815,7 @@ ul li a:hover {
 
     border-radius: 11px;
 
-    background: #fff;
+    background: var(--hsb-mobile-close-bg);
 
     color:
         var(--color-dark);
@@ -842,10 +842,10 @@ ul li a:hover {
 
 .hsb-mobile-menu__close:hover {
     background:
-        var(--color-secondary);
+        var(--hsb-mobile-close-hover-bg);
 
     border-color:
-        var(--color-secondary);
+        var(--hsb-mobile-close-hover-bg);
 
     color: #fff;
 
@@ -928,7 +928,7 @@ ul li a:hover {
         transparent;
 
     color:
-        var(--color-dark);
+        var(--hsb-mobile-nav-text);
 
     font-size: 0.94rem;
     font-weight: 650;
@@ -1998,8 +1998,8 @@ button.handle-frame-section:disabled {
 .site-footer {
   width: 100%;
   margin-top: var(--spacing-xl);
-  color: var(--gray-200);
-  background: var(--gray-900);
+  color: var(--hsb-footer-text);
+  background: var(--hsb-footer-bg);
 }
 
 .site-footer .container {
@@ -2045,7 +2045,7 @@ button.handle-frame-section:disabled {
   flex: 0 0 44px;
   color: var(--color-secondary);
   background: rgba(159, 133, 97, 0.12);
-  border: var(--border-width) solid rgba(159, 133, 97, 0.28);
+  border: var(--border-width) solid var(--hsb-footer-service-icon-border);
   border-radius: var(--radius-lg);
 }
 
@@ -2111,7 +2111,7 @@ button.handle-frame-section:disabled {
   justify-content: center;
   flex: 0 0 72px;
   padding: var(--spacing-xs);
-  background: var(--color-white);
+  background: var(--hsb-footer-logo-box-bg);
   border-radius: var(--radius-lg);
 }
 
@@ -2124,20 +2124,20 @@ button.handle-frame-section:disabled {
 
 .site-footer__brand h2 {
   margin: 0 0 var(--spacing-xs);
-  color: var(--color-white);
+  color: var(--hsb-footer-heading);
   font-size: var(--fs-h4);
   font-weight: 800;
 }
 
 .site-footer__brand-label {
-  color: var(--color-primary-active);
+  color: var(--hsb-footer-brand-label);
   font-size: var(--fs-sm);
   font-weight: 700;
 }
 
 .site-footer__description {
   max-width: 620px;
-  color: var(--gray-400);
+  color: var(--hsb-footer-description-text);
   font-size: var(--fs-body);
   line-height: 2;
 }
@@ -2152,22 +2152,22 @@ button.handle-frame-section:disabled {
   gap: var(--spacing-lg);
   margin-top: var(--spacing-xl);
   padding: var(--spacing-lg);
-  background: var(--gray-800);
-  border: var(--border-width) solid var(--gray-700);
+  background: var(--hsb-footer-cta-bg);
+  border: var(--border-width) solid var(--hsb-footer-cta-border);
   border-radius: var(--radius-lg);
 }
 
 .site-footer__cta strong {
   display: block;
   margin-bottom: var(--spacing-xs);
-  color: var(--color-white);
+  color: var(--hsb-footer-cta-heading);
   font-size: var(--fs-body);
   font-weight: 800;
 }
 
 .site-footer__cta p {
   max-width: 520px;
-  color: var(--gray-400);
+  color: var(--hsb-footer-cta-description);
   font-size: var(--fs-sm);
   line-height: 1.8;
 }
@@ -2185,26 +2185,26 @@ button.handle-frame-section:disabled {
 .site-footer__contact-card {
   height: 100%;
   overflow: hidden;
-  background: var(--gray-800);
-  border: var(--border-width) solid var(--gray-700);
+  background: var(--hsb-footer-contact-bg);
+  border: var(--border-width) solid var(--hsb-footer-contact-border);
   border-radius: var(--radius-lg);
 }
 
 .site-footer__contact-header {
   padding: var(--spacing-lg);
-  background: var(--color-secondary);
+  background: var(--hsb-footer-contact-heading-bg);
 }
 
 .site-footer__contact-header > span {
   display: block;
   margin-bottom: 2px;
-  color: var(--color-white);
+  color: var(--hsb-footer-contact-heading-text);
   font-size: var(--fs-h5);
   font-weight: 800;
 }
 
 .site-footer__contact-header small {
-  color: var(--color-card-article-cat);
+  color: var(--hsb-footer-contact-subtitle);
   font-size: var(--fs-sm);
 }
 
@@ -2218,7 +2218,7 @@ button.handle-frame-section:disabled {
   gap: var(--spacing-md);
   align-items: start;
   padding: var(--spacing-md) 0;
-  border-bottom: var(--border-width) solid var(--gray-700);
+  border-bottom: var(--border-width) solid var(--hsb-footer-contact-divider);
 }
 
 .site-footer__contact-row:first-child {
@@ -2231,7 +2231,7 @@ button.handle-frame-section:disabled {
 }
 
 .site-footer__contact-label {
-  color: var(--color-primary-active);
+  color: var(--hsb-footer-contact-label);
   font-size: var(--fs-sm);
   font-weight: 700;
 }
@@ -2239,7 +2239,7 @@ button.handle-frame-section:disabled {
 .site-footer__contact-value {
   min-width: 0;
   margin: 0;
-  color: var(--gray-300);
+  color: var(--hsb-footer-contact-value-text);
   font-size: var(--fs-sm);
   line-height: 1.9;
 }
@@ -2253,12 +2253,12 @@ button.handle-frame-section:disabled {
 
 .site-footer__phones a,
 .site-footer a.site-footer__contact-value {
-  color: var(--gray-300);
+  color: var(--hsb-footer-contact-link-text);
 }
 
 .site-footer__phones a:hover,
 .site-footer a.site-footer__contact-value:hover {
-  color: var(--color-white);
+  color: var(--hsb-footer-contact-link-hover-text);
 }
 
 
@@ -2269,8 +2269,8 @@ button.handle-frame-section:disabled {
 .site-footer__navigation {
   margin-top: var(--spacing-xl);
   padding: var(--spacing-lg);
-  background: var(--gray-800);
-  border: var(--border-width) solid var(--gray-700);
+  background: var(--hsb-footer-navigation-bg);
+  border: var(--border-width) solid var(--hsb-footer-navigation-border);
   border-radius: var(--radius-lg);
 }
 
@@ -2286,13 +2286,13 @@ button.handle-frame-section:disabled {
 
 .site-footer__navigation h3 {
   margin: 0 0 2px;
-  color: var(--color-white);
+  color: var(--hsb-footer-heading);
   font-size: var(--fs-h5);
   font-weight: 800;
 }
 
 .site-footer__navigation-head p {
-  color: var(--gray-500);
+  color: var(--hsb-footer-nav-description);
   font-size: var(--fs-sm);
 }
 
@@ -2315,9 +2315,9 @@ button.handle-frame-section:disabled {
   gap: var(--spacing-sm);
   min-height: 48px;
   padding: var(--spacing-sm) var(--spacing-md);
-  color: var(--gray-300);
-  background: var(--gray-900);
-  border: var(--border-width) solid var(--gray-700);
+  color: var(--hsb-footer-nav-link-text);
+  background: var(--hsb-footer-nav-item-bg);
+  border: var(--border-width) solid var(--hsb-footer-nav-item-border);
   border-radius: var(--radius-md);
   font-size: var(--fs-body);
   font-weight: 600;
@@ -2329,9 +2329,9 @@ button.handle-frame-section:disabled {
 }
 
 .site-footer__navigation a:hover {
-  color: var(--color-white);
-  background: var(--color-secondary);
-  border-color: var(--color-primary);
+  color: var(--hsb-footer-nav-link-hover-text);
+  background: var(--hsb-footer-nav-item-hover-bg);
+  border-color: var(--hsb-footer-nav-item-hover-border);
   transform: translateY(-2px);
 }
 
@@ -2342,14 +2342,14 @@ button.handle-frame-section:disabled {
   align-items: center;
   justify-content: center;
   flex: 0 0 26px;
-  color: var(--color-primary-active);
-  background: var(--gray-800);
+  color: var(--hsb-footer-link-icon-color);
+  background: var(--hsb-footer-link-icon-bg);
   border-radius: var(--radius-sm);
 }
 
 .site-footer__navigation a:hover .site-footer__link-icon {
-  color: var(--color-white);
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--hsb-footer-link-icon-hover-text);
+  background: var(--hsb-footer-link-icon-hover-bg);
 }
 
 
@@ -2359,8 +2359,8 @@ button.handle-frame-section:disabled {
 
 .site-footer__bottom {
   min-height: 52px;
-  background: var(--color-dark);
-  border-top: var(--border-width) solid var(--gray-800);
+  background: var(--hsb-footer-bottom-bg);
+  border-top: var(--border-width) solid var(--hsb-footer-bottom-border);
 }
 
 .site-footer__bottom-layout {
@@ -2378,12 +2378,12 @@ button.handle-frame-section:disabled {
 .site-footer__bottom p,
 .site-footer__bottom a {
   margin: 0;
-  color: var(--gray-500);
+  color: var(--hsb-footer-bottom-text);
   font-size: var(--fs-sm);
 }
 
 .site-footer__bottom a:hover {
-  color: var(--color-primary-active);
+  color: var(--hsb-footer-bottom-link-hover);
 }
 
 .site-footer__bottom-links {
@@ -2409,7 +2409,7 @@ button.handle-frame-section:disabled {
   }
 
   .site-footer__service-card:nth-child(odd) {
-    border-left: var(--border-width) solid rgba(94, 68, 32, 0.1);
+    border-left: var(--border-width) solid var(--hsb-footer-service-divider);
   }
 
   .site-footer__navigation ul {
@@ -2428,7 +2428,7 @@ button.handle-frame-section:disabled {
   .site-footer__service-card {
     padding-inline: var(--spacing-lg);
     border-bottom: 0;
-    border-left: var(--border-width) solid rgba(94, 68, 32, 0.1);
+    border-left: var(--border-width) solid var(--hsb-footer-service-divider);
   }
 
   .site-footer__service-card:last-child {
@@ -2522,10 +2522,10 @@ button.handle-frame-section:disabled {
 /* ---------- Service strip: approved visual ---------- */
 
 .site-footer__services {
-  background: #f4f1eb;
-  color: var(--color-dark);
-  border-top: var(--border-width) solid rgba(159, 133, 97, 0.22);
-  border-bottom: var(--border-width) solid rgba(159, 133, 97, 0.26);
+  background: var(--hsb-footer-services-bg);
+  color: var(--hsb-footer-service-text);
+  border-top: var(--border-width) solid var(--hsb-footer-service-border-top);
+  border-bottom: var(--border-width) solid var(--hsb-footer-service-border-bottom);
 }
 
 .site-footer__service-card {
@@ -2537,9 +2537,9 @@ button.handle-frame-section:disabled {
   width: 42px;
   height: 42px;
   flex-basis: 42px;
-  color: var(--color-secondary);
-  background: rgba(159, 133, 97, 0.14);
-  border: var(--border-width) solid rgba(159, 133, 97, 0.28);
+  color: var(--hsb-footer-service-icon-color);
+  background: var(--hsb-footer-service-icon-bg);
+  border: var(--border-width) solid var(--hsb-footer-service-icon-border);
   border-radius: 10px;
 }
 
@@ -2549,13 +2549,13 @@ button.handle-frame-section:disabled {
 }
 
 .site-footer__service-card strong {
-  color: #25211c;
+  color: var(--hsb-footer-service-title);
   font-size: 0.88rem;
   font-weight: 800;
 }
 
 .site-footer__service-card p {
-  color: #746d63;
+  color: var(--hsb-footer-service-description);
   font-size: 0.72rem;
   line-height: 1.7;
 }
@@ -2860,14 +2860,14 @@ button.handle-frame-section:disabled {
 }
 
 .site-footer__phones a {
-  color: var(--gray-200);
+  color: var(--hsb-footer-phone-link);
   font-size: var(--fs-body);
   font-weight: 600;
   line-height: 1.4;
 }
 
 .site-footer__phones a:hover {
-  color: var(--color-primary-active);
+  color: var(--hsb-footer-phone-link-hover);
 }
 
 .site-footer__phone-icon {
@@ -2877,8 +2877,8 @@ button.handle-frame-section:disabled {
   align-items: center;
   justify-content: center;
   flex: 0 0 28px;
-  color: var(--color-primary-active);
-  background: var(--gray-900);
+  color: var(--hsb-footer-phone-icon-color);
+  background: var(--hsb-footer-phone-icon-bg);
   border-radius: var(--radius-md);
 }
 
@@ -2888,7 +2888,7 @@ button.handle-frame-section:disabled {
 }
 
 .site-footer__phone-separator {
-  color: var(--gray-600);
+  color: var(--hsb-footer-phone-separator);
   font-size: var(--fs-sm);
 }
 
@@ -3169,7 +3169,7 @@ button.handle-frame-section:disabled {
 
     border-radius: 12px;
 
-    background: #fff;
+    background: var(--hsb-account-dropdown-bg);
 
     box-shadow:
         0 16px 38px
@@ -3214,7 +3214,7 @@ button.handle-frame-section:disabled {
     border: 0 !important;
     border-radius: 8px;
 
-    color: #30383e;
+    color: var(--hsb-account-dropdown-text);
 
     font-size: 12px;
     font-weight: 750;
@@ -3516,11 +3516,9 @@ body.admin-bar
     border: 0 !important;
     border-radius: 10px !important;
 
-    background:
-        var(--color-secondary)
-        !important;
+    background: var(--hsb-header-icon-bg) !important;
 
-    color: #fff !important;
+    color: var(--hsb-header-icon-text) !important;
 
     box-shadow: none !important;
 
@@ -3553,13 +3551,7 @@ body.admin-bar
 .nav-actions
 .hsb-account-menu:focus-within
 .hsb-account-icon {
-    background:
-        color-mix(
-            in srgb,
-            var(--color-secondary) 86%,
-            #000
-        )
-        !important;
+    background: var(--hsb-header-icon-hover-bg) !important;
 
     color: #fff !important;
 }
@@ -3599,11 +3591,9 @@ body.admin-bar
     border: 0 !important;
     border-radius: 10px !important;
 
-    background:
-        var(--color-secondary)
-        !important;
+    background: var(--hsb-header-icon-bg) !important;
 
-    color: #fff !important;
+    color: var(--hsb-header-icon-text) !important;
 }
 
 .mobile-nav-actions
@@ -6200,7 +6190,7 @@ html {
 }
 
 .site-footer__mobile-name {
-    color: var(--gray-300);
+    color: var(--hsb-footer-mobile-name);
     font-size: var(--fs-sm);
     font-weight: 700;
     line-height: 1.6;
@@ -6212,7 +6202,7 @@ html {
 
 .site-footer__mobile-number {
     direction: ltr;
-    color: var(--gray-200);
+    color: var(--hsb-footer-mobile-number);
     font-size: var(--fs-body);
     font-weight: 600;
     line-height: 1.5;
@@ -6220,7 +6210,7 @@ html {
 }
 
 .site-footer__mobile-number:hover {
-    color: var(--color-primary-active);
+    color: var(--hsb-footer-mobile-number-hover);
 }
 
 
@@ -6234,7 +6224,7 @@ html {
 }
 
 .site-footer__enamad-title {
-    color: var(--gray-300);
+    color: var(--hsb-footer-enamad-title);
     font-size: var(--fs-sm);
     font-weight: 700;
 }
@@ -6251,7 +6241,7 @@ html {
 
     padding: 7px;
 
-    background: #fff;
+    background: var(--hsb-footer-enamad-bg);
     border-radius: var(--radius-lg);
 
     overflow: hidden;
@@ -6302,8 +6292,8 @@ html {
 
     padding: 18px 20px;
 
-    background: var(--gray-800);
-    border: 1px solid var(--gray-700);
+    background: var(--hsb-footer-identity-bg);
+    border: 1px solid var(--hsb-footer-identity-border);
     border-radius: var(--radius-lg);
 }
 
@@ -6332,7 +6322,7 @@ html {
 .site-footer__identity-copy h2 {
     margin: 0 0 8px;
 
-    color: var(--color-white);
+    color: var(--hsb-footer-heading);
 
     font-size: var(--fs-h4);
     font-weight: 800;
@@ -6344,7 +6334,7 @@ html {
 
     margin: 0;
 
-    color: var(--gray-300);
+    color: var(--hsb-footer-identity-description);
 
     font-size: var(--fs-sm);
     line-height: 2;
@@ -6375,7 +6365,7 @@ html {
 
     padding: 7px;
 
-    background: #fff;
+    background: var(--hsb-footer-enamad-bg);
     border-radius: var(--radius-lg);
 
     overflow: hidden;
@@ -6559,7 +6549,7 @@ html {
 }
 
 .site-footer__contact-email a:hover {
-    color: var(--color-primary-active);
+    color: var(--hsb-footer-email-hover);
 }
 
 
@@ -6596,4 +6586,640 @@ html {
         width: 100%;
     }
 
+}
+
+
+/* ============================================================
+   HSB CENTRAL DESIGN TOKENS V1
+   Source of truth for future appearance controls.
+
+   IMPORTANT:
+   These are aliases only. Components will be migrated
+   incrementally after visual approval.
+   ============================================================ */
+
+:root {
+
+  /* Brand */
+  --hsb-brand-primary: var(--color-primary);
+  --hsb-brand-secondary: var(--color-secondary);
+  --hsb-brand-primary-hover: var(--color-primary-hover);
+  --hsb-brand-primary-active: var(--color-primary-active);
+
+  /* Global surfaces */
+  --hsb-page-bg: var(--color-white);
+  --hsb-surface-bg: var(--color-white);
+  --hsb-surface-muted: var(--color-light);
+  --hsb-surface-border: var(--border-color);
+
+  /* Global text */
+  --hsb-text-primary: var(--color-dark);
+  --hsb-text-secondary: var(--gray-600);
+  --hsb-text-link: var(--color-link);
+  --hsb-text-link-hover: var(--color-link-hover);
+
+  /* Header */
+  --hsb-header-top-bg: var(--color-primary-hover);
+  --hsb-header-top-text: var(--color-white);
+  --hsb-header-main-bg: var(--color-gray-navs);
+  --hsb-header-nav-text: var(--color-dark);
+  --hsb-header-nav-active: var(--color-secondary);
+  --hsb-header-icon-bg: var(--color-secondary);
+  --hsb-header-icon-text: var(--color-white);
+  --hsb-header-badge-direct-bg: #168052;
+  --hsb-header-badge-quote-bg: #e53935;
+  --hsb-header-badge-text: #ffffff;
+  --hsb-header-badge-border: #ffffff;
+  --hsb-header-badge-empty-bg: #888888;
+
+  /* HSB HEADER TOKENS PHASE 2C */
+  --hsb-header-icon-hover-bg: color-mix(
+      in srgb,
+      var(--hsb-header-icon-bg) 86%,
+      #000
+  );
+  --hsb-account-dropdown-text: #30383e;
+
+
+  /* HSB HEADER TOKENS PHASE 2B */
+
+  --hsb-mobile-drawer-bg: var(--color-white);
+  --hsb-mobile-drawer-header-base: var(--color-gray-navs);
+  --hsb-mobile-nav-text: var(--color-dark);
+
+  --hsb-mobile-close-bg: #ffffff;
+  --hsb-mobile-close-hover-bg: var(--color-secondary);
+
+  --hsb-header-hamburger-color: var(--color-dark);
+
+  --hsb-account-dropdown-bg: #ffffff;
+
+
+  /* Footer */
+  --hsb-footer-bg: var(--gray-900);
+  --hsb-footer-text: var(--gray-200);
+  --hsb-footer-heading: var(--color-white);
+  --hsb-footer-link: var(--color-white);
+  --hsb-footer-box-bg: var(--gray-800);
+  --hsb-footer-box-border: var(--gray-700);
+  --hsb-footer-contact-bg: var(--gray-800);
+  --hsb-footer-contact-heading-bg: var(--color-secondary);
+
+  /* HSB FOOTER SURFACE TOKENS V1 */
+  --hsb-footer-services-bg: #f4f1eb;
+  --hsb-footer-identity-bg: var(--gray-800);
+  --hsb-footer-cta-bg: var(--gray-800);
+  --hsb-footer-navigation-bg: var(--gray-800);
+  --hsb-footer-bottom-bg: var(--color-dark);
+
+  /* HSB FOOTER TEXT TOKENS V1 */
+  --hsb-footer-description-text: var(--gray-400);
+  --hsb-footer-cta-heading: var(--color-white);
+  --hsb-footer-cta-description: var(--gray-400);
+  --hsb-footer-contact-label: var(--color-primary-active);
+  --hsb-footer-contact-value-text: var(--gray-300);
+  --hsb-footer-nav-description: var(--gray-500);
+  --hsb-footer-nav-link-text: var(--gray-300);
+  --hsb-footer-nav-link-hover-text: var(--color-white);
+  --hsb-footer-bottom-link-hover: var(--color-primary-active);
+  --hsb-footer-contact-heading-text: var(--color-white);
+
+  /* HSB FOOTER SERVICE STRIP TOKENS V1 */
+  --hsb-footer-service-text: var(--color-dark);
+  --hsb-footer-service-title: #25211c;
+  --hsb-footer-service-description: #746d63;
+  --hsb-footer-service-icon-color: var(--color-secondary);
+  --hsb-footer-service-icon-bg: rgba(159, 133, 97, 0.14);
+  --hsb-footer-service-icon-border: rgba(159, 133, 97, 0.28);
+  --hsb-footer-service-border-top: rgba(159, 133, 97, 0.22);
+  --hsb-footer-service-border-bottom: rgba(159, 133, 97, 0.26);
+  --hsb-footer-service-divider: rgba(94, 68, 32, 0.1);
+
+  /* HSB FOOTER DETAIL TOKENS V1 */
+
+  /* Card borders */
+  --hsb-footer-identity-border: var(--gray-700);
+  --hsb-footer-contact-border: var(--gray-700);
+  --hsb-footer-contact-divider: var(--gray-700);
+  --hsb-footer-cta-border: var(--gray-700);
+  --hsb-footer-navigation-border: var(--gray-700);
+
+  /* Navigation items */
+  --hsb-footer-nav-item-bg: var(--gray-900);
+  --hsb-footer-nav-item-border: var(--gray-700);
+  --hsb-footer-nav-item-hover-bg: var(--color-secondary);
+  --hsb-footer-nav-item-hover-border: var(--color-primary);
+
+  /* Navigation icons */
+  --hsb-footer-link-icon-color: var(--color-primary-active);
+  --hsb-footer-link-icon-bg: var(--gray-800);
+
+  /* Contact icons */
+  --hsb-footer-phone-icon-color: var(--color-primary-active);
+  --hsb-footer-phone-icon-bg: var(--gray-900);
+  --hsb-footer-phone-separator: var(--gray-600);
+
+  /* Bottom / trust badge */
+  --hsb-footer-bottom-border: var(--gray-800);
+  --hsb-footer-enamad-bg: #ffffff;
+
+  /* HSB FOOTER FINAL COLOR TOKENS V1 */
+  --hsb-footer-brand-label: var(--color-primary-active);
+  --hsb-footer-contact-subtitle: var(--color-card-article-cat);
+  --hsb-footer-phone-link: var(--gray-200);
+  --hsb-footer-phone-link-hover: var(--color-primary-active);
+  --hsb-footer-mobile-name: var(--gray-300);
+  --hsb-footer-mobile-number: var(--gray-200);
+  --hsb-footer-mobile-number-hover: var(--color-primary-active);
+  --hsb-footer-enamad-title: var(--gray-300);
+  --hsb-footer-identity-description: var(--gray-300);
+  --hsb-footer-email-hover: var(--color-primary-active);
+  --hsb-footer-link-icon-hover-text: var(--color-white);
+  --hsb-footer-link-icon-hover-bg: rgba(255, 255, 255, 0.08);
+
+  /* HSB FOOTER AUDIT COMPLETION V1 */
+  --hsb-footer-logo-box-bg: var(--color-white);
+  --hsb-footer-contact-link-text: var(--gray-300);
+  --hsb-footer-contact-link-hover-text: var(--color-white);
+  --hsb-footer-bottom-text: var(--gray-500);
+
+
+
+
+
+  /* General buttons */
+  --hsb-button-primary-bg: var(--color-primary);
+  --hsb-button-primary-text: var(--color-white);
+  --hsb-button-primary-hover-bg: var(--color-primary-hover);
+  --hsb-button-primary-border: var(--color-primary);
+
+  --hsb-button-secondary-bg: var(--color-secondary);
+  --hsb-button-secondary-text: var(--color-white);
+  --hsb-button-secondary-hover-bg: var(--color-primary);
+
+  /* Forms */
+  --hsb-input-bg: var(--color-white);
+  --hsb-input-text: var(--color-dark);
+  --hsb-input-border: var(--border-color);
+  --hsb-input-focus-border: var(--color-primary);
+
+  /* Commerce */
+  --hsb-direct-purchase-bg: #168052;
+  --hsb-direct-purchase-text: #ffffff;
+  --hsb-quote-request-bg: #735936;
+  --hsb-quote-request-text: #ffffff;
+
+  --hsb-product-card-bg: var(--color-white);
+  --hsb-product-card-border: var(--border-color);
+  --hsb-product-price-text: #168052;
+  --hsb-product-breadcrumb-bg: var(--color-product-breadcrumb-background);
+
+  /* Article typography */
+  --hsb-article-h1-text: var(--color-dark);
+  --hsb-article-h2-text: #6f4b29;
+  --hsb-article-h3-text: #76512f;
+  --hsb-article-h4-text: #554432;
+  --hsb-article-h5-text: #765a3c;
+  --hsb-article-h6-text: #626b72;
+
+  --hsb-article-h2-border: #c49a62;
+  --hsb-article-h3-border: #c09a68;
+  --hsb-article-h4-border: #bb9b70;
+  --hsb-article-h2-gradient-start: #dacbb6;
+  --hsb-article-h2-gradient-end: transparent;
+
+  /* Product description typography */
+  --hsb-product-h1-text: var(--hsb-article-h1-text);
+  --hsb-product-h2-text: var(--hsb-article-h2-text);
+  --hsb-product-h3-text: var(--hsb-article-h3-text);
+  --hsb-product-h4-text: var(--hsb-article-h4-text);
+  --hsb-product-h5-text: var(--hsb-article-h5-text);
+  --hsb-product-h6-text: var(--hsb-article-h6-text);
+
+  --hsb-product-h2-border: var(--hsb-article-h2-border);
+  --hsb-product-h3-border: var(--hsb-article-h3-border);
+  --hsb-product-h4-border: var(--hsb-article-h4-border);
+
+  --hsb-product-h2-gradient-start: var(--hsb-article-h2-gradient-start);
+  --hsb-product-h2-gradient-end: var(--hsb-article-h2-gradient-end);
+
+  /* Breadcrumbs */
+  --hsb-article-breadcrumb-bg: transparent;
+  --hsb-article-breadcrumb-text: var(--gray-600);
+  --hsb-product-breadcrumb-text: var(--gray-700);
+
+  /* HSB SHOP DIMENSION SEARCH TOKENS V1 */
+  --hsb-shop-search-border: var(--color-primary);
+  --hsb-shop-search-bg-start: #fdfaf6;
+  --hsb-shop-search-bg-end: #ffffff;
+  --hsb-shop-search-shadow-color: rgba(159, 133, 97, 0.12);
+  --hsb-shop-search-title: var(--color-secondary);
+  --hsb-shop-search-title-border: var(--color-primary);
+  --hsb-shop-search-title-icon: var(--color-primary);
+  --hsb-shop-search-button-bg: var(--color-secondary);
+  --hsb-shop-search-button-hover-bg: var(--color-primary-active);
+
+  /* HSB SHOP CARD SURFACE TOKENS V1 */
+
+  --hsb-shop-card-bg: #ffffff;
+  --hsb-shop-card-base-border: rgba(30, 37, 43, 0.09);
+  --hsb-shop-card-base-shadow: rgba(25, 31, 36, 0.045);
+  --hsb-shop-card-base-hover-border: rgba(157, 126, 78, 0.34);
+  --hsb-shop-card-base-hover-shadow: rgba(25, 31, 36, 0.085);
+
+  --hsb-shop-card-border: color-mix(
+      in srgb,
+      var(--color-secondary) 42%,
+      #5e5e5e
+  );
+
+  --hsb-shop-card-shadow: rgba(24, 30, 35, 0.075);
+
+  --hsb-shop-card-hover-border: color-mix(
+      in srgb,
+      var(--color-secondary) 72%,
+      #555
+  );
+
+  --hsb-shop-card-hover-shadow: rgba(24, 30, 35, 0.16);
+  --hsb-shop-card-media-bg: #ffffff;
+
+  /* HSB SHARED PRODUCT CARD VISUAL V1 */
+  --hsb-shop-card-display-title: #252c31;
+  --hsb-shop-card-part-emphasis: var(--color-secondary);
+  --hsb-shop-card-family-badge-base: var(--color-secondary);
+  --hsb-shop-card-family-badge-bg: color-mix(
+      in srgb,
+      var(--hsb-shop-card-family-badge-base) 91%,
+      transparent
+  );
+  --hsb-shop-card-family-badge-text: #ffffff;
+
+  /* HSB UNIFIED SINGLE PRODUCT CARDS V2 */
+  --hsb-card-dimension-bg: #f7f8f8;
+  --hsb-card-dimension-border: rgba(30, 37, 43, 0.065);
+  --hsb-card-dimension-label: var(--color-secondary);
+  --hsb-card-dimension-value: #293036;
+
+  --hsb-card-origin-brand: #333b41;
+  --hsb-card-origin-country: var(--color-secondary);
+
+  --hsb-card-rating-text: var(--color-secondary);
+  --hsb-card-rating-empty: #c7c9cb;
+  --hsb-card-rating-active: #e5a316;
+
+  --hsb-card-price-note-bg: rgba(49, 112, 77, 0.07);
+  --hsb-card-price-note-text: #466451;
+  --hsb-card-price-inquiry-text: #d11f1f;
+  --hsb-card-price-actual-text: #168052;
+
+  --hsb-card-action-text: var(--color-secondary);
+  --hsb-card-action-direct-bg: #168052;
+  --hsb-card-action-quote-bg: #735936;
+  --hsb-card-action-button-text: #ffffff;
+  --hsb-card-action-disabled-bg: #d7dcda;
+  --hsb-card-action-disabled-text: #49534e;
+
+
+
+
+
+  /* Table design */
+  --hsb-table-head-bg: #806139;
+  --hsb-table-head-text: #ffffff;
+  --hsb-table-row-odd-bg: #ffffff;
+  --hsb-table-row-even-bg: #f3f4f4;
+  --hsb-table-row-hover-bg: #f1e6d5;
+  --hsb-table-border: #e5d9cb;
+
+  /* Article table of contents */
+  --hsb-toc-bg: #eeeeee;
+  --hsb-toc-text: var(--color-dark);
+  --hsb-toc-active-bg: #ffffff;
+  --hsb-toc-active-text: var(--color-secondary);
+  --hsb-toc-hover-bg: #f5f2ec;
+
+  /* Article notes */
+  --hsb-note-bg: #f8f4ee;
+  --hsb-note-text: var(--color-dark);
+  --hsb-note-border: var(--color-primary);
+
+  /* FAQ */
+  --hsb-faq-question-bg: var(--color-white);
+  --hsb-faq-answer-bg: var(--color-white);
+  --hsb-faq-active-bg: #f5f2ec;
+  --hsb-faq-border: var(--border-color);
+
+  /* Back to top */
+  --hsb-back-to-top-bg: var(--color-secondary);
+  --hsb-back-to-top-icon: var(--color-white);
+  --hsb-back-to-top-hover-bg: var(--color-primary);
+
+}
+
+
+
+/* ============================================================
+   HSB MOBILE QUICK ACTIONS V1
+   Compact icon-only quick action menu
+   ============================================================ */
+
+:root {
+    --hsb-mobile-quick-bg: var(--hsb-header-icon-bg);
+    --hsb-mobile-quick-text: var(--hsb-header-icon-text);
+    --hsb-mobile-quick-panel-bg: var(--hsb-header-main-bg);
+    --hsb-mobile-quick-panel-border: var(--gray-300);
+    --hsb-mobile-quick-shadow: rgba(30, 37, 43, .16);
+}
+
+.hsb-mobile-quick-toggle {
+    display: none;
+}
+
+@media (max-width: 991.98px) {
+
+    .hsb-navbar-inner {
+        min-width: 0;
+    }
+
+    .hsb-navbar-inner > .navbar-brand {
+        min-width: 0;
+        max-width: calc(100vw - 145px);
+    }
+
+    .hsb-navbar-inner > .navbar-brand
+    .custom-logo-link {
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .hsb-navbar-inner > .navbar-brand
+    .custom-logo {
+        max-width: 100% !important;
+        width: auto !important;
+        height: auto !important;
+        max-height: 48px;
+        object-fit: contain;
+    }
+
+    .hsb-navbar-inner > .menu-and-cart {
+        position: relative;
+        flex: 1 1 auto;
+        min-width: 96px;
+        gap: 8px;
+        overflow: visible;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .hsb-navbar-inner
+    .hsb-mobile-quick-toggle {
+        display: inline-flex !important;
+        flex: 0 0 44px;
+        width: 44px;
+        min-width: 44px;
+        height: 44px;
+        min-height: 44px;
+        padding: 0;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 10px;
+        background: var(--hsb-mobile-quick-bg);
+        color: var(--hsb-mobile-quick-text);
+        font-size: 20px;
+        cursor: pointer;
+        transition:
+            background-color .2s ease,
+            transform .2s ease;
+    }
+
+    .hsb-navbar-inner
+    .hsb-mobile-quick-toggle:hover,
+    .hsb-navbar-inner
+    .hsb-mobile-quick-toggle[aria-expanded="true"] {
+        background: var(--hsb-header-icon-bg);
+    }
+
+    .hsb-navbar-inner
+    .hsb-mobile-quick-toggle[aria-expanded="true"] {
+        transform: translateY(1px);
+    }
+
+    .hsb-navbar-inner
+    .hsb-mobile-quick-toggle:focus-visible {
+        outline: 3px solid var(--hsb-brand-primary);
+        outline-offset: 3px;
+    }
+
+    /* Existing three actions become a floating panel. */
+    .hsb-navbar-inner > .menu-and-cart
+    > .mobile-nav-actions {
+        position: absolute;
+        z-index: 1200;
+        top: calc(100% + 10px);
+        left: 0;
+        right: auto;
+
+        width: max-content;
+        max-width: calc(100vw - 32px);
+        min-width: 188px;
+
+        display: flex !important;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        margin: 0 !important;
+        padding: 12px !important;
+
+        border: 1px solid var(--hsb-mobile-quick-panel-border);
+        border-radius: 15px;
+        background: var(--hsb-mobile-quick-panel-bg);
+        box-shadow:
+            0 12px 28px var(--hsb-mobile-quick-shadow);
+
+        list-style: none;
+
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(-7px);
+
+        transition:
+            opacity .2s ease,
+            visibility .2s ease,
+            transform .2s ease;
+    }
+
+    .hsb-navbar-inner > .menu-and-cart
+    > .mobile-nav-actions.is-open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .hsb-navbar-inner
+    .mobile-nav-actions > li,
+    .hsb-navbar-inner
+    .mobile-nav-actions > .cart {
+        flex: 0 0 44px;
+        width: 44px;
+        height: 44px;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none;
+    }
+
+    .hsb-navbar-inner
+    .mobile-nav-actions
+    .preinvoice-cart-link,
+    .hsb-navbar-inner
+    .mobile-nav-actions
+    .hsb-account-icon {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        margin: 0 !important;
+    }
+
+    .hsb-navbar-inner
+    .mobile-nav-actions
+    .preinvoice-count-badge,
+    .hsb-navbar-inner
+    .mobile-nav-actions
+    .hsb-direct-header-badge {
+        z-index: 3;
+    }
+}
+
+@media (max-width: 359px) {
+    .hsb-navbar-inner > .navbar-brand {
+        max-width: calc(100vw - 155px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hsb-mobile-quick-toggle,
+    .hsb-navbar-inner > .menu-and-cart
+    > .mobile-nav-actions {
+        transition: none !important;
+    }
+}
+
+
+/* ============================================================
+   HSB DUAL SALES DESIGN TOKENS V1
+   Preserve existing direct-sale and quotation colors.
+   ============================================================ */
+:root {
+    --hsb-sale-quote-button-bg: #735936;
+    --hsb-sale-direct-button-bg: #167a50;
+    --hsb-sale-inquiry-status: #b42318;
+    --hsb-sale-button-text: #fff;
+    --hsb-sale-neutral-border: #ddd;
+}
+
+
+/* ============================================================
+   HSB DUAL CART CENTRAL COLORS V1
+   Cart colors inherit the shared sales workflow tokens.
+   Existing visible colors remain unchanged.
+   ============================================================ */
+:root {
+    --hsb-cart-neutral-white: #fff;
+    --hsb-cart-quote-soft-shadow: rgba(115, 89, 54, .2);
+}
+
+/* ============================================================
+   HSB DUAL CART NEUTRAL TOKENS V1
+   Preserve existing dual-cart neutral colors.
+   ============================================================ */
+:root {
+    --hsb-cart-quote-border: #d9ccbb;
+    --hsb-cart-quote-surface: #f5f0e9;
+    --hsb-cart-direct-surface: #f3f6f3;
+    --hsb-cart-muted-text: #66736b;
+}
+
+/* HSB QUOTE POPUP DESIGN TOKENS V1 */
+:root {
+    --hsb-quote-popup-surface: #f5f2ec;
+    --hsb-quote-popup-border: #e5d8c7;
+    --hsb-quote-popup-text: #32291e;
+}
+
+/* HSB CART AJAX POPUP TOKENS V1 */
+:root {
+    --hsb-cart-popup-muted-border: #b8b8b8;
+    --hsb-cart-popup-secondary-border: #bdbdbd;
+    --hsb-cart-popup-light-border: #dcdcdc;
+    --hsb-cart-popup-success-border: #b8d8c2;
+    --hsb-cart-popup-success-accent: #18a957;
+    --hsb-cart-popup-light-surface: #f3f3f3;
+    --hsb-cart-popup-divider: #d0d0d0;
+    --hsb-cart-popup-shadow: rgba(0, 0, 0, 0.08);
+}
+
+/* HSB CART AJAX FINAL SHADOW V1 */
+:root {
+    --hsb-cart-popup-strong-shadow: rgba(0, 0, 0, 0.12);
+}
+
+/* HSB SINGLE PRODUCT REVIEWS TOKENS V1 */
+:root {
+    --hsb-review-surface: #fff;
+    --hsb-review-text-strong: #111827;
+    --hsb-review-text-muted: #6b7280;
+    --hsb-review-text-body: #374151;
+    --hsb-review-text-subtle: #9ca3af;
+    --hsb-review-surface-soft: #f9fafb;
+    --hsb-review-focus: #2563eb;
+    --hsb-review-error: #ef4444;
+    --hsb-review-star: #f59e0b;
+    --hsb-review-border: #d1d5db;
+    --hsb-review-verified: #15803d;
+    --hsb-review-outline: rgba(17, 24, 39, 0.08);
+    --hsb-review-shadow: rgba(17, 24, 39, 0.07);
+    --hsb-review-focus-ring: rgba(37, 99, 235, 0.12);
+}
+
+/* HSB SINGLE PRODUCT MEDIA SPECS TOKENS V1 */
+:root {
+    --hsb-sp-gallery-surface: #fff;
+    --hsb-sp-gallery-border: rgba(0, 0, 0, 0.08);
+    --hsb-sp-gallery-shadow-soft: rgba(0, 0, 0, 0.07);
+    --hsb-sp-gallery-shadow-active: rgba(37, 99, 235, 0.15);
+    --hsb-sp-specs-surface: #fff;
+    --hsb-sp-specs-border: rgba(0, 0, 0, 0.08);
+    --hsb-sp-specs-shadow: rgba(0, 0, 0, 0.06);
+    --hsb-sp-specs-heading: #111827;
+    --hsb-sp-specs-label: #374151;
+    --hsb-sp-specs-value: #6b7280;
+}
+
+/* HSB SINGLE PRODUCT PURCHASE TOKENS V1 */
+:root {
+    --hsb-sp-purchase-surface: #fff;
+    --hsb-sp-purchase-text-strong: #111827;
+    --hsb-sp-purchase-text-body: #374151;
+    --hsb-sp-purchase-text-muted: #6b7280;
+    --hsb-sp-purchase-text-subtle: #9ca3af;
+    --hsb-sp-purchase-legacy-cta: #ef4444;
+    --hsb-sp-purchase-focus: #2563eb;
+    --hsb-sp-purchase-shadow: rgba(0, 0, 0, 0.08);
+    --hsb-sp-purchase-border: rgba(17, 24, 39, 0.08);
+    --hsb-sp-purchase-hover: rgba(17, 24, 39, 0.07);
+    --hsb-sp-purchase-focus-ring: rgba(37, 99, 235, 0.12);
+}
+
+/* HSB PRODUCT DESCRIPTION BORDER TOKEN V1 */
+:root {
+    --hsb-sp-description-table-border: #e5d9cb;
 }

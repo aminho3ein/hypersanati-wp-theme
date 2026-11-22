@@ -434,9 +434,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const oldText = button.textContent;
 
+    // Change the label without destroying the real Font Awesome icon.
+    function hsbSetPreinvoiceButtonLabel(text) {
+      let icon = button.querySelector("i");
+
+      if (!icon) {
+        icon = document.createElement("i");
+        icon.className = "fa-solid fa-file-invoice";
+        icon.setAttribute("aria-hidden", "true");
+      }
+
+      button.replaceChildren(
+        icon,
+        document.createTextNode(" " + String(text).trim())
+      );
+    }
+
     button.disabled = true;
     button.classList.add("loading");
-    button.textContent = "در حال افزودن...";
+    hsbSetPreinvoiceButtonLabel("در حال افزودن...");
 
     if (message) {
       message.textContent = "";
@@ -513,7 +529,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .finally(function () {
         button.disabled = false;
         button.classList.remove("loading");
-        button.textContent = oldText;
+        hsbSetPreinvoiceButtonLabel(oldText);
       });
   });
 });

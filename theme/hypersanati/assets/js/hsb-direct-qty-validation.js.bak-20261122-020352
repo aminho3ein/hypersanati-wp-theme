@@ -1,0 +1,131 @@
+(function () {
+    "use strict";
+
+    function initDirectQuantity() {
+        const card = document.querySelector(".hsb-sp-direct--unified");
+        if (!card) return;
+
+        const form = card.querySelector("form.cart");
+        const input = form?.querySelector('input[name="quantity"]');
+        const submit = form?.querySelector(
+            'button[name="add-to-cart"]'
+        );
+
+        if (!form || !input || !submit) return;
+
+        const plus = card.querySelector(".qty-plus");
+        const minus = card.querySelector(".qty-minus");
+
+        const initialDisabled = submit.disabled;
+
+        const originalText = submit.innerHTML;
+
+        const maxAttribute = input.getAttribute("max");
+        const max = maxAttribute === null
+            ? Infinity
+            : Number(maxAttribute);
+
+        const message = document.createElement("div");
+        message.className = "hsb-direct-quantity-error";
+        message.setAttribute("role", "status");
+        message.setAttribute("aria-live", "polite");
+
+        input.closest(".hsb-sp-qty-field")?.appendChild(message);
+
+        // Prevent native English browser validation bubbles.
+        form.noValidate = true;
+
+        function validate() {
+            const value = Number(input.value);
+            let error = "";
+
+            if (input.value.trim() === "" ||
+                !Number.isInteger(value) || value < 1) {
+                error = "تعداد سفارش باید حداقل یک عدد باشد.";
+            } else if (value > max) {
+                error = "تعداد انتخابی بیشتر از موجودی قابل سفارش است.";
+            }
+
+            if (initialDisabled) {
+                message.textContent = "";
+                submit.disabled = true;
+                if (plus) plus.disabled = true;
+                if (minus) minus.disabled = true;
+                return false;
+            }
+
+            message.textContent = error;
+            input.setAttribute("aria-invalid", error ? "true" : "false");
+
+            submit.disabled = !!error;
+
+            if (plus) {
+                plus.disabled = !!error || value >= max;
+            }
+
+            if (minus) {
+                minus.disabled = value <= 1 || !Number.isFinite(value);
+            }
+
+            return !error;
+        }
+
+        // Handle +/- ourselves to prevent older handlers
+        // from increasing quantity beyond available stock.
+        document.addEventListener("click", function (event) {
+            const btn = event.target.closest(
+                ".hsb-sp-direct--unified .qty-plus, " +
+                ".hsb-sp-direct--unified .qty-minus"
+            );
+
+            if (!btn || !card.contains(btn)) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+
+            if (btn.disabled || initialDisabled) return;
+
+            const current = Number(input.value) || 1;
+            const step = btn.classList.contains("qty-plus") ? 1 : -1;
+
+            const next = Math.max(1, current + step);
+
+            if (next > max) {
+                message.textContent =
+                    "تعداد انتخابی بیشتر از موجودی قابل سفارش است.";
+                return;
+            }
+
+            input.value = String(next);
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+            validate();
+        }, true);
+
+        input.addEventListener("input", validate);
+        input.addEventListener("change", validate);
+
+        // Submit only valid quantities.
+        form.addEventListener("submit", function (event) {
+            if (initialDisabled || !validate()) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                input.focus();
+            }
+        }, true);
+
+        // Suppress native validation UI if triggered elsewhere.
+        input.addEventListener("invalid", function (event) {
+            event.preventDefault();
+            validate();
+        });
+
+        validate();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initDirectQuantity);
+    } else {
+        initDirectQuantity();
+    }
+})();

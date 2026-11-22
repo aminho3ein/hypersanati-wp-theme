@@ -1092,6 +1092,163 @@ $hero_country_flag_url = trim(
             <!-- =========================================
                  PREINVOICE / SALES REVIEW CARD
                  ========================================= -->
+            <?php if (hsb_dual_is_direct($product)) : ?>
+    <?php
+    $hsb_stock_limited = $product->managing_stock()
+        && !$product->backorders_allowed();
+
+    $hsb_in_cart = 0;
+
+    if (WC()->cart) {
+        foreach (WC()->cart->get_cart() as $hsb_cart_item) {
+            if (absint($hsb_cart_item['product_id'] ?? 0) === absint($product_id)) {
+                $hsb_in_cart += absint($hsb_cart_item['quantity'] ?? 0);
+            }
+        }
+    }
+
+    $hsb_stock_qty = $hsb_stock_limited
+        ? max(0, (int) $product->get_stock_quantity())
+        : null;
+
+    $hsb_remaining = $hsb_stock_limited
+        ? max(0, $hsb_stock_qty - $hsb_in_cart)
+        : null;
+
+    $hsb_can_add = !$hsb_stock_limited || $hsb_remaining > 0;
+    ?>
+
+    <aside class="hsb-sp-inquiry hsb-sp-direct hsb-sp-direct--unified">
+
+        <div class="hsb-sp-inquiry__icon">
+            <i class="fa-solid fa-cart-shopping"></i>
+        </div>
+
+        <span class="hsb-sp-inquiry__eyebrow">
+            سفارش آنلاین
+        </span>
+
+        <h2>ثبت سفارش</h2>
+
+        <p class="hsb-sp-inquiry__intro">
+            این محصول دارای قیمت مشخص است و امکان
+            ثبت سفارش آنلاین آن وجود دارد.
+        </p>
+
+        <div class="hsb-sp-review-status hsb-sp-direct__status">
+            <span>
+                <i class="fa-solid fa-circle-check"></i>
+            </span>
+
+            <div>
+                <strong>
+                    <?php echo $hsb_can_add
+                        ? 'آماده ثبت سفارش'
+                        : 'سقف موجودی در سبد خرید'; ?>
+                </strong>
+
+                <small>
+                    <?php if ($hsb_stock_limited) : ?>
+                        <?php if ($hsb_can_add) : ?>
+                            <?php
+                            echo esc_html(
+                                'قابل افزودن: ' .
+                                number_format_i18n($hsb_remaining) .
+                                ' عدد'
+                            );
+                            ?>
+                        <?php else : ?>
+                            تمام موجودی قابل سفارش این محصول
+                            در سبد خرید شما قرار دارد.
+                        <?php endif; ?>
+                    <?php else : ?>
+                        ثبت سفارش با بررسی موجودی انجام می‌شود.
+                    <?php endif; ?>
+                </small>
+            </div>
+        </div>
+
+        <div class="hsb-sp-direct__price">
+            <span>قیمت واحد</span>
+            <strong>
+                <?php echo wp_kses_post($product->get_price_html()); ?>
+            </strong>
+        </div>
+
+        <form
+            class="cart hsb-sp-direct__form"
+            method="post"
+            action="<?php echo esc_url(get_permalink($product_id)); ?>">
+
+            <input
+                type="hidden"
+                name="product_id"
+                value="<?php echo esc_attr($product_id); ?>">
+
+            <div class="purchase-field hsb-sp-qty-field">
+                <label for="hsb-direct-product-quantity">
+                    تعداد موردنیاز
+                </label>
+
+                <div class="product-quantity-control hsb-sp-qty">
+
+                    <button
+                        type="button"
+                        class="product-quantity-btn qty-minus"
+                        aria-label="کاهش تعداد"
+                        <?php disabled(!$hsb_can_add); ?>>
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+
+                    <input
+                        type="number"
+                        id="hsb-direct-product-quantity"
+                        name="quantity"
+                        class="product-quantity-input"
+                        value="<?php echo $hsb_can_add ? 1 : 0; ?>"
+                        min="<?php echo $hsb_can_add ? 1 : 0; ?>"
+                        <?php if ($hsb_stock_limited) : ?>
+                            max="<?php echo esc_attr($hsb_remaining); ?>"
+                        <?php endif; ?>
+                        step="1"
+                        inputmode="numeric"
+                        aria-label="تعداد موردنیاز"
+                        <?php disabled(!$hsb_can_add); ?>>
+
+                    <button
+                        type="button"
+                        class="product-quantity-btn qty-plus"
+                        aria-label="افزایش تعداد"
+                        <?php disabled(!$hsb_can_add); ?>>
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+
+                </div>
+            </div>
+
+            <button
+                type="submit"
+                name="add-to-cart"
+                value="<?php echo esc_attr($product_id); ?>"
+                class="single_add_to_cart_button add-to-cart hsb-sp-direct__submit"
+                <?php disabled(!$hsb_can_add); ?>>
+
+                <i class="fa-solid fa-cart-plus"></i>
+
+                <?php echo $hsb_can_add
+                    ? 'افزودن به سبد خرید'
+                    : 'سقف موجودی در سبد'; ?>
+
+            </button>
+        </form>
+
+        <div class="hsb-sp-direct__footer">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>تعداد و موجودی هنگام ثبت سفارش بررسی می‌شود.</span>
+        </div>
+
+    </aside>
+    <?php else : ?>
             <aside class="hsb-sp-inquiry">
 
                 <div class="hsb-sp-inquiry__icon">
@@ -1230,7 +1387,7 @@ $hero_country_flag_url = trim(
                         type="submit"
                         class="preinvoice-add-button hsb-sp-add-button">
 
-                        <i class="fa-solid fa-plus"></i>
+                        <i class="fa-solid fa-file-invoice"></i>
 
                         افزودن به پیش‌فاکتور
 
@@ -1284,7 +1441,7 @@ $hero_country_flag_url = trim(
                           <button
                               type="button"
                               class="hsb-sp-mobile-add">
-                              <i class="fa-solid fa-plus"></i>
+                              <i class="fa-solid fa-file-invoice"></i>
                               <span>افزودن به پیش‌فاکتور</span>
                           </button>
 
@@ -1313,6 +1470,7 @@ $hero_country_flag_url = trim(
                 </div>
 
             </aside>
+            <?php endif; ?>
 
         </section>
 

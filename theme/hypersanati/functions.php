@@ -1,4 +1,10 @@
 <?php
+/* HSB EDITORIAL V3 */
+require_once __DIR__ . '/inc/hsb-editorial-v3.php';
+
+/* HSB UNIFIED POPUP FINAL MODULE V1 */
+require_once __DIR__ . '/inc/hsb-unified-popup-module.php';
+
 if (!defined('ABSPATH')) exit;
 
 require_once get_template_directory() . '/inc/footer-admin.php';
@@ -1151,440 +1157,8 @@ function hsb_render_product_card_rating(
 }
 
 
-function hypersanati_render_product_card(
-    $product_id = 0,
-    $family = array()
-) {
-    $product_id = absint(
-        $product_id ?: get_the_ID()
-    );
-
-    $card_product = wc_get_product(
-        $product_id
-    );
-
-    if (
-        !$card_product ||
-        'publish' !== $card_product->get_status()
-    ) {
-        return;
-    }
-
-    $part_number = trim(
-        (string) get_post_meta(
-            $product_id,
-            '_mpn_part_number',
-            true
-        )
-    );
-
-    $inner_diameter = trim(
-        (string) get_post_meta(
-            $product_id,
-            '_inner_diameter',
-            true
-        )
-    );
-
-    $outer_diameter = trim(
-        (string) get_post_meta(
-            $product_id,
-            '_outer_diameter',
-            true
-        )
-    );
-
-    $bearing_width = trim(
-        (string) get_post_meta(
-            $product_id,
-            '_bearing_width',
-            true
-        )
-    );
-
-    $country = trim(
-        (string) get_post_meta(
-            $product_id,
-            '_country_origin',
-            true
-        )
-    );
-
-    $brand_data = function_exists(
-        'hsb_get_product_brand_data'
-    )
-        ? hsb_get_product_brand_data(
-            $product_id
-        )
-        : array();
-
-    $brand_name = trim(
-        (string) (
-            $brand_data['name'] ?? ''
-        )
-    );
-
-    $format_mm = static function ($value) {
-        $value = trim((string) $value);
-
-        if ('' === $value) {
-            return '—';
-        }
-
-        if (
-            preg_match(
-                '/^-?[0-9]+(?:[.,][0-9]+)?$/',
-                $value
-            )
-        ) {
-            return $value . ' mm';
-        }
-
-        return $value;
-    };
-
-    /* hsb-card-auto-family */
-    if (
-        empty($family) &&
-        function_exists(
-            'hsb_get_product_family_ids'
-        ) &&
-        function_exists(
-            'hsb_group_product_ids_by_part_number'
-        )
-    ) {
-        $family_ids =
-            hsb_get_product_family_ids(
-                $product_id
-            );
-
-        $family_groups =
-            hsb_group_product_ids_by_part_number(
-                $family_ids
-            );
-
-        if (!empty($family_groups[0])) {
-            $family = $family_groups[0];
-        }
-    }
-
-    $family_key = !empty(
-        $family['family_key']
-    )
-        ? (string) $family['family_key']
-        : (
-            '' !== $part_number
-                ? 'part:' . mb_strtoupper(
-                    preg_replace(
-                        '/\s+/u',
-                        '',
-                        $part_number
-                    ),
-                    'UTF-8'
-                )
-                : 'product:' . $product_id
-        );
-
-    $version_count = max(
-        1,
-        absint(
-            $family['version_count'] ?? 1
-        )
-    );
-
-    $brand_count = absint(
-        $family['brand_count'] ?? 0
-    );
-
-    $country_count = absint(
-        $family['country_count'] ?? 0
-    );
-
-    $is_family = $version_count > 1;
-
-    $product_url = get_permalink(
-        $product_id
-    );
-    ?>
-
-    <a
-        href="<?php echo esc_url($product_url); ?>"
-        class="product-section hsb-family-product-card"
-        data-family-key="<?php echo esc_attr(
-            $family_key
-        ); ?>"
-        data-part-number="<?php echo esc_attr(
-            $part_number
-        ); ?>">
-
-                <?php
-        $display_image_id = absint(
-            $card_product->get_image_id()
-        );
-        ?>
-
-        <div class="hsb-shop-card-media product-cat-frame"><?php if ($display_image_id) : ?>
-
-                <?php
-                echo wp_get_attachment_image(
-                    $display_image_id,
-                    'woocommerce_thumbnail',
-                    false,
-                    array(
-                        'loading' => 'lazy',
-                        'alt' => $card_product->get_name(),
-                    )
-                );
-                ?>
-
-            <?php else : ?>
-
-                <img
-                    loading="lazy"
-                    src="<?php echo esc_url(
-                        wc_placeholder_img_src()
-                    ); ?>"
-                    alt="<?php echo esc_attr(
-                        $card_product->get_name()
-                    ); ?>">
-
-            <?php endif; ?>
-
-
-            <?php if ($is_family) : ?>
-
-                <span class="hsb-family-card-badge">
-                    <i class="fa-solid fa-layer-group"></i>
-
-                    <?php
-                    echo esc_html(
-                        number_format_i18n(
-                            $version_count
-                        )
-                    );
-                    ?>
-                    گزینه
-                </span>
-
-            <?php endif; ?>
-
-        </div>
-
-
-        <div class="product-name hsb-family-card-body">
-
-            <div class="hsb-family-card-topline">
-
-                <?php if ($part_number) : ?>
-
-                    <div class="hsb-family-card-part">
-                        <span>شماره محصول</span>
-
-                        <strong dir="ltr">
-                            <?php
-                            echo esc_html(
-                                $part_number
-                            );
-                            ?>
-                        </strong>
-                    </div>
-
-                <?php endif; ?>
-
-
-                <?php
-                if (
-                    !$is_family &&
-                    ($brand_name || $country)
-                ) :
-                ?>
-
-                    <div class="hsb-family-card-origin">
-
-                        <?php if ($brand_name) : ?>
-                            <span>
-                                <?php
-                                echo esc_html(
-                                    $brand_name
-                                );
-                                ?>
-                            </span>
-                        <?php endif; ?>
-
-                        <?php if ($country) : ?>
-                            <small>
-                                <?php
-                                echo esc_html(
-                                    $country
-                                );
-                                ?>
-                            </small>
-                        <?php endif; ?>
-
-                    </div>
-
-                <?php endif; ?>
-
-            </div>
-
-
-            <h3 class="hsb-family-card-title">
-                <?php
-                echo esc_html(
-                    $card_product->get_name()
-                );
-                ?>
-            </h3>
-
-
-            <?php
-            hsb_render_product_card_rating(
-                $card_product->get_average_rating(),
-                $card_product->get_rating_count()
-            );
-            ?>
-
-
-            <div class="hsb-family-card-dimensions">
-
-                <div class="hsb-family-card-dimension">
-                    <span>قطر داخلی</span>
-
-                    <strong dir="ltr">
-                        <?php
-                        echo esc_html(
-                            $format_mm(
-                                $inner_diameter
-                            )
-                        );
-                        ?>
-                    </strong>
-
-                    <small>d</small>
-                </div>
-
-
-                <div class="hsb-family-card-dimension">
-                    <span>قطر خارجی</span>
-
-                    <strong dir="ltr">
-                        <?php
-                        echo esc_html(
-                            $format_mm(
-                                $outer_diameter
-                            )
-                        );
-                        ?>
-                    </strong>
-
-                    <small>D</small>
-                </div>
-
-
-                <div class="hsb-family-card-dimension">
-                    <span>عرض</span>
-
-                    <strong dir="ltr">
-                        <?php
-                        echo esc_html(
-                            $format_mm(
-                                $bearing_width
-                            )
-                        );
-                        ?>
-                    </strong>
-
-                    <small>B</small>
-                </div>
-
-            </div>
-
-
-            <?php if ($is_family) : ?>
-
-                <div class="hsb-family-card-options">
-
-                    <span>
-                        <i class="fa-solid fa-layer-group"></i>
-
-                        <?php
-                        echo esc_html(
-                            number_format_i18n(
-                                $version_count
-                            )
-                        );
-                        ?>
-                        گزینه
-                    </span>
-
-                    <?php if ($brand_count > 0) : ?>
-
-                        <span>
-                            <i class="fa-solid fa-tag"></i>
-
-                            <?php
-                            echo esc_html(
-                                number_format_i18n(
-                                    $brand_count
-                                )
-                            );
-                            ?>
-                            برند
-                        </span>
-
-                    <?php endif; ?>
-
-                    <?php if ($country_count > 1) : ?>
-
-                        <span>
-                            <i class="fa-solid fa-earth-asia"></i>
-
-                            <?php
-                            echo esc_html(
-                                number_format_i18n(
-                                    $country_count
-                                )
-                            );
-                            ?>
-                            کشور
-                        </span>
-
-                    <?php endif; ?>
-
-                </div>
-
-            <?php endif; ?>
-
-
-            <div class="hsb-family-card-price-note">
-                <i class="fa-solid fa-file-invoice"></i>
-
-                <span>
-                    قیمت پس از بررسی واحد فروش
-                </span>
-            </div>
-
-
-            <div class="hsb-family-card-action">
-
-                <span>
-                    <?php
-                    echo $is_family
-                        ? 'مشاهده و انتخاب برند'
-                        : 'مشاهده محصول';
-                    ?>
-                </span>
-
-                <i class="fa-solid fa-arrow-left"></i>
-
-            </div>
-
-        </div>
-
-    </a>
-
-    <?php
-}
+/* Shared product card renderer; the original business logic is unchanged. */
+require_once get_template_directory() . '/inc/hsb-product-card.php';
 
 
 /* ============================================================
@@ -1734,6 +1308,14 @@ function load_shop_categories() {
 
     $uncategorized = get_term_by('slug', 'uncategorized', 'product_cat');
     $exclude_ids = $uncategorized ? array($uncategorized->term_id) : array();
+
+    /* Keep online sales above ordinary lazy-loaded categories. */
+    if (function_exists('hsb_online_sale_category_id')) {
+        $hsb_sale_id = hsb_online_sale_category_id(false);
+        if ($hsb_sale_id) {
+            $exclude_ids[] = $hsb_sale_id;
+        }
+    }
 
     $args = [
         'taxonomy'   => 'product_cat',
@@ -2275,6 +1857,67 @@ add_action(
  * The expensive grouping work is cached, while presentation
  * remains paginated in small batches.
  */
+
+/* HSB SHOP FAMILY PRIORITY V3 */
+function hsb_shop_prioritize_families_v3($groups) {
+    if (!is_array($groups) || count($groups) < 2) {
+        return $groups;
+    }
+
+    $ranked = array();
+
+    foreach (array_values($groups) as $index => $group) {
+        $ids = !empty($group['ids'])
+            ? (array) $group['ids']
+            : array($group['representative_id'] ?? 0);
+
+        $priority = 2;
+
+        foreach ($ids as $id) {
+            $id = absint($id);
+            if (!$id) {
+                continue;
+            }
+
+            $price = get_post_meta($id, '_price', true);
+
+            if ($price === '' || (float) $price <= 0) {
+                continue;
+            }
+
+            /* A family containing a priced SKU ranks at least second. */
+            $priority = min($priority, 1);
+
+            /*
+             * Load the WooCommerce product only when it has a price.
+             * Do not load every inquiry-only SKU as a product object.
+             */
+            $product = wc_get_product($id);
+
+            if (
+                $product &&
+                function_exists('hsb_dual_is_direct') &&
+                hsb_dual_is_direct($product)
+            ) {
+                $priority = 0;
+                break;
+            }
+        }
+
+        $ranked[] = array(
+            'priority' => $priority,
+            'index'    => $index,
+            'group'    => $group,
+        );
+    }
+
+    usort($ranked, static function ($a, $b) {
+        return ($a['priority'] <=> $b['priority'])
+            ?: ($a['index'] <=> $b['index']);
+    });
+
+    return array_column($ranked, 'group');
+}
 function hsb_get_shop_subcategory_family_groups(
     $subcategory_id,
     $search_keyword = ''
@@ -2345,6 +1988,9 @@ function hsb_get_shop_subcategory_family_groups(
      * Ten minutes is enough to make repeated browsing fast
      * without leaving catalog changes stale for long.
      */
+    /* Sort all families before AJAX pagination. */
+    $groups = hsb_shop_prioritize_families_v3($groups);
+
     set_transient(
         $cache_key,
         $groups,
@@ -4036,7 +3682,7 @@ function hypersanati_contact_message_column_content( $column, $post_id ) {
 // Start -- AJAX - EZAFE KARDANE MAHSUL BA DOKME AFZODAN BE SABADE KHARID ------------------------->
 add_action('wp_enqueue_scripts', 'hsb_enqueue_cart_ajax_popup_assets');
 function hsb_enqueue_cart_ajax_popup_assets() {
-    if (!function_exists('is_product') || !is_product()) {
+    if (!(is_product() || is_shop() || is_product_category() || is_product_tag() || is_front_page())) {
         return;
     }
 
@@ -4067,7 +3713,7 @@ function hsb_enqueue_cart_ajax_popup_assets() {
 // مرحله ۳: پاپ‌آپ را با wp_footer چاپ کن
 add_action('wp_footer', 'hsb_render_cart_ajax_popup');
 function hsb_render_cart_ajax_popup() {
-    if (!function_exists('is_product') || !is_product()) {
+    if (!(is_product() || is_shop() || is_product_category() || is_product_tag() || is_front_page())) {
         return;
     }
 
@@ -7075,3 +6721,52 @@ add_action('wp_enqueue_scripts', function () {
         );
     }
 });
+
+/* HSB DUAL SALES FLOW */
+require_once get_template_directory() . '/inc/dual-sales-flow.php';
+
+
+/* HSB UNIVERSAL PRODUCT CARD CSS ENQUEUE V2
+ * One shared card stylesheet for product grids and sliders.
+ * Existing page-specific layouts remain unchanged.
+ */
+add_action('wp_enqueue_scripts', function () {
+    $is_product = function_exists('is_product') && is_product();
+
+    $is_shop_context = function_exists('is_shop') && (
+        is_shop() ||
+        is_post_type_archive('product') ||
+        (function_exists('is_product_category') && is_product_category()) ||
+        (function_exists('is_product_tag') && is_product_tag())
+    );
+
+    $is_home_context = is_front_page() || is_home();
+
+    if (!$is_product && !$is_shop_context && !$is_home_context) {
+        return;
+    }
+
+    $relative = '/assets/css/hsb-product-card.css';
+    $path = get_template_directory() . $relative;
+
+    if (!is_readable($path)) {
+        return;
+    }
+
+    $dependency = $is_product
+        ? 'single-product-css'
+        : 'shop-css';
+
+    if (!wp_style_is($dependency, 'enqueued')) {
+        return;
+    }
+
+    hypersanati_enqueue_theme_style(
+        'hsb-product-card',
+        $relative,
+        array($dependency)
+    );
+}, 120);
+
+/* HSB VISUAL DESIGN SYSTEM ADMIN V1 */
+require_once get_template_directory() . '/inc/hsb-design-system-admin.php';

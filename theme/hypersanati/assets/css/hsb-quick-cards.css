@@ -1,0 +1,131 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Keep the action inside its original product card. */
+
+
+
+
+
+
+
+
+/* Inquiry price: distinct red status */
+
+
+/* Keep two sales actions visually distinct */
+
+
+
+
+/* HSB PRICE BOX VISUAL V2 */
+
+/* Shared price box alignment */
+
+
+/* Inquiry products: red box with yellow label */
+
+
+
+
+/* Hide icons in inquiry price box to keep label centered */
+
+
+/* Priced products */
+
+
+
+
+/* WooCommerce regular and discounted prices */
+
+
+
+
+
+
+
+
+
+/* HSB inquiry price: original light background, red centered text */
+
+
+
+
+
+
+/* Separate WooCommerce cart styled to match quote cart */
+.hsb-dual-cart-tabs {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 18px 0 28px;
+    direction: rtl;
+}
+
+.hsb-dual-cart-tabs a {
+    text-decoration: none;
+    border: 1px solid var(--hsb-sale-quote-button-bg);
+    color: var(--hsb-sale-quote-button-bg);
+    background: var(--hsb-sale-button-text);
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-weight: 800;
+}
+
+.hsb-dual-cart-tabs a.is-active {
+    background: var(--hsb-sale-quote-button-bg);
+    color: var(--hsb-sale-button-text);
+}
+
+.hsb-direct-checkout {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    background: var(--hsb-sale-direct-button-bg);
+    color: white !important;
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.hsb-direct-product {
+    margin-bottom: 16px;
+}
+
+.hsb-direct-line-price,
+.hsb-direct-line-total {
+    margin: 10px 0;
+    font-weight: 700;
+}
+
+.hsb-direct-line-total {
+    color: var(--hsb-sale-direct-button-bg);
+}
+
+.hsb-direct-cart-form .quantity input.qty {
+    max-width: 90px;
+    padding: 9px;
+    border: 1px solid var(--hsb-sale-neutral-border);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.hsb-direct-remove {
+    color: var(--hsb-sale-inquiry-status);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+/* HSB STOCK COUNT BESIDE CARD ARROW */

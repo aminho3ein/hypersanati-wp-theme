@@ -43,7 +43,7 @@ if (!$hsb_order_tracking_url) {
     <div class="hsb-top-nav-inner">
 
       <a href="#">
-        ارسال ۷ الی ۱۰ روزکاری
+        ارسال در ۱ تا ۲ روز کاری
       </a>
 
       <a
@@ -166,6 +166,23 @@ if (!$hsb_order_tracking_url) {
         </a>
       </div>
 
+<div class="cart hsb-direct-header-cart">
+    <a class="preinvoice-cart-link hsb-direct-header-link"
+       href="<?php echo esc_url(add_query_arg('hsb_view', 'direct', wc_get_cart_url())); ?>"
+       aria-label="سبد خرید مستقیم"
+       title="سبد خرید مستقیم">
+        <i class="fa-solid fa-basket-shopping" aria-hidden="true"></i>
+        <?php
+        $hsb_direct_count = WC()->cart
+            ? WC()->cart->get_cart_contents_count()
+            : 0;
+        ?>
+        <span class="hsb-direct-header-badge<?php echo $hsb_direct_count ? '' : ' is-empty'; ?>">
+            <?php echo esc_html(number_format_i18n($hsb_direct_count)); ?>
+        </span>
+    </a>
+</div>
+
       <li>
         <?php if (is_user_logged_in()) : ?>
 
@@ -222,7 +239,25 @@ if (!$hsb_order_tracking_url) {
 
     <!-- Hamburger button mobile only -->
     <div class="menu-and-cart">
-      <ul class="mobile-nav-actions">
+      <!-- HSB MOBILE QUICK ACTIONS V1 -->
+     <button
+       type="button"
+       class="hsb-mobile-quick-toggle"
+       id="hsbMobileQuickToggle"
+       aria-label="دسترسی سریع به حساب و سبدهای خرید"
+       aria-controls="hsbMobileQuickActions"
+       aria-expanded="false"
+       title="دسترسی سریع"
+     >
+       <i class="fa-solid fa-grip" aria-hidden="true"></i>
+     </button>
+
+     <ul
+       class="mobile-nav-actions"
+       id="hsbMobileQuickActions"
+       aria-hidden="true"
+       inert
+     >
 
         <div class="cart preinvoice-cart">
           <a
@@ -240,6 +275,23 @@ if (!$hsb_order_tracking_url) {
             </span>
           </a>
         </div>
+
+<div class="cart hsb-direct-header-cart">
+    <a class="preinvoice-cart-link hsb-direct-header-link"
+       href="<?php echo esc_url(add_query_arg('hsb_view', 'direct', wc_get_cart_url())); ?>"
+       aria-label="سبد خرید مستقیم"
+       title="سبد خرید مستقیم">
+        <i class="fa-solid fa-basket-shopping" aria-hidden="true"></i>
+        <?php
+        $hsb_direct_count = WC()->cart
+            ? WC()->cart->get_cart_contents_count()
+            : 0;
+        ?>
+        <span class="hsb-direct-header-badge<?php echo $hsb_direct_count ? '' : ' is-empty'; ?>">
+            <?php echo esc_html(number_format_i18n($hsb_direct_count)); ?>
+        </span>
+    </a>
+</div>
 
         <li>
           <a
