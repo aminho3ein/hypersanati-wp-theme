@@ -7189,3 +7189,17 @@ html {
     --hsb-review-shadow: rgba(17, 24, 39, 0.07);
     --hsb-review-focus-ring: rgba(37, 99, 235, 0.12);
 }
+
+/* HSB SINGLE PRODUCT MEDIA SPECS TOKENS V1 */
+:root {
+    --hsb-sp-gallery-surface: #fff;
+    --hsb-sp-gallery-border: rgba(0, 0, 0, 0.08);
+    --hsb-sp-gallery-shadow-soft: rgba(0, 0, 0, 0.07);
+    --hsb-sp-gallery-shadow-active: rgba(37, 99, 235, 0.15);
+    --hsb-sp-specs-surface: #fff;
+    --hsb-sp-specs-border: rgba(0, 0, 0, 0.08);
+    --hsb-sp-specs-shadow: rgba(0, 0, 0, 0.06);
+    --hsb-sp-specs-heading: #111827;
+    --hsb-sp-specs-label: #374151;
+    --hsb-sp-specs-value: #6b7280;
+}
