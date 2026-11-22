@@ -3320,9 +3320,21 @@
   direction: rtl;
 }
 
+/* Shared sizing applies to the entire section. */
 .smart-product-sections,
 .smart-product-sections * {
   box-sizing: border-box;
+}
+
+/*
+ * Preserve the original square-corner section layout,
+ * but do not override the shared product-card component.
+ */
+.smart-product-sections,
+.smart-product-sections *:not(
+  .hsb-family-product-card,
+  .hsb-family-product-card *
+) {
   border-radius: 0 !important;
 }
 
