@@ -1,0 +1,92 @@
+/* HSB Hero Slider V2. Dedicated final overrides; respects previous site layouts. */
+.hsb-home-hero {
+  isolation: isolate;
+  background: #0b1b3a;
+}
+.hsb-home-hero::after {
+  pointer-events:none;
+  z-index:1;
+  background:linear-gradient(270deg,
+    color-mix(in srgb,var(--hsb-hero-overlay,#0B1B3A) 72%,transparent) 0%,
+    color-mix(in srgb,var(--hsb-hero-overlay,#0B1B3A) 45%,transparent) 53%,
+    color-mix(in srgb,var(--hsb-hero-overlay,#0B1B3A) 18%,transparent) 100%);
+}
+.hsb-home-hero__media { z-index:0; }
+.hsb-home-hero__slide {
+  position:absolute;inset:0;opacity:0;visibility:hidden;
+  transition:opacity 950ms ease,visibility 950ms ease;
+}
+.hsb-home-hero__slide.is-active {opacity:1;visibility:visible;}
+.hsb-home-hero__slide .hsb-home-hero__image {
+  display:block;width:100%;height:100%;object-fit:cover;
+  filter:saturate(1.05) contrast(1.05);
+  transform:scale(1.025);transition:transform 8s ease-out;
+}
+.hsb-home-hero__slide.is-active .hsb-home-hero__image {transform:scale(1);}
+.hsb-home-hero__content {z-index:3;}
+.hsb-home-hero__brand-logo {z-index:4;}
+.hsb-home-hero .hsb-home-hero__title {
+  color:var(--hsb-hero-title,#fff);
+  font-size:clamp(2rem,3.5vw,3.85rem);
+  max-width:850px;white-space:normal;
+  line-height:1.2;overflow-wrap:break-word;
+  text-shadow:0 3px 15px rgba(0,8,24,.62);
+}
+.hsb-home-hero .hsb-home-hero__eyebrow { color:var(--hsb-hero-eyebrow-text,#DBEAFE);text-shadow:none; }
+.hsb-home-hero .hsb-home-hero__description { color:var(--hsb-hero-description,#F1F5F9); }
+.hsb-home-hero .hsb-home-hero__button {
+  background:var(--hsb-hero-button-bg,#2563EB);color:var(--hsb-hero-button-text,#fff);
+  box-shadow:0 10px 30px rgba(15,23,42,.38);
+  transition:background .2s ease,transform .2s ease,box-shadow .2s ease;
+}
+.hsb-home-hero .hsb-home-hero__button:hover,
+.hsb-home-hero .hsb-home-hero__button:focus-visible {
+  background:var(--hsb-hero-button-hover,#1D4ED8);
+  color:var(--hsb-hero-button-text,#fff);transform:translateY(-2px);
+  box-shadow:0 14px 32px rgba(15,23,42,.43);
+}
+.hsb-home-hero__navigation {
+  position:absolute;z-index:5;bottom:21px;right:50%;transform:translateX(50%);
+  display:flex;align-items:center;gap:12px;direction:ltr;
+}
+.hsb-home-hero__nav-button {
+  width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.5);
+  color:white;background:rgba(6,24,55,.63);cursor:pointer;line-height:1;
+}
+.hsb-home-hero__nav-button:focus-visible,.hsb-home-hero__dot:focus-visible {
+  outline:3px solid #93c5fd;outline-offset:3px;
+}
+.hsb-home-hero__dots {display:flex;align-items:center;gap:8px;}
+.hsb-home-hero__dot {
+  width:9px;height:9px;border:0;border-radius:50%;background:rgba(255,255,255,.54);
+  cursor:pointer;padding:0;transition:width .2s,background .2s;
+}
+.hsb-home-hero__dot.is-active {width:27px;border-radius:8px;background:#bfdbfe;}
+/* A subtle localized reflected light, without moving beams/orbs drawn across content. */
+.hsb-home-hero__subtle-light {
+  position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden;
+  opacity:.22;mix-blend-mode:screen;
+  background:
+    radial-gradient(ellipse 12% 17% at 20% 12%,var(--hsb-hero-light,#38BDF8),transparent 75%),
+    radial-gradient(ellipse 15% 12% at 83% 86%,var(--hsb-hero-light,#38BDF8),transparent 85%);
+  animation:hsb-hero-light-breathe 7s ease-in-out infinite alternate;
+}
+@keyframes hsb-hero-light-breathe {
+  from {opacity:.10;filter:blur(5px);transform:scale(1)}
+  to {opacity:.24;filter:blur(10px);transform:scale(1.018)}
+}
+@media(max-width:1100px) {
+  .hsb-home-hero .hsb-home-hero__title {font-size:clamp(1.75rem,3.2vw,2.65rem);}
+}
+@media(max-width:900px) {
+  .hsb-home-hero .hsb-home-hero__title {font-size:clamp(1.7rem,5vw,2.5rem);}
+  .hsb-home-hero__navigation {bottom:12px;}
+}
+@media(max-width:520px) {
+  .hsb-home-hero .hsb-home-hero__title {font-size:clamp(1.5rem,6vw,2rem);}
+  .hsb-home-hero__navigation {bottom:8px;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .hsb-home-hero__slide,.hsb-home-hero__slide .hsb-home-hero__image,
+  .hsb-home-hero__subtle-light {transition:none!important;animation:none!important;transform:none!important;}
+}
