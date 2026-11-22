@@ -6819,6 +6819,32 @@ html {
   --hsb-shop-search-button-bg: var(--color-secondary);
   --hsb-shop-search-button-hover-bg: var(--color-primary-active);
 
+  /* HSB SHOP CARD SURFACE TOKENS V1 */
+
+  --hsb-shop-card-bg: #ffffff;
+  --hsb-shop-card-base-border: rgba(30, 37, 43, 0.09);
+  --hsb-shop-card-base-shadow: rgba(25, 31, 36, 0.045);
+  --hsb-shop-card-base-hover-border: rgba(157, 126, 78, 0.34);
+  --hsb-shop-card-base-hover-shadow: rgba(25, 31, 36, 0.085);
+
+  --hsb-shop-card-border: color-mix(
+      in srgb,
+      var(--color-secondary) 42%,
+      #5e5e5e
+  );
+
+  --hsb-shop-card-shadow: rgba(24, 30, 35, 0.075);
+
+  --hsb-shop-card-hover-border: color-mix(
+      in srgb,
+      var(--color-secondary) 72%,
+      #555
+  );
+
+  --hsb-shop-card-hover-shadow: rgba(24, 30, 35, 0.16);
+  --hsb-shop-card-media-bg: #ffffff;
+
+
 
   /* Table design */
   --hsb-table-head-bg: #806139;
