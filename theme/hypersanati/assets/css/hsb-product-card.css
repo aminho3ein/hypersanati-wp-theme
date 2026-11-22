@@ -22,7 +22,7 @@
     position: relative; display: flex; align-items: center; justify-content: center;
     width: 100%; height: auto; aspect-ratio: 1.20 / 1;
     margin: 0; padding: 0; overflow: hidden; border: 0;
-    border-bottom: 1px solid var(--hsb-card-dimension-border);
+    border-bottom: 1px solid var(--hsb-card-media-divider);
     background: var(--hsb-shop-card-media-bg);
 }
 .hsb-family-product-card .hsb-shop-card-media::after { display: none; }
@@ -38,7 +38,7 @@
     border-radius: 999px; background: var(--hsb-shop-card-family-badge-bg);
     color: var(--hsb-shop-card-family-badge-text); font-size: 10px; font-weight: 800;
 }
-.hsb-family-product-card .hsb-family-card-badge i { font-size: 9px; color: #d2b27d; }
+.hsb-family-product-card .hsb-family-card-badge i { font-size: 9px; color: var(--hsb-card-badge-icon-color); }
 .hsb-family-product-card .hsb-family-card-body.product-name {
     display: flex; flex-direction: column; flex: 1; min-width: 0;
     padding: 10px 10px 7px;
@@ -52,7 +52,7 @@
     display: inline-flex; flex-direction: row; align-items: center;
     justify-content: space-between; gap: 6px; min-width: 0; width: auto;
     margin: 0; padding: 5px 8px; border: 0; border-radius: 8px;
-    background: color-mix(in srgb, var(--hsb-shop-card-part-emphasis) 8%, white);
+    background: var(--hsb-card-part-bg);
     box-shadow: none;
 }
 .hsb-family-product-card .hsb-family-card-part span {
@@ -123,11 +123,11 @@
     display: inline-flex; align-items: center; justify-content: center;
     gap: 3px; min-height: 24px; min-width: 0; white-space: nowrap;
     padding: 3px 2px; border-radius: 7px;
-    background: color-mix(in srgb, var(--hsb-shop-card-part-emphasis) 7%, white);
-    color: var(--hsb-shop-card-part-emphasis); font-size: 9px; font-weight: 750;
+    background: var(--hsb-card-options-bg);
+    color: var(--hsb-card-options-text); font-size: 9px; font-weight: 750;
 }
 .hsb-family-product-card .hsb-family-card-options i {
-    color: var(--hsb-shop-card-part-emphasis); font-size: 8px;
+    color: var(--hsb-card-options-icon); font-size: 8px;
 }
 .hsb-family-product-card .hsb-family-card-price-note {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -137,11 +137,11 @@
     text-align: center; font-size: 9px; font-weight: 700;
 }
 .hsb-family-product-card .hsb-family-card-price-note:has(.hsb-price-inquiry) {
-    background: #edf3ef;
+    background: var(--hsb-card-price-inquiry-bg);
 }
 .hsb-family-product-card .hsb-family-card-price-note > i { display: none; }
 .hsb-family-product-card .hsb-price-inquiry {
-    color: #b42318; font-size: 13px; font-weight: 800; line-height: 1.5;
+    color: var(--hsb-card-price-inquiry-text); font-size: 13px; font-weight: 800; line-height: 1.5;
 }
 .hsb-family-product-card .hsb-card-price-actual {
     display: flex; flex-direction: column; align-items: center; width: 100%;
@@ -152,7 +152,7 @@
     display: block; text-align: center;
 }
 .hsb-family-product-card .hsb-family-card-price-note del {
-    color: #888; font-size: 13px; font-weight: 500;
+    color: var(--hsb-card-price-old-text); font-size: 13px; font-weight: 500;
 }
 .hsb-family-product-card .hsb-family-card-price-note ins {
     color: var(--hsb-card-price-actual-text); font-size: 18px;
@@ -168,7 +168,7 @@
 .hsb-family-product-card .hsb-card-stock-count {
     display: inline-flex; align-items: center; gap: 4px; margin-inline-start: auto;
     margin-inline-end: 8px; padding: 5px 9px; border-radius: 8px;
-    background: #edf5ef; color: var(--hsb-card-action-direct-bg);
+    background: var(--hsb-card-stock-bg); color: var(--hsb-card-action-direct-bg);
     font-size: 12px; font-weight: 800; white-space: nowrap; line-height: 1.6;
 }
 .hsb-family-product-card > .hsb-quick-card-controls {
@@ -181,7 +181,7 @@
     border: 0; border-radius: 10px; color: var(--hsb-card-action-button-text);
     font: inherit; font-size: 12px; font-weight: 850; text-align: center;
     text-decoration: none; cursor: pointer; background: var(--hsb-card-action-direct-bg);
-    transition: opacity .2s ease;
+    transition: background-color .2s ease, opacity .2s ease;
 }
 .hsb-family-product-card .hsb-quick-card-btn:hover {
     color: var(--hsb-card-action-button-text); opacity: .88;
@@ -198,6 +198,15 @@
     background: var(--hsb-card-action-disabled-bg);
     color: var(--hsb-card-action-disabled-text); cursor: default;
 }
+/* Per-action interactive colors. Disabled is always excluded. */
+.hsb-family-product-card .hsb-quick-card-btn[data-hsb-direct-id]:not(.hsb-stock-unavailable):hover { background: var(--hsb-card-action-direct-hover-bg); }
+.hsb-family-product-card .hsb-quick-card-btn[data-hsb-direct-id]:not(.hsb-stock-unavailable):active { background: var(--hsb-card-action-direct-active-bg); }
+.hsb-family-product-card .hsb-quick-card-btn--quote:not(.hsb-stock-unavailable):hover,
+.hsb-family-product-card .hsb-quick-card-btn--select:not(.hsb-stock-unavailable):hover,
+.hsb-family-product-card .hsb-quick-card-btn[data-hsb-quote-id]:not(.hsb-stock-unavailable):hover { background: var(--hsb-card-action-quote-hover-bg); }
+.hsb-family-product-card .hsb-quick-card-btn--quote:not(.hsb-stock-unavailable):active,
+.hsb-family-product-card .hsb-quick-card-btn--select:not(.hsb-stock-unavailable):active,
+.hsb-family-product-card .hsb-quick-card-btn[data-hsb-quote-id]:not(.hsb-stock-unavailable):active { background: var(--hsb-card-action-quote-active-bg); }
 @media (prefers-reduced-motion: reduce) {
     .hsb-family-product-card.product-section { transition: none; }
 }

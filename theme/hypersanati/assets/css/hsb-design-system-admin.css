@@ -17,3 +17,10 @@
 [data-preview="card"] .hsb-ds-real-frame{height:850px}
 [data-preview="header"] .hsb-ds-real-frame{height:300px}
 @media(max-width:750px){.hsb-ds-real-frame{height:430px}[data-preview="footer"] .hsb-ds-real-frame{height:770px}[data-preview="card"] .hsb-ds-real-frame{height:1070px}}
+
+/* Cart color editor: lightweight live previews; storefront markup is unchanged. */
+.hsb-p-cart-demo,.hsb-p-popup-demo{background:#fff;padding:16px;border:1px solid var(--hsb-cart-quote-border,#d9ccbb);border-radius:12px;color:var(--hsb-cart-muted-text,#66736b)}
+.hsb-p-cart-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}.hsb-p-cart-tabs span{padding:12px;border-radius:9px;font-weight:700;background:var(--hsb-sale-quote-button-bg,#735936);color:var(--hsb-sale-button-text,#fff)}.hsb-p-cart-tabs span:first-child{background:var(--hsb-sale-direct-button-bg,#167a50)}
+.hsb-p-cart-demo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.hsb-p-cart-demo-item{padding:15px;background:var(--hsb-cart-direct-surface,#f3f6f3);border:1px solid var(--hsb-cart-quote-border,#d9ccbb);border-radius:10px;display:flex;gap:9px;flex-direction:column}.hsb-p-cart-demo-item:last-child{background:var(--hsb-cart-quote-surface,#f5f0e9)}.hsb-p-cart-demo-item strong{color:#1e293b}.hsb-p-cart-demo-item small{color:var(--hsb-cart-muted-text,#66736b)}.hsb-p-cart-summary{margin-top:12px;display:flex;justify-content:space-between;padding:12px;background:#f1f5f9;border-radius:10px}
+.hsb-p-popup-demo{background:var(--hsb-quote-popup-surface,#f5f2ec);border-color:var(--hsb-quote-popup-border,#e5d8c7);color:var(--hsb-quote-popup-text,#32291e)}.hsb-p-popup-demo-header{background:var(--hsb-cart-popup-light-surface,#f3f3f3);padding:12px;border-radius:8px;border:1px solid var(--hsb-cart-popup-success-border,#b8d8c2);color:var(--hsb-cart-popup-success-accent,#18a957);font-weight:800}.hsb-p-popup-demo-btn{background:var(--hsb-sale-direct-button-bg,#167a50);color:#fff;padding:12px;border-radius:8px;text-align:center}
+@media(max-width:600px){.hsb-p-cart-demo-grid{grid-template-columns:1fr}}

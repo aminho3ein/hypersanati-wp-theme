@@ -1,3 +1,5 @@
+/* Default colors retained exactly until overridden by HSB Design System. */
+:root{--hsb-cart-popup-001:#f7f8f7;--hsb-cart-popup-002:#e5e9e7;--hsb-cart-popup-003:#ffffff;--hsb-cart-popup-004:#ffffff;--hsb-cart-popup-005:#e8f4ed;--hsb-cart-popup-006:#cbe7d5;--hsb-cart-popup-007:#138353;--hsb-cart-popup-008:#e4f5eb;--hsb-cart-popup-009:#f6f7f7;--hsb-cart-popup-010:#eceeed;--hsb-cart-popup-011:#f7f8f7;--hsb-cart-popup-012:#e5e9e7;}
 /* HSB UNIFIED POPUP FINAL V1 */
 
 /* Both sales flows use exactly the same outer layout. */
@@ -24,8 +26,8 @@
   justify-content: center;
   align-items: center;
   padding: 26px;
-  background: #f7f8f7;
-  border-left: 1px solid #e5e9e7;
+  background: var(--hsb-cart-popup-001);
+  border-left: 1px solid var(--hsb-cart-popup-002);
   min-width: 0;
 }
 
@@ -41,7 +43,7 @@
   height: 270px;
   flex-shrink: 1;
   border-radius: 14px;
-  background: #fff;
+  background: var(--hsb-cart-popup-003);
   overflow: hidden;
 }
 
@@ -55,7 +57,7 @@
 #cartAjaxPopup .cart-ajax-popup__summary {
   grid-column: 2;
   grid-row: 1;
-  background: #fff;
+  background: var(--hsb-cart-popup-004);
   border: 0;
   padding: 25px;
   justify-content: flex-start;
@@ -74,8 +76,8 @@
 
 #cartAjaxPopup .cart-ajax-popup__notice {
   border-radius: 12px;
-  background: #e8f4ed;
-  border: 1px solid #cbe7d5;
+  background: var(--hsb-cart-popup-005);
+  border: 1px solid var(--hsb-cart-popup-006);
   padding: 12px;
   margin: 0;
 }
@@ -89,7 +91,7 @@
 
 #cartAjaxPopup .cart-ajax-popup__summary-title::before {
   content: "✓";
-  color: #138353;
+  color: var(--hsb-cart-popup-007);
   font-weight: 900;
   display: inline-flex;
   justify-content: center;
@@ -97,14 +99,14 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: #e4f5eb;
+  background: var(--hsb-cart-popup-008);
   margin-left: 9px;
 }
 
 #cartAjaxPopup .cart-ajax-popup__product-text {
   display: block;
-  background: #f6f7f7;
-  border: 1px solid #eceeed;
+  background: var(--hsb-cart-popup-009);
+  border: 1px solid var(--hsb-cart-popup-010);
   border-radius: 11px;
   padding: 10px 12px;
   line-height: 1.9;
@@ -119,7 +121,7 @@
 #cartAjaxPopup .cart-ajax-popup__prices {
   margin: 0;
   gap: 7px;
-  background: #f7f8f7;
+  background: var(--hsb-cart-popup-011);
   border-radius: 10px;
   padding: 13px;
 }
@@ -157,7 +159,7 @@
     grid-column: 1;
     grid-row: 1;
     border-left: 0;
-    border-bottom: 1px solid #e5e9e7;
+    border-bottom: 1px solid var(--hsb-cart-popup-012);
     padding: 12px;
   }
 
