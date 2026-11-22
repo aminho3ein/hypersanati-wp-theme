@@ -6767,3 +6767,6 @@ add_action('wp_enqueue_scripts', function () {
         array($dependency)
     );
 }, 120);
+
+/* HSB VISUAL DESIGN SYSTEM ADMIN V1 */
+require_once get_template_directory() . '/inc/hsb-design-system-admin.php';
