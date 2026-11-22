@@ -50,7 +50,7 @@ body.cart-ajax-popup-open {
   max-width: 760px;
   background: var(--color-white);
   border: 1px solid var(--hsb-cart-popup-secondary-border);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 16px var(--hsb-cart-popup-strong-shadow);
   padding: 28px 32px 24px;
 }
 

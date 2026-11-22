@@ -7166,3 +7166,8 @@ html {
     --hsb-cart-popup-divider: #d0d0d0;
     --hsb-cart-popup-shadow: rgba(0, 0, 0, 0.08);
 }
+
+/* HSB CART AJAX FINAL SHADOW V1 */
+:root {
+    --hsb-cart-popup-strong-shadow: rgba(0, 0, 0, 0.12);
+}
