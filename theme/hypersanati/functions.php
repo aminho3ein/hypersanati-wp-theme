@@ -7236,3 +7236,24 @@ add_action('wp_enqueue_scripts', function () {
 
 /* HSB DUAL SALES FLOW */
 require_once get_template_directory() . '/inc/dual-sales-flow.php';
+
+
+/* HSB SHARED PRODUCT CARD CSS ENQUEUE V1 */
+add_action('wp_enqueue_scripts', function () {
+    if (!function_exists('is_product') || !is_product()) {
+        return;
+    }
+
+    $relative = '/assets/css/hsb-product-card.css';
+    $path = get_template_directory() . $relative;
+
+    if (!is_readable($path)) {
+        return;
+    }
+
+    hypersanati_enqueue_theme_style(
+        'hsb-product-card',
+        $relative,
+        array('single-product-css')
+    );
+}, 120);
