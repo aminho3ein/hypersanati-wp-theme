@@ -77,24 +77,24 @@
 
 .hsb-dual-cart-tabs a {
     text-decoration: none;
-    border: 1px solid #735936;
-    color: #735936;
-    background: #fff;
+    border: 1px solid var(--hsb-sale-quote-button-bg);
+    color: var(--hsb-sale-quote-button-bg);
+    background: var(--hsb-sale-button-text);
     padding: 12px 22px;
     border-radius: 12px;
     font-weight: 800;
 }
 
 .hsb-dual-cart-tabs a.is-active {
-    background: #735936;
-    color: #fff;
+    background: var(--hsb-sale-quote-button-bg);
+    color: var(--hsb-sale-button-text);
 }
 
 .hsb-direct-checkout {
     display: block;
     text-align: center;
     text-decoration: none;
-    background: #167a50;
+    background: var(--hsb-sale-direct-button-bg);
     color: white !important;
     border-radius: 12px;
     padding: 14px;
@@ -111,19 +111,19 @@
 }
 
 .hsb-direct-line-total {
-    color: #167a50;
+    color: var(--hsb-sale-direct-button-bg);
 }
 
 .hsb-direct-cart-form .quantity input.qty {
     max-width: 90px;
     padding: 9px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--hsb-sale-neutral-border);
     border-radius: 8px;
     text-align: center;
 }
 
 .hsb-direct-remove {
-    color: #b42318;
+    color: var(--hsb-sale-inquiry-status);
     text-decoration: none;
     font-weight: 700;
 }

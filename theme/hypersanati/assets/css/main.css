@@ -7112,3 +7112,16 @@ html {
         transition: none !important;
     }
 }
+
+
+/* ============================================================
+   HSB DUAL SALES DESIGN TOKENS V1
+   Preserve existing direct-sale and quotation colors.
+   ============================================================ */
+:root {
+    --hsb-sale-quote-button-bg: #735936;
+    --hsb-sale-direct-button-bg: #167a50;
+    --hsb-sale-inquiry-status: #b42318;
+    --hsb-sale-button-text: #fff;
+    --hsb-sale-neutral-border: #ddd;
+}
