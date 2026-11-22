@@ -1999,7 +1999,7 @@ button.handle-frame-section:disabled {
   width: 100%;
   margin-top: var(--spacing-xl);
   color: var(--gray-200);
-  background: var(--gray-900);
+  background: var(--hsb-footer-bg);
 }
 
 .site-footer .container {
@@ -2152,7 +2152,7 @@ button.handle-frame-section:disabled {
   gap: var(--spacing-lg);
   margin-top: var(--spacing-xl);
   padding: var(--spacing-lg);
-  background: var(--gray-800);
+  background: var(--hsb-footer-cta-bg);
   border: var(--border-width) solid var(--gray-700);
   border-radius: var(--radius-lg);
 }
@@ -2185,14 +2185,14 @@ button.handle-frame-section:disabled {
 .site-footer__contact-card {
   height: 100%;
   overflow: hidden;
-  background: var(--gray-800);
+  background: var(--hsb-footer-contact-bg);
   border: var(--border-width) solid var(--gray-700);
   border-radius: var(--radius-lg);
 }
 
 .site-footer__contact-header {
   padding: var(--spacing-lg);
-  background: var(--color-secondary);
+  background: var(--hsb-footer-contact-heading-bg);
 }
 
 .site-footer__contact-header > span {
@@ -2269,7 +2269,7 @@ button.handle-frame-section:disabled {
 .site-footer__navigation {
   margin-top: var(--spacing-xl);
   padding: var(--spacing-lg);
-  background: var(--gray-800);
+  background: var(--hsb-footer-navigation-bg);
   border: var(--border-width) solid var(--gray-700);
   border-radius: var(--radius-lg);
 }
@@ -2359,7 +2359,7 @@ button.handle-frame-section:disabled {
 
 .site-footer__bottom {
   min-height: 52px;
-  background: var(--color-dark);
+  background: var(--hsb-footer-bottom-bg);
   border-top: var(--border-width) solid var(--gray-800);
 }
 
@@ -2522,7 +2522,7 @@ button.handle-frame-section:disabled {
 /* ---------- Service strip: approved visual ---------- */
 
 .site-footer__services {
-  background: #f4f1eb;
+  background: var(--hsb-footer-services-bg);
   color: var(--color-dark);
   border-top: var(--border-width) solid rgba(159, 133, 97, 0.22);
   border-bottom: var(--border-width) solid rgba(159, 133, 97, 0.26);
@@ -6292,7 +6292,7 @@ html {
 
     padding: 18px 20px;
 
-    background: var(--gray-800);
+    background: var(--hsb-footer-identity-bg);
     border: 1px solid var(--gray-700);
     border-radius: var(--radius-lg);
 }
@@ -6656,14 +6656,21 @@ html {
 
 
   /* Footer */
-  --hsb-footer-bg: var(--color-dark);
-  --hsb-footer-text: var(--color-white);
+  --hsb-footer-bg: var(--gray-900);
+  --hsb-footer-text: var(--gray-200);
   --hsb-footer-heading: var(--color-white);
   --hsb-footer-link: var(--color-white);
   --hsb-footer-box-bg: var(--gray-800);
   --hsb-footer-box-border: var(--gray-700);
   --hsb-footer-contact-bg: var(--gray-800);
   --hsb-footer-contact-heading-bg: var(--color-secondary);
+
+  /* HSB FOOTER SURFACE TOKENS V1 */
+  --hsb-footer-services-bg: #f4f1eb;
+  --hsb-footer-identity-bg: var(--gray-800);
+  --hsb-footer-cta-bg: var(--gray-800);
+  --hsb-footer-navigation-bg: var(--gray-800);
+  --hsb-footer-bottom-bg: var(--color-dark);
 
   /* General buttons */
   --hsb-button-primary-bg: var(--color-primary);
