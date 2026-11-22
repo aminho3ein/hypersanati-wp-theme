@@ -7125,3 +7125,14 @@ html {
     --hsb-sale-button-text: #fff;
     --hsb-sale-neutral-border: #ddd;
 }
+
+
+/* ============================================================
+   HSB DUAL CART CENTRAL COLORS V1
+   Cart colors inherit the shared sales workflow tokens.
+   Existing visible colors remain unchanged.
+   ============================================================ */
+:root {
+    --hsb-cart-neutral-white: #fff;
+    --hsb-cart-quote-soft-shadow: rgba(115, 89, 54, .2);
+}
