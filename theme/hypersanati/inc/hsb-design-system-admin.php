@@ -156,6 +156,8 @@ function hsb_ds_admin_page() {
           <section class="hsb-ds-section <?php echo $first ? 'is-active':''; ?>" data-hsb-panel="<?php echo esc_attr($slug); ?>">
             <div class="hsb-ds-editor">
               <h2><?php echo esc_html($group['title']); ?></h2><p><?php echo esc_html($group['desc']); ?></p>
+              <button type="button" class="button button-secondary hsb-ds-reset-group" data-reset-group="<?php echo esc_attr($slug); ?>">بازنشانی این بخش به UI Kit اصلی</button>
+              <p class="hsb-ds-reset-note">فقط رنگ‌های همین بخش در پیش‌نمایش بازنشانی می‌شوند؛ برای اعمال در سایت، «ذخیره رنگ‌ها» را بزنید.</p>
               <?php foreach ($group['fields'] as $token => $meta) :
                  $entry = isset($saved[$token]) ? $saved[$token] : array('mode'=>'default');
                  $mode = $entry['mode'];
@@ -170,7 +172,8 @@ function hsb_ds_admin_page() {
                     <option value="<?php echo esc_attr($key); ?>" <?php selected($mode, $key); ?>><?php echo esc_html($label); ?></option>
                     <?php endforeach; ?>
                   </select>
-                  <input type="color" name="hsb_ds[<?php echo esc_attr($token); ?>][color]" class="hsb-ds-color" value="<?php echo esc_attr($value); ?>" aria-label="رنگ <?php echo esc_attr($meta[0]); ?>" <?php disabled($mode !== 'custom'); ?>>
+                  <input type="color" name="hsb_ds[<?php echo esc_attr($token); ?>][color]" class="hsb-ds-color" value="<?php echo esc_attr($value); ?>" aria-label="انتخاب بصری رنگ <?php echo esc_attr($meta[0]); ?>">
+                  <input type="text" class="hsb-ds-hex" value="<?php echo esc_attr($value); ?>" maxlength="7" inputmode="text" spellcheck="false" autocomplete="off" dir="ltr" aria-label="کد HEX رنگ <?php echo esc_attr($meta[0]); ?>" title="کد رنگ مانند #168052" placeholder="#168052">
                 </div>
                 <code>--<?php echo esc_html($token); ?></code>
               </div>
