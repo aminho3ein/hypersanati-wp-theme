@@ -7136,3 +7136,14 @@ html {
     --hsb-cart-neutral-white: #fff;
     --hsb-cart-quote-soft-shadow: rgba(115, 89, 54, .2);
 }
+
+/* ============================================================
+   HSB DUAL CART NEUTRAL TOKENS V1
+   Preserve existing dual-cart neutral colors.
+   ============================================================ */
+:root {
+    --hsb-cart-quote-border: #d9ccbb;
+    --hsb-cart-quote-surface: #f5f0e9;
+    --hsb-cart-direct-surface: #f3f6f3;
+    --hsb-cart-muted-text: #66736b;
+}

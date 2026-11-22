@@ -20,7 +20,7 @@
     min-width: 175px;
     box-sizing: border-box;
     padding: 12px 20px;
-    border: 1px solid #d9ccbb;
+    border: 1px solid var(--hsb-cart-quote-border);
     border-radius: 14px;
     background: var(--hsb-cart-neutral-white);
     color: var(--hsb-sale-quote-button-bg);
@@ -55,7 +55,7 @@
 }
 
 .hsb-dual-cart-tabs a:not(.is-active):hover {
-    background: #f5f0e9;
+    background: var(--hsb-cart-quote-surface);
     border-color: var(--hsb-sale-quote-button-bg);
 }
 
@@ -72,12 +72,12 @@
     flex-direction: column;
     gap: 7px;
     padding: 13px;
-    background: #f3f6f3;
+    background: var(--hsb-cart-direct-surface);
     border-radius: 12px;
 }
 
 .hsb-direct-prices span {
-    color: #66736b;
+    color: var(--hsb-cart-muted-text);
     font-size: 12px;
 }
 
@@ -279,7 +279,7 @@ section.cart-page-items .hsb-dual-tabs-unified a {
     box-sizing: border-box !important;
 
     border-radius: 13px !important;
-    border: 1px solid #d9ccbb !important;
+    border: 1px solid var(--hsb-cart-quote-border) !important;
     background: var(--hsb-cart-neutral-white) !important;
     color: var(--hsb-sale-quote-button-bg) !important;
 
