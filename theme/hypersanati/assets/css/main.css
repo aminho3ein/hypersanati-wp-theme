@@ -7154,3 +7154,15 @@ html {
     --hsb-quote-popup-border: #e5d8c7;
     --hsb-quote-popup-text: #32291e;
 }
+
+/* HSB CART AJAX POPUP TOKENS V1 */
+:root {
+    --hsb-cart-popup-muted-border: #b8b8b8;
+    --hsb-cart-popup-secondary-border: #bdbdbd;
+    --hsb-cart-popup-light-border: #dcdcdc;
+    --hsb-cart-popup-success-border: #b8d8c2;
+    --hsb-cart-popup-success-accent: #18a957;
+    --hsb-cart-popup-light-surface: #f3f3f3;
+    --hsb-cart-popup-divider: #d0d0d0;
+    --hsb-cart-popup-shadow: rgba(0, 0, 0, 0.08);
+}
