@@ -8,3 +8,12 @@
 .hsb-ds-reset-note{font-size:12px!important;line-height:1.8;color:#64748b;margin:4px 0 12px!important}
 .hsb-ds-field.is-custom .hsb-ds-hex{border-color:#a58b66}
 @media(max-width:600px){.hsb-ds-controls{flex-wrap:wrap}.hsb-ds-hex{width:100px}}
+
+/* HSB REAL THEME PREVIEW V4 — full actual template iframe */
+.hsb-ds-real-preview-toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.hsb-ds-real-preview-toolbar strong{font-size:13px;color:#3c424a}
+.hsb-ds-real-frame{display:block;width:100%;height:390px;border:1px solid #d8dfe5;border-radius:10px;background:#fff;box-sizing:border-box}
+[data-preview="footer"] .hsb-ds-real-frame{height:840px}
+[data-preview="card"] .hsb-ds-real-frame{height:850px}
+[data-preview="header"] .hsb-ds-real-frame{height:300px}
+@media(max-width:750px){.hsb-ds-real-frame{height:430px}[data-preview="footer"] .hsb-ds-real-frame{height:770px}[data-preview="card"] .hsb-ds-real-frame{height:1070px}}

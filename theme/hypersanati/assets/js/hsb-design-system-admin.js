@@ -6,6 +6,41 @@ const tabs=Array.from(app.querySelectorAll('[data-hsb-tab]'));
 const panels=Array.from(app.querySelectorAll('[data-hsb-panel]'));
 const previews=Array.from(app.querySelectorAll('.hsb-ds-preview'));
 const notice=app.querySelector('.hsb-ds-unsaved');
+const realFrames=Array.from(app.querySelectorAll('[data-hsb-frame]'));
+function previewValues(){
+ const out={};
+ fields.forEach(f=>{
+  const token=f.dataset.token;
+  const mode=f.querySelector('.hsb-ds-mode').value;
+  if(mode==='custom')out[token]=f.querySelector('.hsb-ds-color').value;
+  else if(mode==='primary')out[token]='var(--color-primary)';
+  else if(mode==='secondary')out[token]='var(--color-secondary)';
+ });
+ return out;
+}
+function syncFrame(frame){
+ try{if(frame.contentWindow)frame.contentWindow.postMessage({type:'hsb-ds-preview-colors',values:previewValues()},window.location.origin);}catch(e){}
+}
+function loadFrame(frame){
+ if(!frame.getAttribute('src'))frame.setAttribute('src',frame.dataset.src);
+ else syncFrame(frame);
+}
+realFrames.forEach(frame=>frame.addEventListener('load',()=>syncFrame(frame)));
+window.addEventListener('message',event=>{
+ if(event.origin!==window.location.origin || !event.data)return;
+ realFrames.forEach(frame=>{
+   if(frame.contentWindow!==event.source)return;
+   if(event.data.type==='hsb-ds-preview-ready')syncFrame(frame);
+   if(event.data.type==='hsb-ds-preview-height'){
+     const h=Number(event.data.height);
+     if(Number.isFinite(h) && h>100)frame.style.height=Math.min(2900,Math.max(180,h))+'px';
+   }
+ });
+});
+app.querySelectorAll('.hsb-ds-reload-preview').forEach(btn=>btn.addEventListener('click',()=>{
+ const frame=btn.closest('.hsb-ds-preview').querySelector('[data-hsb-frame]');
+ if(frame)frame.src=frame.dataset.src;
+}));
 const byToken=Object.fromEntries(fields.map(f=>[f.dataset.token,f]));
 const hexPattern=/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
 function normalizeHex(text){
@@ -35,6 +70,7 @@ function refresh(){
  previews.forEach(p=>{
   fields.forEach(f=>{const token=f.dataset.token;const val=value(token);if(val)p.style.setProperty('--'+token,val)});
  });
+ realFrames.forEach(syncFrame);
  fields.forEach(f=>{
   const mode=f.querySelector('.hsb-ds-mode').value;
   f.classList.toggle('is-custom',mode==='custom');
@@ -82,6 +118,8 @@ tabs.forEach(btn=>btn.addEventListener('click',()=>{
  const target=btn.dataset.hsbTab;
  tabs.forEach(b=>{const active=b===btn;b.classList.toggle('is-active',active);b.setAttribute('aria-selected',active?'true':'false')});
  panels.forEach(p=>p.classList.toggle('is-active',p.dataset.hsbPanel===target));
+ const panel=panels.find(p=>p.dataset.hsbPanel===target);
+ if(panel){const frame=panel.querySelector('[data-hsb-frame]');if(frame)loadFrame(frame);}
 }));
 app.querySelectorAll('[data-reset-group]').forEach(btn=>btn.addEventListener('click',()=>{
  const slug=btn.dataset.resetGroup;
@@ -116,4 +154,6 @@ form.addEventListener('submit',event=>{
  fields.forEach(f=>setHex(f,normalizeHex(f.querySelector('.hsb-ds-hex').value)));
 });
 refresh();
+const initial=panels.find(p=>p.classList.contains('is-active'));
+if(initial){const frame=initial.querySelector('[data-hsb-frame]');if(frame)loadFrame(frame);}
 })();

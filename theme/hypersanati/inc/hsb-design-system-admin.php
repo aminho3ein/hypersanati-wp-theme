@@ -180,8 +180,15 @@ function hsb_ds_admin_page() {
               <?php endforeach; ?>
             </div>
             <div class="hsb-ds-preview" data-preview="<?php echo esc_attr($slug); ?>">
-              <div class="hsb-ds-preview-caption">پیش‌نمایش زنده (نمونه سبک، نه تصویر کامل سایت)</div>
-              <?php hsb_ds_render_preview($slug); ?>
+              <div class="hsb-ds-preview-caption">پیش‌نمایش زنده — قالب واقعی برای هدر، فوتر و کارت‌ها</div>
+              <?php if (in_array($slug, array('header','footer','card'), true)) : ?>
+                <div class="hsb-ds-real-preview-toolbar">
+                  <strong><?php echo esc_html($slug === 'card' ? 'دو وضعیت واقعی محصول' : 'قالب واقعی سایت'); ?></strong>
+                  <button type="button" class="button hsb-ds-reload-preview">بارگذاری مجدد پیش‌نمایش</button>
+                </div>
+                <iframe class="hsb-ds-real-frame" title="<?php echo esc_attr('پیش‌نمایش واقعی ' . $group['title']); ?>" data-hsb-frame="<?php echo esc_attr($slug); ?>" data-src="<?php echo esc_url(add_query_arg(array('hsb_ds_real_preview'=>$slug, '_wpnonce'=>wp_create_nonce('hsb_ds_real_preview')), home_url('/'))); ?>" loading="lazy" referrerpolicy="same-origin"></iframe>
+                <p class="hsb-ds-preview-note">این بخش از قالب واقعی و CSS سایت استفاده می‌کند. ویرایش رنگ فقط در پیش‌نمایش اعمال می‌شود و پس از ذخیره در سایت منتشر خواهد شد.</p>
+                <?php else : ?><?php hsb_ds_render_preview($slug); ?><?php endif; ?>
               <p class="hsb-ds-preview-note">تغییرات این پیش‌نمایش تا زمان ذخیره، روی سایت منتشر نمی‌شوند.</p>
             </div>
           </section>
@@ -211,4 +218,123 @@ function hsb_ds_render_preview($type) {
     <?php } else { ?>
       <div class="hsb-p-content"><h3>نظرات کاربران ★★★★☆</h3><p>نمونه متن و جزئیات نظر درباره محصول</p><input type="text" placeholder="نظر خود را بنویسید" aria-label="نمونه فیلد نظر"><div class="hsb-p-table">مشخصات فنی محصول</div></div>
     <?php }
+}
+
+
+/* HSB REAL-THEME PREVIEW V4 — read-only, admin-only, nonce protected. */
+add_action('template_redirect', 'hsb_ds_real_preview_route', 0);
+function hsb_ds_real_preview_route() {
+    if (!isset($_GET['hsb_ds_real_preview'])) { return; }
+    $kind = sanitize_key(wp_unslash($_GET['hsb_ds_real_preview']));
+    if (!in_array($kind, array('header','footer','card'), true)) {
+        status_header(404); exit;
+    }
+    if (!is_user_logged_in() || !current_user_can('manage_options') ||
+        !isset($_GET['_wpnonce']) ||
+        !wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['_wpnonce'])), 'hsb_ds_real_preview')) {
+        status_header(403); exit;
+    }
+    nocache_headers();
+    header('X-Robots-Tag: noindex, nofollow', true);
+
+    // Preview must reflect the live CSS defaults and *only* the editor's unsaved state.
+    remove_action('wp_head', 'hsb_ds_output_css', 999);
+    add_action('wp_head', static function () use ($kind) {
+        $kind_class = 'hsb-ds-real-' . esc_attr($kind);
+        echo '<style id="hsb-real-preview-scope">';
+        echo 'html,body{margin:0!important;min-height:0!important;overflow-x:hidden!important}';
+        echo 'body{background:#fff!important}';
+        echo '.hsb-ds-real-stage{box-sizing:border-box}';
+        if ($kind === 'header') {
+            echo '.site-footer,.my-foot,.hsb-ds-real-stage{display:none!important}';
+        } elseif ($kind === 'footer') {
+            echo '.header,.hsb-ds-real-stage{display:none!important}';
+        } else {
+            echo '.header,.site-footer,.my-foot{display:none!important}';
+            echo '.hsb-ds-real-stage{padding:18px;background:#f4f5f6;min-height:530px}';
+            echo '.hsb-ds-card-grid{display:grid;grid-template-columns:repeat(2,minmax(230px,1fr));align-items:start;gap:18px;max-width:750px;margin:auto}';
+            echo '.hsb-ds-card-slot{min-width:0}.hsb-ds-card-slot>h2{font-size:15px;margin:0 0 12px;color:#293036}';
+            echo '.hsb-ds-card-slot .hsb-family-product-card{width:100%!important;max-width:360px!important;margin:auto!important}';
+            echo '.hsb-ds-preview-empty{padding:18px;background:white;border:1px dashed #aaa;border-radius:12px;color:#555}';
+            echo '@media(max-width:570px){.hsb-ds-card-grid{grid-template-columns:1fr}}';
+        }
+        echo '</style>';
+    }, 9998);
+
+    get_header();
+    echo '<main class="hsb-ds-real-stage" aria-label="پیش‌نمایش رنگ‌ها">';
+    if ($kind === 'card') { hsb_ds_real_product_cards(); }
+    echo '</main>';
+    // Only a CSS-variable preview. All links/buttons are inert inside the preview.
+    ?>
+    <script>
+    (function () {
+      'use strict';
+      var allowed = <?php echo wp_json_encode(array_keys(hsb_ds_allowed_tokens())); ?>;
+      var known = new Set(allowed);
+      document.addEventListener('click', function(e) {
+        if (e.target.closest('a,button,input[type="submit"]')) { e.preventDefault(); e.stopImmediatePropagation(); }
+      }, true);
+      document.addEventListener('submit', function(e) { e.preventDefault(); e.stopImmediatePropagation(); }, true);
+      window.addEventListener('message', function(event) {
+        if (event.origin !== window.location.origin || !event.data || event.data.type !== 'hsb-ds-preview-colors') { return; }
+        var entries = event.data.values || {};
+        known.forEach(function(token) {
+          var value = entries[token];
+          if (typeof value === 'string' && (/^#[0-9a-fA-F]{6}$/.test(value) || value === 'var(--color-primary)' || value === 'var(--color-secondary)')) {
+            document.documentElement.style.setProperty('--' + token, value);
+          } else { document.documentElement.style.removeProperty('--' + token); }
+        });
+      });
+      window.parent.postMessage({type:'hsb-ds-preview-ready'},window.location.origin);
+      function sendHeight() {
+        var section = <?php echo wp_json_encode($kind); ?>;
+        var node = section === 'footer' ? document.querySelector('footer') :
+                   section === 'header' ? document.querySelector('.header') : document.querySelector('.hsb-ds-real-stage');
+        if (!node) return;
+        var height = Math.ceil(node.getBoundingClientRect().height + 24);
+        window.parent.postMessage({type:'hsb-ds-preview-height', height:height}, window.location.origin);
+      }
+      window.addEventListener('load',sendHeight);
+      if (window.ResizeObserver) {
+        var target = <?php echo wp_json_encode($kind); ?> === 'footer' ? document.querySelector('footer') :
+                     <?php echo wp_json_encode($kind); ?> === 'header' ? document.querySelector('.header') : document.querySelector('.hsb-ds-real-stage');
+        if(target) new ResizeObserver(sendHeight).observe(target);
+      }
+      sendHeight();
+    })();
+    </script>
+    <?php
+    get_footer();
+    exit;
+}
+
+function hsb_ds_real_product_cards() {
+    echo '<div class="hsb-ds-card-grid">';
+    if (!function_exists('wc_get_products') || !function_exists('hypersanati_render_product_card')) {
+        echo '<p class="hsb-ds-preview-empty">WooCommerce یا کامپوننت مشترک کارت محصول در دسترس نیست.</p></div>';
+        return;
+    }
+    // Read-only small bounded lookup. Cards use the SAME renderer as the storefront.
+    $ids = wc_get_products(array('status'=>'publish', 'limit'=>80, 'orderby'=>'date', 'order'=>'DESC', 'return'=>'ids'));
+    $direct = 0; $other = 0;
+    foreach ($ids as $id) {
+        $product = wc_get_product($id);
+        if (!$product) { continue; }
+        $is_direct = function_exists('hsb_dual_is_direct') && hsb_dual_is_direct($product);
+        $can_buy = $is_direct && $product->is_purchasable() && $product->is_in_stock();
+        if ($can_buy && !$direct) { $direct = (int)$id; }
+        if (!$can_buy && !$other) { $other = (int)$id; }
+        if ($direct && $other) { break; }
+    }
+    foreach (array(array('title'=>'محصول موجود / خرید آنلاین', 'id'=>$direct), array('title'=>'استعلامی یا ناموجود', 'id'=>$other)) as $slot) {
+        echo '<section class="hsb-ds-card-slot"><h2>' . esc_html($slot['title']) . '</h2>';
+        if ($slot['id']) {
+            hypersanati_render_product_card($slot['id']);
+        } else {
+            echo '<div class="hsb-ds-preview-empty">محصول متناسب با این وضعیت در ۸۰ محصول اخیر پیدا نشد. نمایشی ساختگی جایگزین نشده است.</div>';
+        }
+        echo '</section>';
+    }
+    echo '</div>';
 }
