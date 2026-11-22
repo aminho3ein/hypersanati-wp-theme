@@ -7684,7 +7684,7 @@ body.single-product #desc .desc-main-card .desc-content
     display: block;
     max-width: 100%;
     overflow-x: auto;
-    border: 1px solid #e5d9cb;
+    border: 1px solid var(--hsb-sp-description-table-border);
     border-radius: 12px;
     -webkit-overflow-scrolling: touch;
 }

@@ -7218,3 +7218,8 @@ html {
     --hsb-sp-purchase-hover: rgba(17, 24, 39, 0.07);
     --hsb-sp-purchase-focus-ring: rgba(37, 99, 235, 0.12);
 }
+
+/* HSB PRODUCT DESCRIPTION BORDER TOKEN V1 */
+:root {
+    --hsb-sp-description-table-border: #e5d9cb;
+}
