@@ -7171,3 +7171,21 @@ html {
 :root {
     --hsb-cart-popup-strong-shadow: rgba(0, 0, 0, 0.12);
 }
+
+/* HSB SINGLE PRODUCT REVIEWS TOKENS V1 */
+:root {
+    --hsb-review-surface: #fff;
+    --hsb-review-text-strong: #111827;
+    --hsb-review-text-muted: #6b7280;
+    --hsb-review-text-body: #374151;
+    --hsb-review-text-subtle: #9ca3af;
+    --hsb-review-surface-soft: #f9fafb;
+    --hsb-review-focus: #2563eb;
+    --hsb-review-error: #ef4444;
+    --hsb-review-star: #f59e0b;
+    --hsb-review-border: #d1d5db;
+    --hsb-review-verified: #15803d;
+    --hsb-review-outline: rgba(17, 24, 39, 0.08);
+    --hsb-review-shadow: rgba(17, 24, 39, 0.07);
+    --hsb-review-focus-ring: rgba(37, 99, 235, 0.12);
+}
