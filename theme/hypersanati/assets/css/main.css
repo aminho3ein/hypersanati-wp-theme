@@ -2045,7 +2045,7 @@ button.handle-frame-section:disabled {
   flex: 0 0 44px;
   color: var(--color-secondary);
   background: rgba(159, 133, 97, 0.12);
-  border: var(--border-width) solid rgba(159, 133, 97, 0.28);
+  border: var(--border-width) solid var(--hsb-footer-service-icon-border);
   border-radius: var(--radius-lg);
 }
 
@@ -2409,7 +2409,7 @@ button.handle-frame-section:disabled {
   }
 
   .site-footer__service-card:nth-child(odd) {
-    border-left: var(--border-width) solid rgba(94, 68, 32, 0.1);
+    border-left: var(--border-width) solid var(--hsb-footer-service-divider);
   }
 
   .site-footer__navigation ul {
@@ -2428,7 +2428,7 @@ button.handle-frame-section:disabled {
   .site-footer__service-card {
     padding-inline: var(--spacing-lg);
     border-bottom: 0;
-    border-left: var(--border-width) solid rgba(94, 68, 32, 0.1);
+    border-left: var(--border-width) solid var(--hsb-footer-service-divider);
   }
 
   .site-footer__service-card:last-child {
@@ -2523,9 +2523,9 @@ button.handle-frame-section:disabled {
 
 .site-footer__services {
   background: var(--hsb-footer-services-bg);
-  color: var(--color-dark);
-  border-top: var(--border-width) solid rgba(159, 133, 97, 0.22);
-  border-bottom: var(--border-width) solid rgba(159, 133, 97, 0.26);
+  color: var(--hsb-footer-service-text);
+  border-top: var(--border-width) solid var(--hsb-footer-service-border-top);
+  border-bottom: var(--border-width) solid var(--hsb-footer-service-border-bottom);
 }
 
 .site-footer__service-card {
@@ -2537,9 +2537,9 @@ button.handle-frame-section:disabled {
   width: 42px;
   height: 42px;
   flex-basis: 42px;
-  color: var(--color-secondary);
-  background: rgba(159, 133, 97, 0.14);
-  border: var(--border-width) solid rgba(159, 133, 97, 0.28);
+  color: var(--hsb-footer-service-icon-color);
+  background: var(--hsb-footer-service-icon-bg);
+  border: var(--border-width) solid var(--hsb-footer-service-icon-border);
   border-radius: 10px;
 }
 
@@ -2549,13 +2549,13 @@ button.handle-frame-section:disabled {
 }
 
 .site-footer__service-card strong {
-  color: #25211c;
+  color: var(--hsb-footer-service-title);
   font-size: 0.88rem;
   font-weight: 800;
 }
 
 .site-footer__service-card p {
-  color: #746d63;
+  color: var(--hsb-footer-service-description);
   font-size: 0.72rem;
   line-height: 1.7;
 }
@@ -6683,6 +6683,18 @@ html {
   --hsb-footer-nav-link-hover-text: var(--color-white);
   --hsb-footer-bottom-link-hover: var(--color-primary-active);
   --hsb-footer-contact-heading-text: var(--color-white);
+
+  /* HSB FOOTER SERVICE STRIP TOKENS V1 */
+  --hsb-footer-service-text: var(--color-dark);
+  --hsb-footer-service-title: #25211c;
+  --hsb-footer-service-description: #746d63;
+  --hsb-footer-service-icon-color: var(--color-secondary);
+  --hsb-footer-service-icon-bg: rgba(159, 133, 97, 0.14);
+  --hsb-footer-service-icon-border: rgba(159, 133, 97, 0.28);
+  --hsb-footer-service-border-top: rgba(159, 133, 97, 0.22);
+  --hsb-footer-service-border-bottom: rgba(159, 133, 97, 0.26);
+  --hsb-footer-service-divider: rgba(94, 68, 32, 0.1);
+
 
   /* General buttons */
   --hsb-button-primary-bg: var(--color-primary);
