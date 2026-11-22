@@ -1,3 +1,5 @@
+/* Default colors retained exactly until overridden by HSB Design System. */
+:root{--hsb-cart-count-001:#ffffff;--hsb-cart-count-002:#ffffff;--hsb-cart-count-003:#168052;--hsb-cart-count-004:#ffffff;--hsb-cart-count-005:#735936;--hsb-cart-count-006:#ffffff;--hsb-cart-count-007:#ffffff;--hsb-cart-count-008:#ffffff;--hsb-cart-count-009:#ffffff;--hsb-cart-count-010:#168052;--hsb-cart-count-011:#e53935;--hsb-cart-count-012:#ffffff;--hsb-cart-count-013:#ffffff;--hsb-cart-count-014:#ffffff;--hsb-cart-count-015:#ffffff;--hsb-cart-count-016:#168052;--hsb-cart-count-017:#e53935;--hsb-cart-count-018:#168052;--hsb-cart-count-019:#ffffff;--hsb-cart-count-020:#e53935;--hsb-cart-count-021:#ffffff;}
 /* Header: independent WooCommerce cart icon */
 .hsb-direct-header-cart {
     display: inline-flex;
@@ -25,7 +27,7 @@
     padding: 0 4px;
     border-radius: 20px;
     background: var(--hsb-header-badge-direct-bg);
-    color: #fff;
+    color: var(--hsb-cart-count-001);
     font-size: 11px;
     font-weight: 800;
     box-sizing: border-box;
@@ -51,10 +53,10 @@
     min-width: 24px !important;
     height: 24px !important;
     padding: 0 6px !important;
-    border: 2px solid #fff !important;
+    border: 2px solid var(--hsb-cart-count-002) !important;
     border-radius: 30px !important;
-    background: #168052 !important;
-    color: #fff !important;
+    background: var(--hsb-cart-count-003) !important;
+    color: var(--hsb-cart-count-004) !important;
     font-size: 12px !important;
     font-weight: 800 !important;
     box-sizing: border-box !important;
@@ -64,7 +66,7 @@
 }
 
 .hsb-dual-cart-tabs a:not(.is-active) .hsb-tab-count {
-    background: #735936 !important;
+    background: var(--hsb-cart-count-005) !important;
 }
 
 .hsb-dual-cart-tabs {
@@ -102,11 +104,11 @@
     padding: 0 4px !important;
 
     box-sizing: border-box !important;
-    border: 3px solid #fff !important;
+    border: 3px solid var(--hsb-cart-count-006) !important;
     border-radius: 50px !important;
 
     background: var(--hsb-header-badge-direct-bg) !important;
-    color: #fff !important;
+    color: var(--hsb-cart-count-007) !important;
 
     font-size: 11px !important;
     font-weight: 800 !important;
@@ -132,10 +134,10 @@
     padding: 0 5px !important;
 
     box-sizing: border-box !important;
-    border: 3px solid #fff !important;
+    border: 3px solid var(--hsb-cart-count-008) !important;
     border-radius: 50px !important;
 
-    color: #fff !important;
+    color: var(--hsb-cart-count-009) !important;
     font-size: 12px !important;
     font-weight: 800 !important;
     line-height: 1 !important;
@@ -147,12 +149,12 @@
 
 /* Direct purchase = green */
 .hsb-dual-cart-tabs [data-hsb-count="direct"] {
-    background: #168052 !important;
+    background: var(--hsb-cart-count-010) !important;
 }
 
 /* Quote = red */
 .hsb-dual-cart-tabs [data-hsb-count="quote"] {
-    background: #e53935 !important;
+    background: var(--hsb-cart-count-011) !important;
 }
 
 /* Maintain badges above the button edges */
@@ -195,11 +197,11 @@
     height: 23px !important;
     padding: 0 4px !important;
 
-    border: 3px solid #fff !important;
+    border: 3px solid var(--hsb-cart-count-012) !important;
     border-radius: 999px !important;
     box-sizing: border-box !important;
 
-    color: #fff !important;
+    color: var(--hsb-cart-count-013) !important;
     font-size: 11px !important;
     font-weight: 800 !important;
     line-height: 1 !important;
@@ -237,11 +239,11 @@
     height: 25px !important;
     padding: 0 5px !important;
 
-    border: 3px solid #fff !important;
+    border: 3px solid var(--hsb-cart-count-014) !important;
     border-radius: 999px !important;
     box-sizing: border-box !important;
 
-    color: #fff !important;
+    color: var(--hsb-cart-count-015) !important;
     font-size: 12px !important;
     font-weight: 800 !important;
     line-height: 1 !important;
@@ -252,24 +254,24 @@
 
 /* Fixed colors regardless of active state */
 .hsb-dual-cart-tabs [data-hsb-count="direct"] {
-    background: #168052 !important;
+    background: var(--hsb-cart-count-016) !important;
 }
 
 .hsb-dual-cart-tabs [data-hsb-count="quote"] {
-    background: #e53935 !important;
+    background: var(--hsb-cart-count-017) !important;
 }
 
 /* Even when tab is active, badge color must remain its own color */
 .hsb-dual-cart-tabs a.is-active [data-hsb-count="direct"],
 .hsb-dual-cart-tabs a[aria-current="page"] [data-hsb-count="direct"] {
-    background: #168052 !important;
-    color: #fff !important;
+    background: var(--hsb-cart-count-018) !important;
+    color: var(--hsb-cart-count-019) !important;
 }
 
 .hsb-dual-cart-tabs a.is-active [data-hsb-count="quote"],
 .hsb-dual-cart-tabs a[aria-current="page"] [data-hsb-count="quote"] {
-    background: #e53935 !important;
-    color: #fff !important;
+    background: var(--hsb-cart-count-020) !important;
+    color: var(--hsb-cart-count-021) !important;
 }
 
 

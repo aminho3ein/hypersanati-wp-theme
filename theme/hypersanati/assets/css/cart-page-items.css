@@ -1,3 +1,5 @@
+/* Default colors retained exactly until overridden by HSB Design System. */
+:root{--hsb-cart-page-001:#d89a00;--hsb-cart-page-002:#cfcfcf;--hsb-cart-page-003:#b08d57;--hsb-cart-page-004:#ececec;--hsb-cart-page-005:#bdbdbd;--hsb-cart-page-006:#d89a00;--hsb-cart-page-007:#d89a00;--hsb-cart-page-008:#cfcfcf;--hsb-cart-page-009:#f7f7f7;--hsb-cart-page-010:#8a8a8a;--hsb-cart-page-011:#d8d8d8;--hsb-cart-page-012:#d0d0d0;--hsb-cart-page-013:#ffffff;--hsb-cart-page-014:#e5e5e5;--hsb-cart-page-015:#2f353b;--hsb-cart-page-016:#171b1f;--hsb-cart-page-017:#ffffff;--hsb-cart-page-018:#ffffff;--hsb-cart-page-019:#9d7e4e;--hsb-cart-page-020:#ffffff;--hsb-cart-page-021:#866a3f;--hsb-cart-page-022:#20262c;--hsb-cart-page-023:#687078;--hsb-cart-page-024:#ffffff;--hsb-cart-page-025:#8b6e43;--hsb-cart-page-026:#2a3035;--hsb-cart-page-027:#80868c;--hsb-cart-page-028:#b9bdc1;--hsb-cart-page-029:#8f7042;--hsb-cart-page-030:#71552f;--hsb-cart-page-031:#ffffff;--hsb-cart-page-032:#858b90;--hsb-cart-page-033:#9d7e4e;--hsb-cart-page-034:#f7f8f8;--hsb-cart-page-035:#31363b;--hsb-cart-page-036:#795a2d;--hsb-cart-page-037:#ffffff;--hsb-cart-page-038:#20252a;--hsb-cart-page-039:#9d7e4e;--hsb-cart-page-040:#22282d;--hsb-cart-page-041:#7c6037;--hsb-cart-page-042:#ffffff;--hsb-cart-page-043:#a0a5a9;--hsb-cart-page-044:#c93737;--hsb-cart-page-045:#f8f9f9;--hsb-cart-page-046:#555d64;--hsb-cart-page-047:#806138;--hsb-cart-page-048:#22282d;--hsb-cart-page-049:#7f6239;--hsb-cart-page-050:#f5f6f7;--hsb-cart-page-051:#8a9095;--hsb-cart-page-052:#343a40;--hsb-cart-page-053:#f8f9f9;--hsb-cart-page-054:#ffffff;--hsb-cart-page-055:#967747;--hsb-cart-page-056:#92979c;--hsb-cart-page-057:#30363b;--hsb-cart-page-058:#6d747a;--hsb-cart-page-059:#87683b;}
 .cart-page-items {
   padding: 48px 0 72px;
   direction: ltr;
@@ -17,7 +19,7 @@
   left: 0;
   bottom: -18px;
   height: 2px;
-  background: #d89a00;
+  background: var(--hsb-cart-page-001);
 }
 
 .cart-page-items__title {
@@ -40,7 +42,7 @@
 }
 
 .cart-sidebar-card {
-  background: #cfcfcf;
+  background: var(--hsb-cart-page-002);
   padding: 22px 14px 28px;
   border-radius: 8px;
 }
@@ -69,7 +71,7 @@
 .cart-sidebar-card__coupon input {
   width: 100%;
   height: 48px;
-  border: 1px solid #b08d57;
+  border: 1px solid var(--hsb-cart-page-003);
   background: var(--color-white);
   padding: 0 14px;
   font-size: 0.95rem;
@@ -107,7 +109,7 @@
 }
 
 .cart-sidebar-card__summary {
-  background: #ececec;
+  background: var(--hsb-cart-page-004);
   border-radius: 8px;
   padding: 16px 14px;
   text-align: center;
@@ -122,7 +124,7 @@
 
 .cart-sidebar-card__divider {
   height: 1px;
-  background: #bdbdbd;
+  background: var(--hsb-cart-page-005);
   margin: 12px 0;
 }
 
@@ -163,7 +165,7 @@
   grid-template-columns: minmax(320px, 1fr) 120px 110px 120px 56px;
   align-items: center;
   padding-bottom: 14px;
-  border-bottom: 2px solid #d89a00;
+  border-bottom: 2px solid var(--hsb-cart-page-006);
   margin-bottom: 18px;
 }
 
@@ -183,7 +185,7 @@
   grid-template-columns: minmax(320px, 1fr) 120px 110px 120px 56px;
   align-items: center;
   padding: 22px 0;
-  border-bottom: 2px solid #d89a00;
+  border-bottom: 2px solid var(--hsb-cart-page-007);
   gap: 12px;
 }
 
@@ -197,8 +199,8 @@
 .cart-page-items__product-image {
   width: 100px;
   height: 100px;
-  border: 1px solid #cfcfcf;
-  background: #f7f7f7;
+  border: 1px solid var(--hsb-cart-page-008);
+  background: var(--hsb-cart-page-009);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -244,7 +246,7 @@
 .cart-page-items__qty-btn {
   width: 34px;
   height: 34px;
-  border: 1px solid #8a8a8a;
+  border: 1px solid var(--hsb-cart-page-010);
   background: var(--color-white);
   color: var(--color-dark);
   display: inline-flex;
@@ -358,7 +360,7 @@
 
   .cart-page-items__row {
     grid-template-columns: 1fr;
-    border: 1px solid #d8d8d8;
+    border: 1px solid var(--hsb-cart-page-011);
     padding: 18px;
     border-radius: 10px;
     margin-bottom: 18px;
@@ -449,7 +451,7 @@
   width: 56px;
   height: 36px;
   text-align: center;
-  border: 1px solid #d0d0d0;
+  border: 1px solid var(--hsb-cart-page-012);
   border-radius: 6px;
 }
 
@@ -463,8 +465,8 @@
 }
 
 .cart-page-items__empty {
-  background: #fff;
-  border: 1px solid #e5e5e5;
+  background: var(--hsb-cart-page-013);
+  border: 1px solid var(--hsb-cart-page-014);
   padding: 32px;
   text-align: center;
   border-radius: 12px;
@@ -583,11 +585,11 @@
     background:
         linear-gradient(
             145deg,
-            #2f353b,
-            #171b1f
+            var(--hsb-cart-page-015),
+            var(--hsb-cart-page-016)
         );
 
-    color: #fff;
+    color: var(--hsb-cart-page-017);
     font-size: 34px;
 
     box-shadow:
@@ -606,11 +608,11 @@
     width: 28px;
     height: 28px;
 
-    border: 3px solid #fff;
+    border: 3px solid var(--hsb-cart-page-018);
     border-radius: 50%;
 
-    background: #9d7e4e;
-    color: #fff;
+    background: var(--hsb-cart-page-019);
+    color: var(--hsb-cart-page-020);
 
     font-size: 10px;
 }
@@ -631,7 +633,7 @@
     border-radius: 999px;
 
     background: rgba(157, 126, 78, 0.10);
-    color: #866a3f;
+    color: var(--hsb-cart-page-021);
 
     font-size: 12px;
     font-weight: 700;
@@ -640,7 +642,7 @@
 .hsb-preinvoice-empty__content h2 {
     margin: 0 0 12px;
 
-    color: #20262c;
+    color: var(--hsb-cart-page-022);
 
     font-size: clamp(23px, 2.1vw, 31px);
     font-weight: 800;
@@ -650,7 +652,7 @@
 .hsb-preinvoice-empty__content p {
     margin: 0;
 
-    color: #687078;
+    color: var(--hsb-cart-page-023);
 
     font-size: 14px;
     line-height: 2;
@@ -701,10 +703,10 @@
 
     border-radius: 50%;
 
-    background: #fff;
+    background: var(--hsb-cart-page-024);
     border: 1px solid rgba(157, 126, 78, 0.28);
 
-    color: #8b6e43;
+    color: var(--hsb-cart-page-025);
 
     font-size: 13px;
     font-weight: 800;
@@ -719,7 +721,7 @@
 
     margin-bottom: 3px;
 
-    color: #2a3035;
+    color: var(--hsb-cart-page-026);
 
     font-size: 13px;
     font-weight: 800;
@@ -728,14 +730,14 @@
 .hsb-preinvoice-empty__step small {
     display: block;
 
-    color: #80868c;
+    color: var(--hsb-cart-page-027);
 
     font-size: 11px;
     line-height: 1.7;
 }
 
 .hsb-preinvoice-empty__step-arrow {
-    color: #b9bdc1;
+    color: var(--hsb-cart-page-028);
     font-size: 11px;
 }
 
@@ -764,11 +766,11 @@
     background:
         linear-gradient(
             135deg,
-            #8f7042,
-            #71552f
+            var(--hsb-cart-page-029),
+            var(--hsb-cart-page-030)
         );
 
-    color: #fff !important;
+    color: var(--hsb-cart-page-031) !important;
 
     font-size: 14px;
     font-weight: 800;
@@ -796,14 +798,14 @@
     justify-content: center;
     gap: 7px;
 
-    color: #858b90;
+    color: var(--hsb-cart-page-032);
 
     font-size: 11px;
     line-height: 1.8;
 }
 
 .hsb-preinvoice-empty__hint i {
-    color: #9d7e4e;
+    color: var(--hsb-cart-page-033);
 }
 
 
@@ -867,7 +869,7 @@
     padding: 2px 4px;
 
     border-radius: 10px;
-    background: #f7f8f8;
+    background: var(--hsb-cart-page-034);
 }
 
 
@@ -885,7 +887,7 @@
     outline: 0;
 
     background: transparent !important;
-    color: #31363b;
+    color: var(--hsb-cart-page-035);
 
     display: inline-flex;
     align-items: center;
@@ -912,7 +914,7 @@
  */
 .preinvoice-page .cart-page-items__qty-btn:hover {
     background: rgba(32, 38, 44, 0.07) !important;
-    color: #795a2d;
+    color: var(--hsb-cart-page-036);
 }
 
 .preinvoice-page .cart-page-items__qty-btn:active {
@@ -930,9 +932,9 @@
     border: 0;
     border-radius: 7px;
 
-    background: #fff;
+    background: var(--hsb-cart-page-037);
 
-    color: #20252a;
+    color: var(--hsb-cart-page-038);
 
     text-align: center;
 
@@ -1012,7 +1014,7 @@
 
     margin-bottom: 3px;
 
-    color: #9d7e4e;
+    color: var(--hsb-cart-page-039);
 
     font-size: 12px;
     font-weight: 800;
@@ -1021,7 +1023,7 @@
 .preinvoice-products-head h2 {
     margin: 0;
 
-    color: #22282d;
+    color: var(--hsb-cart-page-040);
 
     font-size: 20px;
     font-weight: 800;
@@ -1040,7 +1042,7 @@
     border-radius: 999px;
 
     background: rgba(157, 126, 78, 0.10);
-    color: #7c6037;
+    color: var(--hsb-cart-page-041);
 
     font-size: 12px;
     font-weight: 800;
@@ -1057,7 +1059,7 @@
     border: 1px solid rgba(34, 40, 45, 0.10);
     border-radius: 17px;
 
-    background: #fff;
+    background: var(--hsb-cart-page-042);
 
     box-shadow:
         0 7px 26px rgba(29, 34, 39, 0.055);
@@ -1099,7 +1101,7 @@
 
     background: transparent;
 
-    color: #a0a5a9;
+    color: var(--hsb-cart-page-043);
 
     font-size: 13px;
 
@@ -1112,7 +1114,7 @@
 
 .preinvoice-product-card__remove:hover {
     background: rgba(201, 55, 55, 0.08);
-    color: #c93737;
+    color: var(--hsb-cart-page-044);
 }
 
 
@@ -1140,7 +1142,7 @@
     border: 1px solid rgba(34, 40, 45, 0.10);
     border-radius: 13px;
 
-    background: #f8f9f9;
+    background: var(--hsb-cart-page-045);
 }
 
 .preinvoice-product-card__image img {
@@ -1180,12 +1182,12 @@
 
 .preinvoice-primary-badge {
     background: rgba(34, 40, 45, 0.06);
-    color: #555d64;
+    color: var(--hsb-cart-page-046);
 }
 
 .preinvoice-required-badge {
     background: rgba(157, 126, 78, 0.12);
-    color: #806138;
+    color: var(--hsb-cart-page-047);
 }
 
 .preinvoice-product-card__title {
@@ -1195,7 +1197,7 @@
     font-weight: 800;
     line-height: 1.8;
 
-    color: #22282d;
+    color: var(--hsb-cart-page-048);
 }
 
 .preinvoice-product-card__title a {
@@ -1204,7 +1206,7 @@
 }
 
 .preinvoice-product-card__title a:hover {
-    color: #7f6239;
+    color: var(--hsb-cart-page-049);
 }
 
 
@@ -1225,17 +1227,17 @@
 
     border-radius: 8px;
 
-    background: #f5f6f7;
+    background: var(--hsb-cart-page-050);
 
     font-size: 11px;
 }
 
 .preinvoice-product-code span {
-    color: #8a9095;
+    color: var(--hsb-cart-page-051);
 }
 
 .preinvoice-product-code strong {
-    color: #343a40;
+    color: var(--hsb-cart-page-052);
 
     font-size: 12px;
     font-weight: 800;
@@ -1269,7 +1271,7 @@
 
     border-radius: 10px;
 
-    background: #f8f9f9;
+    background: var(--hsb-cart-page-053);
 }
 
 .preinvoice-product-spec__icon {
@@ -1284,8 +1286,8 @@
 
     border-radius: 8px;
 
-    background: #fff;
-    color: #967747;
+    background: var(--hsb-cart-page-054);
+    color: var(--hsb-cart-page-055);
 
     font-size: 10px;
 
@@ -1302,7 +1304,7 @@
 
     margin-bottom: 2px;
 
-    color: #92979c;
+    color: var(--hsb-cart-page-056);
 
     font-size: 9px;
     line-height: 1.5;
@@ -1313,7 +1315,7 @@
 
     overflow: hidden;
 
-    color: #30363b;
+    color: var(--hsb-cart-page-057);
 
     font-size: 11px;
     font-weight: 800;
@@ -1346,7 +1348,7 @@
 }
 
 .preinvoice-product-card__qty-label {
-    color: #6d747a;
+    color: var(--hsb-cart-page-058);
 
     font-size: 11px;
     font-weight: 700;
@@ -1357,7 +1359,7 @@
     align-items: center;
     gap: 6px;
 
-    color: #87683b;
+    color: var(--hsb-cart-page-059);
 
     font-size: 11px;
     font-weight: 800;
