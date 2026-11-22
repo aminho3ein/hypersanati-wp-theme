@@ -92,6 +92,17 @@ function hypersanati_render_product_card(
         return $value;
     };
 
+    /* Smaller unit label without changing measurement data. */
+    $hsb_format_mm_html = static function ($value) use ($format_mm) {
+        $formatted = $format_mm($value);
+        if (preg_match('/^(.+?)\s+mm$/u', $formatted, $match)) {
+            return '<span class="hsb-card-measurement-value">'
+                . esc_html($match[1])
+                . '</span><span class="hsb-card-mm">mm</span>';
+        }
+        return esc_html($formatted);
+    };
+
     /* hsb-card-auto-family */
     if (
         empty($family) &&
@@ -217,6 +228,14 @@ function hypersanati_render_product_card(
 
             <?php endif; ?>
 
+            <!-- HSB COMPACT CARD V1: stars live on image; vote count hidden by card CSS -->
+            <?php
+            hsb_render_product_card_rating(
+                $card_product->get_average_rating(),
+                $card_product->get_rating_count()
+            );
+            ?>
+
         </div>
 
 
@@ -277,21 +296,22 @@ function hypersanati_render_product_card(
             </div>
 
 
-            <h3 class="hsb-family-card-title">
-                <?php
-                echo esc_html(
-                    $card_product->get_name()
-                );
-                ?>
+            <?php
+            $hsb_title = $card_product->get_name();
+            $hsb_title_length = function_exists('mb_strlen')
+                ? mb_strlen($hsb_title, 'UTF-8')
+                : strlen($hsb_title);
+            $hsb_title_class = $hsb_title_length > 45
+                ? 'hsb-card-title--long'
+                : ($hsb_title_length > 30 ? 'hsb-card-title--medium' : 'hsb-card-title--short');
+            ?>
+            <h3 class="hsb-family-card-title <?php echo esc_attr($hsb_title_class); ?>"
+                title="<?php echo esc_attr($hsb_title); ?>">
+                <?php echo esc_html($hsb_title); ?>
             </h3>
 
 
-            <?php
-            hsb_render_product_card_rating(
-                $card_product->get_average_rating(),
-                $card_product->get_rating_count()
-            );
-            ?>
+
 
 
             <div class="hsb-family-card-dimensions">
@@ -301,8 +321,8 @@ function hypersanati_render_product_card(
 
                     <strong dir="ltr">
                         <?php
-                        echo esc_html(
-                            $format_mm(
+                        echo wp_kses_post(
+                            $hsb_format_mm_html(
                                 $inner_diameter
                             )
                         );
@@ -318,8 +338,8 @@ function hypersanati_render_product_card(
 
                     <strong dir="ltr">
                         <?php
-                        echo esc_html(
-                            $format_mm(
+                        echo wp_kses_post(
+                            $hsb_format_mm_html(
                                 $outer_diameter
                             )
                         );
@@ -335,8 +355,8 @@ function hypersanati_render_product_card(
 
                     <strong dir="ltr">
                         <?php
-                        echo esc_html(
-                            $format_mm(
+                        echo wp_kses_post(
+                            $hsb_format_mm_html(
                                 $bearing_width
                             )
                         );
@@ -383,7 +403,7 @@ function hypersanati_render_product_card(
 
                     <?php endif; ?>
 
-                    <?php if ($country_count > 1) : ?>
+                    <?php if ($country_count > 0) : ?>
 
                         <span>
                             <i class="fa-solid fa-earth-asia"></i>
