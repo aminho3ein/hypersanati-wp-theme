@@ -6105,18 +6105,18 @@ body.single-product .sp-products-row {
     overflow: hidden;
 
     border: 1.5px solid
-        rgba(45, 52, 58, 0.30);
+        var(--hsb-shop-card-border);
 
-    border-radius: 12px;
+    border-radius: 16px;
 
-    background: #fff;
+    background: var(--hsb-shop-card-bg);
 
     color: inherit;
     text-decoration: none;
 
     box-shadow:
         0 6px 18px
-        rgba(24, 30, 35, 0.07);
+        var(--hsb-shop-card-shadow);
 
     transition:
         transform 0.18s ease,
@@ -6129,11 +6129,11 @@ body.single-product .sp-products-row {
     transform: translateY(-2px);
 
     border-color:
-        rgba(45, 52, 58, 0.48);
+        var(--hsb-shop-card-hover-border);
 
     box-shadow:
         0 14px 32px
-        rgba(24, 30, 35, 0.14);
+        var(--hsb-shop-card-hover-shadow);
 }
 
 
@@ -6148,7 +6148,7 @@ body.single-product .sp-products-row {
 
     overflow: hidden;
 
-    background: #fff;
+    background: var(--hsb-shop-card-media-bg);
 }
 
 .sp-products-row
@@ -6184,12 +6184,12 @@ body.single-product .sp-products-row {
 
     padding: 5px 8px;
 
-    border-radius: 8px;
+    border-radius: 999px;
 
     background:
-        rgba(255,255,255,0.94);
+        var(--hsb-shop-card-family-badge-bg);
 
-    color: var(--color-secondary);
+    color: var(--hsb-shop-card-family-badge-text);
 
     font-size: 9px;
     font-weight: 850;
@@ -6234,7 +6234,7 @@ body.single-product .sp-products-row {
 
 .sp-products-row
 .hsb-family-card-part strong {
-    color: #20272c;
+    color: var(--hsb-shop-card-part-emphasis);
 
     font-size: 12px;
     font-weight: 900;
@@ -6247,7 +6247,7 @@ body.single-product .sp-products-row {
 
     margin: 10px 0 8px;
 
-    color: #262d32;
+    color: var(--hsb-shop-card-display-title);
 
     font-size: 13px;
     font-weight: 850;

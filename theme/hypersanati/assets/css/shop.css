@@ -993,11 +993,11 @@
     background:
         color-mix(
             in srgb,
-            var(--color-secondary) 91%,
+            var(--hsb-shop-card-family-badge-base) 91%,
             transparent
         );
 
-    color: #fff;
+    color: var(--hsb-shop-card-family-badge-text);
 
     font-size: 10px;
     font-weight: 800;
@@ -1060,7 +1060,7 @@
 
 .products-section
 .hsb-family-card-part strong {
-    color: var(--color-secondary);
+    color: var(--hsb-shop-card-part-emphasis);
 
     font-size: 12px;
     font-weight: 850;
@@ -1102,7 +1102,7 @@
 
     overflow: hidden;
 
-    color: #252c31;
+    color: var(--hsb-shop-card-display-title);
 
     font-size: 13px;
     font-weight: 850;

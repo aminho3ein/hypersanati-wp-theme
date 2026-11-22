@@ -6844,6 +6844,18 @@ html {
   --hsb-shop-card-hover-shadow: rgba(24, 30, 35, 0.16);
   --hsb-shop-card-media-bg: #ffffff;
 
+  /* HSB SHARED PRODUCT CARD VISUAL V1 */
+  --hsb-shop-card-display-title: #252c31;
+  --hsb-shop-card-part-emphasis: var(--color-secondary);
+  --hsb-shop-card-family-badge-base: var(--color-secondary);
+  --hsb-shop-card-family-badge-bg: color-mix(
+      in srgb,
+      var(--hsb-shop-card-family-badge-base) 91%,
+      transparent
+  );
+  --hsb-shop-card-family-badge-text: #ffffff;
+
+
 
 
   /* Table design */
