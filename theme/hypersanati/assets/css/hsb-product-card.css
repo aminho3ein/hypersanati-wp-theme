@@ -353,3 +353,123 @@
 }
 
 /* Keep carousel widths unchanged */
+
+/* ============================================================
+   HSB UNIFIED CARD PART AND DIMENSIONS V1
+
+   Shop rounded cards are the visual reference.
+   Applies identically to Shop, related and family products.
+   ============================================================ */
+
+/* Shared product-number panel */
+:is(.products-section, .sp-products-row)
+.hsb-family-product-card
+.hsb-family-card-part {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+
+    width: auto;
+    min-width: 0;
+    margin: 0;
+    padding: 5px 8px;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: color-mix(
+        in srgb,
+        var(--hsb-shop-card-part-emphasis) 8%,
+        white
+    );
+}
+
+:is(.products-section, .sp-products-row)
+.hsb-family-product-card
+.hsb-family-card-part span {
+    color: var(--hsb-shop-card-part-emphasis);
+    font-size: 9px;
+    font-weight: 700;
+}
+
+:is(.products-section, .sp-products-row)
+.hsb-family-product-card
+.hsb-family-card-part strong {
+    color: var(--hsb-shop-card-part-emphasis);
+    font-size: 12px;
+    font-weight: 850;
+}
+
+/* Shared three-column dimensions layout */
+:is(.products-section, .sp-products-row)
+.hsb-family-product-card
+.hsb-family-card-dimensions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 8px;
+}
+
+/* Identical rounded dimension boxes */
+:is(.products-section, .sp-products-row)
+.hsb-family-product-card
+.hsb-family-card-dimension {
+    position: relative;
+    min-width: 0;
+    padding: 9px 6px 8px;
+
+    border: 1px solid var(--hsb-card-dimension-border);
+    border-radius: 9px;
+
+    background: var(--hsb-card-dimension-bg);
+    text-align: center;
+}
+
+/* Dimension labels: d, D, B */
+:is(.products-section, .sp-products-row)
+.hsb-family-product-card
+.hsb-family-card-dimension span {
+    display: block;
+    margin-bottom: 3px;
+
+    color: var(--hsb-card-dimension-label);
+    font-size: 9px;
+    line-height: 1.4;
+}
+
+/* Numeric measurements */
+:is(.products-section, .sp-products-row)
+.hsb-family-product-card
+.hsb-family-card-dimension strong {
+    display: block;
+    overflow: hidden;
+
+    margin: 0;
+    color: var(--hsb-card-dimension-value);
+
+    font-size: 11px;
+    font-weight: 850;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Small technical letters */
+:is(.products-section, .sp-products-row)
+.hsb-family-product-card
+.hsb-family-card-dimension small {
+    position: absolute;
+    top: 5px;
+    left: 6px;
+
+    color: color-mix(
+        in srgb,
+        var(--hsb-card-dimension-label) 55%,
+        transparent
+    );
+
+    font-size: 8px;
+    font-weight: 800;
+}
