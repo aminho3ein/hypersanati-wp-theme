@@ -7147,3 +7147,10 @@ html {
     --hsb-cart-direct-surface: #f3f6f3;
     --hsb-cart-muted-text: #66736b;
 }
+
+/* HSB QUOTE POPUP DESIGN TOKENS V1 */
+:root {
+    --hsb-quote-popup-surface: #f5f2ec;
+    --hsb-quote-popup-border: #e5d8c7;
+    --hsb-quote-popup-text: #32291e;
+}

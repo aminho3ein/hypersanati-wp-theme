@@ -8,14 +8,14 @@
     gap: 12px;
     margin: 16px 0;
     padding: 16px;
-    background: #f5f2ec;
-    border: 1px solid #e5d8c7;
+    background: var(--hsb-quote-popup-surface);
+    border: 1px solid var(--hsb-quote-popup-border);
     border-radius: 14px;
     direction: rtl;
 }
 
 .hsb-quote-popup-qty__label {
-    color: #735936;
+    color: var(--hsb-sale-quote-button-bg);
     font-size: 14px;
     font-weight: 800;
     text-align: center;
@@ -33,8 +33,8 @@
     justify-content: center;
     width: 39px;
     height: 39px;
-    background: #735936;
-    color: #fff;
+    background: var(--hsb-sale-quote-button-bg);
+    color: var(--hsb-sale-button-text);
     border: 0;
     border-radius: 10px;
     font-size: 23px;
@@ -48,7 +48,7 @@
 
 .hsb-quote-popup-qty__value {
     min-width: 30px;
-    color: #32291e;
+    color: var(--hsb-quote-popup-text);
     font-size: 21px;
     font-weight: 900;
     text-align: center;
