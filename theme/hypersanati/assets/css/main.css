@@ -6808,6 +6808,18 @@ html {
   --hsb-article-breadcrumb-text: var(--gray-600);
   --hsb-product-breadcrumb-text: var(--gray-700);
 
+  /* HSB SHOP DIMENSION SEARCH TOKENS V1 */
+  --hsb-shop-search-border: var(--color-primary);
+  --hsb-shop-search-bg-start: #fdfaf6;
+  --hsb-shop-search-bg-end: #ffffff;
+  --hsb-shop-search-shadow-color: rgba(159, 133, 97, 0.12);
+  --hsb-shop-search-title: var(--color-secondary);
+  --hsb-shop-search-title-border: var(--color-primary);
+  --hsb-shop-search-title-icon: var(--color-primary);
+  --hsb-shop-search-button-bg: var(--color-secondary);
+  --hsb-shop-search-button-hover-bg: var(--color-primary-active);
+
+
   /* Table design */
   --hsb-table-head-bg: #806139;
   --hsb-table-head-text: #ffffff;
