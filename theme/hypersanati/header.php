@@ -43,7 +43,7 @@ if (!$hsb_order_tracking_url) {
     <div class="hsb-top-nav-inner">
 
       <a href="#">
-        ارسال ۷ الی ۱۰ روزکاری
+        ارسال در ۱ تا ۲ روز کاری
       </a>
 
       <a
