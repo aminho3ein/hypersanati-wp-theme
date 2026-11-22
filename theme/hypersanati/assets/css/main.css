@@ -6833,7 +6833,7 @@ html {
       #5e5e5e
   );
 
-  --hsb-shop-card-shadow: rgba(24, 30, 35, 0.075);
+  --hsb-shop-card-shadow: color-mix(in srgb, var(--hsb-card-shadow-color) 7.5%, transparent);
 
   --hsb-shop-card-hover-border: color-mix(
       in srgb,
@@ -6841,7 +6841,7 @@ html {
       #555
   );
 
-  --hsb-shop-card-hover-shadow: rgba(24, 30, 35, 0.16);
+  --hsb-shop-card-hover-shadow: color-mix(in srgb, var(--hsb-card-shadow-color) 16%, transparent);
   --hsb-shop-card-media-bg: #ffffff;
 
   /* HSB SHARED PRODUCT CARD VISUAL V1 */
@@ -6854,6 +6854,22 @@ html {
       transparent
   );
   --hsb-shop-card-family-badge-text: #ffffff;
+
+  /* HSB visual card editor: additional individually editable surfaces. */
+  --hsb-card-shadow-color: #181e23;
+  --hsb-card-media-divider: var(--hsb-card-dimension-border);
+  --hsb-card-part-bg: color-mix(in srgb, var(--hsb-shop-card-part-emphasis) 8%, white);
+  --hsb-card-badge-icon-color: #d2b27d;
+  --hsb-card-options-bg: color-mix(in srgb, var(--hsb-shop-card-part-emphasis) 7%, white);
+  --hsb-card-options-text: var(--hsb-shop-card-part-emphasis);
+  --hsb-card-options-icon: var(--hsb-shop-card-part-emphasis);
+  --hsb-card-price-inquiry-bg: #edf3ef;
+  --hsb-card-stock-bg: #edf5ef;
+  --hsb-card-price-old-text: #888888;
+  --hsb-card-action-direct-hover-bg: var(--hsb-card-action-direct-bg);
+  --hsb-card-action-direct-active-bg: var(--hsb-card-action-direct-bg);
+  --hsb-card-action-quote-hover-bg: var(--hsb-card-action-quote-bg);
+  --hsb-card-action-quote-active-bg: var(--hsb-card-action-quote-bg);
 
   /* HSB UNIFIED SINGLE PRODUCT CARDS V2 */
   --hsb-card-dimension-bg: #f7f8f8;
@@ -6870,7 +6886,7 @@ html {
 
   --hsb-card-price-note-bg: rgba(49, 112, 77, 0.07);
   --hsb-card-price-note-text: #466451;
-  --hsb-card-price-inquiry-text: #d11f1f;
+  --hsb-card-price-inquiry-text: #b42318;
   --hsb-card-price-actual-text: #168052;
 
   --hsb-card-action-text: var(--color-secondary);
