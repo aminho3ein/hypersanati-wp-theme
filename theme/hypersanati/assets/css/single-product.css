@@ -1051,9 +1051,9 @@
   /* border-radius: 24px; */
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.88)),
-    var(--color-white, #fff);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+    var(--color-white, var(--hsb-sp-purchase-surface));
+  border: 1px solid var(--hsb-sp-purchase-shadow);
+  box-shadow: 0 18px 45px var(--hsb-sp-purchase-shadow);
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
@@ -1078,7 +1078,7 @@
 
 .old-price p {
   margin: 0;
-  color: #9ca3af;
+  color: var(--hsb-sp-purchase-text-subtle);
   font-size: 0.7rem;
   text-decoration: line-through;
 }
@@ -1090,22 +1090,22 @@
   padding: 0 0.75rem;
   margin: 0;
   border-radius: 999px;
-  background: var(--color-danger, #ef4444);
-  color: #fff;
+  background: var(--color-danger, var(--hsb-sp-purchase-legacy-cta));
+  color: var(--hsb-sp-purchase-surface);
   font-size: 0.8rem;
   font-weight: 700;
   color: black;
 }
 
 .price-label {
-  color: #6b7280;
+  color: var(--hsb-sp-purchase-text-muted);
   font-size: 0.85rem;
   font-weight: 600;
 }
 
 .price-sec p {
   margin: 0;
-  color: #111827;
+  color: var(--hsb-sp-purchase-text-strong);
   font-size: 1rem;
   font-weight: 900;
   line-height: 1.6;
@@ -1135,7 +1135,7 @@
 .purchase-field label {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #374151;
+  color: var(--hsb-sp-purchase-text-body);
 }
 
 .product-count-select {
@@ -1144,8 +1144,8 @@
   padding: 0 1rem;
   border-radius: 16px;
   border: 1px solid rgba(0, 0, 0, 0.12);
-  background: #fff;
-  color: #111827;
+  background: var(--hsb-sp-purchase-surface);
+  color: var(--hsb-sp-purchase-text-strong);
   font-family: inherit;
   font-size: 0.95rem;
   outline: none;
@@ -1153,8 +1153,8 @@
 }
 
 .product-count-select:focus {
-  border-color: var(--color-primary, #2563eb);
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  border-color: var(--color-primary, var(--hsb-sp-purchase-focus));
+  box-shadow: 0 0 0 4px var(--hsb-sp-purchase-focus-ring);
 }
 
 .add-to-cart {
@@ -1162,8 +1162,8 @@
   height: 54px;
   border: none;
   border-radius: 16px;
-  background: #ef4444;
-  color: #fff;
+  background: var(--hsb-sp-purchase-legacy-cta);
+  color: var(--hsb-sp-purchase-surface);
   font-family: inherit;
   font-size: 0.95rem;
   font-weight: 900;
@@ -1185,8 +1185,8 @@
   padding: 0.75rem;
   border-radius: 16px;
   background: rgba(17, 24, 39, 0.04);
-  color: #374151;
-  border: 1px solid rgba(17, 24, 39, 0.08);
+  color: var(--hsb-sp-purchase-text-body);
+  border: 1px solid var(--hsb-sp-purchase-border);
   text-align: center;
   text-decoration: none;
   font-size: 0.85rem;
@@ -1197,8 +1197,8 @@
 }
 
 .bulk-buy-link:hover {
-  background: rgba(17, 24, 39, 0.07);
-  color: #111827;
+  background: var(--hsb-sp-purchase-hover);
+  color: var(--hsb-sp-purchase-text-strong);
 }
 
 /* تصویر محصول */

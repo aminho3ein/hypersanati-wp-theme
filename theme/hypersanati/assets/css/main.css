@@ -7203,3 +7203,18 @@ html {
     --hsb-sp-specs-label: #374151;
     --hsb-sp-specs-value: #6b7280;
 }
+
+/* HSB SINGLE PRODUCT PURCHASE TOKENS V1 */
+:root {
+    --hsb-sp-purchase-surface: #fff;
+    --hsb-sp-purchase-text-strong: #111827;
+    --hsb-sp-purchase-text-body: #374151;
+    --hsb-sp-purchase-text-muted: #6b7280;
+    --hsb-sp-purchase-text-subtle: #9ca3af;
+    --hsb-sp-purchase-legacy-cta: #ef4444;
+    --hsb-sp-purchase-focus: #2563eb;
+    --hsb-sp-purchase-shadow: rgba(0, 0, 0, 0.08);
+    --hsb-sp-purchase-border: rgba(17, 24, 39, 0.08);
+    --hsb-sp-purchase-hover: rgba(17, 24, 39, 0.07);
+    --hsb-sp-purchase-focus-ring: rgba(37, 99, 235, 0.12);
+}
