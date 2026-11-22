@@ -1998,7 +1998,7 @@ button.handle-frame-section:disabled {
 .site-footer {
   width: 100%;
   margin-top: var(--spacing-xl);
-  color: var(--gray-200);
+  color: var(--hsb-footer-text);
   background: var(--hsb-footer-bg);
 }
 
@@ -2130,7 +2130,7 @@ button.handle-frame-section:disabled {
 }
 
 .site-footer__brand-label {
-  color: var(--color-primary-active);
+  color: var(--hsb-footer-brand-label);
   font-size: var(--fs-sm);
   font-weight: 700;
 }
@@ -2204,7 +2204,7 @@ button.handle-frame-section:disabled {
 }
 
 .site-footer__contact-header small {
-  color: var(--color-card-article-cat);
+  color: var(--hsb-footer-contact-subtitle);
   font-size: var(--fs-sm);
 }
 
@@ -2348,8 +2348,8 @@ button.handle-frame-section:disabled {
 }
 
 .site-footer__navigation a:hover .site-footer__link-icon {
-  color: var(--color-white);
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--hsb-footer-link-icon-hover-text);
+  background: var(--hsb-footer-link-icon-hover-bg);
 }
 
 
@@ -2860,14 +2860,14 @@ button.handle-frame-section:disabled {
 }
 
 .site-footer__phones a {
-  color: var(--gray-200);
+  color: var(--hsb-footer-phone-link);
   font-size: var(--fs-body);
   font-weight: 600;
   line-height: 1.4;
 }
 
 .site-footer__phones a:hover {
-  color: var(--color-primary-active);
+  color: var(--hsb-footer-phone-link-hover);
 }
 
 .site-footer__phone-icon {
@@ -6190,7 +6190,7 @@ html {
 }
 
 .site-footer__mobile-name {
-    color: var(--gray-300);
+    color: var(--hsb-footer-mobile-name);
     font-size: var(--fs-sm);
     font-weight: 700;
     line-height: 1.6;
@@ -6202,7 +6202,7 @@ html {
 
 .site-footer__mobile-number {
     direction: ltr;
-    color: var(--gray-200);
+    color: var(--hsb-footer-mobile-number);
     font-size: var(--fs-body);
     font-weight: 600;
     line-height: 1.5;
@@ -6210,7 +6210,7 @@ html {
 }
 
 .site-footer__mobile-number:hover {
-    color: var(--color-primary-active);
+    color: var(--hsb-footer-mobile-number-hover);
 }
 
 
@@ -6224,7 +6224,7 @@ html {
 }
 
 .site-footer__enamad-title {
-    color: var(--gray-300);
+    color: var(--hsb-footer-enamad-title);
     font-size: var(--fs-sm);
     font-weight: 700;
 }
@@ -6334,7 +6334,7 @@ html {
 
     margin: 0;
 
-    color: var(--gray-300);
+    color: var(--hsb-footer-identity-description);
 
     font-size: var(--fs-sm);
     line-height: 2;
@@ -6549,7 +6549,7 @@ html {
 }
 
 .site-footer__contact-email a:hover {
-    color: var(--color-primary-active);
+    color: var(--hsb-footer-email-hover);
 }
 
 
@@ -6722,6 +6722,21 @@ html {
   /* Bottom / trust badge */
   --hsb-footer-bottom-border: var(--gray-800);
   --hsb-footer-enamad-bg: #ffffff;
+
+  /* HSB FOOTER FINAL COLOR TOKENS V1 */
+  --hsb-footer-brand-label: var(--color-primary-active);
+  --hsb-footer-contact-subtitle: var(--color-card-article-cat);
+  --hsb-footer-phone-link: var(--gray-200);
+  --hsb-footer-phone-link-hover: var(--color-primary-active);
+  --hsb-footer-mobile-name: var(--gray-300);
+  --hsb-footer-mobile-number: var(--gray-200);
+  --hsb-footer-mobile-number-hover: var(--color-primary-active);
+  --hsb-footer-enamad-title: var(--gray-300);
+  --hsb-footer-identity-description: var(--gray-300);
+  --hsb-footer-email-hover: var(--color-primary-active);
+  --hsb-footer-link-icon-hover-text: var(--color-white);
+  --hsb-footer-link-icon-hover-bg: rgba(255, 255, 255, 0.08);
+
 
 
 
