@@ -88,3 +88,33 @@
 .hsb-legal__bottom-help .hsb-legal__pill{background:rgba(255,255,255,.14);color:#fff}
 @media(max-width:950px){.hsb-legal__layout{grid-template-columns:1fr}.hsb-legal__sidebar{order:0}.hsb-legal__article{order:1;padding:0}.hsb-legal__highlights{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.hsb-legal{padding:14px 12px 48px}.hsb-legal__hero{padding:22px;min-height:auto;border-radius:17px;gap:14px}.hsb-legal__hero-mark{height:54px;width:54px;flex-basis:54px;border-radius:14px;font-size:28px}.hsb-legal__hero h1{font-size:25px}.hsb-legal__overview{padding:22px 16px;border-radius:17px;margin-top:17px}.hsb-legal__highlights{grid-template-columns:1fr 1fr;gap:8px}.hsb-legal__highlight{padding:11px;min-height:145px}.hsb-legal__highlight strong{font-size:13px}.hsb-legal__highlight small{font-size:11px}.hsb-legal__body>h3,.hsb-legal__body>h2:not(.hsb-legal__source-title){font-size:18px;padding:17px 14px!important}.hsb-legal__body>p,.hsb-legal__body>ul,.hsb-legal__body>ol,.hsb-legal__body>table{padding:8px 16px 18px!important}.hsb-legal__bottom-help{border-radius:17px;padding:23px 19px;flex-direction:column;align-items:stretch}.hsb-legal__bottom-help h2{font-size:18px}.hsb-legal__bottom-help a{text-align:center}}
+
+/* HSB LEGAL TOC STICKY FIX V3 */
+/* The sidebar spans the full article; its TOC remains pinned while scrolling. */
+@media (min-width: 951px) {
+  .hsb-legal__layout { align-items: stretch; }
+  .hsb-legal__sidebar {
+    position: relative;
+    top: auto;
+    align-self: stretch;
+    display: block;
+    min-height: 0;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+  .hsb-legal__toc {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 112px);
+    max-height: calc(100dvh - 112px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  .hsb-legal__help { margin-top: 18px; }
+}
+@media (max-width: 950px) {
+  .hsb-legal__sidebar { position: static; max-height: none; overflow: visible; }
+  .hsb-legal__toc { position: static; max-height: none; overflow: visible; }
+}
