@@ -26,6 +26,18 @@ function hsb_get_homepage_hero_defaults() {
         'autoplay'      => '1',
         'light_fx'      => '1',
         'hero_colors'   => array(),
+        'font_sizes'    => array(),
+    );
+}
+
+
+/** Four user-facing Hero text elements, each adjustable by device. */
+function hsb_home_hero_font_fields() {
+    return array(
+        'eyebrow' => array('label' => 'عنوان کوچک', 'min' => 10, 'max' => 42, 'selector' => '.hsb-home-hero__eyebrow'),
+        'title' => array('label' => 'تیتر اصلی اسلاید', 'min' => 18, 'max' => 100, 'selector' => '.hsb-home-hero__title'),
+        'description' => array('label' => 'توضیحات', 'min' => 12, 'max' => 36, 'selector' => '.hsb-home-hero__description'),
+        'button' => array('label' => 'متن دکمه شروع جست‌وجو', 'min' => 11, 'max' => 36, 'selector' => '.hsb-home-hero__button'),
     );
 }
 
@@ -232,6 +244,24 @@ $output['eyebrow'] =
             ? sanitize_hex_color(wp_unslash($incoming_colors[$key])) : '';
         $output['hero_colors'][$key] = $value ?: $default_color;
     }
+    // Empty fields mean automatic/default CSS size; preserve existing appearance.
+    $output['font_sizes'] = array();
+    $incoming_font_sizes = isset($input['font_sizes']) && is_array($input['font_sizes'])
+        ? $input['font_sizes'] : array();
+    foreach (hsb_home_hero_font_fields() as $element => $config) {
+        $output['font_sizes'][$element] = array();
+        foreach (array('desktop', 'tablet', 'mobile') as $device) {
+            $raw = isset($incoming_font_sizes[$element][$device]) && is_scalar($incoming_font_sizes[$element][$device])
+                ? trim((string) wp_unslash($incoming_font_sizes[$element][$device])) : '';
+            if ($raw === '') { continue; }
+            // Only whole positive px values, with a safe range per text element.
+            if (!preg_match('/^[0-9]{1,3}$/D', $raw)) { continue; }
+            $size = (int) $raw;
+            if ($size < $config['min'] || $size > $config['max']) { continue; }
+            $output['font_sizes'][$element][$device] = $size;
+        }
+    }
+
     $output['slides'] = array();
     if (isset($input['slides']) && is_array($input['slides'])) {
         foreach (array_slice($input['slides'], 0, 10) as $slide) {
@@ -1021,8 +1051,35 @@ function hsb_render_homepage_hero_section() {
             home_url($logo_target);
     }
 
-?>
+    // Scope font overrides to the homepage hero, without changing default CSS
+    // or the responsive typography when no number has been configured.
+    $font_rules = array();
+    $stored_font_sizes = isset($options['font_sizes']) && is_array($options['font_sizes'])
+        ? $options['font_sizes'] : array();
+    foreach (array('desktop', 'tablet', 'mobile') as $device) {
+        $rules = array();
+        foreach (hsb_home_hero_font_fields() as $element => $config) {
+            $value = isset($stored_font_sizes[$element][$device]) ? absint($stored_font_sizes[$element][$device]) : 0;
+            if ($value >= $config['min'] && $value <= $config['max']) {
+                $rules[] = '.hsb-home-hero.hsb-home-hero ' . $config['selector']
+                    . '{font-size:' . $value . 'px !important;}';
+            }
+        }
+        if (!$rules) { continue; }
+        $css = implode('', $rules);
+        if ($device === 'desktop') {
+            $font_rules[] = '@media (min-width:1025px){' . $css . '}';
+        } elseif ($device === 'tablet') {
+            $font_rules[] = '@media (min-width:601px) and (max-width:1024px){' . $css . '}';
+        } else {
+            $font_rules[] = '@media (max-width:600px){' . $css . '}';
+        }
+    }
 
+?>
+<?php if ($font_rules) : ?>
+    <style id="hsb-hero-responsive-font-sizes"><?php echo implode('', $font_rules); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- numeric values and fixed selectors only. ?></style>
+<?php endif; ?>
     <section
         class="hsb-home-hero<?php
         echo $logo_image_id
@@ -1293,6 +1350,40 @@ function hsb_home_hero_render_slider_settings($options) {
                     value="<?php echo esc_attr(isset($options[$height_key]) ? $options[$height_key] : 95); ?>"
                     style="width:84px;direction:ltr"> ٪</label></p>
         <?php endforeach; ?>
+    </td></tr>
+    <tr><th scope="row">اندازه فونت نوشته‌های هیرو</th><td>
+        <p class="description">اندازه‌های دلخواه بر حسب پیکسل (px) برای چهار متن اصلی. اگر فیلدی خالی باشد، اندازه فعلی قالب به‌صورت خودکار باقی می‌ماند. اندازه‌ها برای سه دستگاه مستقل هستند و روی تمام اسلایدها اعمال می‌شوند.</p>
+        <div style="overflow-x:auto;max-width:900px">
+            <table class="widefat striped" style="width:100%;max-width:860px">
+                <thead><tr><th>نوشته</th><th>دسکتاپ (بیشتر از ۱۰۲۴)</th><th>تبلت (۶۰۱ تا ۱۰۲۴)</th><th>موبایل (تا ۶۰۰)</th></tr></thead>
+                <tbody>
+                <?php
+                $saved_font_sizes = isset($options['font_sizes']) && is_array($options['font_sizes'])
+                    ? $options['font_sizes'] : array();
+                foreach (hsb_home_hero_font_fields() as $font_element => $font_config) : ?>
+                    <tr>
+                        <th scope="row"><?php echo esc_html($font_config['label']); ?></th>
+                        <?php foreach (array('desktop', 'tablet', 'mobile') as $font_device) :
+                            $stored_size = isset($saved_font_sizes[$font_element][$font_device])
+                                ? absint($saved_font_sizes[$font_element][$font_device]) : '';
+                        ?>
+                            <td><label>
+                                <span class="screen-reader-text"><?php echo esc_html($font_config['label'] . ' — ' . $font_device); ?></span>
+                                <input type="number" step="1"
+                                    min="<?php echo esc_attr($font_config['min']); ?>"
+                                    max="<?php echo esc_attr($font_config['max']); ?>"
+                                    name="hsb_homepage_hero_options[font_sizes][<?php echo esc_attr($font_element); ?>][<?php echo esc_attr($font_device); ?>]"
+                                    value="<?php echo esc_attr($stored_size); ?>"
+                                    placeholder="خودکار"
+                                    style="width:100px;max-width:100%;direction:ltr"> px
+                            </label></td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <p class="description">برای بازگشت به اندازه اصلی هر بخش، عدد آن فیلد را پاک و تنظیمات را ذخیره کن. ارتفاع هیرو مستقل از اندازه فونت باقی می‌ماند و در صورت نیاز برای جلوگیری از هم‌پوشانی محتوا افزایش پیدا می‌کند.</p>
     </td></tr>
     <tr><th scope="row">اسلایدهای هیرو</th><td>
         <p class="description">برای هر اسلاید تصویر افقی دسکتاپ، تصویر مربعی تبلت (اختیاری)، تصویر عمودی ۹:۱۶ موبایل (اختیاری) و عنوان اصلی را انتخاب کنید. اگر تصویر تبلت یا موبایل انتخاب نشود، تصویر دسکتاپ نمایش داده می‌شود. ترتیب نمایش با ترتیب کارت‌ها برابر است؛ حداکثر ۱۰ اسلاید.</p>
