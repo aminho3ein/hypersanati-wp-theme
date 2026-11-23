@@ -64,3 +64,10 @@ add_action('wp_enqueue_scripts', function () {
     if (!is_readable($path)) return;
     wp_enqueue_style('hsb-checkout-rebuild', get_template_directory_uri() . '/assets/css/hsb-checkout-rebuild.css', array(), filemtime($path));
 }, 999);
+
+// HSB order-pay unified UI enqueue
+add_action('wp_enqueue_scripts',function(){
+    if (!function_exists('is_wc_endpoint_url') || !is_wc_endpoint_url('order-pay')) return;
+    $path=get_template_directory().'/assets/css/hsb-order-pay.css';
+    if (is_readable($path)) wp_enqueue_style('hsb-order-pay',get_template_directory_uri().'/assets/css/hsb-order-pay.css',array('hsb-checkout-rebuild'),filemtime($path));
+},1001);
