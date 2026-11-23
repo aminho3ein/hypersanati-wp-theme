@@ -8,7 +8,17 @@ get_header();
 $contact_address   = get_theme_mod( 'hypersanati_contact_address', 'تهران، خیابان سعدی جنوبی، خیابان اکباتان، کوچه ناظم الاطبا شمالی، پاساژ امام حسین، زیر همکف، پلاک 32 بلبرینگ ' . get_bloginfo('name') . '' );
 $contact_phone     = get_theme_mod( 'hypersanati_contact_phone', '۰۲۱-۳۳۹۸۹۹۳۰ - ۰۲۱-۳۳۹۸۹۹۴۰' );
 $contact_email     = get_theme_mod( 'hypersanati_contact_email', 'info@olfatbearing.com' );
-$contact_terms_url = get_theme_mod( 'hypersanati_contact_terms_url', '#' );
+$contact_terms_page_id = function_exists('wc_get_page_id') ? (int) wc_get_page_id('terms') : 0;
+$contact_terms_url = $contact_terms_page_id > 0 ? get_permalink($contact_terms_page_id) : '';
+if (!$contact_terms_url) {
+    $contact_terms_page = get_page_by_path('olfat-terms-and-conditions');
+    if ($contact_terms_page instanceof WP_Post && 'publish' === $contact_terms_page->post_status) {
+        $contact_terms_url = get_permalink($contact_terms_page);
+    }
+}
+if (!$contact_terms_url) {
+    $contact_terms_url = get_theme_mod('hypersanati_contact_terms_url', '');
+}
 
 $contact_status = isset( $_GET['contact_status'] ) ? sanitize_key( wp_unslash( $_GET['contact_status'] ) ) : '';
 ?>
@@ -171,6 +181,7 @@ $contact_status = isset( $_GET['contact_status'] ) ? sanitize_key( wp_unslash( $
               <span class="agreement-custom-check"></span>
               <span class="agreement-text">
                 قوانین و مقررات را مطالعه نموده و می‌پذیرم.
+                <?php if ( ! empty( $contact_terms_url ) ) : ?>
                 <a href="<?php echo esc_url( $contact_terms_url ); ?>" class="agreement-link">
                   <span class="agreement-eye-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none">
@@ -180,6 +191,7 @@ $contact_status = isset( $_GET['contact_status'] ) ? sanitize_key( wp_unslash( $
                   </span>
                   مشاهده قوانین
                 </a>
+                <?php endif; ?>
               </span>
             </label>
           </div>

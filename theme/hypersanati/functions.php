@@ -6770,3 +6770,18 @@ add_action('wp_enqueue_scripts', function () {
 
 /* HSB VISUAL DESIGN SYSTEM ADMIN V1 */
 require_once get_template_directory() . '/inc/hsb-design-system-admin.php';
+
+// HSB Commerce Clarity Patch (separate module for safer rollback).
+$hsb_commerce_clarity_file = get_template_directory() . '/inc/hsb-commerce-clarity.php';
+if (is_readable($hsb_commerce_clarity_file)) {
+    require_once $hsb_commerce_clarity_file;
+}
+
+// HSB LEGAL UI PRESENTATION V1
+$hsb_legal_ui_file = get_template_directory() . '/inc/hsb-legal-ui.php';
+if (is_readable($hsb_legal_ui_file)) {
+    require_once $hsb_legal_ui_file;
+}
+
+/* HSB APPROVED PREINVOICE PAYMENT STOCK EXCEPTION V1 */
+require_once get_template_directory() . '/inc/hsb-preinvoice-payment-stock.php';

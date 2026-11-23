@@ -1,473 +1,129 @@
 <?php
 /**
- * Custom WooCommerce Checkout
+ * HSB checkout rebuild — visual structure only.
+ * Keep WooCommerce field names, payment/nonce flow and validation hooks intact.
  */
-
 defined('ABSPATH') || exit;
-
 if (!WC()->cart || WC()->cart->is_empty()) {
     wc_get_template('cart/cart-empty.php');
     return;
 }
-
 if (!$checkout->is_registration_enabled() && $checkout->is_registration_required() && !is_user_logged_in()) {
-    echo esc_html(apply_filters(
-        'woocommerce_checkout_must_be_logged_in_message',
-        __('You must be logged in to checkout.', 'woocommerce')
-    ));
+    echo esc_html(apply_filters('woocommerce_checkout_must_be_logged_in_message', __('You must be logged in to checkout.', 'woocommerce')));
     return;
 }
-
-$cart_count = WC()->cart->get_cart_contents_count();
-$cart_hash  = WC()->cart->get_cart_hash();
-
-$order_reference = $cart_hash ? strtoupper(substr($cart_hash, 0, 12)) : date_i18n('Ymd-His');
-
-$total_weight = 0;
-
-foreach (WC()->cart->get_cart() as $cart_item) {
-    if (!empty($cart_item['data']) && $cart_item['data']->has_weight()) {
-        $total_weight += (float) $cart_item['data']->get_weight() * (int) $cart_item['quantity'];
-    }
-}
-
-$weight_unit = get_option('woocommerce_weight_unit');
-$chosen_shipping_methods = WC()->session ? WC()->session->get('chosen_shipping_methods') : array();
-$shipping_method_text = 'ارسال عادی';
-
-if (!empty($chosen_shipping_methods[0])) {
-    $shipping_method_text = wc_clean($chosen_shipping_methods[0]);
-}
-
 $base_country = WC()->countries ? WC()->countries->get_base_country() : 'IR';
+$cart_count = WC()->cart->get_cart_contents_count();
+$hsb_is_quote = false;
+foreach (WC()->cart->get_cart() as $hsb_item) {
+    $p = isset($hsb_item['data']) ? $hsb_item['data'] : null;
+    if ($p && $p->exists() && '' === $p->get_price()) { $hsb_is_quote = true; break; }
+}
+$privacy_url = function_exists('get_privacy_policy_url') ? get_privacy_policy_url() : '';
+$terms_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('terms') : '';
 ?>
-
-<div class="container">
-
-    <section class="checkout-order-reference">
-        <div class="checkout-order-reference__inner">
-            <p class="checkout-order-reference__text">
-                شماره سفارش :
-                <span class="checkout-order-reference__code"><?php echo esc_html($order_reference); ?></span>
-            </p>
-        </div>
-    </section>
-
+<div class="hsb-co" dir="rtl">
+    <header class="hsb-co__mast">
+        <nav class="hsb-co__crumb" aria-label="موقعیت صفحه"><a href="<?php echo esc_url(wc_get_cart_url()); ?>">سبد خرید</a><span aria-hidden="true">/</span><span>تسویه‌حساب</span></nav>
+        <h1>تکمیل خرید</h1>
+        <p>برای تحویل درست سفارش، اطلاعات گیرنده و نشانی را وارد کنید. این اطلاعات فقط برای ثبت و پیگیری خرید استفاده می‌شود.</p>
+    </header>
     <?php if (wc_coupons_enabled()) : ?>
-        <section class="checkout-discount-code">
-            <div class="checkout-discount-code__header">
-                <h2 class="checkout-discount-code__title">کد تخفیف</h2>
-            </div>
-
-            <form class="checkout-discount-code__form checkout_coupon woocommerce-form-coupon" method="post">
-                <div class="checkout-discount-code__field">
-                    <label for="coupon_code">کد تخفیف</label>
-                    <input
-                        type="text"
-                        class="checkout-discount-code__input"
-                        id="coupon_code"
-                        name="coupon_code"
-                        placeholder="کد تخفیف را وارد کنید"
-                    />
-
-                    <button type="submit"
-                            class="checkout-discount-code__button"
-                            name="apply_coupon"
-                            value="<?php esc_attr_e('Apply coupon', 'woocommerce'); ?>">
-                        ثبت
-                    </button>
-                </div>
-            </form>
-        </section>
+    <details class="hsb-co__coupon">
+        <summary>کد تخفیف دارید؟ <span>در صورت داشتن کد، اینجا وارد کنید</span></summary>
+        <form class="checkout_coupon woocommerce-form-coupon hsb-co__coupon-form" method="post">
+            <label for="coupon_code">کد تخفیف</label>
+            <div class="hsb-co__coupon-row"><input id="coupon_code" name="coupon_code" type="text" placeholder="کد تخفیف" autocomplete="off" />
+            <button type="submit" name="apply_coupon" value="<?php esc_attr_e('Apply coupon','woocommerce'); ?>">اعمال کد</button></div>
+        </form>
+    </details>
     <?php endif; ?>
-
-    <form name="checkout"
-          method="post"
-          class="checkout woocommerce-checkout"
-          action="<?php echo esc_url(wc_get_checkout_url()); ?>"
-          enctype="multipart/form-data">
-
+    <form name="checkout" method="post" class="checkout woocommerce-checkout hsb-co__form" action="<?php echo esc_url(wc_get_checkout_url()); ?>" enctype="multipart/form-data">
         <?php do_action('woocommerce_checkout_before_customer_details'); ?>
-
         <input type="hidden" name="billing_country" value="<?php echo esc_attr($checkout->get_value('billing_country') ?: $base_country); ?>" />
-
-        <section class="checkout-address">
-            <div class="checkout-address__header">
-                <h2 class="checkout-address__title">آدرس من</h2>
-            </div>
-
-            <div class="checkout-address__form">
-                <div class="checkout-address__grid checkout-address__grid--two-col">
-                    <div class="checkout-address__field">
-                        <label class="checkout-address__label" for="billing_state">استان <span>*</span></label>
-                        <input
-                            class="checkout-address__input"
-                            type="text"
-                            id="billing_state"
-                            name="billing_state"
-                            placeholder="استان"
-                            value="<?php echo esc_attr($checkout->get_value('billing_state')); ?>"
-                            autocomplete="address-level1"
-                        />
-                    </div>
-
-                    <div class="checkout-address__field">
-                        <label class="checkout-address__label" for="billing_city">شهر <span>*</span></label>
-                        <input
-                            class="checkout-address__input"
-                            type="text"
-                            id="billing_city"
-                            name="billing_city"
-                            placeholder="شهر"
-                            value="<?php echo esc_attr($checkout->get_value('billing_city')); ?>"
-                            autocomplete="address-level2"
-                        />
-                    </div>
-                </div>
-
-                <div class="checkout-address__field checkout-address__field--full">
-                    <label class="checkout-address__label" for="billing_address_1">آدرس <span>*</span></label>
-                    <input
-                        class="checkout-address__input"
-                        type="text"
-                        id="billing_address_1"
-                        name="billing_address_1"
-                        placeholder="مثال کوچه و خیابان و جزئیات آدرس"
-                        value="<?php echo esc_attr($checkout->get_value('billing_address_1')); ?>"
-                        autocomplete="address-line1"
-                    />
-
-                    <p class="checkout-address__hint">
-                        در صورت تغییر این بخش و ناهماهنگی آن با موقعیت مکانی، ممکن است ارسال سفارش با مشکل مواجه شود.
-                    </p>
-                </div>
-
-                <div class="checkout-address__grid checkout-address__grid--two-col">
-                    <div class="checkout-address__field">
-                        <label class="checkout-address__label" for="billing_plaque">پلاک <span>*</span></label>
-                        <input
-                            class="checkout-address__input"
-                            type="text"
-                            id="billing_plaque"
-                            name="billing_plaque"
-                            value="<?php echo esc_attr($checkout->get_value('billing_plaque')); ?>"
-                        />
-                    </div>
-
-                    <div class="checkout-address__field">
-                        <label class="checkout-address__label" for="billing_address_2">واحد</label>
-                        <input
-                            class="checkout-address__input"
-                            type="text"
-                            id="billing_address_2"
-                            name="billing_address_2"
-                            value="<?php echo esc_attr($checkout->get_value('billing_address_2')); ?>"
-                            autocomplete="address-line2"
-                        />
-                    </div>
-                </div>
-
-                <div class="checkout-address__field checkout-address__field--full">
-                    <label class="checkout-address__label" for="billing_postcode">کدپستی <span>*</span></label>
-                    <input
-                        class="checkout-address__input"
-                        type="text"
-                        id="billing_postcode"
-                        name="billing_postcode"
-                        placeholder="باید ده رقمی باشد"
-                        value="<?php echo esc_attr($checkout->get_value('billing_postcode')); ?>"
-                        autocomplete="postal-code"
-                    />
-                </div>
-            </div>
-        </section>
-
-        <section class="checkout-personal-info">
-            <div class="checkout-personal-info__header">
-                <h2 class="checkout-personal-info__title">اطلاعات شخصی من</h2>
-            </div>
-
-            <div class="checkout-personal-info__form" id="personalInfoForm">
-                <div class="checkout-personal-info__gender">
-                    <div class="checkout-personal-info__gender-options">
-                        <?php
-                        $gender_value = $checkout->get_value('billing_gender') ?: 'male';
-                        ?>
-
-                        <label class="checkout-personal-info__radio">
-                            <input type="radio" id="gender-male" name="billing_gender" value="male" <?php checked($gender_value, 'male'); ?> />
-                            <span class="checkout-personal-info__radio-box"></span>
-                            <span class="checkout-personal-info__radio-text">آقا</span>
-                        </label>
-
-                        <label class="checkout-personal-info__radio">
-                            <input type="radio" id="gender-female" name="billing_gender" value="female" <?php checked($gender_value, 'female'); ?> />
-                            <span class="checkout-personal-info__radio-box"></span>
-                            <span class="checkout-personal-info__radio-text">خانم</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="checkout-personal-info__grid">
-                    <div class="checkout-personal-info__field">
-                        <label class="checkout-address__label" for="billing_first_name">نام <span>*</span></label>
-                        <input
-                            class="checkout-personal-info__input"
-                            type="text"
-                            id="billing_first_name"
-                            name="billing_first_name"
-                            placeholder="نام خود را وارد کنید *"
-                            value="<?php echo esc_attr($checkout->get_value('billing_first_name')); ?>"
-                            autocomplete="given-name"
-                        />
-                    </div>
-
-                    <div class="checkout-personal-info__field">
-                        <label class="checkout-address__label" for="billing_last_name">نام خانوادگی <span>*</span></label>
-                        <input
-                            class="checkout-personal-info__input"
-                            type="text"
-                            id="billing_last_name"
-                            name="billing_last_name"
-                            placeholder="نام خانوادگی خود را وارد کنید *"
-                            value="<?php echo esc_attr($checkout->get_value('billing_last_name')); ?>"
-                            autocomplete="family-name"
-                        />
-                    </div>
-
-                    <div class="checkout-personal-info__field">
-                        <label class="checkout-address__label" for="billing_company">نام فروشگاه</label>
-                        <input
-                            class="checkout-personal-info__input"
-                            type="text"
-                            id="billing_company"
-                            name="billing_company"
-                            placeholder="نام فروشگاه یا کارگاه خود را وارد کنید"
-                            value="<?php echo esc_attr($checkout->get_value('billing_company')); ?>"
-                        />
-                    </div>
-
-                    <div class="checkout-personal-info__field">
-                        <label class="checkout-address__label" for="billing_national_code">شماره کد ملی <span>*</span></label>
-                        <input
-                            class="checkout-personal-info__input"
-                            type="text"
-                            id="billing_national_code"
-                            name="billing_national_code"
-                            placeholder="شماره ملی خود را وارد کنید *"
-                            value="<?php echo esc_attr($checkout->get_value('billing_national_code')); ?>"
-                        />
-                    </div>
-
-                    <div class="checkout-personal-info__field">
-                        <label class="checkout-address__label" for="billing_phone">شماره موبایل <span>*</span></label>
-                        <input
-                            class="checkout-personal-info__input"
-                            type="tel"
-                            id="billing_phone"
-                            name="billing_phone"
-                            placeholder="شماره موبایل خود را وارد کنید *"
-                            value="<?php echo esc_attr($checkout->get_value('billing_phone')); ?>"
-                            autocomplete="tel"
-                        />
-                    </div>
-
-                    <div class="checkout-personal-info__field">
-                        <label class="checkout-address__label" for="billing_birth_date">تاریخ تولد شما</label>
-                        <input
-                            class="checkout-personal-info__input"
-                            type="text"
-                            id="billing_birth_date"
-                            name="billing_birth_date"
-                            placeholder="تاریخ تولد خود را وارد کنید"
-                            value="<?php echo esc_attr($checkout->get_value('billing_birth_date')); ?>"
-                        />
-                    </div>
-
-                    <div class="checkout-personal-info__field">
-                        <label class="checkout-address__label" for="billing_email">ایمیل</label>
-                        <input
-                            class="checkout-personal-info__input"
-                            type="email"
-                            id="billing_email"
-                            name="billing_email"
-                            placeholder="ایمیل خود را وارد کنید"
-                            value="<?php echo esc_attr($checkout->get_value('billing_email')); ?>"
-                            autocomplete="email"
-                        />
-                    </div>
-
-                    <?php if (!is_user_logged_in() && $checkout->is_registration_enabled()) : ?>
-                        <input type="hidden" name="createaccount" value="1" />
-
-                        <div class="checkout-personal-info__field checkout-personal-info__field--password-group">
-                            <label class="checkout-address__label" for="password">رمز عبور خود را انتخاب کنید</label>
-
-                            <div class="checkout-personal-info__password-error" id="confirmPasswordError"></div>
-
-                            <div class="checkout-personal-info__password-row">
-                                <div class="checkout-personal-info__password-col">
-                                    <div class="checkout-personal-info__password-wrap">
-                                        <input
-                                            class="checkout-personal-info__input checkout-personal-info__input--password"
-                                            type="password"
-                                            id="password"
-                                            name="account_password"
-                                            placeholder="رمز عبور"
-                                        />
-
-                                        <button
-                                            class="checkout-personal-info__password-toggle"
-                                            type="button"
-                                            aria-label="نمایش موقت رمز عبور"
-                                            data-toggle-password="password"
-                                        >
-                                            👁
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div class="checkout-personal-info__password-col">
-                                    <div class="checkout-personal-info__password-wrap">
-                                        <label class="checkout-address__label" for="confirm-password">
-                                            تکرار رمز عبور
-                                        </label>
-
-                                        <input
-                                            class="checkout-personal-info__input checkout-personal-info__input--password"
-                                            type="password"
-                                            id="confirm-password"
-                                            name="confirm_password"
-                                            placeholder="تکرار رمز عبور"
-                                        />
-
-                                        <button
-                                            class="checkout-personal-info__password-toggle"
-                                            type="button"
-                                            aria-label="نمایش موقت تکرار رمز عبور"
-                                            data-toggle-password="confirm-password"
-                                        >
-                                            👁
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+        <div class="hsb-co__grid">
+            <main class="hsb-co__main">
+                <section class="hsb-co__panel" aria-labelledby="hsb-co-personal-heading">
+                    <div class="hsb-co__panel-head"><span class="hsb-co__num">۱</span><div><h2 id="hsb-co-personal-heading">اطلاعات گیرنده</h2><p>برای هماهنگی تحویل و پیگیری سفارش</p></div></div>
+                    <div class="hsb-co__fields">
+                        <div class="hsb-co__field hsb-co__field--full hsb-co__gender"><span class="hsb-co__label">عنوان</span>
+                            <?php $gender = $checkout->get_value('billing_gender') ?: 'male'; ?>
+                            <div class="hsb-co__radio-line"><label><input type="radio" id="gender-male" name="billing_gender" value="male" <?php checked($gender,'male'); ?> /> آقا</label><label><input type="radio" id="gender-female" name="billing_gender" value="female" <?php checked($gender,'female'); ?> /> خانم</label></div>
                         </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </section>
-
-        <?php do_action('woocommerce_checkout_after_customer_details'); ?>
-
-        <section class="checkout-payment-gateway">
-            <div class="checkout-payment-gateway__header">
-                <h2 class="checkout-payment-gateway__title">انتخاب درگاه پرداخت</h2>
-            </div>
-
-            <div id="order_review" class="woocommerce-checkout-review-order checkout-payment-gateway__woocommerce">
-                <?php do_action('woocommerce_checkout_order_review'); ?>
-            </div>
-        </section>
-
-        <section class="checkout-order-summary">
-            <div class="checkout-order-summary__header">
-                <h2 class="checkout-order-summary__title">خلاصه سفارش</h2>
-            </div>
-
-            <div class="checkout-order-summary__top">
-                <div class="checkout-order-summary__shipping-meta">
-                    <p class="checkout-order-summary__shipping-date">
-                        زمان ارسال در مرحله پردازش سفارش مشخص می‌شود
-                    </p>
-
-                    <p class="checkout-order-summary__shipping-count">
-                        <?php echo esc_html(number_format_i18n($cart_count)); ?> کالا
-                    </p>
-
-                    <p class="checkout-order-summary__shipping-method">
-                        <?php echo esc_html($shipping_method_text); ?>
-                    </p>
-                </div>
-
-                <button
-                    id="orderSummaryToggle"
-                    class="checkout-order-summary__accordion-btn"
-                    type="button"
-                    aria-expanded="true"
-                    aria-controls="orderSummaryContent"
-                >
-                    <span class="checkout-order-summary__accordion-text">جزئیات مرسوله</span>
-                    <span class="checkout-order-summary__accordion-chevron" aria-hidden="true"></span>
-                </button>
-            </div>
-
-            <div class="checkout-order-summary__accordion-content is-open" id="orderSummaryContent">
-                <div class="checkout-order-summary__details">
-                    <div class="checkout-order-summary__detail-item">
-                        <span class="checkout-order-summary__detail-label">نام گیرنده:</span>
-                        <span class="checkout-order-summary__detail-value" data-summary-recipient>
-                            نام و نام خانوادگی مخاطب
-                        </span>
-                    </div>
-
-                    <div class="checkout-order-summary__detail-item">
-                        <span class="checkout-order-summary__detail-label">شماره تماس:</span>
-                        <span class="checkout-order-summary__detail-value" data-summary-mobile>
-                            ۰۹۱۲۰۰۰۰۰۰۰
-                        </span>
-                    </div>
-
-                    <div class="checkout-order-summary__detail-item">
-                        <span class="checkout-order-summary__detail-label">آدرس ارسال:</span>
-                        <span class="checkout-order-summary__detail-value" data-summary-address>
-                            استان، شهر، خیابان، کوچه، پلاک، واحد، کدپستی
-                        </span>
-                    </div>
-
-                    <div class="checkout-order-summary__detail-item">
-                        <span class="checkout-order-summary__detail-label">وزن مرسوله:</span>
-                        <span class="checkout-order-summary__detail-value" data-summary-weight>
-                            <?php
-                            if ($total_weight > 0) {
-                                echo esc_html(number_format_i18n($total_weight, 2) . ' ' . $weight_unit);
-                            } else {
-                                echo 'ثبت نشده';
-                            }
-                            ?>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="checkout-order-summary__products">
-                    <?php foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) : ?>
                         <?php
-                        $_product = $cart_item['data'];
-
-                        if (!$_product || !$_product->exists() || $cart_item['quantity'] <= 0) {
-                            continue;
-                        }
-
-                        $product_permalink = $_product->is_visible() ? $_product->get_permalink($cart_item) : wc_get_cart_url();
+                        $personal = array(
+                            array('billing_first_name','نام',true,'text','given-name'),
+                            array('billing_last_name','نام خانوادگی',true,'text','family-name'),
+                            array('billing_phone','شماره موبایل',true,'tel','tel'),
+                            array('billing_national_code','کد ملی',true,'text','off'),
+                            array('billing_company','نام فروشگاه یا شرکت',false,'text','organization'),
+                            array('billing_email','ایمیل',false,'email','email'),
+                            array('billing_birth_date','تاریخ تولد',false,'text','bday'),
+                        );
+                        foreach ($personal as $f): ?>
+                            <div class="hsb-co__field"><label for="<?php echo esc_attr($f[0]); ?>"><?php echo esc_html($f[1]); ?><?php if ($f[2]): ?><span class="hsb-co__required" aria-hidden="true"> *</span><?php endif; ?></label>
+                                <input id="<?php echo esc_attr($f[0]); ?>" name="<?php echo esc_attr($f[0]); ?>" type="<?php echo esc_attr($f[3]); ?>" autocomplete="<?php echo esc_attr($f[4]); ?>" value="<?php echo esc_attr($checkout->get_value($f[0])); ?>" <?php echo $f[2] ? 'required' : ''; ?> />
+                            </div>
+                        <?php endforeach; ?>
+                        <?php if (!is_user_logged_in() && $checkout->is_registration_enabled()): ?>
+                            <input type="hidden" name="createaccount" value="1" />
+                            <div class="hsb-co__field"><label for="password">رمز عبور حساب</label><input id="password" name="account_password" type="password" autocomplete="new-password" /></div>
+                            <div class="hsb-co__field"><label for="confirm-password">تکرار رمز عبور</label><input id="confirm-password" name="confirm_password" type="password" autocomplete="new-password" /><p id="confirmPasswordError" class="hsb-co__error" role="status"></p></div>
+                        <?php endif; ?>
+                    </div>
+                </section>
+                <section class="hsb-co__panel" aria-labelledby="hsb-co-address-heading">
+                    <div class="hsb-co__panel-head"><span class="hsb-co__num">۲</span><div><h2 id="hsb-co-address-heading">نشانی تحویل</h2><p>نشانی کامل و کد پستی را با دقت وارد کنید.</p></div></div>
+                    <div class="hsb-co__fields">
+                        <?php
+                        $address = array(
+                            array('billing_state','استان',true,false,'address-level1'),
+                            array('billing_city','شهر',true,false,'address-level2'),
+                            array('billing_address_1','خیابان، کوچه و نشانی',true,true,'address-line1'),
+                            array('billing_plaque','پلاک',true,false,'off'),
+                            array('billing_address_2','واحد',false,false,'address-line2'),
+                            array('billing_postcode','کد پستی',true,true,'postal-code'),
+                        );
+                        foreach ($address as $f): ?>
+                            <div class="hsb-co__field<?php echo $f[3] ? ' hsb-co__field--full' : ''; ?>"><label for="<?php echo esc_attr($f[0]); ?>"><?php echo esc_html($f[1]); ?><?php if ($f[2]): ?><span class="hsb-co__required" aria-hidden="true"> *</span><?php endif; ?></label>
+                                <input id="<?php echo esc_attr($f[0]); ?>" name="<?php echo esc_attr($f[0]); ?>" type="text" autocomplete="<?php echo esc_attr($f[4]); ?>" value="<?php echo esc_attr($checkout->get_value($f[0])); ?>" <?php echo $f[2] ? 'required' : ''; ?> />
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </section>
+                <?php do_action('woocommerce_checkout_after_customer_details'); ?>
+                <section class="hsb-co__panel hsb-co__payment" aria-labelledby="hsb-co-payment-heading">
+                    <div class="hsb-co__panel-head"><span class="hsb-co__num">۳</span><div><h2 id="hsb-co-payment-heading">روش پرداخت</h2><p><?php echo $hsb_is_quote ? 'درخواست استعلام پس از بررسی فروش نهایی می‌شود.' : 'روش موردنظر خود را برای پرداخت انتخاب کنید.'; ?></p></div></div>
+                    <?php if ($hsb_is_quote): ?><p class="hsb-co__quote-note">در این سبد کالای فاقد قیمت وجود دارد. امکان پرداخت آن منوط به اعلام قیمت و تأیید نهایی است.</p><?php endif; ?>
+                    <div id="order_review" class="woocommerce-checkout-review-order hsb-co__payment-review">
+                        <?php
+                        // Preserve native payment gateways, secure WooCommerce checkout and terms checkbox.
+                        // Render WooCommerce review and payment in their native order: required by checkout AJAX.
+                        do_action('woocommerce_checkout_order_review');
                         ?>
-
-                        <a href="<?php echo esc_url($product_permalink); ?>"
-                           class="checkout-order-summary__product"
-                           aria-label="<?php echo esc_attr($_product->get_name()); ?>">
-                            <?php echo wp_kses_post($_product->get_image('woocommerce_thumbnail')); ?>
-                        </a>
-                    <?php endforeach; ?>
+                    </div>
+                </section>
+            </main>
+            <aside class="hsb-co__aside" aria-label="خلاصه سفارش">
+                <div class="hsb-co__summary">
+                    <div class="hsb-co__summary-head"><h2>خلاصه سفارش</h2><span><?php echo esc_html(number_format_i18n($cart_count)); ?> کالا</span></div>
+                    <div class="hsb-co__items">
+                        <?php foreach (WC()->cart->get_cart() as $cart_item):
+                            $product = isset($cart_item['data']) ? $cart_item['data'] : null;
+                            if (!$product || !$product->exists() || (int) $cart_item['quantity'] <= 0) continue;
+                            $qty = (int) $cart_item['quantity']; ?>
+                            <div class="hsb-co__item"><div class="hsb-co__thumb"><?php echo wp_kses_post($product->get_image('woocommerce_thumbnail')); ?></div><div class="hsb-co__item-content"><p><?php echo esc_html($product->get_name()); ?></p><small>تعداد: <?php echo esc_html(number_format_i18n($qty)); ?></small></div></div>
+                        <?php endforeach; ?>
+                    </div>
+                    <p class="hsb-co__summary-note">مبلغ نهایی، تخفیف و هزینه‌های قابل پرداخت در بخش «روش پرداخت» نمایش داده می‌شود.</p>
+                    <div class="hsb-co__trust"><span aria-hidden="true">✓</span> اطلاعات سفارش شما فقط برای پردازش خرید و هماهنگی تحویل استفاده می‌شود.</div>
+                    <div class="hsb-co__legal">
+                        <?php if ($terms_url): ?><a href="<?php echo esc_url($terms_url); ?>" target="_blank" rel="noopener">شرایط و مقررات خرید</a><?php endif; ?>
+                        <?php if ($privacy_url): ?><a href="<?php echo esc_url($privacy_url); ?>" target="_blank" rel="noopener">سیاست حفظ حریم خصوصی</a><?php endif; ?>
+                    </div>
                 </div>
-            </div>
-
-            <div class="checkout-order-summary__actions">
-                <button type="button" class="checkout-order-summary__submit-btn" id="hsbCustomPlaceOrder">
-                    تأیید و ادامه
-                </button>
-            </div>
-        </section>
-
+            </aside>
+        </div>
         <?php wp_nonce_field('woocommerce-process_checkout', 'woocommerce-process-checkout-nonce'); ?>
-
     </form>
 </div>

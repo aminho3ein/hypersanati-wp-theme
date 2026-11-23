@@ -22,35 +22,35 @@ body.single-post .hsb-editorial-body h1 {
     color: #252b30;
     margin: 40px 0 22px;
     padding: 0 0 15px;
-    border-bottom: 3px solid #806139;
+    border-bottom: 3px solid var(--color-secondary, #123e69);
 }
 
 body.single-post .hsb-editorial-body h2 {
     font-size: clamp(25px,2.2vw,34px);
     font-weight: 900;
     line-height: 1.8;
-    color: #6f4b29;
+    color: var(--color-secondary, #123e69);
     margin: 42px 0 22px;
     padding: 16px 22px 16px 18px;
-    border-right: 5px solid #c49a62;
+    border-right: 5px solid var(--color-primary, #1d619e);
     border-radius: 14px;
     background: linear-gradient(
         90deg,
         rgba(255,255,255,0) 0%,
-        rgba(232,221,205,0.42) 58%,
-        rgba(218,203,182,0.82) 100%
+        rgba(29,97,158,0.06) 58%,
+        rgba(29,97,158,0.14) 100%
     );
-    box-shadow: inset 0 0 0 1px rgba(196,154,98,0.18);
+    box-shadow: inset 0 0 0 1px rgba(29,97,158,0.16);
 }
 
 body.single-post .hsb-editorial-body h3 {
     font-size: clamp(20px,1.7vw,24px);
     font-weight: 800;
     line-height: 1.9;
-    color: #76512f;
+    color: var(--color-secondary, #123e69);
     margin: 30px 0 17px;
     padding: 4px 16px 4px 0;
-    border-right: 4px solid #c09a68;
+    border-right: 4px solid var(--color-primary, #1d619e);
     border-bottom: 0;
     background: transparent;
 }
@@ -59,23 +59,23 @@ body.single-post .hsb-editorial-body h4 {
     font-size: 19px;
     font-weight: 800;
     line-height: 1.8;
-    color: #554432;
+    color: var(--color-secondary, #123e69);
     margin: 26px 0 14px;
     padding-right: 12px;
-    border-right: 3px solid #bb9b70;
+    border-right: 3px solid var(--color-primary, #1d619e);
 }
 
 body.single-post .hsb-editorial-body h5 {
     font-size: 17px;
     font-weight: 750;
     line-height: 1.85;
-    color: #765a3c;
+    color: var(--color-secondary, #123e69);
     margin: 22px 0 12px;
 }
 
 body.single-post .hsb-editorial-body h5::before {
     content: "◆";
-    color: #c4a57e;
+    color: var(--color-primary, #1d619e);
     font-size: 10px;
     margin-left: 9px;
 }
@@ -87,7 +87,7 @@ body.single-post .hsb-editorial-body h6 {
     color: #626b72;
     margin: 19px 0 11px;
     text-decoration: underline;
-    text-decoration-color: #d7bd9b;
+    text-decoration-color: color-mix(in srgb, var(--color-primary, #1d619e) 40%, white);
     text-decoration-thickness: 2px;
     text-underline-offset: 7px;
 }
@@ -103,9 +103,9 @@ body.single-post .hsb-editorial-body
 :is(.obt-container,.wp-block-table,.hsb-table-scroll) {
     max-width: 100%;
     overflow-x: auto;
-    border: 1px solid #e5d9cb;
+    border: 1px solid color-mix(in srgb, var(--color-primary, #1d619e) 20%, white);
     border-radius: 13px;
-    box-shadow: 0 5px 20px rgba(50,40,30,.045);
+    box-shadow: 0 5px 20px rgba(18,62,105,.045);
     -webkit-overflow-scrolling: touch;
 }
 
@@ -122,7 +122,7 @@ body.single-post .hsb-editorial-body
 
 body.single-post .hsb-editorial-body
 :is(.olfat-brand-table,.wp-block-table,.hsb-table-scroll) thead th {
-    background: #806139;
+    background: var(--color-secondary, #123e69);
     color: white;
     padding: 14px 16px;
     border: 0;
@@ -147,7 +147,7 @@ tbody tr:nth-child(even) > * {
 body.single-post .hsb-editorial-body
 :is(.olfat-brand-table,.wp-block-table,.hsb-table-scroll)
 tbody tr:hover > * {
-    background: #f1e6d5;
+    background: color-mix(in srgb, var(--color-primary, #1d619e) 7%, white);
 }
 
 body.single-post .hsb-editorial-body
@@ -155,7 +155,7 @@ body.single-post .hsb-editorial-body
 tbody td {
     padding: 14px 16px;
     border: 0;
-    border-bottom: 1px solid #e9e5df;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-primary, #1d619e) 20%, white);
     text-align: right;
     vertical-align: middle;
     line-height: 2;
@@ -167,7 +167,7 @@ tbody td {
 }
 
 body.single-post .hsb-editorial-body .obt-brand {
-    color: #674626;
+    color: var(--color-secondary, #123e69);
     font-weight: 800;
 }
 
@@ -176,11 +176,11 @@ body.single-post .hsb-editorial-body p.hsb-editorial-note {
     position: relative;
     margin: 25px 0;
     padding: 18px 65px 18px 20px;
-    border: 1px solid #e7d4b9;
-    border-right: 4px solid #a47b48;
+    border: 1px solid color-mix(in srgb, var(--color-primary, #1d619e) 20%, white);
+    border-right: 4px solid var(--color-primary, #1d619e);
     border-radius: 12px;
-    background: #f6eee3;
-    color: #5b4731;
+    background: color-mix(in srgb, var(--color-primary, #1d619e) 7%, white);
+    color: var(--color-secondary, #123e69);
     line-height: 2.1;
 }
 
@@ -194,7 +194,7 @@ body.single-post .hsb-editorial-body p.hsb-editorial-note::before {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background: #a47b48;
+    background: var(--color-primary, #1d619e);
     color: #fff;
     font-weight: 900;
     font-size: 19px;
@@ -242,7 +242,7 @@ body.single-post .hsb-editorial-body
 body.single-post .hsb-editorial-body .schema-faq-section {
     overflow: hidden;
     background: white;
-    border: 1px solid #e6ddd2;
+    border: 1px solid color-mix(in srgb, var(--color-primary, #1d619e) 20%, white);
     border-radius: 13px;
     box-shadow: 0 4px 17px rgba(35,35,35,.045);
     transition: border-color .25s, box-shadow .25s;
@@ -250,7 +250,7 @@ body.single-post .hsb-editorial-body .schema-faq-section {
 
 body.single-post .hsb-editorial-body
 .schema-faq-section.hsb-faq-open {
-    border-color: #b89972;
+    border-color: var(--color-primary, #1d619e);
     box-shadow: 0 8px 25px rgba(91,65,35,.09);
 }
 
@@ -275,7 +275,7 @@ body.single-post .hsb-editorial-body
 .schema-faq-question:hover,
 body.single-post .hsb-editorial-body
 .hsb-faq-open .schema-faq-question {
-    background: #faf5ee;
+    background: color-mix(in srgb, var(--color-primary, #1d619e) 7%, white);
 }
 
 body.single-post .hsb-editorial-body
@@ -290,8 +290,8 @@ body.single-post .hsb-editorial-body
     width: 29px;
     height: 29px;
     border-radius: 9px;
-    background: #efe1cf;
-    color: #855f36;
+    background: color-mix(in srgb, var(--color-primary, #1d619e) 12%, white);
+    color: var(--color-secondary, #123e69);
     font-size: 18px;
 }
 
@@ -308,20 +308,20 @@ body.single-post .hsb-editorial-body
     height: 29px;
     border-radius: 50%;
     background: #f0e8dd;
-    color: #806139;
+    color: var(--color-secondary, #123e69);
     font-size: 22px;
 }
 
 body.single-post .hsb-editorial-body
 .hsb-faq-open .schema-faq-question::after {
     content: "−";
-    background: #806139;
+    background: var(--color-secondary, #123e69);
     color: white;
 }
 
 body.single-post .hsb-editorial-body
 .schema-faq-question:focus-visible {
-    outline: 3px solid #ad895c;
+    outline: 3px solid var(--color-primary, #1d619e);
     outline-offset: -3px;
 }
 
@@ -375,7 +375,7 @@ body.single-post .hsb-editorial-body
     margin: 0;
     padding: 15px 58px 15px 20px;
     list-style: none;
-    border: 1px solid #e6d9c8;
+    border: 1px solid color-mix(in srgb, var(--color-primary, #1d619e) 20%, white);
     border-radius: 11px;
     background: #fcf9f5;
     color: #535960;
@@ -394,8 +394,8 @@ body.single-post .hsb-editorial-body
     min-width: 29px;
     height: 29px;
     border-radius: 8px;
-    background: #efe2d1;
-    color: #76512d;
+    background: color-mix(in srgb, var(--color-primary, #1d619e) 7%, white);
+    color: var(--color-secondary, #123e69);
     font-size: 12px;
     font-weight: 900;
 }
@@ -403,12 +403,12 @@ body.single-post .hsb-editorial-body
 body.single-post .hsb-editorial-body
 .wp-block-footnotes > li:hover {
     background: #f4eadc;
-    border-color: #caa77d;
+    border-color: var(--color-primary, #1d619e);
 }
 
 body.single-post .hsb-editorial-body
 .wp-block-footnotes a {
-    color: #79552f;
+    color: var(--color-secondary, #123e69);
     text-decoration: none;
     overflow-wrap: anywhere;
 }

@@ -20,10 +20,51 @@ function hsb_get_homepage_hero_defaults() {
         'logo_target'   => '/shop/',
         'slides'        => array(),
         'slide_seconds' => 6,
+        'height_desktop' => 95,
+        'height_tablet'  => 95,
+        'height_mobile'  => 95,
         'autoplay'      => '1',
         'light_fx'      => '1',
         'hero_colors'   => array(),
+        'font_sizes'    => array(),
+        'font_sizes_unit' => 'px',
     );
+}
+
+
+/** Four user-facing Hero text elements, editable in points on each device. */
+function hsb_home_hero_font_fields() {
+    // Reference sizes are based on the actual v1.3.2 CSS at viewport widths
+    // 1440px / 800px / 390px, assuming the standard 16px root font.
+    // Older fluid clamp() values do not have a single universal size.
+    return array(
+        'eyebrow' => array('label' => 'عنوان کوچک', 'min' => 7, 'max' => 40,
+            'defaults' => array('desktop' => 14.4, 'tablet' => 14.4, 'mobile' => 14.4),
+            'selector' => '.hsb-home-hero__eyebrow'),
+        'title' => array('label' => 'تیتر اصلی اسلاید', 'min' => 12, 'max' => 80,
+            'defaults' => array('desktop' => 37.8, 'tablet' => 30, 'mobile' => 18),
+            'selector' => '.hsb-home-hero__title'),
+        'description' => array('label' => 'توضیحات', 'min' => 7, 'max' => 32,
+            'defaults' => array('desktop' => 9.6, 'tablet' => 9.7, 'mobile' => 9),
+            'selector' => '.hsb-home-hero__description'),
+        'button' => array('label' => 'متن دکمه شروع جست‌وجو', 'min' => 7, 'max' => 30,
+            'defaults' => array('desktop' => 11.5, 'tablet' => 11.5, 'mobile' => 11.5),
+            'selector' => '.hsb-home-hero__button'),
+    );
+}
+
+/** Convert legacy px settings to pt; 1pt = 4/3 CSS px at standard resolution. */
+function hsb_home_hero_resolved_font_pt($options, $element, $device, $config) {
+    $stored = isset($options['font_sizes'][$element][$device])
+        ? $options['font_sizes'][$element][$device] : null;
+    if (!is_numeric($stored) || (float) $stored <= 0) {
+        return (float) $config['defaults'][$device];
+    }
+    $value = (float) $stored;
+    if (empty($options['font_sizes_unit']) || $options['font_sizes_unit'] !== 'pt') {
+        $value *= 0.75;
+    }
+    return min($config['max'], max($config['min'], round($value, 1)));
 }
 
 
@@ -210,6 +251,11 @@ $output['eyebrow'] =
             ? esc_url_raw($logo_target)
             : '/shop/';
 
+    foreach (array('height_desktop', 'height_tablet', 'height_mobile') as $height_key) {
+        $height_value = isset($input[$height_key]) ? absint($input[$height_key]) : 95;
+        $output[$height_key] = min(150, max(40, $height_value));
+    }
+
     $output['slide_seconds'] = isset($input['slide_seconds'])
         ? min(15, max(3, absint($input['slide_seconds']))) : 6;
     $output['autoplay'] = !empty($input['autoplay']) ? '1' : '0';
@@ -224,6 +270,31 @@ $output['eyebrow'] =
             ? sanitize_hex_color(wp_unslash($incoming_colors[$key])) : '';
         $output['hero_colors'][$key] = $value ?: $default_color;
     }
+    // Store user-facing font sizes in pt; preserve converted legacy px values.
+    $output['font_sizes_unit'] = 'pt';
+    $output['font_sizes'] = array();
+    $incoming_font_sizes = isset($input['font_sizes']) && is_array($input['font_sizes'])
+        ? $input['font_sizes'] : array();
+    foreach (hsb_home_hero_font_fields() as $element => $config) {
+        $output['font_sizes'][$element] = array();
+        foreach (array('desktop', 'tablet', 'mobile') as $device) {
+            $raw = isset($incoming_font_sizes[$element][$device]) && is_scalar($incoming_font_sizes[$element][$device])
+                ? trim((string) wp_unslash($incoming_font_sizes[$element][$device])) : '';
+            // Blank fields revert to the visible baseline size in pt.
+            if ($raw === '') {
+                $value = (float) $config['defaults'][$device];
+            } else {
+                $raw = str_replace(',', '.', $raw);
+                if (!preg_match('/^[0-9]{1,2}(?:\.[0-9])?$/D', $raw)) {
+                    $value = (float) $config['defaults'][$device];
+                } else {
+                    $value = min($config['max'], max($config['min'], (float) $raw));
+                }
+            }
+            $output['font_sizes'][$element][$device] = round($value, 1);
+        }
+    }
+
     $output['slides'] = array();
     if (isset($input['slides']) && is_array($input['slides'])) {
         foreach (array_slice($input['slides'], 0, 10) as $slide) {
@@ -232,7 +303,14 @@ $output['eyebrow'] =
             if (!$id || !wp_attachment_is_image($id)) { continue; }
             $title = isset($slide['title'])
                 ? sanitize_text_field(wp_unslash($slide['title'])) : '';
-            $output['slides'][] = array('image_id' => $id, 'title' => $title);
+            $tablet_id = isset($slide['tablet_image_id']) ? absint($slide['tablet_image_id']) : 0;
+            $mobile_id = isset($slide['mobile_image_id']) ? absint($slide['mobile_image_id']) : 0;
+            $output['slides'][] = array(
+                'image_id' => $id,
+                'tablet_image_id' => $tablet_id && wp_attachment_is_image($tablet_id) ? $tablet_id : 0,
+                'mobile_image_id' => $mobile_id && wp_attachment_is_image($mobile_id) ? $mobile_id : 0,
+                'title' => $title,
+            );
         }
     }
 
@@ -969,7 +1047,11 @@ function hsb_render_homepage_hero_section() {
             ? $options['hero_colors'] : array(),
         hsb_home_hero_color_defaults()
     );
-    $css_vars = array();
+    $css_vars = array(
+        '--hsb-hero-height-desktop:' . min(150, max(40, (int) $options['height_desktop'])) . 'dvh',
+        '--hsb-hero-height-tablet:' . min(150, max(40, (int) $options['height_tablet'])) . 'dvh',
+        '--hsb-hero-height-mobile:' . min(150, max(40, (int) $options['height_mobile'])) . 'dvh',
+    );
     foreach (hsb_home_hero_color_defaults() as $key => $fallback) {
         $color = sanitize_hex_color($color_values[$key]) ?: $fallback;
         $css_vars[] = '--hsb-hero-' . str_replace('_', '-', $key) . ':' . $color;
@@ -1002,8 +1084,30 @@ function hsb_render_homepage_hero_section() {
             home_url($logo_target);
     }
 
-?>
+    // Explicit point sizes (including initial baseline) eliminate blank/automatic
+    // controls and give the editor predictable, independently adjustable values.
+    $font_rules = array();
+    foreach (array('desktop', 'tablet', 'mobile') as $device) {
+        $rules = array();
+        foreach (hsb_home_hero_font_fields() as $element => $config) {
+            $value = hsb_home_hero_resolved_font_pt($options, $element, $device, $config);
+            $rules[] = '.hsb-home-hero.hsb-home-hero ' . $config['selector']
+                . '{font-size:' . esc_attr(number_format($value, 1, '.', '')) . 'pt !important;}';
+        }
+        $css = implode('', $rules);
+        if ($device === 'desktop') {
+            $font_rules[] = '@media (min-width:1025px){' . $css . '}';
+        } elseif ($device === 'tablet') {
+            $font_rules[] = '@media (min-width:601px) and (max-width:1024px){' . $css . '}';
+        } else {
+            $font_rules[] = '@media (max-width:600px){' . $css . '}';
+        }
+    }
 
+?>
+<?php if ($font_rules) : ?>
+    <style id="hsb-hero-responsive-font-sizes"><?php echo implode('', $font_rules); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- numeric values and fixed selectors only. ?></style>
+<?php endif; ?>
     <section
         class="hsb-home-hero<?php
         echo $logo_image_id
@@ -1149,16 +1253,24 @@ function hsb_render_homepage_hero_section() {
                 <?php foreach ($slides as $index => $slide) : ?>
                     <div class="hsb-home-hero__slide<?php echo 0 === $index ? ' is-active' : ''; ?>"
                          data-slide-title="<?php echo esc_attr($slide['title']); ?>">
-                        <?php echo wp_get_attachment_image(
-                            $slide['image_id'], 'full', false,
-                            array(
-                                'class' => 'hsb-home-hero__image',
-                                'alt' => '',
-                                'loading' => 0 === $index ? 'eager' : 'lazy',
-                                'fetchpriority' => 0 === $index ? 'high' : 'auto',
-                                'decoding' => 'async',
-                            )
-                        ); ?>
+                        <picture class="hsb-home-hero__picture">
+                            <?php if (!empty($slide['mobile_image_id'])) : ?>
+                                <source media="(max-width: 600px)" srcset="<?php echo esc_url(wp_get_attachment_image_url($slide['mobile_image_id'], 'full')); ?>">
+                            <?php endif; ?>
+                            <?php if (!empty($slide['tablet_image_id'])) : ?>
+                                <source media="(max-width: 1024px)" srcset="<?php echo esc_url(wp_get_attachment_image_url($slide['tablet_image_id'], 'full')); ?>">
+                            <?php endif; ?>
+                            <?php echo wp_get_attachment_image(
+                                $slide['image_id'], 'full', false,
+                                array(
+                                    'class' => 'hsb-home-hero__image',
+                                    'alt' => '',
+                                    'loading' => 0 === $index ? 'eager' : 'lazy',
+                                    'fetchpriority' => 0 === $index ? 'high' : 'auto',
+                                    'decoding' => 'async',
+                                )
+                            ); ?>
+                        </picture>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -1212,6 +1324,8 @@ function hsb_home_hero_get_render_slides($options) {
             if (!$id || !wp_attachment_is_image($id)) { continue; }
             $slides[] = array(
                 'image_id' => $id,
+                'tablet_image_id' => !empty($slide['tablet_image_id']) && wp_attachment_is_image(absint($slide['tablet_image_id'])) ? absint($slide['tablet_image_id']) : 0,
+                'mobile_image_id' => !empty($slide['mobile_image_id']) && wp_attachment_is_image(absint($slide['mobile_image_id'])) ? absint($slide['mobile_image_id']) : 0,
                 'title' => !empty($slide['title']) ? $slide['title'] : $options['title'],
             );
         }
@@ -1255,8 +1369,50 @@ function hsb_home_hero_render_slider_settings($options) {
                  <?php checked($options['light_fx'], '1'); ?>> درخشش ملایم روی تصویر (بدون موج و مدار نور)</label></p>
         <p class="description">عنوان کوچک، توضیحات، لوگو، دکمه جستجو و باکس‌های آماری در تمام اسلایدها ثابت می‌مانند.</p>
     </td></tr>
+    <tr><th scope="row">ارتفاع هیرو در دستگاه‌های مختلف</th><td>
+        <p class="description">درصد ارتفاع قابل‌مشاهده صفحه (dvh). مقدار پیشنهادی ۹۵٪ است؛ بازه قابل تنظیم ۴۰ تا ۱۵۰٪. اگر محتوا بلندتر باشد، هیرو برای جلوگیری از هم‌پوشانی بزرگ‌تر می‌شود.</p>
+        <?php foreach (array('height_desktop' => 'دسکتاپ (بیشتر از ۱۰۲۴ پیکسل)', 'height_tablet' => 'تبلت (۶۰۱ تا ۱۰۲۴ پیکسل)', 'height_mobile' => 'موبایل (تا ۶۰۰ پیکسل)') as $height_key => $height_label) : ?>
+            <p><label><?php echo esc_html($height_label); ?>
+                <input type="number" min="40" max="150" step="1"
+                    name="hsb_homepage_hero_options[<?php echo esc_attr($height_key); ?>]"
+                    value="<?php echo esc_attr(isset($options[$height_key]) ? $options[$height_key] : 95); ?>"
+                    style="width:84px;direction:ltr"> ٪</label></p>
+        <?php endforeach; ?>
+    </td></tr>
+    <tr><th scope="row">اندازه فونت نوشته‌های هیرو (pt)</th><td>
+        <p class="description">مقدار هر فیلد <strong>به‌صورت عددی و بر حسب پوینت (pt)</strong> نمایش داده می‌شود؛ دیگر گزینه «خودکار» یا فیلد خالی وجود ندارد. اندازه‌های اولیه از CSS فعلی قالب در عرض‌های مرجع دسکتاپ ۱۴۴۰، تبلت ۸۰۰ و موبایل ۳۹۰ پیکسل استخراج شده‌اند (با فرض ریشه فونت ۱۶px). چون CSS قبلی از clamp() استفاده می‌کرد، اندازه واقعی قبلاً با عرض صفحه تغییر می‌کرد.</p>
+        <p class="description"><strong>توجه:</strong> اعداد ۱۰۲۴ و ۶۰۰ فقط مرز عرض دستگاه‌ها بر حسب پیکسل هستند؛ هیچ ارتباطی با اندازه فونت ندارند.</p>
+        <div style="overflow-x:auto;max-width:900px">
+            <table class="widefat striped" style="width:100%;max-width:860px">
+                <thead><tr><th>نوشته</th><th>دسکتاپ · pt</th><th>تبلت · pt</th><th>موبایل · pt</th></tr></thead>
+                <tbody>
+                <?php foreach (hsb_home_hero_font_fields() as $font_element => $font_config) : ?>
+                    <tr>
+                        <th scope="row"><?php echo esc_html($font_config['label']); ?></th>
+                        <?php foreach (array('desktop', 'tablet', 'mobile') as $font_device) :
+                            $size_pt = hsb_home_hero_resolved_font_pt($options, $font_element, $font_device, $font_config);
+                            $initial = $font_config['defaults'][$font_device];
+                        ?>
+                            <td><label>
+                                <span class="screen-reader-text"><?php echo esc_html($font_config['label'] . ' — ' . $font_device); ?></span>
+                                <input type="number" step="0.1"
+                                    min="<?php echo esc_attr($font_config['min']); ?>"
+                                    max="<?php echo esc_attr($font_config['max']); ?>"
+                                    name="hsb_homepage_hero_options[font_sizes][<?php echo esc_attr($font_element); ?>][<?php echo esc_attr($font_device); ?>]"
+                                    value="<?php echo esc_attr(number_format($size_pt, 1, '.', '')); ?>"
+                                    style="width:90px;max-width:100%;direction:ltr"> pt
+                                <small style="display:block;color:#64748b;margin-top:4px">مقدار اولیه: <?php echo esc_html(number_format($initial, 1, '.', '')); ?> pt</small>
+                            </label></td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <p class="description">برای بازگشت به اندازه پیشنهادی اولیه، عدد نمایش‌داده‌شده زیر همان فیلد را وارد کن و ذخیره کن. اگر قبلاً مقداری با واحد px ذخیره شده، این نسخه آن را به pt تبدیل می‌کند تا ظاهرش تا حد امکان حفظ شود.</p>
+    </td></tr>
     <tr><th scope="row">اسلایدهای هیرو</th><td>
-        <p class="description">برای هر اسلاید یک تصویر و عنوان اصلی اختصاصی انتخاب کنید. ترتیب نمایش با ترتیب کارت‌ها برابر است؛ حداکثر ۱۰ اسلاید.</p>
+        <p class="description">برای هر اسلاید تصویر افقی دسکتاپ، تصویر مربعی تبلت (اختیاری)، تصویر عمودی ۹:۱۶ موبایل (اختیاری) و عنوان اصلی را انتخاب کنید. اگر تصویر تبلت یا موبایل انتخاب نشود، تصویر دسکتاپ نمایش داده می‌شود. ترتیب نمایش با ترتیب کارت‌ها برابر است؛ حداکثر ۱۰ اسلاید.</p>
         <div id="hsb-hero-admin-slides">
         <?php foreach ($slides as $index => $slide) :
             $src = wp_get_attachment_image_url(absint($slide['image_id']), 'medium'); ?>
@@ -1264,7 +1420,19 @@ function hsb_home_hero_render_slider_settings($options) {
                 <p><strong>اسلاید</strong> <span class="hsb-hero-slide-number"><?php echo esc_html($index + 1); ?></span></p>
                 <input type="hidden" class="hsb-hero-slide-id" name="hsb_homepage_hero_options[slides][<?php echo esc_attr($index); ?>][image_id]" value="<?php echo esc_attr($slide['image_id']); ?>">
                 <img class="hsb-hero-slide-preview" src="<?php echo esc_url($src ?: ''); ?>" alt="" style="display:<?php echo $src ? 'block' : 'none'; ?>;width:240px;max-width:100%;height:105px;object-fit:cover;border-radius:8px;margin-bottom:10px">
-                <p><button type="button" class="button hsb-hero-pick-image">انتخاب / تغییر تصویر</button></p>
+                <p><button type="button" class="button hsb-hero-pick-image">انتخاب / تغییر تصویر دسکتاپ</button></p>
+                <?php foreach (array('tablet' => 'تبلت · تصویر مربعی ۱:۱', 'mobile' => 'موبایل · تصویر عمودی ۹:۱۶') as $device => $caption) :
+                    $field = $device . '_image_id';
+                    $device_id = !empty($slide[$field]) ? absint($slide[$field]) : 0;
+                    $device_src = $device_id ? wp_get_attachment_image_url($device_id, 'medium') : ''; ?>
+                    <div class="hsb-hero-responsive-image" data-device="<?php echo esc_attr($device); ?>" style="margin:10px 0;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px">
+                        <strong><?php echo esc_html($caption); ?></strong><br>
+                        <input type="hidden" class="hsb-hero-device-id" name="hsb_homepage_hero_options[slides][<?php echo esc_attr($index); ?>][<?php echo esc_attr($field); ?>]" value="<?php echo esc_attr($device_id); ?>">
+                        <img class="hsb-hero-device-preview" src="<?php echo esc_url($device_src ?: ''); ?>" alt="" style="display:<?php echo $device_src ? 'block' : 'none'; ?>;width:112px;max-height:145px;object-fit:contain;margin:8px 0">
+                        <button type="button" class="button hsb-hero-pick-device">انتخاب / تغییر</button>
+                        <button type="button" class="button hsb-hero-clear-device">حذف تصویر این دستگاه</button>
+                    </div>
+                <?php endforeach; ?>
                 <label>عنوان اصلی این اسلاید<br><input type="text" class="large-text hsb-hero-slide-title" name="hsb_homepage_hero_options[slides][<?php echo esc_attr($index); ?>][title]" value="<?php echo esc_attr($slide['title']); ?>"></label>
                 <p><button type="button" class="button hsb-hero-move-up">بالا</button> <button type="button" class="button hsb-hero-move-down">پایین</button> <button type="button" class="button hsb-hero-remove-slide">حذف اسلاید</button></p>
             </div>
@@ -1316,6 +1484,9 @@ add_action('admin_footer-appearance_page_hsb-homepage-hero', function () {
           row.querySelector('.hsb-hero-slide-number').textContent = String(index + 1);
           row.querySelector('.hsb-hero-slide-id').name = `hsb_homepage_hero_options[slides][${index}][image_id]`;
           row.querySelector('.hsb-hero-slide-title').name = `hsb_homepage_hero_options[slides][${index}][title]`;
+          row.querySelectorAll('.hsb-hero-responsive-image').forEach((field) => {
+            field.querySelector('.hsb-hero-device-id').name = `hsb_homepage_hero_options[slides][${index}][${field.dataset.device}_image_id]`;
+          });
         });
         add.disabled = rows.length >= maximum;
       }
@@ -1326,7 +1497,9 @@ add_action('admin_footer-appearance_page_hsb-homepage-hero', function () {
         row.innerHTML = `<p><strong>اسلاید</strong> <span class="hsb-hero-slide-number"></span></p>
           <input type="hidden" class="hsb-hero-slide-id" value="">
           <img class="hsb-hero-slide-preview" alt="" style="display:none;width:240px;max-width:100%;height:105px;object-fit:cover;border-radius:8px;margin-bottom:10px">
-          <p><button type="button" class="button hsb-hero-pick-image">انتخاب / تغییر تصویر</button></p>
+          <p><button type="button" class="button hsb-hero-pick-image">انتخاب / تغییر تصویر دسکتاپ</button></p>
+          <div class="hsb-hero-responsive-image" data-device="tablet" style="margin:10px 0;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px"><strong>تبلت · تصویر مربعی ۱:۱</strong><br><input type="hidden" class="hsb-hero-device-id" value=""><img class="hsb-hero-device-preview" alt="" style="display:none;width:112px;max-height:145px;object-fit:contain;margin:8px 0"><button type="button" class="button hsb-hero-pick-device">انتخاب / تغییر</button> <button type="button" class="button hsb-hero-clear-device">حذف تصویر این دستگاه</button></div>
+          <div class="hsb-hero-responsive-image" data-device="mobile" style="margin:10px 0;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px"><strong>موبایل · تصویر عمودی ۹:۱۶</strong><br><input type="hidden" class="hsb-hero-device-id" value=""><img class="hsb-hero-device-preview" alt="" style="display:none;width:112px;max-height:145px;object-fit:contain;margin:8px 0"><button type="button" class="button hsb-hero-pick-device">انتخاب / تغییر</button> <button type="button" class="button hsb-hero-clear-device">حذف تصویر این دستگاه</button></div>
           <label>عنوان اصلی این اسلاید<br><input type="text" class="large-text hsb-hero-slide-title" value=""></label>
           <p><button type="button" class="button hsb-hero-move-up">بالا</button> <button type="button" class="button hsb-hero-move-down">پایین</button> <button type="button" class="button hsb-hero-remove-slide">حذف اسلاید</button></p>`;
         return row;
@@ -1349,6 +1522,29 @@ add_action('admin_footer-appearance_page_hsb-homepage-hero', function () {
         }
         if (button.classList.contains('hsb-hero-move-down') && row.nextElementSibling) {
           container.insertBefore(row.nextElementSibling, row); renumber(); return;
+        }
+        if (button.classList.contains('hsb-hero-clear-device')) {
+          const field = button.closest('.hsb-hero-responsive-image');
+          if (!field) return;
+          field.querySelector('.hsb-hero-device-id').value = '';
+          const preview = field.querySelector('.hsb-hero-device-preview');
+          preview.removeAttribute('src');
+          preview.style.display = 'none';
+          return;
+        }
+        if (button.classList.contains('hsb-hero-pick-device') && window.wp && wp.media) {
+          const field = button.closest('.hsb-hero-responsive-image');
+          if (!field) return;
+          const frame = wp.media({title:'انتخاب تصویر ' + field.dataset.device,button:{text:'انتخاب تصویر'},library:{type:'image'},multiple:false});
+          frame.on('select', () => {
+            const item = frame.state().get('selection').first().toJSON();
+            field.querySelector('.hsb-hero-device-id').value = item.id;
+            const preview = field.querySelector('.hsb-hero-device-preview');
+            preview.src = item.sizes && item.sizes.medium ? item.sizes.medium.url : item.url;
+            preview.style.display = 'block';
+          });
+          frame.open();
+          return;
         }
         if (button.classList.contains('hsb-hero-pick-image') && window.wp && wp.media) {
           const frame = wp.media({title:'انتخاب تصویر اسلاید',button:{text:'انتخاب تصویر'},library:{type:'image'},multiple:false});

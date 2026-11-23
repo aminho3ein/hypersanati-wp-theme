@@ -92,8 +92,10 @@ $enamad_image_url = trim(
 );
 
 
-$terms_url = $footer_url($footer_settings['terms_url'] ?? '');
-$privacy_url = $footer_url($footer_settings['privacy_url'] ?? '');
+$terms_page_id = function_exists('wc_get_page_id') ? wc_get_page_id('terms') : 0;
+$terms_url = $terms_page_id > 0 ? get_permalink($terms_page_id) : $footer_url($footer_settings['terms_url'] ?? '');
+$privacy_page_id = (int) get_option('wp_page_for_privacy_policy');
+$privacy_url = $privacy_page_id > 0 ? get_permalink($privacy_page_id) : $footer_url($footer_settings['privacy_url'] ?? '');
 $developer_url = $footer_url($footer_settings['developer_url'] ?? '');
 
 $footer_links = array(
@@ -243,31 +245,27 @@ $footer_links = array(
               </div>
 
 
-              <?php if (
-                  '' !== $enamad_url &&
-                  '' !== $enamad_image_url
-              ) : ?>
-
-                <div class="site-footer__enamad">
-
-                  <a
-                    class="site-footer__enamad-link"
-                    referrerpolicy="origin"
-                    target="_blank"
-                    href="<?php echo esc_url($enamad_url); ?>"
-                  >
-                    <img
-                      referrerpolicy="origin"
-                      src="<?php echo esc_url($enamad_image_url); ?>"
-                      alt=""
-                      style="cursor:pointer"
-                      code="nxOA49f5DeMd9GQHPBS9lt1DAW1dxvGF"
-                    >
+              <div class="hsb-trust-badges" aria-label="نمادهای اعتبار فروشگاه">
+                <?php if ('' !== $enamad_url && '' !== $enamad_image_url) : ?>
+                  <a class="hsb-trust-badges__slot site-footer__enamad-link" href="<?php echo esc_url($enamad_url); ?>" target="_blank" rel="noopener noreferrer" referrerpolicy="origin" aria-label="بررسی اعتبار نماد اعتماد الکترونیکی">
+                    <img src="<?php echo esc_url($enamad_image_url); ?>" referrerpolicy="origin" alt="نماد اعتماد الکترونیکی" loading="lazy" decoding="async" onerror="this.style.display='none';this.parentNode.classList.add('hsb-enamad-image-failed');" />
                   </a>
-
-                </div>
-
-              <?php endif; ?>
+                <?php endif; ?>
+                <?php
+                  // Slot is intentionally inactive until the merchant provides the official badge.
+                  $zarinpal_badge_html = apply_filters('hsb_verified_zarinpal_badge_html', '');
+                  if (is_string($zarinpal_badge_html) && '' !== trim($zarinpal_badge_html)) :
+                ?>
+                  <div class="hsb-trust-badges__slot hsb-trust-badges__zarinpal">
+                    <?php echo wp_kses_post($zarinpal_badge_html); ?>
+                  </div>
+                <?php else : ?>
+                  <div class="hsb-trust-badges__slot hsb-trust-badges__zarinpal-pending" aria-label="زرین‌پال؛ در انتظار تأیید پذیرندگی">
+                    <span class="hsb-trust-badges__pending-name">زرین‌پال</span>
+                    <span class="hsb-trust-badges__pending-status">در انتظار تأیید</span>
+                  </div>
+                <?php endif; ?>
+              </div>
 
             </div>
 
