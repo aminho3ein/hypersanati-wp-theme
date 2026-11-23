@@ -6776,3 +6776,9 @@ $hsb_commerce_clarity_file = get_template_directory() . '/inc/hsb-commerce-clari
 if (is_readable($hsb_commerce_clarity_file)) {
     require_once $hsb_commerce_clarity_file;
 }
+
+// HSB LEGAL UI PRESENTATION V1
+$hsb_legal_ui_file = get_template_directory() . '/inc/hsb-legal-ui.php';
+if (is_readable($hsb_legal_ui_file)) {
+    require_once $hsb_legal_ui_file;
+}
