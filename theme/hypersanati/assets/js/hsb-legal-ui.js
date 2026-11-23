@@ -59,96 +59,114 @@
   else ready();
 })();
 
-/* HSB LEGAL TOC PINNED FALLBACK V4 - works even with overflow ancestors */
+/* HSB LEGAL SIDEBAR STICKY V5 — pins TOC and help together */
 (function () {
   'use strict';
   function boot() {
     var root = document.querySelector('.hsb-legal');
     if (!root) return;
+    var layout = root.querySelector('.hsb-legal__layout');
     var sidebar = root.querySelector('.hsb-legal__sidebar');
     var toc = sidebar && sidebar.querySelector('.hsb-legal__toc');
+    var help = sidebar && sidebar.querySelector('.hsb-legal__help');
     var article = root.querySelector('.hsb-legal__article');
-    if (!sidebar || !toc || !article || toc.dataset.hsbPinnedReady === '1') return;
-    toc.dataset.hsbPinnedReady = '1';
-    var anchor = document.createElement('div');
-    anchor.className = 'hsb-legal__toc-anchor';
-    anchor.setAttribute('aria-hidden', 'true');
-    sidebar.insertBefore(anchor, toc);
-    var pinned = false;
-    var pending = false;
+    if (!layout || !sidebar || !toc || !article || sidebar.dataset.hsbV5 === '1') return;
+    sidebar.dataset.hsbV5 = '1';
+    var placeholder = document.createElement('div');
+    placeholder.className = 'hsb-legal__sidebar-placeholder';
+    placeholder.setAttribute('aria-hidden', 'true');
+    layout.insertBefore(placeholder, sidebar);
     var desktop = window.matchMedia('(min-width: 951px)');
+    var pinned = false;
+    var ticking = false;
     var offset = 96;
-    var props = ['--legal-accent','--legal-accent-dark','--legal-ink','--legal-muted','--legal-surface','--legal-border'];
-
-    function restore() {
-      if (pinned) {
-        sidebar.insertBefore(toc, anchor.nextSibling);
-        pinned = false;
+    var cssVars = ['--legal-accent', '--legal-accent-dark', '--legal-ink', '--legal-muted', '--legal-surface', '--legal-border'];
+    function clearStyles(el, keys) {
+      keys.forEach(function (name) { el.style.removeProperty(name); });
+    }
+    function unpin() {
+      if (!pinned) return;
+      layout.insertBefore(sidebar, placeholder.nextSibling);
+      pinned = false;
+      placeholder.style.display = 'none';
+      clearStyles(sidebar, ['position','top','left','width','max-height','overflow','display','flex-direction','gap','z-index','direction','font-family','box-sizing','margin','align-self']);
+      cssVars.forEach(function (name) { sidebar.style.removeProperty(name); });
+      clearStyles(toc, ['position','top','max-height','overflow-y','flex','min-height']);
+      if (help) clearStyles(help, ['margin-top','flex-shrink']);
+    }
+    function pin() {
+      var original = sidebar.getBoundingClientRect();
+      var styles = window.getComputedStyle(root);
+      cssVars.forEach(function (name) {
+        var value = styles.getPropertyValue(name).trim();
+        if (value) sidebar.style.setProperty(name, value);
+      });
+      sidebar.style.fontFamily = styles.fontFamily;
+      sidebar.style.direction = 'rtl';
+      sidebar.style.boxSizing = 'border-box';
+      placeholder.style.display = 'block';
+      placeholder.style.minHeight = '1px';
+      document.body.appendChild(sidebar);
+      pinned = true;
+      sidebar.style.left = original.left + 'px';
+      sidebar.style.width = original.width + 'px';
+      sidebar.style.margin = '0';
+      sidebar.style.alignSelf = 'auto';
+      sidebar.style.position = 'fixed';
+      sidebar.style.zIndex = '40';
+      sidebar.style.display = 'flex';
+      sidebar.style.flexDirection = 'column';
+      sidebar.style.gap = '12px';
+      sidebar.style.overflow = 'visible';
+      toc.style.position = 'static';
+      toc.style.top = 'auto';
+      toc.style.flex = '0 1 auto';
+      toc.style.minHeight = '0';
+      toc.style.overflowY = 'auto';
+      if (help) {
+        help.style.marginTop = '0';
+        help.style.flexShrink = '0';
       }
-      toc.style.removeProperty('position');
-      toc.style.removeProperty('top');
-      toc.style.removeProperty('left');
-      toc.style.removeProperty('width');
-      toc.style.removeProperty('z-index');
-      toc.style.removeProperty('direction');
-      toc.style.removeProperty('font-family');
-      toc.style.removeProperty('box-sizing');
-      toc.style.removeProperty('max-height');
-      toc.style.removeProperty('overflow-y');
-      props.forEach(function (key) { toc.style.removeProperty(key); });
-      anchor.style.height = '0px';
-      anchor.style.display = 'none';
     }
     function update() {
-      pending = false;
-      if (!desktop.matches || !root.isConnected || !sidebar.isConnected) {
-        restore();
+      ticking = false;
+      if (!desktop.matches || !root.isConnected || !article.isConnected) {
+        unpin();
         return;
       }
-      var anchorTop = anchor.getBoundingClientRect().top;
-      if (anchorTop > offset) {
-        if (pinned) restore();
+      var trigger = (pinned ? placeholder : sidebar).getBoundingClientRect().top;
+      if (trigger > offset) {
+        unpin();
         return;
       }
-      if (!pinned) {
-        var rootStyles = window.getComputedStyle(root);
-        props.forEach(function (key) {
-          var value = rootStyles.getPropertyValue(key).trim();
-          if (value) toc.style.setProperty(key, value);
-        });
-        toc.style.fontFamily = rootStyles.fontFamily;
-        toc.style.direction = 'rtl';
-        toc.style.boxSizing = 'border-box';
-        var measuredHeight = toc.getBoundingClientRect().height;
-        anchor.style.height = measuredHeight + 'px';
-        anchor.style.display = 'block';
-        document.body.appendChild(toc);
-        pinned = true;
-      }
-      var sideRect = sidebar.getBoundingClientRect();
-      var viewportHeight = window.innerHeight;
-      var maxHeight = Math.max(150, viewportHeight - offset - 16);
-      var width = sideRect.width;
-      toc.style.position = 'fixed';
-      toc.style.left = sideRect.left + 'px';
-      toc.style.width = width + 'px';
-      toc.style.maxHeight = maxHeight + 'px';
-      toc.style.overflowY = 'auto';
-      toc.style.zIndex = '40';
-      var height = toc.getBoundingClientRect().height;
-      // Stop at the article/sidebar bottom; do not overlap the help banner or footer.
-      var stopBottom = Math.min(sideRect.bottom, article.getBoundingClientRect().bottom);
-      toc.style.top = Math.min(offset, stopBottom - height) + 'px';
+      if (!pinned) pin();
+      var rect = placeholder.getBoundingClientRect();
+      var available = Math.max(180, window.innerHeight - offset - 16);
+      var helpHeight = help ? help.getBoundingClientRect().height : 0;
+      var tocLimit = Math.max(100, available - helpHeight - (help ? 12 : 0));
+      sidebar.style.left = rect.left + 'px';
+      sidebar.style.width = rect.width + 'px';
+      sidebar.style.maxHeight = available + 'px';
+      toc.style.maxHeight = tocLimit + 'px';
+      var totalHeight = sidebar.getBoundingClientRect().height;
+      var stopBottom = article.getBoundingClientRect().bottom;
+      sidebar.style.top = Math.min(offset, stopBottom - totalHeight - 8) + 'px';
     }
     function schedule() {
-      if (!pending) {
-        pending = true;
+      if (!ticking) {
+        ticking = true;
         window.requestAnimationFrame(update);
       }
     }
-    window.addEventListener('scroll', schedule, {passive: true});
-    window.addEventListener('resize', schedule, {passive: true});
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
     window.addEventListener('pageshow', schedule);
+    if ('ResizeObserver' in window) {
+      var observer = new ResizeObserver(schedule);
+      observer.observe(article);
+      observer.observe(toc);
+      if (help) observer.observe(help);
+    }
     schedule();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

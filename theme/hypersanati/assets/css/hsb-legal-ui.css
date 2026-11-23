@@ -118,3 +118,49 @@
   .hsb-legal__sidebar { position: static; max-height: none; overflow: visible; }
   .hsb-legal__toc { position: static; max-height: none; overflow: visible; }
 }
+
+/* HSB LEGAL SIDEBAR COMPACT V5 — only legal pages, desktop + mobile */
+.hsb-legal .hsb-legal__toc { padding: 16px 12px; }
+.hsb-legal .hsb-legal__toc-head { font-size: 14px; padding-bottom: 10px; margin-bottom: 6px; }
+.hsb-legal .hsb-legal__toc-head strong { font-size: 14px; line-height: 1.65; }
+.hsb-legal .hsb-legal__toc-head span { font-size: 16px; }
+.hsb-legal .hsb-legal__toc li a,
+body > .hsb-legal__sidebar .hsb-legal__toc li a {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 6px 9px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.75;
+}
+.hsb-legal .hsb-legal__toc-child a,
+body > .hsb-legal__sidebar .hsb-legal__toc-child a { font-size: 11px; }
+.hsb-legal .hsb-legal__toc li[data-section] a::before,
+body > .hsb-legal__sidebar .hsb-legal__toc li[data-section] a::before {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0 3px;
+  border-radius: 5px;
+  font-size: 9px;
+  line-height: 18px;
+}
+/* The fixed sidebar is temporarily moved to <body>; keep the palette. */
+body > .hsb-legal__sidebar .hsb-legal__toc a { color: var(--legal-ink); }
+body > .hsb-legal__sidebar .hsb-legal__toc a.is-current,
+body > .hsb-legal__sidebar .hsb-legal__toc a:hover {
+  color: var(--legal-accent);
+  background: color-mix(in srgb, var(--legal-accent) 9%, white);
+  border-right-color: var(--legal-accent);
+}
+body > .hsb-legal__sidebar .hsb-legal__toc-child a { color: var(--legal-muted); }
+body > .hsb-legal__sidebar .hsb-legal__help { margin-top: 0; }
+@media (max-width: 950px) {
+  .hsb-legal .hsb-legal__sidebar { position: static; }
+  .hsb-legal .hsb-legal__toc { position: static; }
+}
+body > .hsb-legal__sidebar .hsb-legal__toc { padding: 16px 12px; }
+body > .hsb-legal__sidebar .hsb-legal__toc-head { font-size: 14px; padding-bottom: 10px; margin-bottom: 6px; }
+body > .hsb-legal__sidebar .hsb-legal__toc-head strong { font-size: 14px; }
+body > .hsb-legal__sidebar .hsb-legal__toc-head span { font-size: 16px; }
