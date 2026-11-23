@@ -4701,7 +4701,7 @@ html {
   padding: 8px 18px;
   border-radius: 50px;
   background: rgba(255,255,255,0.12);
-  color: #d8b77a;
+  color: var(--hsb-hero-eyebrow-text, #dbeafe);
   border: 1px solid rgba(255,255,255,0.18);
   font-size: 0.95rem;
   font-weight: 700;
@@ -4739,7 +4739,7 @@ html {
   min-height: 56px;
   padding: 0 34px;
   border-radius: 14px;
-  background: #9b753d;
+  background: var(--hsb-hero-button-bg, #1d619e);
   color: #fff;
   font-weight: 800;
   box-shadow:
@@ -5034,7 +5034,7 @@ html {
 }
 
 .hsb-home-hero__eyebrow {
-  color: #5f4528;
+  color: var(--hsb-hero-eyebrow-text, #dbeafe);
   font-size: 1.2rem;
   font-weight: 900;
 }
@@ -5945,9 +5945,9 @@ html {
   border-radius: 50%;
 
   background:
-    rgba(242, 189, 0, 0.14);
+    rgba(29, 97, 158, 0.10);
 
-  color: #8a6700;
+  color: var(--color-secondary, #123e69);
 
   font-size: 13px;
 
@@ -5962,7 +5962,7 @@ html {
 .hsb-search-help-trigger:hover,
 .hsb-search-help-trigger:focus-visible,
 .hsb-search-help-trigger.is-active {
-  background: #f6c900;
+  background: var(--color-primary, #1d619e);
   color: #151515;
 
   transform:
@@ -5996,14 +5996,14 @@ html {
 
   border:
     1px solid
-    #d6a900;
+    var(--color-primary, #1d619e);
 
   border-radius: 14px;
 
   background:
-    #ffd94a;
+    color-mix(in srgb, var(--color-primary, #1d619e) 12%, white);
 
-  color: #171717;
+  color: var(--color-secondary, #123e69);
 
   box-shadow:
     0 12px 32px
@@ -6028,13 +6028,13 @@ html {
   width: 15px;
   height: 15px;
 
-  background: #ffd94a;
+  background: color-mix(in srgb, var(--color-primary, #1d619e) 12%, white);
 
   border-top:
-    1px solid #d6a900;
+    1px solid var(--color-primary, #1d619e);
 
   border-left:
-    1px solid #d6a900;
+    1px solid var(--color-primary, #1d619e);
 
   transform:
     translateX(-50%)
@@ -6049,10 +6049,10 @@ html {
   border-left: 0;
 
   border-right:
-    1px solid #d6a900;
+    1px solid var(--color-primary, #1d619e);
 
   border-bottom:
-    1px solid #d6a900;
+    1px solid var(--color-primary, #1d619e);
 }
 
 

@@ -548,7 +548,7 @@
     flex-direction: column;
     min-width: 0;
     overflow: hidden;
-    border: 1px solid #e7e5e1;
+    border: 1px solid color-mix(in srgb, var(--color-primary, #1d619e) 20%, white);
     border-radius: 18px;
     background: #fff;
     box-shadow: 0 5px 22px rgba(32, 39, 42, 0.055);
@@ -560,7 +560,7 @@
 
 .article-category-main .article-category-item:hover {
     transform: translateY(-4px);
-    border-color: #cbb89c;
+    border-color: color-mix(in srgb, var(--color-primary, #1d619e) 40%, white);
     box-shadow: 0 14px 34px rgba(32, 39, 42, 0.11);
 }
 
@@ -621,7 +621,7 @@
     gap: 10px;
     align-items: center;
     justify-content: center;
-    color: #9a8a74;
+    color: var(--color-secondary, #123e69);
     font-size: 13px;
 }
 
@@ -643,7 +643,7 @@
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    color: #876b47;
+    color: var(--color-secondary, #123e69);
     font-size: 12px;
     font-weight: 600;
 }
@@ -682,7 +682,7 @@
     gap: 10px 14px;
     margin-top: auto;
     padding-top: 14px;
-    border-top: 1px solid #eeece9;
+    border-top: 1px solid color-mix(in srgb, var(--color-primary, #1d619e) 20%, white);
     color: #777b7e;
     font-size: 11.5px;
     line-height: 1.8;
@@ -697,14 +697,14 @@
 }
 
 .article-category-main .hsb-mag-card__footer i {
-    color: #9a7a52;
+    color: var(--color-primary, #1d619e);
 }
 
 .article-category-main .hsb-mag-card__more {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: #806139;
+    color: var(--color-primary, #1d619e);
     font-size: 13px;
     font-weight: 700;
 }
@@ -751,7 +751,7 @@
 
 body.page .article-category-hero {
     padding: 28px 0 30px;
-    background: #faf9f7;
+    background: color-mix(in srgb, var(--color-primary, #1d619e) 7%, white);
     overflow: visible;
 }
 
@@ -763,7 +763,7 @@ body.page .article-category-hero__inner {
     gap: 32px;
     padding: 28px 34px;
     min-height: 0;
-    border: 1px solid #e7e2da;
+    border: 1px solid color-mix(in srgb, var(--color-primary, #1d619e) 20%, white);
     border-radius: 18px;
     background: #fff;
     box-shadow: 0 8px 30px rgba(46, 39, 32, .055);
@@ -786,10 +786,10 @@ body.page .article-category-hero__label {
     max-width: 100%;
     margin: 0 0 13px;
     padding: 6px 12px;
-    border: 1px solid #eadfcf;
+    border: 1px solid color-mix(in srgb, var(--color-primary, #1d619e) 20%, white);
     border-radius: 30px;
-    background: #f7f0e6;
-    color: #806139;
+    background: color-mix(in srgb, var(--color-primary, #1d619e) 7%, white);
+    color: var(--color-primary, #1d619e);
     font-size: 12px;
     font-weight: 700;
     line-height: 1.7;
@@ -844,9 +844,9 @@ body.page .article-category-hero__media {
     aspect-ratio: 4 / 3;
     margin: 0;
     padding: 8px;
-    border: 1px solid #ece9e3;
+    border: 1px solid color-mix(in srgb, var(--color-primary, #1d619e) 20%, white);
     border-radius: 15px;
-    background: #f7f7f5;
+    background: color-mix(in srgb, var(--color-primary, #1d619e) 4%, white);
     overflow: hidden;
 }
 
