@@ -58,3 +58,99 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready);
   else ready();
 })();
+
+/* HSB LEGAL TOC PINNED FALLBACK V4 - works even with overflow ancestors */
+(function () {
+  'use strict';
+  function boot() {
+    var root = document.querySelector('.hsb-legal');
+    if (!root) return;
+    var sidebar = root.querySelector('.hsb-legal__sidebar');
+    var toc = sidebar && sidebar.querySelector('.hsb-legal__toc');
+    var article = root.querySelector('.hsb-legal__article');
+    if (!sidebar || !toc || !article || toc.dataset.hsbPinnedReady === '1') return;
+    toc.dataset.hsbPinnedReady = '1';
+    var anchor = document.createElement('div');
+    anchor.className = 'hsb-legal__toc-anchor';
+    anchor.setAttribute('aria-hidden', 'true');
+    sidebar.insertBefore(anchor, toc);
+    var pinned = false;
+    var pending = false;
+    var desktop = window.matchMedia('(min-width: 951px)');
+    var offset = 96;
+    var props = ['--legal-accent','--legal-accent-dark','--legal-ink','--legal-muted','--legal-surface','--legal-border'];
+
+    function restore() {
+      if (pinned) {
+        sidebar.insertBefore(toc, anchor.nextSibling);
+        pinned = false;
+      }
+      toc.style.removeProperty('position');
+      toc.style.removeProperty('top');
+      toc.style.removeProperty('left');
+      toc.style.removeProperty('width');
+      toc.style.removeProperty('z-index');
+      toc.style.removeProperty('direction');
+      toc.style.removeProperty('font-family');
+      toc.style.removeProperty('box-sizing');
+      toc.style.removeProperty('max-height');
+      toc.style.removeProperty('overflow-y');
+      props.forEach(function (key) { toc.style.removeProperty(key); });
+      anchor.style.height = '0px';
+      anchor.style.display = 'none';
+    }
+    function update() {
+      pending = false;
+      if (!desktop.matches || !root.isConnected || !sidebar.isConnected) {
+        restore();
+        return;
+      }
+      var anchorTop = anchor.getBoundingClientRect().top;
+      if (anchorTop > offset) {
+        if (pinned) restore();
+        return;
+      }
+      if (!pinned) {
+        var rootStyles = window.getComputedStyle(root);
+        props.forEach(function (key) {
+          var value = rootStyles.getPropertyValue(key).trim();
+          if (value) toc.style.setProperty(key, value);
+        });
+        toc.style.fontFamily = rootStyles.fontFamily;
+        toc.style.direction = 'rtl';
+        toc.style.boxSizing = 'border-box';
+        var measuredHeight = toc.getBoundingClientRect().height;
+        anchor.style.height = measuredHeight + 'px';
+        anchor.style.display = 'block';
+        document.body.appendChild(toc);
+        pinned = true;
+      }
+      var sideRect = sidebar.getBoundingClientRect();
+      var viewportHeight = window.innerHeight;
+      var maxHeight = Math.max(150, viewportHeight - offset - 16);
+      var width = sideRect.width;
+      toc.style.position = 'fixed';
+      toc.style.left = sideRect.left + 'px';
+      toc.style.width = width + 'px';
+      toc.style.maxHeight = maxHeight + 'px';
+      toc.style.overflowY = 'auto';
+      toc.style.zIndex = '40';
+      var height = toc.getBoundingClientRect().height;
+      // Stop at the article/sidebar bottom; do not overlap the help banner or footer.
+      var stopBottom = Math.min(sideRect.bottom, article.getBoundingClientRect().bottom);
+      toc.style.top = Math.min(offset, stopBottom - height) + 'px';
+    }
+    function schedule() {
+      if (!pending) {
+        pending = true;
+        window.requestAnimationFrame(update);
+      }
+    }
+    window.addEventListener('scroll', schedule, {passive: true});
+    window.addEventListener('resize', schedule, {passive: true});
+    window.addEventListener('pageshow', schedule);
+    schedule();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
