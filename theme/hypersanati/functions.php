@@ -6782,3 +6782,6 @@ $hsb_legal_ui_file = get_template_directory() . '/inc/hsb-legal-ui.php';
 if (is_readable($hsb_legal_ui_file)) {
     require_once $hsb_legal_ui_file;
 }
+
+/* HSB APPROVED PREINVOICE PAYMENT STOCK EXCEPTION V1 */
+require_once get_template_directory() . '/inc/hsb-preinvoice-payment-stock.php';
