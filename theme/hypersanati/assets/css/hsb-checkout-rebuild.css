@@ -1,0 +1,116 @@
+/* HSB Checkout Rebuild 1.0 — independent layout, theme palette only.
+   Intentionally scoped so no other theme pages are affected. */
+body.woocommerce-checkout .hsb-co {
+  --co-ink: #252525;
+  --co-muted: #687078;
+  --co-line: #e1e5e8;
+  --co-primary: var(--color-primary, #9f8561);
+  --co-deep: var(--color-secondary, #5e4420);
+  --co-soft: #f8f7f4;
+  color: var(--co-ink);
+  width: min(1140px, calc(100% - 36px));
+  margin: 30px auto 76px;
+  direction: rtl;
+  text-align: right;
+  font-size: 14px;
+  line-height: 1.65;
+}
+body.woocommerce-checkout .hsb-co *, body.woocommerce-checkout .hsb-co *::before, body.woocommerce-checkout .hsb-co *::after { box-sizing: border-box; }
+body.woocommerce-checkout .hsb-co h1,body.woocommerce-checkout .hsb-co h2,body.woocommerce-checkout .hsb-co h3,
+body.woocommerce-checkout .hsb-co p { margin: 0; padding: 0; }
+body.woocommerce-checkout .hsb-co__mast { margin: 0 0 20px; padding: 0 0 16px; border-bottom: 1px solid var(--co-line); }
+body.woocommerce-checkout .hsb-co__crumb { display:flex; align-items:center; gap:7px; color:var(--co-muted); font-size:12px; margin-bottom:8px; }
+body.woocommerce-checkout .hsb-co__crumb a { color:var(--co-deep); text-decoration:none; }
+body.woocommerce-checkout .hsb-co__mast h1 { font-size:clamp(21px,2vw,26px); font-weight:800; line-height:1.4; color:var(--co-ink); margin-bottom:5px; }
+body.woocommerce-checkout .hsb-co__mast > p { font-size:13px; line-height:1.9; max-width:790px; color:var(--co-muted); }
+body.woocommerce-checkout .hsb-co__grid { display:grid; grid-template-columns:minmax(0,1fr) 320px; grid-template-areas:'main aside'; gap:18px; align-items:start; }
+body.woocommerce-checkout .hsb-co__main { grid-area:main; min-width:0; display:grid; gap:15px; }
+body.woocommerce-checkout .hsb-co__aside { grid-area:aside; min-width:0; }
+body.woocommerce-checkout .hsb-co__panel, body.woocommerce-checkout .hsb-co__summary { background:#fff; border:1px solid var(--co-line); border-radius:14px; box-shadow:0 3px 16px rgba(18,24,35,.035); }
+body.woocommerce-checkout .hsb-co__panel { padding:20px 22px; }
+body.woocommerce-checkout .hsb-co__panel-head { display:flex; align-items:flex-start; gap:10px; padding-bottom:14px; margin-bottom:17px; border-bottom:1px solid var(--co-line); }
+body.woocommerce-checkout .hsb-co__num { flex:0 0 24px; height:24px; display:grid;place-items:center; background:var(--co-primary);color:#fff; border-radius:7px; font-size:12px;font-weight:700; }
+body.woocommerce-checkout .hsb-co__panel-head h2 { font-size:16px!important; font-weight:800!important;line-height:1.45!important;color:var(--co-ink)!important; }
+body.woocommerce-checkout .hsb-co__panel-head p { margin-top:3px; font-size:12px;line-height:1.7;color:var(--co-muted); }
+body.woocommerce-checkout .hsb-co__fields { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px 16px; }
+body.woocommerce-checkout .hsb-co__field { min-width:0;display:flex;flex-direction:column;gap:6px; }
+body.woocommerce-checkout .hsb-co__field--full { grid-column:1/-1; }
+body.woocommerce-checkout .hsb-co__field label,body.woocommerce-checkout .hsb-co__label { margin:0;color:#3b4146;font-size:12.5px!important; font-weight:650!important; line-height:1.5; }
+body.woocommerce-checkout .hsb-co__required { color:#a74d35; }
+body.woocommerce-checkout .hsb-co__field input:not([type=radio]),body.woocommerce-checkout .hsb-co__coupon-row input {
+  width:100%!important; max-width:100%!important;height:43px!important;min-height:43px!important;
+  margin:0!important; padding:9px 12px!important; border:1px solid #d3d8db!important;
+  background:#fff!important; border-radius:9px!important; color:var(--co-ink)!important;
+  font-size:13px!important; font-weight:400!important;line-height:1.5!important;
+  outline:0; box-shadow:none!important;
+}
+body.woocommerce-checkout .hsb-co input:focus-visible { outline:2px solid var(--co-primary)!important;outline-offset:1px; }
+body.woocommerce-checkout .hsb-co__radio-line { display:flex;gap:20px;align-items:center;padding-top:3px; }
+body.woocommerce-checkout .hsb-co__radio-line label { display:inline-flex;gap:7px;align-items:center;font-size:13px!important;font-weight:400!important;cursor:pointer; }
+body.woocommerce-checkout .hsb-co input[type=radio],body.woocommerce-checkout .hsb-co input[type=checkbox] { accent-color:var(--co-deep); width:16px; height:16px;flex-shrink:0; }
+body.woocommerce-checkout .hsb-co__error { font-size:12px;color:#b42318; }
+body.woocommerce-checkout .hsb-co__summary { position:sticky;top:24px; padding:18px; }
+body.woocommerce-checkout .hsb-co__summary-head {display:flex;justify-content:space-between;align-items:center;padding-bottom:13px;border-bottom:1px solid var(--co-line);gap:12px;}
+body.woocommerce-checkout .hsb-co__summary-head h2 { font-size:16px!important;line-height:1.5!important;font-weight:800!important; }
+body.woocommerce-checkout .hsb-co__summary-head span {color:var(--co-muted);font-size:12px;background:var(--co-soft);padding:3px 8px;border-radius:7px;}
+body.woocommerce-checkout .hsb-co__items {padding:8px 0 2px;}
+body.woocommerce-checkout .hsb-co__item {display:flex;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid #edf0f1;min-width:0;}
+body.woocommerce-checkout .hsb-co__thumb {flex:0 0 56px;width:56px;height:56px;border:1px solid var(--co-line);border-radius:9px;display:grid;place-items:center;overflow:hidden;}
+body.woocommerce-checkout .hsb-co__thumb img {display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;}
+body.woocommerce-checkout .hsb-co__item-content {min-width:0;flex:1;}
+body.woocommerce-checkout .hsb-co__item-content p {font-size:12.5px;line-height:1.7;font-weight:600;overflow-wrap:anywhere;}
+body.woocommerce-checkout .hsb-co__item-content small {font-size:11.5px;color:var(--co-muted);}
+body.woocommerce-checkout .hsb-co__summary-note {font-size:11.5px;color:var(--co-muted);padding:13px 0;line-height:1.9;}
+body.woocommerce-checkout .hsb-co__trust {color:var(--co-deep);background:var(--co-soft);border-radius:9px;padding:11px;font-size:11.5px;line-height:1.9;display:flex;gap:7px;}
+body.woocommerce-checkout .hsb-co__trust span {font-weight:800;}
+body.woocommerce-checkout .hsb-co__legal {display:flex;gap:6px 14px;flex-wrap:wrap;margin-top:13px;}
+body.woocommerce-checkout .hsb-co__legal a {font-size:11.5px;text-decoration:underline;color:var(--co-deep);}
+body.woocommerce-checkout .hsb-co__coupon {border:1px solid var(--co-line);border-radius:10px;margin-bottom:16px;background:#fff;max-width:450px;}
+body.woocommerce-checkout .hsb-co__coupon summary {cursor:pointer; list-style:none;display:flex;align-items:center;flex-wrap:wrap;gap:7px;padding:11px 14px;font-size:12.5px;font-weight:700;}
+body.woocommerce-checkout .hsb-co__coupon summary::-webkit-details-marker {display:none;}
+body.woocommerce-checkout .hsb-co__coupon summary::before {content:'+';color:var(--co-primary);font-size:19px;line-height:1;}
+body.woocommerce-checkout .hsb-co__coupon[open] summary::before {content:'−';}
+body.woocommerce-checkout .hsb-co__coupon summary span {font-weight:400;font-size:11.5px;color:var(--co-muted);}
+body.woocommerce-checkout .hsb-co__coupon-form {padding:12px 14px 15px;border-top:1px solid var(--co-line);}
+body.woocommerce-checkout .hsb-co__coupon-form label {display:block;margin:0 0 7px;font-size:12px;font-weight:600;}
+body.woocommerce-checkout .hsb-co__coupon-row {display:flex;gap:8px;}
+body.woocommerce-checkout .hsb-co__coupon-row button {white-space:nowrap;min-height:43px;border:0;border-radius:8px;background:var(--co-deep);color:#fff;padding:0 15px;font-size:12.5px;font-weight:700;cursor:pointer;}
+/* WooCommerce order review + payment: force readable, full-width choices rather than inherited oversized cards. */
+body.woocommerce-checkout .hsb-co__payment-review,body.woocommerce-checkout .hsb-co__payment-review #payment {min-width:0;width:100%;}
+body.woocommerce-checkout .hsb-co__payment-review .woocommerce-checkout-review-order-table {width:100%;border-collapse:collapse;margin:0 0 16px!important;font-size:12.5px!important;table-layout:auto;}
+body.woocommerce-checkout .hsb-co__payment-review .woocommerce-checkout-review-order-table th,
+body.woocommerce-checkout .hsb-co__payment-review .woocommerce-checkout-review-order-table td {padding:9px 7px!important;font-size:12.5px!important;line-height:1.7!important;vertical-align:middle;}
+body.woocommerce-checkout .hsb-co__payment-review .woocommerce-checkout-review-order-table .order-total th,
+body.woocommerce-checkout .hsb-co__payment-review .woocommerce-checkout-review-order-table .order-total td {font-weight:800!important;color:var(--co-deep);font-size:14px!important;}
+body.woocommerce-checkout .hsb-co__payment-review #payment {background:transparent!important;border:0!important;padding:0!important;box-shadow:none!important;}
+body.woocommerce-checkout .hsb-co__payment-review #payment ul.payment_methods {display:flex!important;flex-direction:column!important;gap:9px!important; margin:0!important;padding:0!important;border:0!important;list-style:none!important;width:100%!important;}
+body.woocommerce-checkout .hsb-co__payment-review #payment ul.payment_methods > li,
+body.woocommerce-checkout .hsb-co__payment-review #payment ul.wc_payment_methods > li,
+body.woocommerce-checkout .hsb-co__payment-review .wc_payment_method {width:100%!important;max-width:none!important;min-width:0!important;min-height:0!important;flex:0 0 auto!important;display:block!important;float:none!important;position:relative!important;margin:0!important;padding:12px 13px!important;background:#fff!important;border:1px solid var(--co-line)!important;border-radius:10px!important;box-shadow:none!important;}
+body.woocommerce-checkout .hsb-co__payment-review #payment .wc_payment_method:has(input.input-radio:checked) {border-color:var(--co-primary)!important;background:var(--co-soft)!important;}
+body.woocommerce-checkout .hsb-co__payment-review #payment .wc_payment_method > input.input-radio {display:inline-block!important;position:static!important;width:16px!important;height:16px!important;vertical-align:middle!important;margin:0 0 0 9px!important;}
+body.woocommerce-checkout .hsb-co__payment-review #payment .wc_payment_method > label {display:inline!important;font-size:13px!important;line-height:1.6!important;font-weight:700!important;letter-spacing:0!important;padding:0!important;margin:0!important;white-space:normal!important;overflow-wrap:anywhere;}
+body.woocommerce-checkout .hsb-co__payment-review #payment .wc_payment_method > label img {display:inline-block;vertical-align:middle;width:auto;max-width:80px;max-height:24px;margin:0 7px;}
+body.woocommerce-checkout .hsb-co__payment-review #payment .payment_box {width:auto!important;max-width:none!important;min-height:0!important;height:auto!important; margin:10px 0 0!important;padding:10px 12px!important;background:#f5f5f5!important;border-radius:8px!important;box-shadow:none!important;color:#555!important;}
+body.woocommerce-checkout .hsb-co__payment-review #payment .payment_box::before {display:none!important;}
+body.woocommerce-checkout .hsb-co__payment-review #payment .payment_box p,
+body.woocommerce-checkout .hsb-co__payment-review #payment .payment_box div,
+body.woocommerce-checkout .hsb-co__payment-review #payment .payment_box label {font-size:12px!important;line-height:1.8!important;font-weight:400!important;white-space:normal!important;overflow-wrap:anywhere;}
+body.woocommerce-checkout .hsb-co__payment-review #payment .form-row.place-order {width:100%!important;display:block!important;float:none!important;margin:16px 0 0!important;padding:14px 0 0!important;border-top:1px solid var(--co-line);}
+body.woocommerce-checkout .hsb-co__payment-review #payment .woocommerce-privacy-policy-text,
+body.woocommerce-checkout .hsb-co__payment-review #payment .woocommerce-terms-and-conditions-wrapper {font-size:12px!important;line-height:1.9!important;color:var(--co-muted);margin-bottom:12px;}
+body.woocommerce-checkout .hsb-co__payment-review #payment .woocommerce-terms-and-conditions-checkbox-text {font-size:12px!important;line-height:1.8!important;font-weight:400!important;}
+body.woocommerce-checkout .hsb-co__payment-review #payment #place_order {display:block!important;float:none!important;width:100%!important;min-height:46px!important;height:auto!important;max-width:none!important;padding:11px 16px!important;background:var(--co-primary)!important;color:#fff!important;border-radius:9px!important;border:0!important;font-size:14px!important;line-height:1.5!important;font-weight:750!important;box-shadow:none!important;cursor:pointer;}
+body.woocommerce-checkout .hsb-co__quote-note {font-size:12px;background:var(--co-soft);border-right:3px solid var(--co-primary);padding:9px 12px;border-radius:6px;margin:0 0 13px;line-height:1.9;}
+body.woocommerce-checkout .hsb-co .woocommerce-error,body.woocommerce-checkout .hsb-co .woocommerce-info {font-size:12.5px!important;line-height:1.8!important;}
+@media(max-width:900px) {body.woocommerce-checkout .hsb-co__grid {grid-template-columns:minmax(0,1fr);grid-template-areas:'main' 'aside';}body.woocommerce-checkout .hsb-co__summary{position:static;} }
+@media(max-width:600px) {body.woocommerce-checkout .hsb-co{width:calc(100% - 24px);margin:18px auto 40px;}body.woocommerce-checkout .hsb-co__panel{padding:17px 14px;}body.woocommerce-checkout .hsb-co__fields{grid-template-columns:minmax(0,1fr);gap:12px;}body.woocommerce-checkout .hsb-co__field--full{grid-column:auto;}body.woocommerce-checkout .hsb-co__field input:not([type=radio]),body.woocommerce-checkout .hsb-co__coupon-row input{font-size:16px!important;}body.woocommerce-checkout .hsb-co__coupon summary span{display:none;}}
+/* Isolate legacy form layout rules without changing WooCommerce semantics. */
+body.woocommerce-checkout .hsb-co form.checkout.woocommerce-checkout {display:block!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;}
+body.woocommerce-checkout .hsb-co .hsb-co__grid {display:grid!important;}
+body.woocommerce-checkout .hsb-co .hsb-co__main {display:grid!important;}
+body.woocommerce-checkout .hsb-co .hsb-co__aside {display:block!important;}
+body.woocommerce-checkout .hsb-co .hsb-co__panel {width:auto!important;max-width:none!important;min-height:0!important;height:auto!important;float:none!important;}
+body.woocommerce-checkout .hsb-co #order_review {float:none!important; width:100%!important; max-width:100%!important;margin:0!important;padding:0!important;}
+body.woocommerce-checkout .hsb-co details.hsb-co__coupon[open] > form.checkout_coupon.woocommerce-form-coupon {display:block!important;visibility:visible!important;opacity:1!important;}
+body.woocommerce-checkout .hsb-co details.hsb-co__coupon:not([open]) > form.checkout_coupon.woocommerce-form-coupon {display:none!important;}

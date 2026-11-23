@@ -56,3 +56,11 @@ add_action('wp_enqueue_scripts', function () {
     if (!is_readable($file)) return;
     wp_enqueue_style('hsb-checkout-refine', get_template_directory_uri() . '/assets/css/hsb-checkout-refine.css', array('hsb-commerce-clarity'), filemtime($file));
 }, 120);
+
+// HSB checkout rebuild — enqueue isolated stylesheet
+add_action('wp_enqueue_scripts', function () {
+    if (!function_exists('is_checkout') || !is_checkout() || (function_exists('is_order_received_page') && is_order_received_page())) return;
+    $path = get_template_directory() . '/assets/css/hsb-checkout-rebuild.css';
+    if (!is_readable($path)) return;
+    wp_enqueue_style('hsb-checkout-rebuild', get_template_directory_uri() . '/assets/css/hsb-checkout-rebuild.css', array(), filemtime($path));
+}, 999);
