@@ -259,6 +259,11 @@ $footer_links = array(
                   <div class="hsb-trust-badges__slot hsb-trust-badges__zarinpal">
                     <?php echo wp_kses_post($zarinpal_badge_html); ?>
                   </div>
+                <?php else : ?>
+                  <div class="hsb-trust-badges__slot hsb-trust-badges__zarinpal-pending" aria-label="زرین‌پال؛ در انتظار تأیید پذیرندگی">
+                    <span class="hsb-trust-badges__pending-name">زرین‌پال</span>
+                    <span class="hsb-trust-badges__pending-status">در انتظار تأیید</span>
+                  </div>
                 <?php endif; ?>
               </div>
 

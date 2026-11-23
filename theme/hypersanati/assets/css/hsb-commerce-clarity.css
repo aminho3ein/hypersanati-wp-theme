@@ -16,3 +16,8 @@
 .hsb-checkout-intro h1 {font-size:clamp(1.35rem,2vw,1.75rem);line-height:1.6;margin:0 0 8px;}
 .hsb-checkout-intro p {line-height:1.95;margin:0;}
 @media(max-width:700px){.hsb-commerce-guide__grid{grid-template-columns:1fr}.hsb-commerce-guide{margin-block:18px 30px;padding:16px}.hsb-trust-badges{justify-content:center}}
+
+/* Pending Zarinpal is NOT an official verification badge. */
+.hsb-trust-badges__zarinpal-pending{flex-direction:column;gap:9px;text-align:center;border:1px dashed var(--hsb-border,#cbdcef);background:var(--hsb-surface,#f7faff)!important;color:var(--hsb-primary,#1d619e);}
+.hsb-trust-badges__pending-name{font-size:15px;font-weight:800;line-height:1.5;}
+.hsb-trust-badges__pending-status{font-size:10px;font-weight:600;line-height:1.7;color:var(--hsb-muted,#526b82);}
