@@ -44,10 +44,14 @@ $base_country = WC()->countries ? WC()->countries->get_base_country() : 'IR';
 
 <div class="container">
 
+    <section class="hsb-checkout-intro" aria-label="راهنمای ثبت سفارش">
+        <h1>تکمیل اطلاعات سفارش</h1>
+        <p>در این مرحله اطلاعات تماس و نشانی خود را بررسی کنید. برای کالاهای دارای قیمت، پرداخت پس از تأیید اطلاعات و انتخاب درگاه فعال انجام می‌شود. درخواست پیش‌فاکتور به‌تنهایی به معنای خرید یا پرداخت نیست.</p>
+    </section>
     <section class="checkout-order-reference">
         <div class="checkout-order-reference__inner">
             <p class="checkout-order-reference__text">
-                شماره سفارش :
+                شناسه موقت سبد خرید :
                 <span class="checkout-order-reference__code"><?php echo esc_html($order_reference); ?></span>
             </p>
         </div>
