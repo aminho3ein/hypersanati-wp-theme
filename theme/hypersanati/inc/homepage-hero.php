@@ -27,18 +27,44 @@ function hsb_get_homepage_hero_defaults() {
         'light_fx'      => '1',
         'hero_colors'   => array(),
         'font_sizes'    => array(),
+        'font_sizes_unit' => 'px',
     );
 }
 
 
-/** Four user-facing Hero text elements, each adjustable by device. */
+/** Four user-facing Hero text elements, editable in points on each device. */
 function hsb_home_hero_font_fields() {
+    // Reference sizes are based on the actual v1.3.2 CSS at viewport widths
+    // 1440px / 800px / 390px, assuming the standard 16px root font.
+    // Older fluid clamp() values do not have a single universal size.
     return array(
-        'eyebrow' => array('label' => 'عنوان کوچک', 'min' => 10, 'max' => 42, 'selector' => '.hsb-home-hero__eyebrow'),
-        'title' => array('label' => 'تیتر اصلی اسلاید', 'min' => 18, 'max' => 100, 'selector' => '.hsb-home-hero__title'),
-        'description' => array('label' => 'توضیحات', 'min' => 12, 'max' => 36, 'selector' => '.hsb-home-hero__description'),
-        'button' => array('label' => 'متن دکمه شروع جست‌وجو', 'min' => 11, 'max' => 36, 'selector' => '.hsb-home-hero__button'),
+        'eyebrow' => array('label' => 'عنوان کوچک', 'min' => 7, 'max' => 40,
+            'defaults' => array('desktop' => 14.4, 'tablet' => 14.4, 'mobile' => 14.4),
+            'selector' => '.hsb-home-hero__eyebrow'),
+        'title' => array('label' => 'تیتر اصلی اسلاید', 'min' => 12, 'max' => 80,
+            'defaults' => array('desktop' => 37.8, 'tablet' => 30, 'mobile' => 18),
+            'selector' => '.hsb-home-hero__title'),
+        'description' => array('label' => 'توضیحات', 'min' => 7, 'max' => 32,
+            'defaults' => array('desktop' => 9.6, 'tablet' => 9.7, 'mobile' => 9),
+            'selector' => '.hsb-home-hero__description'),
+        'button' => array('label' => 'متن دکمه شروع جست‌وجو', 'min' => 7, 'max' => 30,
+            'defaults' => array('desktop' => 11.5, 'tablet' => 11.5, 'mobile' => 11.5),
+            'selector' => '.hsb-home-hero__button'),
     );
+}
+
+/** Convert legacy px settings to pt; 1pt = 4/3 CSS px at standard resolution. */
+function hsb_home_hero_resolved_font_pt($options, $element, $device, $config) {
+    $stored = isset($options['font_sizes'][$element][$device])
+        ? $options['font_sizes'][$element][$device] : null;
+    if (!is_numeric($stored) || (float) $stored <= 0) {
+        return (float) $config['defaults'][$device];
+    }
+    $value = (float) $stored;
+    if (empty($options['font_sizes_unit']) || $options['font_sizes_unit'] !== 'pt') {
+        $value *= 0.75;
+    }
+    return min($config['max'], max($config['min'], round($value, 1)));
 }
 
 
@@ -244,7 +270,8 @@ $output['eyebrow'] =
             ? sanitize_hex_color(wp_unslash($incoming_colors[$key])) : '';
         $output['hero_colors'][$key] = $value ?: $default_color;
     }
-    // Empty fields mean automatic/default CSS size; preserve existing appearance.
+    // Store user-facing font sizes in pt; preserve converted legacy px values.
+    $output['font_sizes_unit'] = 'pt';
     $output['font_sizes'] = array();
     $incoming_font_sizes = isset($input['font_sizes']) && is_array($input['font_sizes'])
         ? $input['font_sizes'] : array();
@@ -253,12 +280,18 @@ $output['eyebrow'] =
         foreach (array('desktop', 'tablet', 'mobile') as $device) {
             $raw = isset($incoming_font_sizes[$element][$device]) && is_scalar($incoming_font_sizes[$element][$device])
                 ? trim((string) wp_unslash($incoming_font_sizes[$element][$device])) : '';
-            if ($raw === '') { continue; }
-            // Only whole positive px values, with a safe range per text element.
-            if (!preg_match('/^[0-9]{1,3}$/D', $raw)) { continue; }
-            $size = (int) $raw;
-            if ($size < $config['min'] || $size > $config['max']) { continue; }
-            $output['font_sizes'][$element][$device] = $size;
+            // Blank fields revert to the visible baseline size in pt.
+            if ($raw === '') {
+                $value = (float) $config['defaults'][$device];
+            } else {
+                $raw = str_replace(',', '.', $raw);
+                if (!preg_match('/^[0-9]{1,2}(?:\.[0-9])?$/D', $raw)) {
+                    $value = (float) $config['defaults'][$device];
+                } else {
+                    $value = min($config['max'], max($config['min'], (float) $raw));
+                }
+            }
+            $output['font_sizes'][$element][$device] = round($value, 1);
         }
     }
 
@@ -1051,21 +1084,16 @@ function hsb_render_homepage_hero_section() {
             home_url($logo_target);
     }
 
-    // Scope font overrides to the homepage hero, without changing default CSS
-    // or the responsive typography when no number has been configured.
+    // Explicit point sizes (including initial baseline) eliminate blank/automatic
+    // controls and give the editor predictable, independently adjustable values.
     $font_rules = array();
-    $stored_font_sizes = isset($options['font_sizes']) && is_array($options['font_sizes'])
-        ? $options['font_sizes'] : array();
     foreach (array('desktop', 'tablet', 'mobile') as $device) {
         $rules = array();
         foreach (hsb_home_hero_font_fields() as $element => $config) {
-            $value = isset($stored_font_sizes[$element][$device]) ? absint($stored_font_sizes[$element][$device]) : 0;
-            if ($value >= $config['min'] && $value <= $config['max']) {
-                $rules[] = '.hsb-home-hero.hsb-home-hero ' . $config['selector']
-                    . '{font-size:' . $value . 'px !important;}';
-            }
+            $value = hsb_home_hero_resolved_font_pt($options, $element, $device, $config);
+            $rules[] = '.hsb-home-hero.hsb-home-hero ' . $config['selector']
+                . '{font-size:' . esc_attr(number_format($value, 1, '.', '')) . 'pt !important;}';
         }
-        if (!$rules) { continue; }
         $css = implode('', $rules);
         if ($device === 'desktop') {
             $font_rules[] = '@media (min-width:1025px){' . $css . '}';
@@ -1351,31 +1379,29 @@ function hsb_home_hero_render_slider_settings($options) {
                     style="width:84px;direction:ltr"> ٪</label></p>
         <?php endforeach; ?>
     </td></tr>
-    <tr><th scope="row">اندازه فونت نوشته‌های هیرو</th><td>
-        <p class="description">اندازه‌های دلخواه بر حسب پیکسل (px) برای چهار متن اصلی. اگر فیلدی خالی باشد، اندازه فعلی قالب به‌صورت خودکار باقی می‌ماند. اندازه‌ها برای سه دستگاه مستقل هستند و روی تمام اسلایدها اعمال می‌شوند.</p>
+    <tr><th scope="row">اندازه فونت نوشته‌های هیرو (pt)</th><td>
+        <p class="description">مقدار هر فیلد <strong>به‌صورت عددی و بر حسب پوینت (pt)</strong> نمایش داده می‌شود؛ دیگر گزینه «خودکار» یا فیلد خالی وجود ندارد. اندازه‌های اولیه از CSS فعلی قالب در عرض‌های مرجع دسکتاپ ۱۴۴۰، تبلت ۸۰۰ و موبایل ۳۹۰ پیکسل استخراج شده‌اند (با فرض ریشه فونت ۱۶px). چون CSS قبلی از clamp() استفاده می‌کرد، اندازه واقعی قبلاً با عرض صفحه تغییر می‌کرد.</p>
+        <p class="description"><strong>توجه:</strong> اعداد ۱۰۲۴ و ۶۰۰ فقط مرز عرض دستگاه‌ها بر حسب پیکسل هستند؛ هیچ ارتباطی با اندازه فونت ندارند.</p>
         <div style="overflow-x:auto;max-width:900px">
             <table class="widefat striped" style="width:100%;max-width:860px">
-                <thead><tr><th>نوشته</th><th>دسکتاپ (بیشتر از ۱۰۲۴)</th><th>تبلت (۶۰۱ تا ۱۰۲۴)</th><th>موبایل (تا ۶۰۰)</th></tr></thead>
+                <thead><tr><th>نوشته</th><th>دسکتاپ · pt</th><th>تبلت · pt</th><th>موبایل · pt</th></tr></thead>
                 <tbody>
-                <?php
-                $saved_font_sizes = isset($options['font_sizes']) && is_array($options['font_sizes'])
-                    ? $options['font_sizes'] : array();
-                foreach (hsb_home_hero_font_fields() as $font_element => $font_config) : ?>
+                <?php foreach (hsb_home_hero_font_fields() as $font_element => $font_config) : ?>
                     <tr>
                         <th scope="row"><?php echo esc_html($font_config['label']); ?></th>
                         <?php foreach (array('desktop', 'tablet', 'mobile') as $font_device) :
-                            $stored_size = isset($saved_font_sizes[$font_element][$font_device])
-                                ? absint($saved_font_sizes[$font_element][$font_device]) : '';
+                            $size_pt = hsb_home_hero_resolved_font_pt($options, $font_element, $font_device, $font_config);
+                            $initial = $font_config['defaults'][$font_device];
                         ?>
                             <td><label>
                                 <span class="screen-reader-text"><?php echo esc_html($font_config['label'] . ' — ' . $font_device); ?></span>
-                                <input type="number" step="1"
+                                <input type="number" step="0.1"
                                     min="<?php echo esc_attr($font_config['min']); ?>"
                                     max="<?php echo esc_attr($font_config['max']); ?>"
                                     name="hsb_homepage_hero_options[font_sizes][<?php echo esc_attr($font_element); ?>][<?php echo esc_attr($font_device); ?>]"
-                                    value="<?php echo esc_attr($stored_size); ?>"
-                                    placeholder="خودکار"
-                                    style="width:100px;max-width:100%;direction:ltr"> px
+                                    value="<?php echo esc_attr(number_format($size_pt, 1, '.', '')); ?>"
+                                    style="width:90px;max-width:100%;direction:ltr"> pt
+                                <small style="display:block;color:#64748b;margin-top:4px">مقدار اولیه: <?php echo esc_html(number_format($initial, 1, '.', '')); ?> pt</small>
                             </label></td>
                         <?php endforeach; ?>
                     </tr>
@@ -1383,7 +1409,7 @@ function hsb_home_hero_render_slider_settings($options) {
                 </tbody>
             </table>
         </div>
-        <p class="description">برای بازگشت به اندازه اصلی هر بخش، عدد آن فیلد را پاک و تنظیمات را ذخیره کن. ارتفاع هیرو مستقل از اندازه فونت باقی می‌ماند و در صورت نیاز برای جلوگیری از هم‌پوشانی محتوا افزایش پیدا می‌کند.</p>
+        <p class="description">برای بازگشت به اندازه پیشنهادی اولیه، عدد نمایش‌داده‌شده زیر همان فیلد را وارد کن و ذخیره کن. اگر قبلاً مقداری با واحد px ذخیره شده، این نسخه آن را به pt تبدیل می‌کند تا ظاهرش تا حد امکان حفظ شود.</p>
     </td></tr>
     <tr><th scope="row">اسلایدهای هیرو</th><td>
         <p class="description">برای هر اسلاید تصویر افقی دسکتاپ، تصویر مربعی تبلت (اختیاری)، تصویر عمودی ۹:۱۶ موبایل (اختیاری) و عنوان اصلی را انتخاب کنید. اگر تصویر تبلت یا موبایل انتخاب نشود، تصویر دسکتاپ نمایش داده می‌شود. ترتیب نمایش با ترتیب کارت‌ها برابر است؛ حداکثر ۱۰ اسلاید.</p>
