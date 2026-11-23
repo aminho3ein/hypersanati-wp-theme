@@ -48,3 +48,11 @@ add_action('get_footer', function () {
         hsb_render_purchase_guide('home');
     }
 }, 5);
+
+// HSB checkout visual refinement: only on the checkout page, without changing order processing.
+add_action('wp_enqueue_scripts', function () {
+    if (!function_exists('is_checkout') || !is_checkout() || (function_exists('is_order_received_page') && is_order_received_page())) return;
+    $file = get_template_directory() . '/assets/css/hsb-checkout-refine.css';
+    if (!is_readable($file)) return;
+    wp_enqueue_style('hsb-checkout-refine', get_template_directory_uri() . '/assets/css/hsb-checkout-refine.css', array('hsb-commerce-clarity'), filemtime($file));
+}, 120);

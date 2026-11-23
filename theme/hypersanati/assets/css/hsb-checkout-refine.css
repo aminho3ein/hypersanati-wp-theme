@@ -1,0 +1,41 @@
+/* HSB Checkout Experience V1 — presentation only. Theme UI-Kit tokens. */
+body.woocommerce-checkout:not(.woocommerce-order-received) .hsb-checkout-experience,
+body.woocommerce-checkout:not(.woocommerce-order-received) .woocommerce-checkout {direction:rtl}
+.hsb-checkout-experience{margin:28px 0 24px;padding:clamp(20px,3vw,36px);border-radius:22px;background:linear-gradient(115deg,color-mix(in srgb,var(--color-primary,#9f8561) 12%,white),#fff 63%);border:1px solid color-mix(in srgb,var(--color-primary,#9f8561) 24%,#e6e6e6);color:var(--color-text,#272727)}
+.hsb-checkout-experience__eyebrow{font-weight:750;letter-spacing:.03em;color:var(--color-primary-hover,#8a7353);margin:0 0 5px;font-size:.88rem}
+.hsb-checkout-experience h1{margin:0 0 8px;font-size:clamp(1.55rem,2.8vw,2.2rem);line-height:1.55;color:var(--color-heading,#242424)}
+.hsb-checkout-experience__lead{margin:0;line-height:2;color:var(--color-text-secondary,#5c5c5c);max-width:74ch}
+.hsb-checkout-experience__steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:21px}
+.hsb-checkout-experience__step{display:flex;align-items:center;gap:11px;padding:13px 14px;background:#fff;border:1px solid color-mix(in srgb,var(--color-primary,#9f8561) 19%,#e9e9e9);border-radius:14px;min-width:0}
+.hsb-checkout-experience__step strong{width:29px;height:29px;flex:0 0 29px;background:var(--color-primary,#9f8561);color:#fff;display:grid;place-items:center;border-radius:9px;font-size:.86rem}
+.hsb-checkout-experience__step span{font-size:.88rem;font-weight:650;line-height:1.65}
+.hsb-checkout-experience__links{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;font-size:.9rem}
+.hsb-checkout-experience__links a{color:var(--color-primary-hover,#8a7353);text-decoration:underline;text-underline-offset:4px}
+.hsb-checkout-experience__links a:focus-visible{outline:2px solid var(--color-primary,#9f8561);outline-offset:3px}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,370px);gap:18px 24px;align-items:start}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-address{grid-column:1;grid-row:1}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-personal-info{grid-column:1;grid-row:2}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-payment-gateway{grid-column:1;grid-row:3}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-order-summary{grid-column:2;grid-row:1/span 3;position:sticky;top:22px;min-width:0}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-address,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-personal-info,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-payment-gateway,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-order-summary{min-width:0;box-sizing:border-box;padding:clamp(17px,2vw,26px);border-radius:18px;background:var(--color-surface,#fff);border:1px solid color-mix(in srgb,var(--color-primary,#9f8561) 15%,#e5e5e5);box-shadow:0 10px 26px rgba(28,24,20,.035)}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout h2{line-height:1.65;letter-spacing:0;margin-top:0}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout input:not([type=radio]):not([type=checkbox]):not([type=hidden]),
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout select,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout textarea{max-width:100%;box-sizing:border-box;border-radius:10px}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout input:focus-visible,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout textarea:focus-visible,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout select:focus-visible{outline:2px solid var(--color-primary,#9f8561);outline-offset:2px}
+body.woocommerce-checkout:not(.woocommerce-order-received) .checkout-order-reference{margin:0 0 18px}
+body.woocommerce-checkout:not(.woocommerce-order-received) .checkout-order-reference__text{font-size:.88rem;line-height:1.75}
+body.woocommerce-checkout:not(.woocommerce-order-received) .checkout-order-summary__actions{margin-top:22px}
+body.woocommerce-checkout:not(.woocommerce-order-received) .checkout-order-summary__submit-btn{background:var(--color-primary,#9f8561);border-color:var(--color-primary,#9f8561);color:#fff;border-radius:12px;min-height:48px;font-weight:750}
+body.woocommerce-checkout:not(.woocommerce-order-received) .checkout-order-summary__submit-btn:hover{background:var(--color-primary-hover,#8a7353)}
+.hsb-checkout-legal-note{padding:15px 16px;margin:12px 0 0;border:1px solid color-mix(in srgb,var(--color-primary,#9f8561) 21%,#e8e8e8);background:color-mix(in srgb,var(--color-primary,#9f8561) 6%,#fff);border-radius:12px;line-height:1.95;font-size:.87rem}
+.hsb-checkout-legal-note p{margin:0}.hsb-checkout-legal-note a{text-decoration:underline;text-underline-offset:3px;color:var(--color-primary-hover,#8a7353)}
+.hsb-checkout-legal-note strong{color:var(--color-heading,#242424)}
+.hsb-checkout-experience__stage-notice{margin:16px 0 0;padding:12px 15px;background:#fff;border-radius:11px;border-inline-start:3px solid var(--color-primary,#9f8561);line-height:1.9;font-size:.88rem}
+@media (max-width:980px){body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout{grid-template-columns:minmax(0,1fr)}body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-address,body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-personal-info,body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-payment-gateway,body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-order-summary{grid-column:1;grid-row:auto}body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-order-summary{position:static}}
+@media(max-width:620px){.hsb-checkout-experience{padding:18px;border-radius:16px}.hsb-checkout-experience__steps{grid-template-columns:1fr;gap:7px}.hsb-checkout-experience__step{padding:9px 11px}.hsb-checkout-experience__step strong{height:25px;width:25px;flex-basis:25px}body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout{gap:12px}body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-address,body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-personal-info,body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-payment-gateway,body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout>.checkout-order-summary{padding:16px;border-radius:13px}}

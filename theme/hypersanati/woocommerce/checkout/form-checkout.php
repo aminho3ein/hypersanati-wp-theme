@@ -44,9 +44,24 @@ $base_country = WC()->countries ? WC()->countries->get_base_country() : 'IR';
 
 <div class="container">
 
-    <section class="hsb-checkout-intro" aria-label="راهنمای ثبت سفارش">
-        <h1>تکمیل اطلاعات سفارش</h1>
-        <p>در این مرحله اطلاعات تماس و نشانی خود را بررسی کنید. برای کالاهای دارای قیمت، پرداخت پس از تأیید اطلاعات و انتخاب درگاه فعال انجام می‌شود. درخواست پیش‌فاکتور به‌تنهایی به معنای خرید یا پرداخت نیست.</p>
+    <?php
+    $hsb_privacy_url = function_exists('get_privacy_policy_url') ? get_privacy_policy_url() : '';
+    $hsb_terms_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('terms') : '';
+    ?>
+    <section class="hsb-checkout-experience" dir="rtl" aria-labelledby="hsb-checkout-heading">
+        <p class="hsb-checkout-experience__eyebrow">صنعت گستران الفت / تسویه‌حساب</p>
+        <h1 id="hsb-checkout-heading">ثبت سفارش، روشن و مرحله‌به‌مرحله</h1>
+        <p class="hsb-checkout-experience__lead">اطلاعات تماس و نشانی خود را بررسی کنید و سپس روش پرداخت فعال را انتخاب کنید. شماره سفارش واقعی پس از ثبت موفق سفارش ایجاد می‌شود.</p>
+        <div class="hsb-checkout-experience__steps" aria-label="مراحل ثبت سفارش">
+            <div class="hsb-checkout-experience__step"><strong>۱</strong><span>اطلاعات تحویل</span></div>
+            <div class="hsb-checkout-experience__step"><strong>۲</strong><span>بررسی اقلام و هزینه‌ها</span></div>
+            <div class="hsb-checkout-experience__step"><strong>۳</strong><span>ثبت سفارش و پرداخت در صورت فعال‌بودن</span></div>
+        </div>
+        <p class="hsb-checkout-experience__stage-notice">محصولات بدون قیمت ابتدا برای استعلام ارسال می‌شوند؛ درخواست پیش‌فاکتور، خرید قطعی یا پرداخت نیست. مبلغ نهایی پس از بررسی واحد فروش و تأیید شما اعلام می‌شود.</p>
+        <nav class="hsb-checkout-experience__links" aria-label="اسناد حقوقی فروشگاه">
+            <?php if ($hsb_terms_url) : ?><a href="<?php echo esc_url($hsb_terms_url); ?>" target="_blank" rel="noopener noreferrer">شرایط و مقررات خرید</a><?php endif; ?>
+            <?php if ($hsb_privacy_url) : ?><a href="<?php echo esc_url($hsb_privacy_url); ?>" target="_blank" rel="noopener noreferrer">سیاست حفظ حریم خصوصی</a><?php endif; ?>
+        </nav>
     </section>
     <section class="checkout-order-reference">
         <div class="checkout-order-reference__inner">
@@ -470,6 +485,10 @@ $base_country = WC()->countries ? WC()->countries->get_base_country() : 'IR';
                 </button>
             </div>
         </section>
+
+        <div class="hsb-checkout-legal-note">
+            <p><strong>پیش از ثبت نهایی:</strong> اطلاعات خریدار، مبلغ قابل پرداخت و روش ارسال را بررسی کنید. پذیرش مقررات در بخش پرداخت ووکامرس انجام می‌شود و لینک‌های رسمی قوانین در بالای همین صفحه در دسترس‌اند.</p>
+        </div>
 
         <?php wp_nonce_field('woocommerce-process_checkout', 'woocommerce-process-checkout-nonce'); ?>
 
