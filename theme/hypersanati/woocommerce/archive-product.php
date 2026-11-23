@@ -20,7 +20,7 @@ $shop_height_bound_max =
     (float) $shop_dimension_ranges['height']['max'];
 ?>
 
-    <?php if (function_exists('hsb_render_purchase_guide')) { hsb_render_purchase_guide('shop'); } ?>
+    <?php if (function_exists('hsb_shop_purchase_popup_render')) { hsb_shop_purchase_popup_render(); } ?>
 
     <!-- search-feat -->
 

@@ -71,3 +71,6 @@ add_action('wp_enqueue_scripts',function(){
     $path=get_template_directory().'/assets/css/hsb-order-pay.css';
     if (is_readable($path)) wp_enqueue_style('hsb-order-pay',get_template_directory_uri().'/assets/css/hsb-order-pay.css',array('hsb-checkout-rebuild'),filemtime($path));
 },1001);
+
+// HSB Shop Popup V1 (scoped shop guide)
+require_once __DIR__ . '/hsb-shop-purchase-popup.php';

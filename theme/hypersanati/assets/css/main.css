@@ -11,8 +11,8 @@
    Colors
    ======================= */
 :root {
-  --color-primary: #9f8561;
-  --color-secondary: #5e4420;
+  --color-primary: #1d619e;
+  --color-secondary: #123e69;
   --color-success: #ffa800;
   --color-warning: #ff9621;
   --color-danger: #fff200;
@@ -26,7 +26,7 @@
   --color-red: #f90000;
   --color-red-read-more: #ba0404;
   --color-search-box: #e7e3e3;
-  --color-card-article-cat: #e6d8c6;
+  --color-card-article-cat: #e5eff9;
   --color-product-breadcrumb-background: #e1e1e1;
   --gray-100: #f8f9fa;
   --gray-200: #e9ecef;
@@ -96,8 +96,8 @@
   --radius-pill: 999px;
   --border-width: 1px;
   --border-color: #dee2e6;
-  --color-primary-hover: #8a7353;
-  --color-primary-active: #bd9f78;
+  --color-primary-hover: #185387;
+  --color-primary-active: #387fb9;
 }
 
 /* --- Reset --- */
@@ -6766,7 +6766,7 @@ html {
   /* Commerce */
   --hsb-direct-purchase-bg: #168052;
   --hsb-direct-purchase-text: #ffffff;
-  --hsb-quote-request-bg: #735936;
+  --hsb-quote-request-bg: #245e90;
   --hsb-quote-request-text: #ffffff;
 
   --hsb-product-card-bg: var(--color-white);
@@ -6776,16 +6776,16 @@ html {
 
   /* Article typography */
   --hsb-article-h1-text: var(--color-dark);
-  --hsb-article-h2-text: #6f4b29;
-  --hsb-article-h3-text: #76512f;
-  --hsb-article-h4-text: #554432;
-  --hsb-article-h5-text: #765a3c;
+  --hsb-article-h2-text: #1c5687;
+  --hsb-article-h3-text: #275d8a;
+  --hsb-article-h4-text: #315c80;
+  --hsb-article-h5-text: #42739d;
   --hsb-article-h6-text: #626b72;
 
-  --hsb-article-h2-border: #c49a62;
-  --hsb-article-h3-border: #c09a68;
-  --hsb-article-h4-border: #bb9b70;
-  --hsb-article-h2-gradient-start: #dacbb6;
+  --hsb-article-h2-border: #82abd0;
+  --hsb-article-h3-border: #98b8d8;
+  --hsb-article-h4-border: #b1c7df;
+  --hsb-article-h2-gradient-start: #e1ecf7;
   --hsb-article-h2-gradient-end: transparent;
 
   /* Product description typography */
@@ -6810,9 +6810,9 @@ html {
 
   /* HSB SHOP DIMENSION SEARCH TOKENS V1 */
   --hsb-shop-search-border: var(--color-primary);
-  --hsb-shop-search-bg-start: #fdfaf6;
+  --hsb-shop-search-bg-start: #f3f8fd;
   --hsb-shop-search-bg-end: #ffffff;
-  --hsb-shop-search-shadow-color: rgba(159, 133, 97, 0.12);
+  --hsb-shop-search-shadow-color: rgba(29, 97, 158, 0.12);
   --hsb-shop-search-title: var(--color-secondary);
   --hsb-shop-search-title-border: var(--color-primary);
   --hsb-shop-search-title-icon: var(--color-primary);
@@ -6824,7 +6824,7 @@ html {
   --hsb-shop-card-bg: #ffffff;
   --hsb-shop-card-base-border: rgba(30, 37, 43, 0.09);
   --hsb-shop-card-base-shadow: rgba(25, 31, 36, 0.045);
-  --hsb-shop-card-base-hover-border: rgba(157, 126, 78, 0.34);
+  --hsb-shop-card-base-hover-border: rgba(29, 97, 158, 0.34);
   --hsb-shop-card-base-hover-shadow: rgba(25, 31, 36, 0.085);
 
   --hsb-shop-card-border: color-mix(
@@ -6859,7 +6859,7 @@ html {
   --hsb-card-shadow-color: #181e23;
   --hsb-card-media-divider: var(--hsb-card-dimension-border);
   --hsb-card-part-bg: color-mix(in srgb, var(--hsb-shop-card-part-emphasis) 8%, white);
-  --hsb-card-badge-icon-color: #d2b27d;
+  --hsb-card-badge-icon-color: #6e9bc4;
   --hsb-card-options-bg: color-mix(in srgb, var(--hsb-shop-card-part-emphasis) 7%, white);
   --hsb-card-options-text: var(--hsb-shop-card-part-emphasis);
   --hsb-card-options-icon: var(--hsb-shop-card-part-emphasis);
@@ -6891,7 +6891,7 @@ html {
 
   --hsb-card-action-text: var(--color-secondary);
   --hsb-card-action-direct-bg: #168052;
-  --hsb-card-action-quote-bg: #735936;
+  --hsb-card-action-quote-bg: #245e90;
   --hsb-card-action-button-text: #ffffff;
   --hsb-card-action-disabled-bg: #d7dcda;
   --hsb-card-action-disabled-text: #49534e;
@@ -6901,29 +6901,29 @@ html {
 
 
   /* Table design */
-  --hsb-table-head-bg: #806139;
+  --hsb-table-head-bg: #205789;
   --hsb-table-head-text: #ffffff;
   --hsb-table-row-odd-bg: #ffffff;
   --hsb-table-row-even-bg: #f3f4f4;
-  --hsb-table-row-hover-bg: #f1e6d5;
-  --hsb-table-border: #e5d9cb;
+  --hsb-table-row-hover-bg: #e9f2fb;
+  --hsb-table-border: #dce7f3;
 
   /* Article table of contents */
   --hsb-toc-bg: #eeeeee;
   --hsb-toc-text: var(--color-dark);
   --hsb-toc-active-bg: #ffffff;
   --hsb-toc-active-text: var(--color-secondary);
-  --hsb-toc-hover-bg: #f5f2ec;
+  --hsb-toc-hover-bg: #eef4fa;
 
   /* Article notes */
-  --hsb-note-bg: #f8f4ee;
+  --hsb-note-bg: #f2f7fd;
   --hsb-note-text: var(--color-dark);
   --hsb-note-border: var(--color-primary);
 
   /* FAQ */
   --hsb-faq-question-bg: var(--color-white);
   --hsb-faq-answer-bg: var(--color-white);
-  --hsb-faq-active-bg: #f5f2ec;
+  --hsb-faq-active-bg: #edf4fb;
   --hsb-faq-border: var(--border-color);
 
   /* Back to top */
@@ -7135,7 +7135,7 @@ html {
    Preserve existing direct-sale and quotation colors.
    ============================================================ */
 :root {
-    --hsb-sale-quote-button-bg: #735936;
+    --hsb-sale-quote-button-bg: #245e90;
     --hsb-sale-direct-button-bg: #167a50;
     --hsb-sale-inquiry-status: #b42318;
     --hsb-sale-button-text: #fff;
@@ -7150,7 +7150,7 @@ html {
    ============================================================ */
 :root {
     --hsb-cart-neutral-white: #fff;
-    --hsb-cart-quote-soft-shadow: rgba(115, 89, 54, .2);
+    --hsb-cart-quote-soft-shadow: rgba(29, 97, 158, .20);
 }
 
 /* ============================================================
@@ -7158,17 +7158,17 @@ html {
    Preserve existing dual-cart neutral colors.
    ============================================================ */
 :root {
-    --hsb-cart-quote-border: #d9ccbb;
-    --hsb-cart-quote-surface: #f5f0e9;
+    --hsb-cart-quote-border: #cfdfec;
+    --hsb-cart-quote-surface: #eef4fa;
     --hsb-cart-direct-surface: #f3f6f3;
     --hsb-cart-muted-text: #66736b;
 }
 
 /* HSB QUOTE POPUP DESIGN TOKENS V1 */
 :root {
-    --hsb-quote-popup-surface: #f5f2ec;
-    --hsb-quote-popup-border: #e5d8c7;
-    --hsb-quote-popup-text: #32291e;
+    --hsb-quote-popup-surface: #edf4fb;
+    --hsb-quote-popup-border: #d2e2f2;
+    --hsb-quote-popup-text: #1d3651;
 }
 
 /* HSB CART AJAX POPUP TOKENS V1 */
@@ -7237,5 +7237,5 @@ html {
 
 /* HSB PRODUCT DESCRIPTION BORDER TOKEN V1 */
 :root {
-    --hsb-sp-description-table-border: #e5d9cb;
+    --hsb-sp-description-table-border: #dce7f3;
 }
