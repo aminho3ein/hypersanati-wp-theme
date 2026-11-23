@@ -574,7 +574,7 @@
     max-width: calc(100% - 28px);
     padding: 6px 12px;
     border-radius: 30px;
-    background: rgba(111, 78, 42, 0.92);
+    background: var(--color-secondary);
     color: #fff;
     font-size: 12px;
     line-height: 1.7;

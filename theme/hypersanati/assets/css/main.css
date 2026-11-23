@@ -3753,8 +3753,8 @@ body.admin-bar
   border: 0;
   border-radius: 10px;
 
-  background: var(--color-success);
-  color: var(--color-primary-active);
+  background: var(--color-primary);
+  color: var(--color-white);
 
   cursor: pointer;
 }
@@ -3991,7 +3991,7 @@ body.admin-bar
 
   border-radius: 9px;
 
-  background: var(--color-red-read-more);
+  background: var(--color-primary);
   color: var(--color-white);
 
   font-size: 0.7rem;
