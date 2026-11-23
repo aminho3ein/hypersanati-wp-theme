@@ -28,3 +28,139 @@ Text Domain: hypersanati
 This theme is a custom development project and follows WordPress theme development standards.
 
 */
+
+/* HSB CHECKOUT COMPACT V3 START: scope limited to the actual checkout form */
+/* Override legacy checkout component sizes regardless of their stylesheet order. */
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-address__title,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-personal-info__title,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__title,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-payment-gateway h2 {
+  font-size: 17px !important;
+  line-height: 1.55 !important;
+  font-weight: 750 !important;
+  margin-block: 0 !important;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-address__header,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-personal-info__header,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__header {
+  padding-bottom: 13px !important;
+  margin-bottom: 17px !important;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-address__label,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-personal-info__radio-text,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-personal-info__field > label {
+  font-size: 12.5px !important;
+  line-height: 1.6 !important;
+  font-weight: 650 !important;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-address__field,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-personal-info__field {
+  min-width: 0 !important;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-address__input,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-personal-info__input,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout input.checkout-address__input,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout input.checkout-personal-info__input {
+  box-sizing: border-box !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  padding: 9px 12px !important;
+  font-size: 13.5px !important;
+  line-height: 1.5 !important;
+  border-radius: 9px !important;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout textarea.checkout-address__input,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout textarea.checkout-personal-info__input {
+  height: auto !important;
+  min-height: 80px !important;
+  padding: 10px 12px !important;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-address__input::placeholder,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-personal-info__input::placeholder {
+  font-size: 12.5px !important;
+  opacity: .75;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-address__hint,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-personal-info__password-error {
+  font-size: 11.5px !important;
+  line-height: 1.8 !important;
+}
+/* Shipping summary: the original theme forces oversized bold type in a 370px sidebar. */
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__top {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  justify-content: space-between !important;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__shipping-meta {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+  max-width: 100% !important;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__shipping-date,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__shipping-count,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__shipping-method {
+  font-size: 12.5px !important;
+  line-height: 1.75 !important;
+  font-weight: 550 !important;
+  letter-spacing: 0 !important;
+  overflow-wrap: anywhere;
+  margin: 0 0 7px !important;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__shipping-count,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__shipping-method {
+  font-weight: 650 !important;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout button.checkout-order-summary__accordion-btn {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  max-width: 47% !important;
+  min-height: 38px !important;
+  padding: 7px 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  border-radius: 9px !important;
+  line-height: 1.5 !important;
+  font-size: 12px !important;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__accordion-text {
+  font-size: 12px !important;
+  line-height: 1.55 !important;
+  font-weight: 650 !important;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__accordion-chevron {
+  flex: 0 0 auto;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__details {
+  padding: 12px !important;
+  font-size: 12px !important;
+  line-height: 1.8 !important;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__detail-item,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__detail-label,
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__detail-value {
+  font-size: 12px !important;
+  line-height: 1.85 !important;
+  overflow-wrap: anywhere;
+}
+body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__submit-btn {
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+@media (max-width: 980px) {
+  body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__top {gap: 14px !important;}
+}
+@media (max-width: 620px) {
+  body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-address__input,
+  body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-personal-info__input {
+    font-size: 16px !important; /* Prevent iOS Safari zoom on input focus */
+    min-height: 44px !important;
+    height: 44px !important;
+    padding: 8px 11px !important;
+  }
+  body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__shipping-date,
+  body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__shipping-count,
+  body.woocommerce-checkout:not(.woocommerce-order-received) form.woocommerce-checkout .checkout-order-summary__shipping-method {font-size: 12px !important;}
+}
+/* HSB CHECKOUT COMPACT V3 END */
