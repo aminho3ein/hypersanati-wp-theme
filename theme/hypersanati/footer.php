@@ -248,7 +248,7 @@ $footer_links = array(
               <div class="hsb-trust-badges" aria-label="نمادهای اعتبار فروشگاه">
                 <?php if ('' !== $enamad_url && '' !== $enamad_image_url) : ?>
                   <a class="hsb-trust-badges__slot site-footer__enamad-link" href="<?php echo esc_url($enamad_url); ?>" target="_blank" rel="noopener noreferrer" referrerpolicy="origin" aria-label="بررسی اعتبار نماد اعتماد الکترونیکی">
-                    <img src="<?php echo esc_url($enamad_image_url); ?>" referrerpolicy="origin" alt="نماد اعتماد الکترونیکی" loading="lazy" decoding="async" />
+                    <img src="<?php echo esc_url($enamad_image_url); ?>" referrerpolicy="origin" alt="نماد اعتماد الکترونیکی" loading="lazy" decoding="async" onerror="this.style.display='none';this.parentNode.classList.add('hsb-enamad-image-failed');" />
                   </a>
                 <?php endif; ?>
                 <?php
