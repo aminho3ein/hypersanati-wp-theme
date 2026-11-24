@@ -1885,6 +1885,176 @@ document.addEventListener(
         }
 
 
+
+
+        // All prices and purchase modes are provided by WooCommerce.
+        // No navigation or remote HTML fetching occurs when switching.
+        let hsbLastPriced = null;
+        let hsbToastTimer = null;
+        const hsbInitialItem = productMap.get(
+          String(switcher.dataset.currentProduct)
+        );
+        if (hsbInitialItem && hsbInitialItem.is_direct) {
+          hsbLastPriced = hsbInitialItem;
+        }
+        function hsbSafe(value) {
+          return String(value == null ? "" : value).replace(
+            /[&<>"']/g,
+            function (char) {
+              return {
+                "&": "&amp;", "<": "&lt;", ">": "&gt;",
+                '"': "&quot;", "'": "&#39;"
+              }[char];
+            }
+          );
+        }
+        function hsbShowCompactToast(message) {
+          const previous = document.getElementById("hsb-price-toast");
+          if (previous) previous.remove();
+          clearTimeout(hsbToastTimer);
+          const toast = document.createElement("div");
+          toast.id = "hsb-price-toast";
+          toast.dir = "rtl";
+          toast.innerHTML = '<i class="fa-solid fa-triangle-exclamation hsb-price-toast__icon" aria-hidden="true"></i>' +
+            '<div class="hsb-price-toast__body" role="status" aria-live="polite"><strong>تغییر روش ثبت سفارش</strong><p></p></div>' +
+            '<button type="button" class="hsb-price-toast__close" aria-label="بستن هشدار">×</button>' +
+            '<span class="hsb-price-toast__track" aria-hidden="true"><span></span></span>';
+          const body = toast.querySelector(".hsb-price-toast__body p");
+          const progress = toast.querySelector(".hsb-price-toast__track span");
+          let timer = null;
+          let remaining = 5000;
+          let started = 0;
+          let running = false;
+          let closed = false;
+          function close() {
+            if (closed) return;
+            closed = true;
+            clearTimeout(timer);
+            toast.classList.remove("is-visible");
+            toast.classList.add("is-closing");
+            setTimeout(function () { toast.remove(); }, 220);
+          }
+          function pause() {
+            if (!running || closed) return;
+            remaining = Math.max(0, remaining - (performance.now() - started));
+            running = false;
+            clearTimeout(timer);
+            progress.style.transition = "none";
+            progress.style.transform = "scaleX(" + remaining / 5000 + ")";
+          }
+          function resume() {
+            if (closed || running || !toast.isConnected || toast.matches(":hover") || toast.contains(document.activeElement)) return;
+            if (remaining <= 0) { close(); return; }
+            running = true;
+            started = performance.now();
+            progress.style.transition = "transform " + remaining + "ms linear";
+            progress.style.transform = "scaleX(0)";
+            timer = setTimeout(close, remaining);
+            hsbToastTimer = timer;
+          }
+          toast.querySelector("button").addEventListener("click", close);
+          toast.addEventListener("mouseenter", pause);
+          toast.addEventListener("mouseleave", resume);
+          toast.addEventListener("focusin", pause);
+          toast.addEventListener("focusout", function () { requestAnimationFrame(resume); });
+          document.body.appendChild(toast);
+          body.textContent = message;
+          requestAnimationFrame(function () {
+            if (!toast.isConnected || closed) return;
+            toast.classList.add("is-visible");
+            requestAnimationFrame(resume);
+          });
+        }
+        function hsbUpdatePurchase(item) {
+          const oldPanel = document.querySelector(".hsb-sp-inquiry");
+          if (!oldPanel) return;
+          const id = Number(item.product_id);
+          if (!Number.isSafeInteger(id) || id <= 0) return;
+          const direct = item.is_direct === true;
+          const previousDirect = oldPanel.classList.contains("hsb-sp-direct");
+          const url = hsbSafe(item.url || window.location.pathname);
+          const available = !item.stock_limited || Number(item.stock_quantity) > 0;
+          const maxStock = item.stock_limited ? Math.max(0, Number(item.stock_quantity) || 0) : null;
+          const quantityHtml = '<div class="purchase-field hsb-sp-qty-field">' +
+            '<label>تعداد موردنیاز</label>' +
+            '<div class="product-quantity-control hsb-sp-qty">' +
+            '<button type="button" class="product-quantity-btn qty-minus" aria-label="کاهش تعداد">' +
+            '<i class="fa-solid fa-minus"></i></button>' +
+            '<input type="number" name="quantity" class="product-quantity-input" value="1" min="1" step="1" inputmode="numeric" aria-label="تعداد موردنیاز"' +
+            (direct && maxStock !== null ? ' max="' + maxStock + '"' : '') + '>' +
+            '<button type="button" class="product-quantity-btn qty-plus" aria-label="افزایش تعداد">' +
+            '<i class="fa-solid fa-plus"></i></button></div></div>';
+          const intro = direct
+            ? 'این محصول دارای قیمت مشخص است و امکان ثبت سفارش آنلاین آن وجود دارد.'
+            : 'قیمت، موجودی و زمان تأمین این کالا توسط واحد فروش بررسی و تأیید می‌شود.';
+          const statusTitle = direct ? (available ? 'آماده ثبت سفارش' : 'ناموجود برای سفارش') : 'بررسی قبل از پرداخت';
+          const statusText = direct ? 'ثبت سفارش با بررسی موجودی انجام می‌شود.' : 'در این مرحله پرداختی انجام نمی‌شود';
+          const start = '<div class="hsb-sp-inquiry__icon"><i class="fa-solid ' +
+            (direct ? 'fa-cart-shopping' : 'fa-file-invoice') + '"></i></div>' +
+            '<span class="hsb-sp-inquiry__eyebrow">' +
+            (direct ? 'سفارش آنلاین' : 'استعلام قیمت و موجودی') + '</span>' +
+            '<h2>' + (direct ? 'ثبت سفارش' : 'درخواست پیش‌فاکتور') + '</h2>' +
+            '<p class="hsb-sp-inquiry__intro">' + intro + '</p>' +
+            '<div class="hsb-sp-review-status"><span><i class="fa-solid fa-circle-check"></i></span>' +
+            '<div><strong>' + statusTitle + '</strong><small>' + statusText + '</small></div></div>';
+          let form = '';
+          if (direct) {
+            form = '<div class="hsb-sp-direct__price"><span>قیمت واحد</span><strong>' +
+              (item.price_html || '') + '</strong></div>' +
+              '<form class="cart hsb-sp-direct__form" method="post" action="' + url + '">' +
+              '<input type="hidden" name="product_id" value="' + id + '">' +
+              quantityHtml +
+              '<button type="submit" name="add-to-cart" value="' + id + '" ' +
+              'class="single_add_to_cart_button add-to-cart hsb-sp-direct__submit"' +
+              (available ? '' : ' disabled') + '><i class="fa-solid fa-cart-plus"></i> ' +
+              (available ? 'افزودن به سبد خرید' : 'ناموجود') + '</button></form>' +
+              '<div class="hsb-sp-direct__footer"><i class="fa-solid fa-shield-halved"></i>' +
+              '<span>تعداد و موجودی هنگام ثبت سفارش بررسی می‌شود.</span></div>';
+          } else {
+            const nonce = hsbSafe(switcher.dataset.hsbPreinvoiceNonce || '');
+            const ajax = hsbSafe(switcher.dataset.hsbPreinvoiceAjax || '');
+            const required = Number(item.required_count) || 0;
+            const requiredNote = required > 0
+              ? '<div class="hsb-sp-required-note"><i class="fa-solid fa-link"></i>' +
+                '<div><strong>دارای کالای همراه اجباری</strong><span>هنگام افزودن، ' +
+                required.toLocaleString('fa-IR') + ' قلم همراه نیز به پیش‌فاکتور افزوده می‌شود.</span></div></div>'
+              : '';
+            form = requiredNote + '<form class="product-preinvoice-form hsb-sp-preinvoice-form" ' +
+              'data-ajax-url="' + ajax + '" data-nonce="' + nonce + '">' +
+              '<input type="hidden" name="product_id" value="' + id + '">' +
+              quantityHtml +
+              '<button type="submit" class="preinvoice-add-button hsb-sp-add-button">' +
+              '<i class="fa-solid fa-file-invoice"></i> افزودن به پیش‌فاکتور</button>' +
+              '<div class="preinvoice-add-message" aria-live="polite"></div></form>' +
+              '<div class="hsb-sp-inquiry__footer">' +
+              '<div><i class="fa-solid fa-headset"></i> بررسی توسط واحد فروش</div>' +
+              '<div><i class="fa-solid fa-shield-halved"></i> تأیید مشخصات قبل از خرید</div>' +
+              '</div>';
+          }
+          const next = document.createElement('aside');
+          next.className = direct
+            ? 'hsb-sp-inquiry hsb-sp-direct hsb-sp-direct--unified'
+            : 'hsb-sp-inquiry';
+          next.innerHTML = start + form;
+          // Reject any form whose product identity does not match selection.
+          if (String(next.querySelector('input[name="product_id"]')?.value) !== String(id)) {
+            return;
+          }
+          oldPanel.replaceWith(next);
+          if (direct) {
+            hsbLastPriced = item;
+          } else if (previousDirect) {
+            const current = [item.brand, item.country].filter(Boolean).join('، ');
+            const old = hsbLastPriced
+              ? [hsbLastPriced.brand, hsbLastPriced.country].filter(Boolean).join('، ')
+              : '';
+            hsbShowCompactToast(
+              'قیمت گزینه «' + current + '» ثبت نشده؛ سفارش به پیش‌فاکتور تغییر کرد.' +
+              (old ? ' برای خرید مستقیم، «' + old + '» را انتخاب کنید.' : '')
+            );
+          }
+        }
+
         function updateProduct(
           productId,
           pushHistory
@@ -1944,7 +2114,8 @@ document.addEventListener(
             renderKeySpecs(item);
             renderFullSpecs(item);
             renderImages(item);
-            renderRequiredNote(item);
+            hsbUpdatePurchase(item);
+
 
             const productIdInput =
               document.querySelector(

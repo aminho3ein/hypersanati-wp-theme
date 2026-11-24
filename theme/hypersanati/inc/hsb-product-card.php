@@ -2,7 +2,8 @@
 /** Shared WooCommerce card component: used by Shop, Home, AJAX sections. */
 function hypersanati_render_product_card(
     $product_id = 0,
-    $family = array()
+    $family = array(),
+    $individual_card = false
 ) {
     $product_id = absint(
         $product_id ?: get_the_ID()
@@ -105,6 +106,7 @@ function hypersanati_render_product_card(
 
     /* hsb-card-auto-family */
     if (
+        !$individual_card &&
         empty($family) &&
         function_exists(
             'hsb_get_product_family_ids'
@@ -160,7 +162,7 @@ function hypersanati_render_product_card(
         $family['country_count'] ?? 0
     );
 
-    $is_family = $version_count > 1;
+    $is_family = !$individual_card && $version_count > 1;
 
     $product_url = get_permalink(
         $product_id
