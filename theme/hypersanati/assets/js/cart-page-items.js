@@ -1,4 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("input.qty[max]").forEach(function (input) {
+    const maximum = Number(input.getAttribute("max"));
+    if (Number.isFinite(maximum) && maximum < 0) {
+      input.removeAttribute("max");
+    }
+  });
+
   const couponToggle = document.querySelector(".cart-sidebar-card__toggle");
   const couponBox = document.querySelector(".cart-sidebar-card__coupon");
 
@@ -24,8 +31,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!input) return;
 
     const min = parseFloat(input.getAttribute("min")) || 0;
-    const max = parseFloat(input.getAttribute("max")) || 999999;
+    const maxValue = Number(input.getAttribute("max"));
+    const max = Number.isFinite(maxValue) && maxValue > 0 ? maxValue : Infinity;
     const step = parseFloat(input.getAttribute("step")) || 1;
+    if (input.hasAttribute("max") && Number(input.getAttribute("max")) < 0) {
+      input.removeAttribute("max");
+    }
     let value = parseFloat(input.value) || 0;
 
     if (plusBtn) {
