@@ -1309,10 +1309,10 @@ function load_shop_categories() {
     $uncategorized = get_term_by('slug', 'uncategorized', 'product_cat');
     $exclude_ids = $uncategorized ? array($uncategorized->term_id) : array();
 
-    /* Keep online sales above ordinary lazy-loaded categories. */
+    /* Hide sale category from normal category queue, not from its own archive. */
     if (function_exists('hsb_online_sale_category_id')) {
         $hsb_sale_id = hsb_online_sale_category_id(false);
-        if ($hsb_sale_id) {
+        if ($hsb_sale_id && $selected_cat_id !== $hsb_sale_id) {
             $exclude_ids[] = $hsb_sale_id;
         }
     }
@@ -2056,11 +2056,37 @@ function hsb_load_shop_family_batch() {
      */
     $per_page = 8;
 
-    $groups =
-        hsb_get_shop_subcategory_family_groups(
-            $subcategory_id,
-            $search_keyword
+    $is_online_sale = function_exists('hsb_online_sale_category_id')
+        && $subcategory_id === hsb_online_sale_category_id(false);
+
+    if ($is_online_sale) {
+        /* Paginate real priced SKUs; never collapse families. */
+        $args = array(
+            'post_type' => 'product', 'post_status' => 'publish',
+            'fields' => 'ids', 'posts_per_page' => -1,
+            'orderby' => 'date', 'order' => 'DESC',
+            'no_found_rows' => true,
+            'tax_query' => array(array(
+                'taxonomy' => 'product_cat', 'field' => 'term_id',
+                'terms' => $subcategory_id, 'include_children' => false,
+            )),
         );
+        if ('' !== $search_keyword) {
+            $args['s'] = $search_keyword;
+        }
+        $ids = get_posts($args);
+        $groups = array();
+        foreach ($ids as $id) {
+            $p = wc_get_product($id);
+            if ($p && hsb_dual_is_direct($p)) {
+                $groups[] = array('representative_id' => absint($id));
+            }
+        }
+    } else {
+        $groups = hsb_get_shop_subcategory_family_groups(
+            $subcategory_id, $search_keyword
+        );
+    }
 
     if (empty($groups)) {
         wp_send_json_success(
@@ -2085,10 +2111,9 @@ function hsb_load_shop_family_batch() {
 
     foreach ($batch as $family_group) {
         hypersanati_render_product_card(
-            $family_group[
-                'representative_id'
-            ],
-            $family_group
+            $family_group['representative_id'],
+            $family_group,
+            $is_online_sale
         );
     }
 
@@ -5522,6 +5547,14 @@ function hsb_get_product_family_live_data($product_id) {
             'has_real_image' => $has_real_image,
 
             'required_count' => count($required_ids),
+            'is_direct' => function_exists('hsb_dual_is_direct')
+                ? (bool) hsb_dual_is_direct($product)
+                : false,
+            'price_html' => wp_kses_post($product->get_price_html()),
+            'stock_limited' => $product->managing_stock() && !$product->backorders_allowed(),
+            'stock_quantity' => $product->managing_stock()
+                ? max(0, (int) $product->get_stock_quantity())
+                : 0,
         );
     }
 

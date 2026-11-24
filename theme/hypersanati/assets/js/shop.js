@@ -37,6 +37,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const container = document.getElementById("shop-container");
     const loader = document.querySelector(".shop-loader");
+    const onlineSaleSection = document.querySelector(".hsb-online-sale-section");
+    const onlineSaleDivider = document.querySelector(".hsb-online-sale-divider");
+    function syncOnlineSaleVisibility() {
+        const show = searchQuery === "" && !dimensionSearch && currentSelectedCategory === 0;
+        if (onlineSaleSection) onlineSaleSection.hidden = !show;
+        if (onlineSaleDivider) onlineSaleDivider.hidden = !show;
+    }
+    syncOnlineSaleVisibility();
     const sidebarContainer = document.getElementById("sidebar-category");
     const mobileSidebarContainer = document.getElementById("mobile-sidebar-category");
 
@@ -806,6 +814,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function loadProducts(reset = false) {
+        syncOnlineSaleVisibility();
 
         if (dimensionSearch) {
 

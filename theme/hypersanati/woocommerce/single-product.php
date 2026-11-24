@@ -629,6 +629,8 @@ $hero_country_flag_url = trim(
 
                     <div
                         class="hsb-sp-family-switcher"
+                        data-hsb-preinvoice-nonce="<?php echo esc_attr(wp_create_nonce('hsb_preinvoice_nonce')); ?>"
+                        data-hsb-preinvoice-ajax="<?php echo esc_url(admin_url('admin-ajax.php')); ?>"
                         data-current-product="<?php echo esc_attr(
                             $product_id
                         ); ?>">
