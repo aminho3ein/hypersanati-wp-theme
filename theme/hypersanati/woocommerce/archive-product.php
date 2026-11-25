@@ -408,7 +408,7 @@ if ($hsb_online_term_id && is_shop() && empty($_GET['dimension_search']) &&
     empty(trim((string) ($_GET['s'] ?? '')))) {
     $hsb_online_ids = get_posts(array(
         'post_type' => 'product', 'post_status' => 'publish',
-        'posts_per_page' => 120, 'fields' => 'ids',
+        'posts_per_page' => -1, 'fields' => 'ids',
         'orderby' => 'date', 'order' => 'DESC',
         'no_found_rows' => true,
         'tax_query' => array(array(
@@ -439,18 +439,11 @@ if ($hsb_online_term_id && is_shop() && empty($_GET['dimension_search']) &&
         محصولات دارای قیمت و موجودی، آماده ثبت سفارش آنلاین
     </p>
     <div class="child-category hsb-online-sale-grid">
-        <?php foreach (array_slice($hsb_online_products, 0, 8) as $hsb_id) : ?>
+        <?php foreach ($hsb_online_products as $hsb_id) : ?>
             <?php hypersanati_render_product_card($hsb_id, array(), true); ?>
         <?php endforeach; ?>
     </div>
-    <?php if (count($hsb_online_products) > 8) : ?>
-        <div class="hsb-online-sale-more">
-            <a href="<?php echo esc_url(get_term_link($hsb_online_term_id, 'product_cat')); ?>">
-                مشاهده همه محصولات فروش آنلاین
-                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
-            </a>
-        </div>
-    <?php endif; ?>
+
 </section>
 <hr class="sub-section-hr hsb-online-sale-divider" />
 <?php endif; ?>
