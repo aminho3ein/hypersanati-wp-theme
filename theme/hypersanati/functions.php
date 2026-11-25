@@ -2083,7 +2083,7 @@ function hsb_load_shop_family_batch() {
             }
         }
     } else {
-        $groups = hsb_get_shop_subcategory_family_groups(
+        $groups = hsb_family_index_get_shop_queue(
             $subcategory_id, $search_keyword
         );
     }
@@ -6818,3 +6818,11 @@ if (is_readable($hsb_legal_ui_file)) {
 
 /* HSB APPROVED PREINVOICE PAYMENT STOCK EXCEPTION V1 */
 require_once get_template_directory() . '/inc/hsb-preinvoice-payment-stock.php';
+
+
+/* HSB Persistent Family Index V1 */
+require_once __DIR__ . '/inc/hsb-family-index.php';
+
+if (is_admin()) {
+    require_once __DIR__ . '/inc/hsb-family-index-admin.php';
+}
